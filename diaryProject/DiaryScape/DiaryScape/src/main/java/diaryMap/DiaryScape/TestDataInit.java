@@ -4,10 +4,10 @@ import diaryMap.DiaryScape.domain.item.Item;
 import diaryMap.DiaryScape.domain.item.ItemRepository;
 import diaryMap.DiaryScape.domain.member.Member;
 import diaryMap.DiaryScape.domain.member.MemberRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 
 @Component
 @RequiredArgsConstructor
@@ -26,9 +26,9 @@ public class TestDataInit {
         itemRepository.save(new Item("itemB", 20000, 20));
 
         Member member = new Member();
-        member.setLoginId("1");
-        member.setPassword("1!");
-        member.setName("1");
+        member.setLoginId("test");
+        member.setPassword("test!");
+        member.setName("테스터");
         memberRepository.save(member);
     }
 

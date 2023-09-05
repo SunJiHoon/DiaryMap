@@ -2,25 +2,18 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-
+import LoginBox from './components/login_box'
+import { Provider } from 'react-redux'
+import { store } from './app/store'
 function App() {
 
   return (
     <>
       <div>
         <div>
-          <form>
-            <div style={{
-              display:"flex",
-              flexDirection:"column",
-            }}>
-              <input type="text" />
-              <input type="password" />
-            </div>
-            <div>
-              <button type="submit">login</button>
-            </div>
-          </form>
+          <Provider store={store}>
+          <LoginBox />
+          </Provider>
         </div>
       </div>
     </>

@@ -3,6 +3,7 @@ package diaryMap.DiaryScape.domain.member;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
+
 @Data
 public class Member {
     private Long id;

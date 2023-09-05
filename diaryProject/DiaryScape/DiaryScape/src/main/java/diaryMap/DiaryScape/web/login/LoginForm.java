@@ -1,8 +1,8 @@
 package diaryMap.DiaryScape.web.login;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
-import jakarta.validation.constraints.NotEmpty;
 
 @Data
 public class LoginForm {

@@ -7,7 +7,7 @@ const LoginBox = () => {
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
   
-  const [id, setId] = useState("")
+  const [loginId, setId] = useState("")
   const [password, setPassword] = useState("")
 
   const [loading, setLoading] = useState("")
@@ -19,7 +19,7 @@ const LoginBox = () => {
 
   const handleLogin = (e) => {
     e.preventDefault()
-    if( !id ) {
+    if( !loginId ) {
       setMsg("id is empty")
       return
     }
@@ -29,11 +29,11 @@ const LoginBox = () => {
     }
 
     let body = {
-      id,
+      loginId,
       password,
     }
 
-    axios.post("", body)
+    axios.post("http://localhost:8080/api/login", body)//login
       .then((res) => {
         console.log(res.data)
         if(res.data.code == 200) {
@@ -41,7 +41,6 @@ const LoginBox = () => {
         }
       })
   }
-  console.log(user.name)
 
   return (<>
     <div>
@@ -49,9 +48,9 @@ const LoginBox = () => {
         display: "flex",
         flexDirection: "column",
       }}>
-        { user.name && <p>logined as {user.name}</p> }
+        { user && <p>logined as {user.name}</p> }
         <form onSubmit={handleLogin}>
-          <input type="id" value={id} onChange={(e) => setId(e.target.value)} />
+          <input type="text" value={loginId} onChange={(e) => setId(e.target.value)} />
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           <button type="submit">login</button>
         </form>

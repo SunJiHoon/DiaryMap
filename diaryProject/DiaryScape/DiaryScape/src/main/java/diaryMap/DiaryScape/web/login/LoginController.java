@@ -2,31 +2,30 @@ package diaryMap.DiaryScape.web.login;
 
 import diaryMap.DiaryScape.domain.login.LoginService;
 import diaryMap.DiaryScape.domain.member.Member;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
 
 @Slf4j
-@Controller
+@RestController()
 @RequiredArgsConstructor
 public class LoginController {
     private final LoginService loginService;
-    @GetMapping("/login")
+    @GetMapping("/api/login")
     public String loginForm(@ModelAttribute("loginForm") LoginForm form) {
+        log.info("간다");
         return "login/loginForm";
     }
-    @PostMapping("/login")
-    public String login(@Valid @ModelAttribute LoginForm form,
+    @PostMapping("/api/login")//@Valid//@Valid @ModelAttribute
+    public String login(@RequestBody LoginForm form,
                         BindingResult bindingResult,
                         HttpServletResponse response) {
+        log.info("들어왔다.");
+        log.info(form.toString());
         if (bindingResult.hasErrors()) {
             return "login/loginForm";
         }
@@ -44,7 +43,8 @@ public class LoginController {
         response.addCookie(idCookie);
 
 
-        return "redirect:/";
+        return "성공";
+
     }
 
     @PostMapping("/logout")
