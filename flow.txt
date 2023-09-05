@@ -1,0 +1,38 @@
+사이트 접속 시
+--
+HomeController가 잡아서 로그인이 되어있다면
+template안에 있는 loginhome.html을 호출한다.
+    --
+    login이 되어있어서 loginHome.html에 연결된 경우
+    로그인 된 상태라 상품관리 혹은 로그아웃 실현 가능.
+
+--
+만약 로그인이 안 되어 있었고(session cache로 판단), 회원가입을 할 때
+template 안에 있는 Home.html을 연결해준다.
+    --
+    login이 안 되어있어서 home.html에 연결된 경우
+    회원가입 혹은 로그인페이지로 이동 가능
+        - 회원가입(/members/add) get 호출 -> MemberController가 동작 
+          template의 members/addMemberForm.html을 호출
+        회원가입
+        로그인 ID
+        비밀번호
+        이름
+        을 입력하여 회원가입 버튼을 누르면
+        - 회원가입(/members/add) post 호출 
+            -> valid이상 없으면 저장하고 리다이렉트 후완료.
+
+--
+만약 로그인이 안 되어 있었고(session cache로 판단), 로그인을 할 때,
+    --
+    login이 안 되어있어서 home.html에 연결된 경우
+    회원가입 혹은 로그인페이지로 이동 가능
+        - 로그인(/login) get 호출 -> LoginController 동작 
+          template의 login/loginForm.html 호출
+        로그인 ID
+        비밀번호
+        을 입력하여 로그인 버튼을 누르면
+        -  로그인(/login) post 호출 
+            -> valid이상 없으면 세션쿠키 보내고 리다이렉트 후 완료
+            이후 로그아웃 시 세션쿠키를 만료해주면 된다.
+
