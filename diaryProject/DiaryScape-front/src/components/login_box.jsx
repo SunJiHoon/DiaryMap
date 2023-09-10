@@ -4,7 +4,8 @@ import { loginUser } from '../reducer/user_slice'
 import axios from 'axios'
 
 const LoginBox = () => {
-  const username = useSelector((state) => state.name)
+
+  const username = useSelector((state) => state.user.name)
   const dispatch = useDispatch()
   
   const [loginId, setId] = useState("")
