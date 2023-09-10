@@ -3,6 +3,9 @@ import { useDispatch , useSelector } from 'react-redux'
 import { loginUser, clearUser } from '../reducer/user_slice'
 import axios from 'axios'
 
+axios.defaults.withCredentials = true;//axios가 웹 브라우져 내에서 항상 캐시를 소유할 수 있게 변경
+
+
 const LoginBox = () => {
 
   const username = useSelector((state) => state.user.name)
