@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch , useSelector } from 'react-redux'
-import { loginUser } from '../reducer/user_slice'
+import { loginUser, clearUser } from '../reducer/user_slice'
 import axios from 'axios'
 
 const LoginBox = () => {
@@ -47,7 +47,7 @@ const LoginBox = () => {
         display: "flex",
         flexDirection: "column",
       }}>
-        { username && <p>{username}로 로그인함</p> }
+        { username && <><p>{username}로 로그인함</p> <button onClick={clearUser}>로그아웃</button></> }
         <form onSubmit={handleLogin}>
           <input type="text" value={loginId} onChange={(e) => setId(e.target.value)} />
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
