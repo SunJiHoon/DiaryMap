@@ -13,11 +13,13 @@ const userSlice = createSlice({
       state.name = action.payload.name
       state.id = action.payload.loginId
       state.isLogin = true
+      return state
     },
     clearUser: (state) => {
       state.name = ""
       state.id = ""
       state.isLogin = false
+      return state
     },
   },
 })
