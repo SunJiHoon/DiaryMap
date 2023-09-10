@@ -3,7 +3,7 @@ import { useDispatch , useSelector } from 'react-redux'
 import { loginUser } from '../reducer/user_slice'
 import axios from 'axios'
 
-const LoginBox = () => {
+const SignUpBox = () => {
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
   
@@ -48,11 +48,11 @@ const LoginBox = () => {
         display: "flex",
         flexDirection: "column",
       }}>
-        { user && <p>{user.name}로 로그인함</p> }
+        { user && <p>logined as {user.name}</p> }
         <form onSubmit={handleLogin}>
           <input type="text" value={loginId} onChange={(e) => setId(e.target.value)} />
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          <button type="submit">로그인</button>
+          <button type="submit">회원가입</button>
         </form>
       </div>
     </div>
@@ -60,4 +60,4 @@ const LoginBox = () => {
 
 }
 
-export default LoginBox
+export default SignUpBox
