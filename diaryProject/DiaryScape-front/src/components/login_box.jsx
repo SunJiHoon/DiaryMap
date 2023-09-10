@@ -4,7 +4,7 @@ import { loginUser } from '../reducer/user_slice'
 import axios from 'axios'
 
 const LoginBox = () => {
-  const user = useSelector((state) => state.user)
+  const username = useSelector((state) => state.name)
   const dispatch = useDispatch()
   
   const [loginId, setId] = useState("")
@@ -46,7 +46,7 @@ const LoginBox = () => {
         display: "flex",
         flexDirection: "column",
       }}>
-        { user && <p>{user.name}로 로그인함</p> }
+        { username && <p>{username}로 로그인함</p> }
         <form onSubmit={handleLogin}>
           <input type="text" value={loginId} onChange={(e) => setId(e.target.value)} />
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
