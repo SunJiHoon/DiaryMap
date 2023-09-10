@@ -11,7 +11,7 @@ const userSlice = createSlice({
   reducers: {
     loginUser: (state, action) => {
       state.name = action.payload.name
-      state.id = action.payload.id
+      state.id = action.payload.loginId
       state.isLogin = true
     },
     clearUser: (state) => {

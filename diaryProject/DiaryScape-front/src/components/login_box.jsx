@@ -36,9 +36,7 @@ const LoginBox = () => {
     axios.post("http://localhost:8080/api/login", body, {withCredentials:true})//login
       .then((res) => {
         console.log(res.data)
-        if(res.data.code == 200) {
-          dispatch(loginUser(res.data.userInfo))
-        }
+        dispatch(loginUser(res.data))
       })
   }
 
