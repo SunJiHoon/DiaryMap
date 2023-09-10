@@ -8,7 +8,7 @@ const SignUpBox = () => {
   const dispatch = useDispatch()
   
   const [loginId, setId] = useState("")
-  const [username, setUsername] = useState("")
+  const [name, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
   const [loading, setLoading] = useState("")
@@ -31,7 +31,7 @@ const SignUpBox = () => {
 
     let body = {
       loginId,
-      username,
+      name,
       password,
     }
 
@@ -57,13 +57,14 @@ const SignUpBox = () => {
           id : <input type="text" value={loginId} onChange={(e) => setId(e.target.value)} />
           </li>
           <li>
-          username: <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+          username: <input type="text" value={name} onChange={(e) => setUsername(e.target.value)} />
           </li>
           <li>
           password: <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </li>
           </ul>
           <button type="submit">회원가입</button>
+          
         </form>
       </div>
     </div>
