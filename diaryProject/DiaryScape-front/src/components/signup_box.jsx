@@ -8,6 +8,7 @@ const SignUpBox = () => {
   const dispatch = useDispatch()
   
   const [loginId, setId] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
   const [loading, setLoading] = useState("")
@@ -30,10 +31,11 @@ const SignUpBox = () => {
 
     let body = {
       loginId,
+      username,
       password,
     }
 
-    axios.post("http://localhost:8080/api/login", body)//login
+    axios.post("http://localhost:8080/api/register", body) //register
       .then((res) => {
         console.log(res.data)
         if(res.data.code == 200) {
@@ -50,8 +52,17 @@ const SignUpBox = () => {
       }}>
         { user && <p>logined as {user.name}</p> }
         <form onSubmit={handleLogin}>
-          <input type="text" value={loginId} onChange={(e) => setId(e.target.value)} />
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <ul>
+            <li>
+          id : <input type="text" value={loginId} onChange={(e) => setId(e.target.value)} />
+          </li>
+          <li>
+          username: <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+          </li>
+          <li>
+          password: <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          </li>
+          </ul>
           <button type="submit">회원가입</button>
         </form>
       </div>
