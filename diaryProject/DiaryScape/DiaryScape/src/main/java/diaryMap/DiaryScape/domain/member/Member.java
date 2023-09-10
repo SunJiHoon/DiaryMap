@@ -1,5 +1,6 @@
 package diaryMap.DiaryScape.domain.member;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
