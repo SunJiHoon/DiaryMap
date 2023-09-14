@@ -5,28 +5,15 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom'
-import './index.css'
 import Home from './home'
 import SignIn from './signin'
 import SignUp from './signup'
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home />
-  },
-  {
-    path: '/signin',
-    element: <SignIn />
-  },
-  {
-    path: '/signup',
-    element: <SignUp />
-  },
-])
+import { ChakraProvider } from '@chakra-ui/react'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ChakraProvider>
+      <App />
+    </ChakraProvider>
   </React.StrictMode>,
 )
