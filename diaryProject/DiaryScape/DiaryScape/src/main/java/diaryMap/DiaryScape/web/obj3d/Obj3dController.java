@@ -1,13 +1,16 @@
-package diaryMap.DiaryScape;
+package diaryMap.DiaryScape.web.obj3d;
 
-import diaryMap.DiaryScape.domain.item.Item;
-import diaryMap.DiaryScape.domain.item.ItemRepository;
 import diaryMap.DiaryScape.domain.member.Member;
-import diaryMap.DiaryScape.domain.member.MemberRepository;
 import diaryMap.DiaryScape.domain.obj3d.Obj3d;
-import jakarta.annotation.PostConstruct;
+import diaryMap.DiaryScape.web.login.LoginForm;
+import diaryMap.DiaryScape.web.member.MemberWithoutId;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -15,55 +18,24 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 
-@Component
+@RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
-public class TestDataInit {
+@Slf4j
+public class Obj3dController {
 
-    private final ItemRepository itemRepository;
-    private final MemberRepository memberRepository;
+    @GetMapping("/Obj")
+    public ResponseEntity<String[]> getObj_string() {
+        log.info("obj를 요청하는 query가 들어왔다.");
 
-    /**
-     * 테스트용 데이터 추가
-     */
-    //@PostConstruct
-    public void init() {
-        itemRepository.save(new Item("itemA", 10000, 10));
-        itemRepository.save(new Item("itemB", 20000, 20));
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
 
         /*
-        Member member1 = new Member();
-        member1.setLoginId("test");
-        member1.setPassword("test!");
-        member1.setName("테스터");
-        memberRepository.save(member1);
 
-        Member member2 = new Member();
-        member2.setLoginId("2");
-        member2.setPassword("2!");
-        member2.setName("2");
-        memberRepository.save(member2);
-
-         */
-        //
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
-
-        EntityManager em = emf.createEntityManager();
-
-        EntityTransaction tx = em.getTransaction();
         tx.begin();
-        //추가
-        Member member1 = new Member();
-        member1.setLoginId("test");
-        member1.setPassword("test!");
-        member1.setName("테스터");
-        em.persist(member1);
-
-        Member member2 = new Member();
-        member2.setLoginId("2");
-        member2.setPassword("2!");
-        member2.setName("2");
-        em.persist(member2);
-
         Obj3d obj3d_1 = new Obj3d();
         obj3d_1.setObjName("축구공");
 
@@ -270,10 +242,43 @@ public class TestDataInit {
 
 
         tx.commit();
+ */
 
+        tx.begin();
+        //찾기
+        Obj3d obj3d = em.find(Obj3d.class, 1L);
+        String[] strings = new String[1];
+        strings[0] = obj3d.getJson_obj();
+        tx.commit();
         em.close();
         emf.close();
-        //
+        // 문자열 배열을 생성하거나 가져옵니다.
+
+        // ResponseEntity를 사용하여 문자열 배열을 응답으로 반환합니다.
+        return ResponseEntity.ok(strings);
     }
 
+    @PostMapping("/Obj")//@Valid//@Valid @ModelAttribute //requestBody
+    public ResponseEntity<String> registerObj(@RequestBody String str,
+                                 BindingResult bindingResult,
+                                 HttpServletResponse response) {
+        log.info("obj를 등록해보자");
+        log.info(str);
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        //추가
+
+        Obj3d obj3d_1 = new Obj3d();
+        obj3d_1.setObjName("축구공");
+        obj3d_1.setJson_obj(str);
+
+        em.persist(obj3d_1);
+        tx.commit();
+        em.close();
+        emf.close();
+        return ResponseEntity.ok("sucess");
+    }
 }
