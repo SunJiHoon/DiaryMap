@@ -1,12 +1,11 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OBJExporter} from 'three/examples/jsm/exporters/OBJExporter'
-import { Axios } from 'axios'
+import axios from 'axios'
 
 const loader = new GLTFLoader();
 const objLoader = new THREE.ObjectLoader();
 const exporter = new OBJExporter();
-const axios = new Axios();
 
 let scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -68,7 +67,7 @@ document.addEventListener('keydown', onDocumentKeyDown, false);
 function onDocumentKeyDown(event) {
     var keyCode = event.which;
     if (keyCode == 65) {
-        axios.post("http://localhost:8080/api/register", "asdf").then((res) => {
+        axios.post("http://localhost:8080/api/Obj", sceneJson).then((res) => {
 			console.log(res.data)
 		})
     }
