@@ -71,6 +71,11 @@ function onDocumentKeyDown(event) {
 			console.log(res.data)
 		})
     }
+	else if(keyCode == 66){
+		axios.get("http//localhost:8080/api/Obj").then((res) => {
+			console.log(res.data);
+		})
+	}
 };
 
 animate();
