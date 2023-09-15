@@ -72,7 +72,7 @@ function onDocumentKeyDown(event) {
 		})
     }
 	else if(keyCode == 66){
-		axios.get("http//localhost:8080/api/Obj").then((res) => {
+		axios.get("http://localhost:8080/api/Obj").then((res) => {
 			console.log(res.data);
 		})
 	}
