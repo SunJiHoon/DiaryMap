@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch , useSelector } from 'react-redux'
 import { loginUser } from '../reducer/user_slice'
 import axios from 'axios'
+import { Box, Input, Button } from '@chakra-ui/react'
 
 const SignUpBox = () => {
   const user = useSelector((state) => state.user)
@@ -45,29 +46,18 @@ const SignUpBox = () => {
   }
 
   return (<>
-    <div>
-      <div style={{
-        display: "flex",
-        flexDirection: "column",
-      }}>
+      <Box
+        w={300}
+      >
         { user && <p>logined as {user.name}</p> }
         <form onSubmit={handleLogin}>
-          <ul>
-            <li>
-          id : <input type="text" value={loginId} onChange={(e) => setId(e.target.value)} />
-          </li>
-          <li>
-          username: <input type="text" value={name} onChange={(e) => setUsername(e.target.value)} />
-          </li>
-          <li>
-          password: <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </li>
-          </ul>
-          <button type="submit">회원가입</button>
+          <Input type="text" placeholder="ID" value={loginId} onChange={(e) => setId(e.target.value)} />
+          <Input type="text" placeholder="Username" value={name} onChange={(e) => setUsername(e.target.value)} />
+          <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <Button w={300} type="submit" colorScheme="teal" mt={2}>회원가입</Button>
           
         </form>
-      </div>
-    </div>
+      </Box>
   </>)
 
 }
