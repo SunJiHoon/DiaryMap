@@ -67,7 +67,7 @@ document.addEventListener('keydown', onDocumentKeyDown, false);
 function onDocumentKeyDown(event) {
     var keyCode = event.which;
     if (keyCode == 65) {
-        axios.post("http://localhost:8080/api/register", "asdf").then((res) => {
+        axios.post("http://localhost:8080/api/Obj", sceneJson).then((res) => {
 			console.log(res.data)
 		})
     }
