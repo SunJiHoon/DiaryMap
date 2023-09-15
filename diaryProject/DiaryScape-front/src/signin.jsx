@@ -2,6 +2,7 @@ import { Provider } from "react-redux"
 import { store } from './app/store'
 import LoginBox from "./components/login_box"
 import { Link } from "react-router-dom"
+import { Box } from '@chakra-ui/react'
 const SignIn = () => {
     return (
         <Provider store={store}>

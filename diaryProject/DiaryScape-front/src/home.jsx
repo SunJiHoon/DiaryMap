@@ -1,17 +1,33 @@
 import { Link } from "react-router-dom"
-import { Box, Center } from '@chakra-ui/react'
+import { Box, Button, Center, Text, Heading } from '@chakra-ui/react'
+
 const Home = () => {
     return (
-      <Center h="100vh">
-        <Box p="6" maxW="300px" border="1px" borderColor="gray.200">
-          <Link to="signup">
-            <Box>회원가입</Box>
-          </Link>
-          <Link to ="signin">
-            <Box>로그인</Box>
-          </Link>
+      <Box h="90vh" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+        <Box>
+          <Heading
+            color="teal"
+          >
+            DiaryMap
+          </Heading>
         </Box>
-      </Center>
+        <Box p={6} m={6} maxW={400} border="1px" borderColor="gray.200">
+          <Box>
+            <Link to="signup">
+              <Button colorScheme="teal" variant="outline" p={2} w={300}>
+                회원가입
+              </Button>
+            </Link>
+          </Box>
+          <Box mt={2}>
+            <Link to ="signin">
+              <Button colorScheme="teal" variant="outline" p={2} w={300}>
+                로그인
+              </Button>
+            </Link>
+          </Box>
+        </Box>
+      </Box>
     )
 }
 
