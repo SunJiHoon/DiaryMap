@@ -35,9 +35,10 @@ const testData = {
 const Map = () => {
     const [menuVisible, setMenuVisible] = useState(false)
     const [menuPosition, setMenuPosition] = useState({x:0, y:0})
-    const [menuData, setMenuData] = useState({})
+    const [menuData, setMenuData] = useState("")
 
-    const canvasRef = useRef()
+    const divRef = useRef(null)
+    const canvasRef = useRef(null)
     
     useEffect(() => {
         
@@ -65,7 +66,7 @@ const Map = () => {
             const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
             const material = new THREE.MeshBasicMaterial({ color: 0xffff00})
             const mesh = new THREE.Mesh(geometry, material)
-            mesh.position.set(review.x, 0, review.y)
+            mesh.position.set(review.x, 0.5, review.y)
             scene.add(mesh)
             table.push({mesh, review})
             meshes.push(mesh)
@@ -123,6 +124,7 @@ const Map = () => {
                 const data = table.find(e => {
                     return e.mesh === currentIntersect.object
                 })
+                setMenuData(data.review.reviewerName + " 님이 " + data.review.reviewNum + "회 리뷰")
                 console.log(data.review)
             }
             else {
@@ -140,9 +142,12 @@ const Map = () => {
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
         }
 
-        window.addEventListener('click', handleClick)
-        window.addEventListener('resize', handleResize)
-
+        if (divRef && divRef.current) {
+            divRef.current.addEventListener('click', handleClick)
+        }
+        if (window) {
+            window.addEventListener('resize', handleResize)
+        }
 
         // animation
         let animationHandle
@@ -156,7 +161,7 @@ const Map = () => {
 
         return () => {
             window.cancelAnimationFrame(animationHandle)
-            window.removeEventListener('click', handleClick)
+            divRef.current.removeEventListener('click', handleClick)
             window.removeEventListener('resize', handleResize)
             renderer.dispose()
         }
@@ -188,14 +193,26 @@ const Map = () => {
         display="flex"
         flexDirection="column"
         opacity={menuVisible ? "1" : "0"}
+        zIndex={menuVisible ? 1 : -1}
         transition="opacity 0.3s"
     >
-        <Button onClick={() => console.log("menu1 clicked")}>menu1</Button>
-        <Button>menu2</Button>
+        <Box bgColor="white" fontWeight="semibold">{menuData}</Box>
+        <Box
+            w={24}
+            borderRadius="4px"
+            bgColor="white"
+            display="flex"
+            flexDirection="column"
+            p={1}
+            mt={2}
+        >
+        <Button onClick={() => console.log("menu1 clicked")} colorScheme="teal" variant="outline">메뉴1</Button>
+        <Button mt={2} colorScheme="teal" variant="outline">메뉴2</Button>
+        </Box>
     </Box>
     
 
-    <div>
+    <div ref={divRef} style={{zIndex: 0}}>
         <canvas ref={canvasRef}></canvas>
     </div>
     </>
