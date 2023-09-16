@@ -9,22 +9,22 @@ import axios from 'axios'
 const testData = {
     reviews : [
         {
-            x : 10,
-            y : 10,
+            x : 3,
+            y : 3,
             reviewerId: "kihun",
             reviewerName: "Kihun Jang",
             reviewNum: 3,
         },
         {
-            x : 10,
-            y : 20,
+            x : -2,
+            y : 4,
             reviewerId: "testid2",
             reviewerName: "Test 2",
             reviewNum: 1,
         },
         {
-            x : 30,
-            y : 30,
+            x : 3,
+            y : -2,
             reviewerId: "testid3",
             reviewerName: "Test 3",
             reviewNum: 4,
@@ -53,16 +53,35 @@ const Map = () => {
             canvas: canvasRef.current
         })
         renderer.setSize(aspect.width, aspect.height)
-        const geometry = new THREE.BoxGeometry(1, 1, 1)
-        const material = new THREE.MeshBasicMaterial({ color: 0xffff00})
-        const boxMesh = new THREE.Mesh(geometry, material)
-        boxMesh.position.set(0, 0, 0)
-        
+        // const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
+        // const material = new THREE.MeshBasicMaterial({ color: 0xffff00})
+        // const boxMesh = new THREE.Mesh(geometry, material)
+        // boxMesh.position.set(0, 0, 1)
+        // scene.add(boxMesh)
+
+        const table = []
+        const meshes = []
+        for (const review of testData.reviews) {
+            const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
+            const material = new THREE.MeshBasicMaterial({ color: 0xffff00})
+            const mesh = new THREE.Mesh(geometry, material)
+            mesh.position.set(review.x, 0, review.y)
+            scene.add(mesh)
+            table.push({mesh, review})
+            meshes.push(mesh)
+        }
+
+        const planeGeometry = new THREE.PlaneGeometry(10, 10)
+        const mapMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff})
+        const mapMesh = new THREE.Mesh(planeGeometry, mapMaterial)
+        mapMesh.position.set(0, 0, 0)
+        mapMesh.rotation.x = -90 * Math.PI / 180
+        scene.add(mapMesh)
         
         const camera = new THREE.PerspectiveCamera(75, aspect.width / aspect.height)
-        camera.position.z = 5
+        camera.position.y = 5
+        camera.position.z = 11
         const orbitControl = new OrbitControls(camera, canvasRef.current)
-        scene.add(boxMesh)
 
 
         // raycaster
@@ -76,7 +95,7 @@ const Map = () => {
 
             raycaster.setFromCamera(mouse, camera)
             
-            const intersects = raycaster.intersectObjects([boxMesh])
+            const intersects = raycaster.intersectObjects(meshes)
             // for(const intersect of intersects ) {
             //     intersect.object.material.color.set("#ffffff")
             // }
@@ -101,12 +120,10 @@ const Map = () => {
                 setMenuVisible(true)
                 setMenuPosition({x: e.clientX, y: e.clientY})
                 console.log(e.clientX, e.clientY)
-
-                switch(currentIntersect.object) {
-                    case boxMesh:
-                        console.log('boxMesh clicked')
-                        break
-                }
+                const data = table.find(e => {
+                    return e.mesh === currentIntersect.object
+                })
+                console.log(data.review)
             }
             else {
                 setMenuVisible(false)
@@ -173,7 +190,7 @@ const Map = () => {
         opacity={menuVisible ? "1" : "0"}
         transition="opacity 0.3s"
     >
-        <Button>menu1</Button>
+        <Button onClick={() => console.log("menu1 clicked")}>menu1</Button>
         <Button>menu2</Button>
     </Box>
     
