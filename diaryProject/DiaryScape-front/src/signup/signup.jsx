@@ -14,12 +14,12 @@ const SignUp = () => {
                 justifyContent="center"
                 alignItems="center"
             >
-            <SignUpBox />
-            <Link to='/'>
-            <Button mt={2} w={300} colorScheme="teal" variant="outline">
-                뒤로가기
-            </Button>
-            </Link>
+                <SignUpBox />
+                <Link to='/'>
+                    <Button mt={2} w={300} colorScheme="teal" variant="outline">
+                        뒤로가기
+                    </Button>
+                </Link>
             </Box>
         </Provider>
     )

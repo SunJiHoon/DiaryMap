@@ -14,12 +14,12 @@ const SignIn = () => {
                 justifyContent="center"
                 alignItems="center"
             >
-            <LoginBox />
-            <Link to='/'>
-            <Button mt={2} w={300} colorScheme="teal" variant="outline">
-                뒤로가기
-            </Button>
-            </Link>
+                <LoginBox />
+                <Link to='/'>
+                    <Button mt={2} w={300} colorScheme="teal" variant="outline">
+                        뒤로가기
+                    </Button>
+                </Link>
             </Box>
         </Provider>
     )

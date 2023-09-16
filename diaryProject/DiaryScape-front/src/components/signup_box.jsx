@@ -3,10 +3,12 @@ import { useDispatch , useSelector } from 'react-redux'
 import { loginUser } from '../reducer/user_slice'
 import axios from 'axios'
 import { Box, Input, Button } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 
 const SignUpBox = () => {
-  const user = useSelector((state) => state.user)
+  const username = useSelector((state) => state.user.name)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   
   const [loginId, setId] = useState("")
   const [name, setUsername] = useState("")
@@ -41,6 +43,7 @@ const SignUpBox = () => {
         console.log(res.data)
         if(res.data.code == 200) {
           dispatch(loginUser(res.data.userInfo))
+          navigate("/map")
         }
       })
   }
@@ -49,7 +52,7 @@ const SignUpBox = () => {
       <Box
         w={300}
       >
-        { user && <p>logined as {user.name}</p> }
+        { username && <p>logined as {username}</p> }
         <form onSubmit={handleLogin}>
           <Input type="text" placeholder="ID" value={loginId} onChange={(e) => setId(e.target.value)} />
           <Input type="text" placeholder="Username" mt={2} value={name} onChange={(e) => setUsername(e.target.value)} />

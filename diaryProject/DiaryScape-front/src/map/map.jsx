@@ -1,27 +1,56 @@
+import './map.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Box, Button } from '@chakra-ui/react' 
+import axios from 'axios'
+
+const testData = {
+    reviews : [
+        {
+            x : 10,
+            y : 10,
+            reviewerId: "kihun",
+            reviewerName: "Kihun Jang",
+            reviewNum: 3,
+        },
+        {
+            x : 10,
+            y : 20,
+            reviewerId: "testid2",
+            reviewerName: "Test 2",
+            reviewNum: 1,
+        },
+        {
+            x : 30,
+            y : 30,
+            reviewerId: "testid3",
+            reviewerName: "Test 3",
+            reviewNum: 4,
+        },
+    ],
+}
 
 const Map = () => {
     const canvasRef = useRef()
-
+    
     useEffect(() => {
         
+        // init scene
         const aspect = {
             width: window.innerWidth,
             height: window.innerHeight,
         }
 
         const scene = new THREE.Scene()
-        scene.background = new THREE.Color(0xafafaf)
+        scene.background = new THREE.Color(0xaaaaff)
         const renderer = new THREE.WebGLRenderer({
             canvas: canvasRef.current
         })
         renderer.setSize(aspect.width, aspect.height)
         const geometry = new THREE.BoxGeometry(1, 1, 1)
-        const material = new THREE.MeshBasicMaterial()
+        const material = new THREE.MeshBasicMaterial({ color: 0xffff00})
         const boxMesh = new THREE.Mesh(geometry, material)
         boxMesh.position.set(0, 0, 0)
         
@@ -31,17 +60,77 @@ const Map = () => {
         const orbitControl = new OrbitControls(camera, canvasRef.current)
         scene.add(boxMesh)
 
+
+        // raycaster
+        const raycaster = new THREE.Raycaster()
+        const mouse = new THREE.Vector2()
+        let currentIntersect = null
+
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = (event.clientX / aspect.width) * 2 - 1
+            mouse.y = -(event.clientY / aspect.height) * 2 + 1
+
+            raycaster.setFromCamera(mouse, camera)
+            
+            const intersects = raycaster.intersectObjects([boxMesh])
+            // for(const intersect of intersects ) {
+            //     intersect.object.material.color.set("#ffffff")
+            // }
+            if(intersects.length) {
+                if(!currentIntersect) {
+                for(const intersect of intersects) {
+                    intersect.object.material.color.set("#ffffff")
+                }
+                currentIntersect = intersects[0]
+            }
+            }
+            else {
+                if(currentIntersect) {
+                    currentIntersect.object.material.color.set("#ffff00")
+                    currentIntersect = null
+                }
+            }
+        })
+
+        const handleClick = (e) => {
+            if(currentIntersect) {
+                switch(currentIntersect.object) {
+                    case boxMesh:
+                        console.log('boxMesh clicked')
+                        break
+                }
+            }
+        }
+
+        const handleResize = () => {
+            aspect.width = window.innerWidth
+            aspect.height = window.innerHeight
+            camera.aspect = aspect.width / aspect.height
+            camera.updateProjectionMatrix()
+
+            renderer.setSize(aspect.width, aspect.height)
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        }
+
+        window.addEventListener('click', handleClick)
+        window.addEventListener('resize', handleResize)
+
+
+        // animation
         let animationHandle
         const animate = () => {
+            orbitControl.update()
             renderer.render(scene, camera)
             animationHandle = window.requestAnimationFrame(animate)
         }
 
         animate()
-        
+
         return () => {
-            orbitControl.update()
             window.cancelAnimationFrame(animationHandle)
+            window.removeEventListener('click', handleClick)
+            window.removeEventListener('resize', handleResize)
+            renderer.dispose()
         }
     }, [])
 
