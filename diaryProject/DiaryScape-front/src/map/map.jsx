@@ -98,12 +98,13 @@ const Map = () => {
 
         const handleClick = (e) => {
             if(currentIntersect) {
+                setMenuVisible(true)
+                setMenuPosition({x: e.clientX, y: e.clientY})
+                console.log(e.clientX, e.clientY)
+
                 switch(currentIntersect.object) {
                     case boxMesh:
                         console.log('boxMesh clicked')
-                        setMenuVisible(true)
-                        setMenuPosition({x: e.clientX, y: e.clientY})
-                        console.log(e.clientX, e.clientY)
                         break
                 }
             }
@@ -161,18 +162,21 @@ const Map = () => {
         </Box>
     </div>
 
-    { menuVisible && (
+    
     <Box
+        visiblity={menuVisible ? "visible" : "hidden"}
         position="fixed"
         left={menuPosition.x}
         top={menuPosition.y}
         display="flex"
         flexDirection="column"
+        opacity={menuVisible ? "1" : "0"}
+        transition="opacity 0.3s"
     >
         <Button>menu1</Button>
         <Button>menu2</Button>
     </Box>
-    )}
+    
 
     <div>
         <canvas ref={canvasRef}></canvas>
