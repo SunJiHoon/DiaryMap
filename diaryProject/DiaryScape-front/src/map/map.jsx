@@ -1,7 +1,8 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-
 import { useRef, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { Box, Button } from '@chakra-ui/react' 
 
 const Map = () => {
     const canvasRef = useRef()
@@ -14,6 +15,7 @@ const Map = () => {
         }
 
         const scene = new THREE.Scene()
+        scene.background = new THREE.Color(0xafafaf)
         const renderer = new THREE.WebGLRenderer({
             canvas: canvasRef.current
         })
@@ -28,6 +30,7 @@ const Map = () => {
         camera.position.z = 5
         const orbitControl = new OrbitControls(camera, canvasRef.current)
         scene.add(boxMesh)
+
         let animationHandle
         const animate = () => {
             renderer.render(scene, camera)
@@ -42,9 +45,25 @@ const Map = () => {
         }
     }, [])
 
-    return <div>
+    return <>
+    <div style={{
+        position:"fixed",
+        top:"0",
+        left:"0",
+    }}>
+        <Box
+            ml={4}
+            mt={4}
+        >
+            <Link to="/">
+                <Button colorScheme="teal">홈으로 돌아가기</Button>
+            </Link>
+        </Box>
+    </div>
+    <div>
         <canvas ref={canvasRef}></canvas>
     </div>
+    </>
 }
 
 export default Map
