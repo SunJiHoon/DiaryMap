@@ -50,6 +50,7 @@ const Map = () => {
         position:"fixed",
         top:"0",
         left:"0",
+        zIndex:"2"
     }}>
         <Box
             ml={4}
