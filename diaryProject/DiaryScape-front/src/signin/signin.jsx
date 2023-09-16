@@ -1,10 +1,10 @@
-import SignUpBox from './components/signup_box'
 import { Provider } from "react-redux"
-import { store } from './app/store'
-import { Link } from 'react-router-dom'
-import { Box, Button} from '@chakra-ui/react'
+import { store } from '../app/store'
+import LoginBox from "../components/login_box"
+import { Link } from "react-router-dom"
+import { Box, Button } from '@chakra-ui/react'
 
-const SignUp = () => {
+const SignIn = () => {
     return (
         <Provider store={store}>
             <Box
@@ -14,7 +14,7 @@ const SignUp = () => {
                 justifyContent="center"
                 alignItems="center"
             >
-            <SignUpBox />
+            <LoginBox />
             <Link to='/'>
             <Button mt={2} w={300} colorScheme="teal" variant="outline">
                 뒤로가기
@@ -25,4 +25,4 @@ const SignUp = () => {
     )
 }
 
-export default SignUp
+export default SignIn
