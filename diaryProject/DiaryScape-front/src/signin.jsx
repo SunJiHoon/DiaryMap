@@ -3,11 +3,12 @@ import { store } from './app/store'
 import LoginBox from "./components/login_box"
 import { Link } from "react-router-dom"
 import { Box, Button } from '@chakra-ui/react'
+
 const SignIn = () => {
     return (
         <Provider store={store}>
             <Box
-                h="90vh"
+                h="100vh"
                 display="flex"
                 flexDirection="column"
                 justifyContent="center"

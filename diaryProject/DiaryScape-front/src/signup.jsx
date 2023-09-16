@@ -8,7 +8,7 @@ const SignUp = () => {
     return (
         <Provider store={store}>
             <Box
-                h="90vh"
+                h="100vh"
                 display="flex"
                 flexDirection="column"
                 justifyContent="center"

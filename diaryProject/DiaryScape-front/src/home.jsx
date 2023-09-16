@@ -3,7 +3,8 @@ import { Box, Button, Center, Text, Heading } from '@chakra-ui/react'
 
 const Home = () => {
     return (
-      <Box h="90vh" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+      <Box h="100vh" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+        <Box>
         <Box>
           <Heading
             color="teal"
@@ -26,6 +27,7 @@ const Home = () => {
               </Button>
             </Link>
           </Box>
+        </Box>
         </Box>
       </Box>
     )
