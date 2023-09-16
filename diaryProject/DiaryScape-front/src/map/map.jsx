@@ -1,7 +1,7 @@
 import './map.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Box, Button } from '@chakra-ui/react' 
 import axios from 'axios'
@@ -33,6 +33,10 @@ const testData = {
 }
 
 const Map = () => {
+    const [menuVisible, setMenuVisible] = useState(false)
+    const [menuPosition, setMenuPosition] = useState({x:0, y:0})
+    const [menuData, setMenuData] = useState({})
+
     const canvasRef = useRef()
     
     useEffect(() => {
@@ -97,8 +101,14 @@ const Map = () => {
                 switch(currentIntersect.object) {
                     case boxMesh:
                         console.log('boxMesh clicked')
+                        setMenuVisible(true)
+                        setMenuPosition({x: e.clientX, y: e.clientY})
+                        console.log(e.clientX, e.clientY)
                         break
                 }
+            }
+            else {
+                setMenuVisible(false)
             }
         }
 
@@ -150,6 +160,20 @@ const Map = () => {
             </Link>
         </Box>
     </div>
+
+    { menuVisible && (
+    <Box
+        position="fixed"
+        left={menuPosition.x}
+        top={menuPosition.y}
+        display="flex"
+        flexDirection="column"
+    >
+        <Button>menu1</Button>
+        <Button>menu2</Button>
+    </Box>
+    )}
+
     <div>
         <canvas ref={canvasRef}></canvas>
     </div>
