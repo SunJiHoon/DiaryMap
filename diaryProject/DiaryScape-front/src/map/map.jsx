@@ -5,6 +5,7 @@ import { useRef, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Box, Button } from '@chakra-ui/react' 
 import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 const testData = {
     reviews : [
@@ -33,6 +34,7 @@ const testData = {
 }
 
 const Map = () => {
+    const username = useSelector((state) => state.user.name)
     const [menuVisible, setMenuVisible] = useState(false)
     const [menuPosition, setMenuPosition] = useState({x:0, y:0})
     const [menuData, setMenuData] = useState("")
@@ -141,9 +143,9 @@ const Map = () => {
             renderer.setSize(aspect.width, aspect.height)
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
         }
-
-        if (divRef && divRef.current) {
-            divRef.current.addEventListener('click', handleClick)
+        const divInstance = divRef.current
+        if (divInstance) {
+            divInstance.addEventListener('click', handleClick)
         }
         if (window) {
             window.addEventListener('resize', handleResize)
@@ -161,7 +163,7 @@ const Map = () => {
 
         return () => {
             window.cancelAnimationFrame(animationHandle)
-            divRef.current.removeEventListener('click', handleClick)
+            divInstance.removeEventListener('click', handleClick)
             window.removeEventListener('resize', handleResize)
             renderer.dispose()
         }
@@ -181,6 +183,13 @@ const Map = () => {
             <Link to="/">
                 <Button colorScheme="teal">홈으로 돌아가기</Button>
             </Link>
+        </Box>
+        <Box
+            mt={4}
+        >
+            { username &&
+                <Box>{username} 님, 안녕하세요!</Box>
+            }
         </Box>
     </div>
 
