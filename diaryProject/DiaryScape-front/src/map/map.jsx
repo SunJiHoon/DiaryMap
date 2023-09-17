@@ -141,9 +141,9 @@ const Map = () => {
             renderer.setSize(aspect.width, aspect.height)
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
         }
-
-        if (divRef && divRef.current) {
-            divRef.current.addEventListener('click', handleClick)
+        const divInstance = divRef.current
+        if (divInstance) {
+            divInstance.addEventListener('click', handleClick)
         }
         if (window) {
             window.addEventListener('resize', handleResize)
@@ -161,7 +161,7 @@ const Map = () => {
 
         return () => {
             window.cancelAnimationFrame(animationHandle)
-            divRef.current.removeEventListener('click', handleClick)
+            divInstance.removeEventListener('click', handleClick)
             window.removeEventListener('resize', handleResize)
             renderer.dispose()
         }
