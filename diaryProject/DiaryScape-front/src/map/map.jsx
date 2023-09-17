@@ -67,7 +67,7 @@ const Map = () => {
         axios.get('http://localhost:8080/api/reviews',).then((res) => {
             const reviewData = res.data
             console.log(reviewData)
-            for (const review of testData.reviews) {
+            for (const review of riviewData) {
                 const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
                 const material = new THREE.MeshBasicMaterial({ color: 0xffff00})
                 const mesh = new THREE.Mesh(geometry, material)
@@ -130,7 +130,7 @@ const Map = () => {
                 const data = table.find(e => {
                     return e.mesh === currentIntersect.object
                 })
-                setMenuData(data.review.reviewerName + " 님이 " + data.review.reviewNum + "회 리뷰")
+                setMenuData("제목 : " + data.review.reviewTitle + ", "+data.review.reviewerName + "님, " + data.review.hart_count + "(좋아요)")
                 console.log(data.review)
             }
             else {
