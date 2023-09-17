@@ -67,7 +67,7 @@ const Map = () => {
         axios.get('http://localhost:8080/api/reviews',).then((res) => {
             const reviewData = res.data
             console.log(reviewData)
-            for (const review of riviewData) {
+            for (const review of reviewData) {
                 const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
                 const material = new THREE.MeshBasicMaterial({ color: 0xffff00})
                 const mesh = new THREE.Mesh(geometry, material)
