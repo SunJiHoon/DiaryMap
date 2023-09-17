@@ -64,7 +64,7 @@ const Map = () => {
 
         const table = []
         const meshes = []
-        axios.get('/api/reviews', (res) => {
+        axios.get('http://localhost:8080/api/reviews', (res) => {
             const reviewData = res.data
             console.log(reviewData)
             for (const review of testData.reviews) {
