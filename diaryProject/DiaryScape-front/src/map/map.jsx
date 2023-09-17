@@ -64,15 +64,19 @@ const Map = () => {
 
         const table = []
         const meshes = []
-        for (const review of testData.reviews) {
-            const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
-            const material = new THREE.MeshBasicMaterial({ color: 0xffff00})
-            const mesh = new THREE.Mesh(geometry, material)
-            mesh.position.set(review.x, 0.5, review.y)
-            scene.add(mesh)
-            table.push({mesh, review})
-            meshes.push(mesh)
-        }
+        axios.get('/api/reviews', (res) => {
+            const reviewData = res.data
+            console.log(reviewData)
+            for (const review of testData.reviews) {
+                const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
+                const material = new THREE.MeshBasicMaterial({ color: 0xffff00})
+                const mesh = new THREE.Mesh(geometry, material)
+                mesh.position.set(review.x, 0.25, review.y)
+                scene.add(mesh)
+                table.push({mesh, review})
+                meshes.push(mesh)
+            }
+        })
 
         const planeGeometry = new THREE.PlaneGeometry(10, 10)
         const mapMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff})
