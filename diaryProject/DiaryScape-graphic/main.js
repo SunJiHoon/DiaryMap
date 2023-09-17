@@ -26,6 +26,8 @@ async function init() {
   camera.position.z = 100;
   camera.rotation.y = Math.PI / 4;
 
+  const saveManager = new SaveManager(scene);
+
   const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
   directionalLight.position.set(-10, 10, 20);
   scene.add(directionalLight);
@@ -39,18 +41,17 @@ async function init() {
   const player = new Player();
   const playerMesh = await player.loadGltf("spongebob");
 
-  playerMesh;
+  saveManager.saveObj(playerMesh);
   scene.add(playerMesh);
 
   camera.position.set(-35, 40, 45);
   camera.lookAt(0, 0, 0);
 
+  const inputManager = new InputManager(camera, scene);
+
   document.body.appendChild(renderer.domElement);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.render(scene, camera);
-
-  const inputManager = new InputManager(camera, scene);
-  const saveManager = new SaveManager(scene);
 
   const tempGeoMetry = new THREE.BoxGeometry(1, 1, 1);
   const tempMaterial = new THREE.MeshBasicMaterial();
