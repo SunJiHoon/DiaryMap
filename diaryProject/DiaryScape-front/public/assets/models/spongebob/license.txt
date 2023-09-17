@@ -1,0 +1,11 @@
+Model Information:
+* title:	Spongebob
+* source:	https://sketchfab.com/3d-models/spongebob-a98d07f92b5a42c8a871d5a38f47e282
+* author:	Felix the mouse (https://sketchfab.com/Felix_da_mouse)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Spongebob" (https://sketchfab.com/3d-models/spongebob-a98d07f92b5a42c8a871d5a38f47e282) by Felix the mouse (https://sketchfab.com/Felix_da_mouse) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

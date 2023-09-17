@@ -1,0 +1,11 @@
+Model Information:
+* title:	Patrick
+* source:	https://sketchfab.com/3d-models/patrick-90ca50487cf3462fb652d7734fdc1dd1
+* author:	LostBoyz2078 (https://sketchfab.com/LostModels2025)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Patrick" (https://sketchfab.com/3d-models/patrick-90ca50487cf3462fb652d7734fdc1dd1) by LostBoyz2078 (https://sketchfab.com/LostModels2025) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

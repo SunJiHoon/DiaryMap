@@ -30,7 +30,14 @@ const Home = () => {
           <Box mt={2}>
             <Link to ="map">
               <Button colorScheme="teal" variant="outline" p={2} w={300}>
-                테스트
+                맵 테스트
+              </Button>
+            </Link>
+          </Box>
+          <Box mt={2}>
+            <Link to ="reviewspace">
+              <Button colorScheme="teal" variant="outline" p={2} w={300}>
+                리뷰 공간 테스트
               </Button>
             </Link>
           </Box>
