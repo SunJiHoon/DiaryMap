@@ -25,12 +25,12 @@ public class TestDataInit {
     /**
      * 테스트용 데이터 추가
      */
-    //@PostConstruct
+    @PostConstruct
     public void init() {
         itemRepository.save(new Item("itemA", 10000, 10));
         itemRepository.save(new Item("itemB", 20000, 20));
 
-        /*
+
         Member member1 = new Member();
         member1.setLoginId("test");
         member1.setPassword("test!");
@@ -43,8 +43,9 @@ public class TestDataInit {
         member2.setName("2");
         memberRepository.save(member2);
 
-         */
+
         //
+        /*
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
 
         EntityManager em = emf.createEntityManager();
@@ -273,7 +274,7 @@ public class TestDataInit {
 
         em.close();
         emf.close();
-        //
+        //*/
     }
 
 }

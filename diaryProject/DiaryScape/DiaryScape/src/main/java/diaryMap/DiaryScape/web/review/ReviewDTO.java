@@ -13,4 +13,8 @@ public class ReviewDTO {
     private long hart_count;
     //private DoType doType;
     private String doName;
+
+    private int x;
+    private int y;
+
 }
