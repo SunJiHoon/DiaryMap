@@ -6,22 +6,24 @@ import SaveManager from "../components/manager/saveManager";
 import { useRef, useEffect } from "react";
 import { Link } from 'react-router-dom'
 import { Box, Button } from '@chakra-ui/react'
+
 const ReviewSpace = () => {
     const canvasRef = useRef(null)
 
     useEffect(() => {
-
+        let renderer, scene, camera
+        
         async function init() {
-            const scene = new THREE.Scene();
+            scene = new THREE.Scene();
 
-            const renderer = new THREE.WebGLRenderer({
+            renderer = new THREE.WebGLRenderer({
                 canvas: canvasRef.current,
                 antialias: true,
                 alpha: true,
             });
             renderer.setClearColor(0x80ffff, 1);
 
-            const camera = new THREE.PerspectiveCamera(
+            camera = new THREE.PerspectiveCamera(
                 75,
                 window.innerWidth / window.innerHeight,
                 1,
@@ -55,37 +57,38 @@ const ReviewSpace = () => {
 
             // document.body.appendChild(renderer.domElement);
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.render(scene, camera);
+            // renderer.render(scene, camera);
 
             const tempGeoMetry = new THREE.BoxGeometry(1, 1, 1);
             const tempMaterial = new THREE.MeshBasicMaterial();
             const tempMesh = new THREE.Mesh(tempGeoMetry, tempMaterial);
             saveManager.saveObj(tempMesh);
-
-            const loadTemp = window.addEventListener("resize", handleResize);
-
-            function handleResize() {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.render(scene, camera);
-            }
-
-            let req
-            function anim() {
-                renderer.render(scene, camera);
-
-                req = requestAnimationFrame(anim);
-            }
-            anim();
+            
         }
         
         init()
 
+        const loadTemp = window.addEventListener("resize", handleResize);
+
+        function handleResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.render(scene, camera);
+        }
+
+        let req
+        function anim() {
+            renderer.render(scene, camera);
+
+            req = requestAnimationFrame(anim);
+        }
+        anim();
+
         return (() => {
-            // cancelAnimationFrame(req)
-            // window.removeEventListener("resize", handleResize)
+            cancelAnimationFrame(req)
+            window.removeEventListener("resize", handleResize)
         })
     }, [])
 
