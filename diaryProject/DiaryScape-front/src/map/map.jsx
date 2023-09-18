@@ -12,23 +12,23 @@ const testData = {
         {
             x : 3,
             y : 3,
-            reviewerId: "kihun",
+            reviewTitle: "부산 리뷰",
             reviewerName: "Kihun Jang",
-            reviewNum: 3,
+            hart_count: 3,
         },
         {
             x : -2,
             y : 4,
-            reviewerId: "testid2",
+            reviewTitle: "1박 2일 후쿠오카",
             reviewerName: "Test 2",
-            reviewNum: 1,
+            hart_count: 1,
         },
         {
             x : 3,
             y : -2,
-            reviewerId: "testid3",
+            reviewTitle: "환상같았던 교토 여행",
             reviewerName: "Test 3",
-            reviewNum: 4,
+            hart_count: 4,
         },
     ],
 }
@@ -38,6 +38,10 @@ const Map = () => {
     const [menuVisible, setMenuVisible] = useState(false)
     const [menuPosition, setMenuPosition] = useState({x:0, y:0})
     const [menuData, setMenuData] = useState("")
+
+    const [reviewDataVisible, setReviewDataVisible] = useState(false)
+    const [reviewDataPosition, setReviewDataPosition] = useState({x:0, y:0})
+    const [reviewData, setReviewData] = useState("")
 
     const divRef = useRef(null)
     const canvasRef = useRef(null)
@@ -77,6 +81,15 @@ const Map = () => {
                 meshes.push(mesh)
             }
         })
+        // for (const review of testData.reviews) {
+        //     const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
+        //     const material = new THREE.MeshBasicMaterial({ color: 0xffff00})
+        //     const mesh = new THREE.Mesh(geometry, material)
+        //     mesh.position.set(review.x, 0.25, review.y)
+        //     scene.add(mesh)
+        //     table.push({mesh, review})
+        //     meshes.push(mesh)
+        // }
 
         const planeGeometry = new THREE.PlaneGeometry(10, 10)
         const mapMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff})
@@ -107,17 +120,27 @@ const Map = () => {
             //     intersect.object.material.color.set("#ffffff")
             // }
             if(intersects.length) {
+                
                 if(!currentIntersect) {
                 for(const intersect of intersects) {
                     intersect.object.material.color.set("#ffffff")
                 }
                 currentIntersect = intersects[0]
+                const data = table.find(e => {
+                    return e.mesh === currentIntersect.object
+                })
+                setReviewDataPosition({x: event.clientX-100, y: event.clientY-30})
+                    // console.log(e.clientX, e.clientY)
+                    
+                setReviewData("제목 : " + data.review.reviewTitle + " - "+data.review.reviewerName + "님, 하트:" + data.review.hart_count)
+                setReviewDataVisible(true)
             }
             }
             else {
                 if(currentIntersect) {
                     currentIntersect.object.material.color.set("#ffff00")
                     currentIntersect = null
+                    setReviewDataVisible(false)
                 }
             }
         })
@@ -130,7 +153,7 @@ const Map = () => {
                 const data = table.find(e => {
                     return e.mesh === currentIntersect.object
                 })
-                setMenuData("제목 : " + data.review.reviewTitle + ", "+data.review.reviewerName + "님, " + data.review.hart_count + "(좋아요)")
+                setMenuData("제목 : " + data.review.reviewTitle + " - "+data.review.reviewerName + "님, 하트:" + data.review.hart_count)
                 console.log(data.review)
             }
             else {
@@ -209,7 +232,6 @@ const Map = () => {
         zIndex={menuVisible ? 1 : -1}
         transition="opacity 0.3s"
     >
-        <Box bgColor="white" fontWeight="semibold">{menuData}</Box>
         <Box
             w={24}
             borderRadius="4px"
@@ -223,6 +245,20 @@ const Map = () => {
         <Button mt={2} colorScheme="teal" variant="outline">메뉴2</Button>
         </Box>
     </Box>
+    <Box
+        visiblity={reviewDataVisible ? "visible" : "hidden"}
+        position="fixed"
+        left={reviewDataPosition.x}
+        top={reviewDataPosition.y}
+        display="flex"
+        flexDirection="column"
+        opacity={reviewDataVisible ? "1" : "0"}
+        zIndex={reviewDataVisible ? 1 : -1}
+        transition="opacity 0.1s"
+    >
+        <Box bgColor="white" fontWeight="semibold">{reviewData}</Box>
+    </Box>
+
     
 
     <div ref={divRef} style={{zIndex: 0}}>
