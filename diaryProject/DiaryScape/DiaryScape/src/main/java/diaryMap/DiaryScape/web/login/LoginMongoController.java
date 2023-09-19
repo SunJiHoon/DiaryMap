@@ -1,28 +1,25 @@
 package diaryMap.DiaryScape.web.login;
 
+import diaryMap.DiaryScape.domain.login.LoginMongoService;
 import diaryMap.DiaryScape.domain.login.LoginService;
 import diaryMap.DiaryScape.domain.member.Member;
+import diaryMap.DiaryScape.domain.member.MemberMongoRepository;
 import diaryMap.DiaryScape.domain.member.MemberRepository;
 import diaryMap.DiaryScape.web.member.MemberWithoutId;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-
 @Slf4j
-//@RestController//
+@RestController//
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class LoginController {
-    private final LoginService loginService;
-    private final MemberRepository memberRepository;
+public class LoginMongoController {
+    private final LoginMongoService loginMongoService;
+    //private final MemberMongoRepository memberMongoRepository;
 
     @GetMapping("/login")
     public String loginForm(@ModelAttribute("loginForm") LoginForm form) {
@@ -31,15 +28,15 @@ public class LoginController {
     }
     @PostMapping("/login")//@Valid//@Valid @ModelAttribute //requestBody
     public MemberWithoutId login(@RequestBody LoginForm form,
-                        BindingResult bindingResult,
-                        HttpServletResponse response) {
+                                 BindingResult bindingResult,
+                                 HttpServletResponse response) {
         log.info("들어왔다.");
         log.info(form.toString());
         MemberWithoutId noMember = new MemberWithoutId("-1", "-1");
         if (bindingResult.hasErrors()) {
             return noMember;
         }
-        Member loginMember = loginService.login(form.getLoginId(),
+        Member loginMember = loginMongoService.login(form.getLoginId(),
                 form.getPassword());
         log.info("login? {}", loginMember);
         if (loginMember == null) {
@@ -67,5 +64,4 @@ public class LoginController {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
     }
-
 }
