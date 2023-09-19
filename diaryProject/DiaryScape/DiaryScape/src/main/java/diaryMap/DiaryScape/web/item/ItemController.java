@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("/items")
+@RequestMapping("/test/items")
 @RequiredArgsConstructor
 public class ItemController {
 

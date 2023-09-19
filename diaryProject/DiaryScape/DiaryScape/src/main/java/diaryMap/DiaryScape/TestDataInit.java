@@ -24,11 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class TestDataInit {
-
     private final ItemRepository itemRepository;
     private final MemberRepository memberRepository;
-
-    //    @Autowired
     private final MemberMongoRepository memberMongoRepository;
 
     /**
@@ -67,10 +64,10 @@ public class TestDataInit {
         //memberMongoRepository.insert(Arrays.asList(member3, member4));
 
         // get
-        List<Member> result = memberMongoRepository.findByName("4");
+        //List<Member> result = memberMongoRepository.findByName("4");
         //List<Member> result = memberMongoRepository.findBy()
 
-        log.info(result.toString());
+        //log.info(result.toString());
 
     }
 

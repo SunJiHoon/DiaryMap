@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 //@RestController//
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/test")
 public class LoginController {
     private final LoginService loginService;
     private final MemberRepository memberRepository;
