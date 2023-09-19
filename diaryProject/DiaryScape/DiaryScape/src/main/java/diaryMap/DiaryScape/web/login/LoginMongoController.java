@@ -46,7 +46,7 @@ public class LoginMongoController {
         //로그인 성공 처리 TODO
         //쿠키에 시간 정보를 주지 않으면 세션 쿠키(브라우저 종료시 모두 종료)
         Cookie idCookie = new Cookie("memberId",
-                String.valueOf(loginMember.getId()));
+                String.valueOf(loginMember.getRealid()));
         response.addCookie(idCookie);
 
         MemberWithoutId mem = new MemberWithoutId(loginMember.getLoginId(), loginMember.getName());
