@@ -11,6 +11,8 @@ const ReviewSpace = () => {
     useEffect(() => {
         let renderer, scene, camera
         
+        let inputManager
+        let saveManager
         async function init() {
             scene = new THREE.Scene();
 
@@ -31,8 +33,9 @@ const ReviewSpace = () => {
             camera.position.set(-35, 45, 45);
             camera.lookAt(0,0,0);
 
-            const saveManager = new SaveManager(scene);
-            saveManager.newMap("spongebob").then(()=>new InputManager(camera, scene));
+            saveManager = new SaveManager(scene);
+            saveManager.newMap("spongebob").then(()=> { inputManager = new InputManager(camera, scene) });
+            saveManager.setupEventListener();
 
             // document.body.appendChild(renderer.domElement);
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -69,6 +72,8 @@ const ReviewSpace = () => {
         return (() => {
             cancelAnimationFrame(req)
             window.removeEventListener("resize", handleResize)
+            inputManager?.cleanup()
+            saveManager?.cleanup()
         })
     }, [])
 
