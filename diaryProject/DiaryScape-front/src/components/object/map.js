@@ -5,7 +5,7 @@ class Map {
     const mapGeometry = new THREE.PlaneGeometry(1000, 1000, 500, 500);
     const mapMaterial = new THREE.MeshStandardMaterial({
       color: "green",
-      wireframe: true,
+      wireframe: false,
       side: THREE.DoubleSide,
     });
 

@@ -1,8 +1,6 @@
 import * as THREE from "three";
-import Map from "../components/object/map";
-import Player from "../components/object/player";
 import InputManager from "../components/manager/inputManager";
-import SaveManager from "../components/manager/saveManager";
+import SaveManager from "../components/manager/objectManager";
 import { useRef, useEffect } from "react";
 import { Link } from 'react-router-dom'
 import { Box, Button } from '@chakra-ui/react'
@@ -29,41 +27,23 @@ const ReviewSpace = () => {
                 1,
                 300
             );
-            camera.position.z = 100;
             camera.rotation.y = Math.PI / 4;
+            camera.position.set(-35, 45, 45);
+            camera.lookAt(0,0,0);
 
             const saveManager = new SaveManager(scene);
-
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
-            directionalLight.position.set(-10, 10, 20);
-            scene.add(directionalLight);
-
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-            scene.add(ambientLight);
-
-            const map = new Map();
-            scene.add(map.mesh);
-
-            const player = new Player();
-            const playerMesh = await player.loadGltf("spongebob");
-
-            saveManager.saveObj(playerMesh);
-            scene.add(playerMesh);
-
-            camera.position.set(-35, 40, 45);
-            camera.lookAt(0, 0, 0);
-
-            const inputManager = new InputManager(camera, scene);
+            saveManager.newMap("spongebob").then(()=>new InputManager(camera, scene));
 
             // document.body.appendChild(renderer.domElement);
             renderer.setSize(window.innerWidth, window.innerHeight);
             // renderer.render(scene, camera);
 
-            const tempGeoMetry = new THREE.BoxGeometry(1, 1, 1);
+            const tempGeoMetry = new THREE.BoxGeometry(2, 2, 2);
             const tempMaterial = new THREE.MeshBasicMaterial();
             const tempMesh = new THREE.Mesh(tempGeoMetry, tempMaterial);
-            saveManager.saveObj(tempMesh);
+            scene.add(tempMesh);
             
+            //scene.remove(tempMesh);
         }
         
         init()
