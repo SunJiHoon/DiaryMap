@@ -1,0 +1,98 @@
+import { useDispatch, useSelector } from "react-redux"
+import { loginUser, clearUser } from '../reducer/user_slice'
+import { Box, Input, Button, Heading} from '@chakra-ui/react'
+import { useState, useEffect, useCallback, useRef } from "react"
+
+const MyTripmap = () => {
+
+
+    const [isTest, setIsTest] = useState(true)
+    // true: 테스트 맵 데이터 사용
+    // false: "api/my_tripmap"에 Get 요청 후 맵 데이터 가져옴.
+
+
+    // 로그인은 일단 프론트에서만 수행하도록 구현함
+    const dispatch = useDispatch()
+    
+    const testLoginData = {
+        name:"Tester",
+        loginId: "tester_id"
+    }
+
+    dispatch(loginUser(testLoginData))
+
+    const username = useSelector((state) => state.user.name)
+
+    
+
+    const [reviewData, setReviewData] = useState([])
+    const [newReviewValue, setNewReviewValue] = useState([])
+    
+    const onNewReviewChange = useCallback((e) => {
+        setNewReviewValue(e.target.value)
+    }, [])
+
+    const nextId = useRef(3)
+    const onNewReviewSubmit = useCallback((e) => {
+        e.preventDefault()
+        setReviewData(reviewData.concat({
+            title: newReviewValue,
+            id: nextId.current
+        }))
+        setNewReviewValue('')
+
+        nextId.current++
+    })
+
+    useEffect(() => {
+        if(isTest) {
+            setReviewData([
+                {
+                    title: "부산 리뷰",
+                    id: 1
+                },
+                {
+                    title: "제주도 리뷰",
+                    id: 2
+                }
+            ])
+            console.log(reviewData)
+        }
+        else {
+            axios.get('http://localhost:8080/api/my_tripmap').then((res) => {
+                setReviewData(res.data)
+            })
+        }
+    }, [])
+
+    return (
+    <Box p={6}>
+        <Heading as="h2" size="xl">
+            <Box display="inline" color="blue">{username}</Box>의 Trip Zone
+        </Heading>
+        <Box>
+            <Heading as="h3" size="lg">여행 리뷰 맵 리스트</Heading>
+            <form onSubmit={onNewReviewSubmit}>
+                <Box display="flex" justifyContent="center">
+                <Box display="flex" justifyContent="center" w="100%" maxW="500px" mt={6} mb={6}>
+                <Input type="text" placeholder="새 리뷰 추가" value={newReviewValue} onChange={onNewReviewChange}/>
+                <Button type="submit" ml={4}>추가</Button>
+                </Box>
+                </Box>
+            </form>
+            <Box display="flex" justifyContent="center">
+                <Box w="100%" maxW="500px">
+                    {reviewData.map((review) => (
+                        <Box border="1px" key={review.id} mb={6}>
+                            {review.title}<br />
+                            {review.id}
+                        </Box>
+                    ))}
+                </Box>
+            </Box>
+        </Box>
+    </Box>
+    )
+}
+
+export default MyTripmap
