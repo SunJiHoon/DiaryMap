@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { loginUser, clearUser } from '../reducer/user_slice'
 import { Box, Input, Button, Heading} from '@chakra-ui/react'
 import { useState, useEffect, useCallback, useRef } from "react"
+import axios from "axios"
 
 const MyTripmap = () => {
 
@@ -74,10 +75,10 @@ const MyTripmap = () => {
             <Heading as="h3" size="lg">여행 리뷰 맵 리스트</Heading>
             <form onSubmit={onNewReviewSubmit}>
                 <Box display="flex" justifyContent="center">
-                <Box display="flex" justifyContent="center" w="100%" maxW="500px" mt={6} mb={6}>
-                <Input type="text" placeholder="새 리뷰 추가" value={newReviewValue} onChange={onNewReviewChange}/>
-                <Button type="submit" ml={4}>추가</Button>
-                </Box>
+                    <Box display="flex" justifyContent="center" w="100%" maxW="500px" mt={6} mb={6}>
+                    <Input type="text" placeholder="새 리뷰 추가" value={newReviewValue} onChange={onNewReviewChange}/>
+                    <Button type="submit" ml={4}>추가</Button>
+                    </Box>
                 </Box>
             </form>
             <Box display="flex" justifyContent="center">
