@@ -36,10 +36,15 @@ const MyTripmap = () => {
     const nextId = useRef(3)
     const onNewReviewSubmit = useCallback((e) => {
         e.preventDefault()
-        setReviewData(reviewData.concat({
-            title: newReviewValue,
-            id: nextId.current
-        }))
+        // setReviewData(reviewData.concat({
+        //     title: newReviewValue,
+        //     id: nextId.current
+        // }))
+        axios.post("http://localhost:8080/api/obj/create?mapName="+newReviewValue, {}, {withCredentials:true})
+            .then((res) => {
+                
+            })
+
         setNewReviewValue('')
 
         nextId.current++
