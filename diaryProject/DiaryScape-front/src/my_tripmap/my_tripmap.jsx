@@ -42,7 +42,9 @@ const MyTripmap = () => {
         // }))
         axios.post("http://localhost:8080/api/obj/create?mapName="+newReviewValue, {}, {withCredentials:true})
             .then((res) => {
-                
+                axios.get('http://localhost:8080/api/obj/list').then((res) => {
+                    setReviewData(res.data)
+                })
             })
 
         setNewReviewValue('')
