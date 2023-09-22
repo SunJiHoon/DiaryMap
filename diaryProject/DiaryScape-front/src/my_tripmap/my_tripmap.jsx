@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback, useRef } from "react"
 const MyTripmap = () => {
 
 
-    const [isTest, setIsTest] = useState(true)
+    const [isTest, setIsTest] = useState(false)
     // true: 테스트 맵 데이터 사용
     // false: "api/my_tripmap"에 Get 요청 후 맵 데이터 가져옴.
 
@@ -59,7 +59,7 @@ const MyTripmap = () => {
             console.log(reviewData)
         }
         else {
-            axios.get('http://localhost:8080/api/my_tripmap').then((res) => {
+            axios.get('http://localhost:8080/api/obj/list').then((res) => {
                 setReviewData(res.data)
             })
         }
@@ -83,9 +83,9 @@ const MyTripmap = () => {
             <Box display="flex" justifyContent="center">
                 <Box w="100%" maxW="500px">
                     {reviewData.map((review) => (
-                        <Box border="1px" key={review.id} mb={6}>
+                        <Box border="1px" key={review.mapId} mb={6}>
                             {review.title}<br />
-                            {review.id}
+                            {review.mapId}
                         </Box>
                     ))}
                 </Box>
