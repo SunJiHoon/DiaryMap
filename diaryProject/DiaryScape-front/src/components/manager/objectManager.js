@@ -1,12 +1,20 @@
 import * as THREE from "three";
-import Map from '../object/map.js';
-import Player from '../object/player.js'
+import Map from "../object/map.js";
+import Player from "../object/player.js";
 import axios from "axios";
 
 let scene;
 const loader = new THREE.ObjectLoader();
 
-class saveManager {
+let posArr1 = [
+  new THREE.Vector3(0, 1, 0), //역
+  new THREE.Vector3(10, 1, 0), //음식점1
+  new THREE.Vector3(10, 1, 10), //음식점2
+  new THREE.Vector3(10, 1, 20), //음식점3
+  new THREE.Vector3(20, 1, 20), //관광지1
+];
+
+class objectManager {
   constructor(_scene) {
     scene = _scene;
   }
@@ -26,16 +34,19 @@ class saveManager {
     const playerMesh = await player.loadGltf(characterName);
     playerMesh.name = "player";
     scene.add(playerMesh);
-    console.log("create the player");
 
-    //this.saveObjs();
+    for (var i = 0; i < 5; i++) {
+      const tempGeometry = new THREE.BoxGeometry(2, 2, 2);
+      const tempMaterial = new THREE.MeshStandardMaterial();
+      const tempMesh = new THREE.Mesh(tempGeometry, tempMaterial);
+      tempMesh.position.set(posArr1[i].x, posArr1[i].y, posArr1[i].z);
+      tempMesh.userData = { tag: "node" };
+      tempMesh.name = i;
+      scene.add(tempMesh);
+    }
   }
 
-  createObj(object, pos){
-    object.position.set(pos);
-  }
-
-  deleteObj(object){
+  deleteObj(object) {
     scene.remove(object);
   }
 
@@ -45,13 +56,14 @@ class saveManager {
     console.log(objectJson);
     console.log(object.position);
     console.log(object.rotation);
-
+    axios.post("http://localhost:8080/api/save/Obj");
     return objectJson;
   }
 
   saveObjs() {
-    console.log(scene.toJSON());
-    axios.post("http://localhost:8080/api/Obj").then((res) => {
+    const sceneJSON = scene.toJSON();
+    console.log(sceneJSON);
+    axios.post("http://localhost:8080/api/save/Objs").then((res) => {
       console.log(res.data);
     });
   }
@@ -77,33 +89,21 @@ class saveManager {
             obj.position.set(object.pos);
             obj.rotation.set(object.rot);
           });
+          for (var i = 0; i < posArr1.length - 1; i++) {
+            const x1 = posArr1[i].x;
+            const z1 = posArr1[i].z;
+            const x2 = posArr1[i + 1].x;
+            const z2 = posArr1[i + 1].z;
+
+            const lineGeometry = new THREE.PlaneGeometry();
+            const lineMaterial = new THREE.MeshStandardMaterial();
+            const line = new THREE.Mesh(lineGeometry, lineMaterial);
+            scene.add(line);
+          }
         });
       }
     });
   }
-  
-  setupEventListener() {
-    document.addEventListener("keydown", this.onDocumentKeyDown, false);
-  }
-  cleanup() {
-    document.removeEventListener("keydown", this.onDocumentKeyDown, false);
-    console.log("cleanup saveManager")
-  }
-  onDocumentKeyDown(event) {
-    var keyCode = event.which;
-    if (keyCode == 65) {
-      axios.post("http://localhost:8080/api/Obj", sceneJson).then((res) => {
-        console.log(res.data);
-      });
-    } else if (keyCode == 66) {
-      axios.get("http://localhost:8080/api/Obj").then((res) => {
-        console.log(res.data);
-      });
-    }
-  }
 }
 
-
-
-
-export default saveManager;
+export default objectManager;

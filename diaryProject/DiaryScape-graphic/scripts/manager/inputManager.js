@@ -5,6 +5,12 @@ let camera;
 let scene;
 let character;
 
+let originCameraPos;
+
+const pos1 = THREE.Vector3(10, 0, 20);
+const pos2 = THREE.Vector3(20, 0, 20);
+const pos3 = THREE.Vector3(20, 0, 30);
+
 class inputManager {
   constructor(_camera, _scene) {
     camera = _camera;
@@ -25,7 +31,7 @@ function inputManage() {
 
   character = scene.getObjectByName("player");
 
-  window.addEventListener("pointerdown", handlePointerDown);
+  window.addEventListener("keydown", handlePointerDown);
 
   function handlePointerDown(event) {
     pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
