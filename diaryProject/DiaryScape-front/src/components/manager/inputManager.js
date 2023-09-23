@@ -5,7 +5,10 @@ import ObjectManager from './objectManager';
 let camera;
 let scene;
 let character;
+
 let cur_state;
+
+let cameraOrigin;
 
 const InputState = {
   IDLE: "idle",
@@ -19,6 +22,7 @@ class inputManager {
   constructor(_camera, _scene) {
     camera = _camera;
     scene = _scene;
+
     const objectManager = new ObjectManager(scene);
     character = scene.getObjectByName("player");
 
@@ -29,7 +33,7 @@ class inputManager {
 function inputManage() {
   cur_state = InputState.IDLE;
 
-  const cameraOrigin = new THREE.Vector3(
+  cameraOrigin = new THREE.Vector3(
     camera.position.x,
     camera.position.y,
     camera.position.z
@@ -52,35 +56,45 @@ function inputManage() {
         intersectObjects[0].point.y,
         intersectObjects[0].point.z
       );
-
-      let angle = new THREE.Vector2(0, 1).angleTo(
-        new THREE.Vector2(
-          targetPos.x - character.position.x,
-          targetPos.z - character.position.z
-        )
-      );
-      if (targetPos.x < character.position.x) {
-        angle = Math.PI * 2 - angle;
-      }
-      gsap.to(character.position, {
-        x: targetPos.x,
-        z: targetPos.z,
-        duration: 2,
-      });
-      gsap.to(camera.position, {
-        x: cameraOrigin.x + targetPos.x,
-        z: cameraOrigin.z + targetPos.z,
-        duration: 2,
-      });
-      gsap.to(character.rotation, {
-        y: angle,
-        duration: 0.3,
-      });
+      move(targetPos);
     }
-    else if(cur_state == InputState.CREATE){
-
+    else if (cur_state == InputState.CREATE) {
+      //cur_state = CREATE로 만들어주고 create_object를 설정해주는 버튼 만들어주기.
+      //현재 설치하려는 칸에 obj가 이미 만들어져 있지 않은지 검사해주기.
+      objectManager.createObj(create_object, pointer);
+      create_object = null;
     }
   }
+}
+
+function move(targetPos) {
+  let angle = new THREE.Vector2(0, 1).angleTo(
+    new THREE.Vector2(
+      targetPos.x - character.position.x,
+      targetPos.z - character.position.z
+    )
+  );
+  if (targetPos.x < character.position.x) {
+    angle = Math.PI * 2 - angle;
+  }
+  gsap.to(character.position, {
+    x: targetPos.x,
+    z: targetPos.z,
+    duration: 2,
+  });
+  gsap.to(camera.position, {
+    x: cameraOrigin.x + targetPos.x,
+    z: cameraOrigin.z + targetPos.z,
+    duration: 2,
+  });
+  gsap.to(character.rotation, {
+    y: angle,
+    duration: 0.3,
+  });
+}
+
+function createObj() {
+
 }
 
 export default inputManager;

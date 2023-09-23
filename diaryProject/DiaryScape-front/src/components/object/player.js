@@ -1,4 +1,3 @@
-import { DoubleSide } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 class player {

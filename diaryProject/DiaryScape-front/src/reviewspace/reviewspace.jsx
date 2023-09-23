@@ -32,7 +32,7 @@ const ReviewSpace = () => {
             camera.lookAt(0,0,0);
 
             const saveManager = new SaveManager(scene);
-            saveManager.newMap("spongebob").then(()=>new InputManager(camera, scene));
+            saveManager.newMap("spongebob").then(()=>{const inputManager = new InputManager(camera, scene)});
 
             // document.body.appendChild(renderer.domElement);
             renderer.setSize(window.innerWidth, window.innerHeight);
