@@ -41,6 +41,13 @@ const Home = () => {
               </Button>
             </Link>
           </Box>
+          <Box mt={2}>
+            <Link to ="my_tripmap">
+              <Button colorScheme="teal" variant="outline" p={2} w={300}>
+                내 Trip 맵 보기
+              </Button>
+            </Link>
+          </Box>
         </Box>
         </Box>
       </Box>

@@ -81,20 +81,29 @@ class saveManager {
       }
     });
   }
-}
-
-document.addEventListener("keydown", onDocumentKeyDown, false);
-function onDocumentKeyDown(event) {
-  var keyCode = event.which;
-  if (keyCode == 65) {
-    axios.post("http://localhost:8080/api/Obj", sceneJson).then((res) => {
-      console.log(res.data);
-    });
-  } else if (keyCode == 66) {
-    axios.get("http://localhost:8080/api/Obj").then((res) => {
-      console.log(res.data);
-    });
+  
+  setupEventListener() {
+    document.addEventListener("keydown", this.onDocumentKeyDown, false);
+  }
+  cleanup() {
+    document.removeEventListener("keydown", this.onDocumentKeyDown, false);
+    console.log("cleanup saveManager")
+  }
+  onDocumentKeyDown(event) {
+    var keyCode = event.which;
+    if (keyCode == 65) {
+      axios.post("http://localhost:8080/api/Obj", sceneJson).then((res) => {
+        console.log(res.data);
+      });
+    } else if (keyCode == 66) {
+      axios.get("http://localhost:8080/api/Obj").then((res) => {
+        console.log(res.data);
+      });
+    }
   }
 }
+
+
+
 
 export default saveManager;

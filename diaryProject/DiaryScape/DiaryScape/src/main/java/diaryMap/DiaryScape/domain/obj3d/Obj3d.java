@@ -1,16 +1,15 @@
 package diaryMap.DiaryScape.domain.obj3d;
 
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 
-@Entity
+@Document(collection = "obj3ds")
 @Data
 public class Obj3d {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
     private String objName;
-    @Lob
     private String json_obj;
 }

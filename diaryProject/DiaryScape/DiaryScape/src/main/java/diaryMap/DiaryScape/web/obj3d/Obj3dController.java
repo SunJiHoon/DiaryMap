@@ -1,10 +1,12 @@
 package diaryMap.DiaryScape.web.obj3d;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import diaryMap.DiaryScape.domain.member.Member;
+import diaryMap.DiaryScape.domain.member.MemberMongoRepository;
 import diaryMap.DiaryScape.domain.obj3d.Obj3d;
-import diaryMap.DiaryScape.web.login.LoginForm;
-import diaryMap.DiaryScape.web.member.MemberWithoutId;
-import jakarta.servlet.http.Cookie;
+import diaryMap.DiaryScape.domain.obj3d.Obj3dRepository;
+import diaryMap.DiaryScape.source.StringSource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
@@ -24,261 +30,180 @@ import javax.persistence.Persistence;
 @Slf4j
 public class Obj3dController {
 
-    @GetMapping("/Obj")
-    public ResponseEntity<String[]> getObj_string() {
-        log.info("obj를 요청하는 query가 들어왔다.");
+    private final Obj3dRepository obj3dRepository;
+    private final MemberMongoRepository memberMongoRepository;
 
+    /*
+    const ToDoListHandler = () => {
+    axios.get('https://localhost:4000/sendlist/todo',
+      {userId: userId},
+      { withCredentials: true }
+    )
+    .then((res)=> {
+      setToDoList(res.data.data)
+    })
+  }
+  */
+    @PostMapping("/obj/create")// obj/create?mapName=척척박사//postMapping도 가능하다.
+    public String createNewObj(
+            @RequestParam Map<String, String> paraMap,//url+?키=value&키=value //John%20Doe
+            //@RequestParam String mapName,
+            @CookieValue(value = "memberId", required = false) String cookie
+    ){
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
+        StringSource stringSource = new StringSource();
+        Obj3d obj3d1 = new Obj3d();
+        obj3d1.setObjName(paraMap.get("mapName"));
+        obj3d1.setJson_obj(stringSource.getJsonInitData());
+        obj3dRepository.save(obj3d1);
 
+        log.info(obj3d1.getObjName());
+        Optional<Member> loginMember = memberMongoRepository.findById(cookie);
+
+        if (loginMember.isPresent()) {
+            Member actualMember = loginMember.get();
+            //log.info(String.valueOf(actualMember));
+            // actualMember를 사용하여 필요한 작업을 수행
+
+            if(actualMember.getObj3dArrayList() == null){
+                actualMember.setObj3dArrayList(new ArrayList<>());
+                actualMember.getObj3dArrayList().add(obj3d1);
+                memberMongoRepository.save(actualMember);
+            }
+            else{
+                actualMember.getObj3dArrayList().add(obj3d1);
+                memberMongoRepository.save(actualMember);
+            }
+
+            //obj3d1은 참조 관계이기때문에 자동으로 저장될 것임
+            log.info("로그인된 id에 초기화 된 map저장 완료.");
+
+        } else {
+            log.info("쿠키에 들어있는 id로 조회를 해봤으나 db상에 해당 id가 존재하지 않습니다.");
+            log.info("we can not find id in our db. i think cookie you have is expired.");
+            // Member 객체를 찾지 못한 경우의 처리
+            // 예를 들어, 오류 처리 또는 다른 작업을 수행
+        }
         /*
+        List<Member> findmemberlist = memberMongoRepository.findByName("3");
+        if (findmemberlist.size() > 0) {
+            if(findmemberlist.get(0).getObj3dArrayList() == null){
+                findmemberlist.get(0).setObj3dArrayList(new ArrayList<>());
+                findmemberlist.get(0).getObj3dArrayList().add(obj3d1);
+                memberMongoRepository.save(findmemberlist.get(0));
+            }
+            else{
+                findmemberlist.get(0).getObj3dArrayList().add(obj3d1);
+                memberMongoRepository.save(findmemberlist.get(0));
+            }
+        }
+*/
 
-        tx.begin();
-        Obj3d obj3d_1 = new Obj3d();
-        obj3d_1.setObjName("축구공");
-
-        obj3d_1.setJson_obj("{\n" +
-                "    \"metadata\": {\n" +
-                "        \"version\": 4.6,\n" +
-                "        \"type\": \"Object\",\n" +
-                "        \"generator\": \"Object3D.toJSON\"\n" +
-                "    },\n" +
-                "    \"geometries\": [\n" +
-                "        {\n" +
-                "            \"uuid\": \"d19b4909-73f9-4460-9b71-0be7ef41d770\",\n" +
-                "            \"type\": \"PlaneGeometry\",\n" +
-                "            \"width\": 2,\n" +
-                "            \"height\": 3,\n" +
-                "            \"widthSegments\": 1,\n" +
-                "            \"heightSegments\": 1\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"uuid\": \"bcdd51ef-7bfb-4e06-9c54-3a8726c56a12\",\n" +
-                "            \"type\": \"CircleGeometry\",\n" +
-                "            \"radius\": 1.5,\n" +
-                "            \"segments\": 32,\n" +
-                "            \"thetaStart\": 0,\n" +
-                "            \"thetaLength\": 6.283185307179586\n" +
-                "        }\n" +
-                "    ],\n" +
-                "    \"materials\": [\n" +
-                "        {\n" +
-                "            \"uuid\": \"4ffe05b0-07d6-43c3-a2dd-97c2bf96bb61\",\n" +
-                "            \"type\": \"MeshBasicMaterial\",\n" +
-                "            \"color\": 255,\n" +
-                "            \"reflectivity\": 1,\n" +
-                "            \"refractionRatio\": 0.98,\n" +
-                "            \"depthFunc\": 3,\n" +
-                "            \"depthTest\": true,\n" +
-                "            \"depthWrite\": true,\n" +
-                "            \"colorWrite\": true,\n" +
-                "            \"stencilWrite\": false,\n" +
-                "            \"stencilWriteMask\": 255,\n" +
-                "            \"stencilFunc\": 519,\n" +
-                "            \"stencilRef\": 0,\n" +
-                "            \"stencilFuncMask\": 255,\n" +
-                "            \"stencilFail\": 7680,\n" +
-                "            \"stencilZFail\": 7680,\n" +
-                "            \"stencilZPass\": 7680\n" +
-                "        }\n" +
-                "    ],\n" +
-                "    \"object\": {\n" +
-                "        \"uuid\": \"d20d3da9-f67f-4806-ab65-f03a19d42430\",\n" +
-                "        \"type\": \"Scene\",\n" +
-                "        \"layers\": 1,\n" +
-                "        \"matrix\": [\n" +
-                "            1,\n" +
-                "            0,\n" +
-                "            0,\n" +
-                "            0,\n" +
-                "            0,\n" +
-                "            1,\n" +
-                "            0,\n" +
-                "            0,\n" +
-                "            0,\n" +
-                "            0,\n" +
-                "            1,\n" +
-                "            0,\n" +
-                "            0,\n" +
-                "            0,\n" +
-                "            0,\n" +
-                "            1\n" +
-                "        ],\n" +
-                "        \"up\": [\n" +
-                "            0,\n" +
-                "            1,\n" +
-                "            0\n" +
-                "        ],\n" +
-                "        \"children\": [\n" +
-                "            {\n" +
-                "                \"uuid\": \"e492e968-2b4b-416b-a49e-4331143dadd0\",\n" +
-                "                \"type\": \"AmbientLight\",\n" +
-                "                \"layers\": 1,\n" +
-                "                \"matrix\": [\n" +
-                "                    1,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    1,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    1,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    1\n" +
-                "                ],\n" +
-                "                \"up\": [\n" +
-                "                    0,\n" +
-                "                    1,\n" +
-                "                    0\n" +
-                "                ],\n" +
-                "                \"color\": 16777215,\n" +
-                "                \"intensity\": 1\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"uuid\": \"73722e99-a615-4a2b-a7fb-b966345c6d57\",\n" +
-                "                \"type\": \"Mesh\",\n" +
-                "                \"name\": \"plane\",\n" +
-                "                \"layers\": 1,\n" +
-                "                \"matrix\": [\n" +
-                "                    1,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    1,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    1,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    1\n" +
-                "                ],\n" +
-                "                \"up\": [\n" +
-                "                    0,\n" +
-                "                    1,\n" +
-                "                    0\n" +
-                "                ],\n" +
-                "                \"geometry\": \"d19b4909-73f9-4460-9b71-0be7ef41d770\",\n" +
-                "                \"material\": \"4ffe05b0-07d6-43c3-a2dd-97c2bf96bb61\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"uuid\": \"db7a71fb-d4bd-4503-a25d-53693cd5eff4\",\n" +
-                "                \"type\": \"Mesh\",\n" +
-                "                \"layers\": 1,\n" +
-                "                \"matrix\": [\n" +
-                "                    1,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    1,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    1,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    1\n" +
-                "                ],\n" +
-                "                \"up\": [\n" +
-                "                    0,\n" +
-                "                    1,\n" +
-                "                    0\n" +
-                "                ],\n" +
-                "                \"geometry\": \"bcdd51ef-7bfb-4e06-9c54-3a8726c56a12\",\n" +
-                "                \"material\": \"4ffe05b0-07d6-43c3-a2dd-97c2bf96bb61\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"uuid\": \"73722e99-a615-4a2b-a7fb-b966345c6d57\",\n" +
-                "                \"type\": \"Mesh\",\n" +
-                "                \"name\": \"plane\",\n" +
-                "                \"layers\": 1,\n" +
-                "                \"matrix\": [\n" +
-                "                    1,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    1,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    1,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    0,\n" +
-                "                    1\n" +
-                "                ],\n" +
-                "                \"up\": [\n" +
-                "                    0,\n" +
-                "                    1,\n" +
-                "                    0\n" +
-                "                ],\n" +
-                "                \"geometry\": \"d19b4909-73f9-4460-9b71-0be7ef41d770\",\n" +
-                "                \"material\": \"4ffe05b0-07d6-43c3-a2dd-97c2bf96bb61\"\n" +
-                "            }\n" +
-                "        ]\n" +
-                "    }\n" +
-                "}");
-
-        em.persist(obj3d_1);
-
-
-        tx.commit();
- */
-
-        tx.begin();
-        //찾기
-        Obj3d obj3d = em.find(Obj3d.class, 1L);
-        String[] strings = new String[1];
-        strings[0] = obj3d.getJson_obj();
-        tx.commit();
-        em.close();
-        emf.close();
-        // 문자열 배열을 생성하거나 가져옵니다.
-
-        // ResponseEntity를 사용하여 문자열 배열을 응답으로 반환합니다.
-        return ResponseEntity.ok(strings);
+        log.info(paraMap.get("mapName"));
+        log.info(cookie);
+        return "success";
     }
 
-    @PostMapping("/Obj")//@Valid//@Valid @ModelAttribute //requestBody
-    public ResponseEntity<String> registerObj(@RequestBody String str,
-                                 BindingResult bindingResult,
-                                 HttpServletResponse response) {
-        log.info("obj를 등록해보자");
-        log.info(str);
+    @GetMapping(value = "/obj/list", produces = "application/json")// obj/create?mapName=척척박사//postMapping도 가능하다.
+    public String getMapLists(
+            @CookieValue(value = "memberId", required = false) String cookie
+    ){
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<titleData_DTO> titleDataDtos = new ArrayList<>();
+        //mapDataDtos.add(new mapData_DTO("title1","id1"));
+        //mapDataDtos.add(new mapData_DTO("title2","id2"));
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
-        //추가
+        //log.info(cookie);
+        Optional<Member> loginMember = memberMongoRepository.findById(cookie);
 
-        Obj3d obj3d_1 = new Obj3d();
-        obj3d_1.setObjName("축구공");
-        obj3d_1.setJson_obj(str);
+        if (loginMember.isPresent()) {
+            Member actualMember = loginMember.get();
+            for(int i=0;i<actualMember.getObj3dArrayList().size();i++){
+                //log.info(actualMember.getObj3dArrayList().get(i).getObjName());
+                //log.info(actualMember.getObj3dArrayList().get(i).getId());
+                titleDataDtos.add(
+                        new titleData_DTO(
+                                actualMember.getObj3dArrayList().get(i).getObjName(),
+                                actualMember.getObj3dArrayList().get(i).getId()
+                        ));
+            }
+            log.info("로그인된 id에 해당하는 map 리스트 추출 완료.");
 
-        em.persist(obj3d_1);
-        tx.commit();
-        em.close();
-        emf.close();
-        return ResponseEntity.ok("sucess");
+        }
+        else {
+            log.info("쿠키에 들어있는 id로 조회를 해봤으나 db상에 해당 id가 존재하지 않습니다.");
+            log.info("we can not find id in our db. i think cookie you have is expired.");
+        }
+
+        String mapDatasJson;
+        try{
+            mapDatasJson = objectMapper.writeValueAsString(titleDataDtos);
+        }
+        catch (JsonProcessingException e){
+            mapDatasJson= "[]";
+        }
+
+        return mapDatasJson;
+    }
+
+    @GetMapping(value = "/obj/one", produces = "application/json")
+    public String getOneMap(
+            @RequestParam Map<String, String> paraMap
+            //url+?키=value&키=value //John%20Doe
+    )
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String queryMapId = paraMap.get("mapId");
+        Optional<Obj3d> findobj3d = obj3dRepository.findById(queryMapId);
+
+        String objJson = "{}";
+        if (findobj3d.isPresent()){
+            log.info("해당 id를 가진 map 발견");
+            Obj3d actualObj3d = findobj3d.get();
+
+            try {
+                objJson = objectMapper.writeValueAsString(actualObj3d);
+            } catch (JsonProcessingException e) {
+                //throw new RuntimeException(e);
+            }
+        }
+        else{
+            log.info("해당 id를 가진 map이 존재하지 않습니다.");
+        }
+
+        return objJson;
+    }
+
+    @GetMapping(value = "/obj/update", produces = "application/json")
+    public String temptestupdateOneMap(
+            @RequestParam Map<String, String> paraMap
+            //@RequestBody Obj3d obj3d
+            //url+?키=value&키=value //John%20Doe
+            //@CookieValue(value = "memberId", required = false) String cookie
+    )
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Optional<Obj3d> obj3d = obj3dRepository.findById(paraMap.get("mapId"));
+        if (obj3d.isPresent()){
+            try {
+                return objectMapper.writeValueAsString(obj3d.get());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return "x";
+    }
+    @PostMapping(value = "/obj/update")
+    public void updateOneMap(
+            //@RequestParam Map<String, String> paraMap,
+            @RequestBody Obj3d obj3d
+            //url+?키=value&키=value //John%20Doe
+            //@CookieValue(value = "memberId", required = false) String cookie
+    )
+    {
+        log.info(String.valueOf(obj3d));
+        obj3dRepository.save(obj3d);
     }
 }

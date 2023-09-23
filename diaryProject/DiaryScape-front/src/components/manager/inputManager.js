@@ -8,7 +8,7 @@ let character;
 
 let cur_state;
 
-let cameraOrigin;
+let cameraOrigin
 
 const InputState = {
   IDLE: "idle",
@@ -25,23 +25,27 @@ class inputManager {
 
     const objectManager = new ObjectManager(scene);
     character = scene.getObjectByName("player");
-
-    inputManage();
+    
+    this.inputManage();
   }
-}
-
-function inputManage() {
-  cur_state = InputState.IDLE;
-
-  cameraOrigin = new THREE.Vector3(
-    camera.position.x,
-    camera.position.y,
-    camera.position.z
-  );
-
-  window.addEventListener("pointerdown", handlePointerDown);
-
-  function handlePointerDown(event) {
+  inputManage() {
+    cur_state = InputState.IDLE;
+  
+    cameraOrigin = new THREE.Vector3(
+      camera.position.x,
+      camera.position.y,
+      camera.position.z
+    );
+  
+    window.addEventListener("pointerdown", this.handlePointerDown);
+  
+    
+  }
+  cleanup() {
+    window.removeEventListener("pointerdown", this.handlePointerDown)
+    console.log("cleanup inputManager")
+  }
+  handlePointerDown(event) {
     const pointer = new THREE.Vector2();
 
     pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
