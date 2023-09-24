@@ -1,4 +1,3 @@
-import { DoubleSide } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 class player {
@@ -10,6 +9,7 @@ class player {
     await gltfLoader.loadAsync("scene.gltf").then((characterGltf) => {
       _character = characterGltf.scene;
       _character.name = "player";
+      _character.userData = { myNode: [] };
       _character.scale.set(10, 10, 10);
     });
     return _character;

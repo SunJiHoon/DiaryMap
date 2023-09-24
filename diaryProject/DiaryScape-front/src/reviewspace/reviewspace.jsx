@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import InputManager from "../components/manager/inputManager";
-import SaveManager from "../components/manager/objectManager";
+import ObjectManager from "../components/manager/objectManager";
 import { useRef, useEffect } from "react";
 import { Link } from 'react-router-dom'
 import { Box, Button } from '@chakra-ui/react'
@@ -12,7 +12,8 @@ const ReviewSpace = () => {
         let renderer, scene, camera
         
         let inputManager
-        let saveManager
+        let objectManager
+
         async function init() {
             scene = new THREE.Scene();
 
@@ -33,25 +34,17 @@ const ReviewSpace = () => {
             camera.position.set(-35, 45, 45);
             camera.lookAt(0,0,0);
 
-            saveManager = new SaveManager(scene);
-            saveManager.newMap("spongebob").then(()=> { inputManager = new InputManager(camera, scene) });
-            saveManager.setupEventListener();
+            objectManager = new ObjectManager(scene);
+            objectManager.newMap("spongebob").then(()=> { inputManager = new InputManager(camera, scene) });
 
             // document.body.appendChild(renderer.domElement);
             renderer.setSize(window.innerWidth, window.innerHeight);
             // renderer.render(scene, camera);
-
-            const tempGeoMetry = new THREE.BoxGeometry(2, 2, 2);
-            const tempMaterial = new THREE.MeshBasicMaterial();
-            const tempMesh = new THREE.Mesh(tempGeoMetry, tempMaterial);
-            scene.add(tempMesh);
-            
-            //scene.remove(tempMesh);
         }
         
         init()
 
-        const loadTemp = window.addEventListener("resize", handleResize);
+        window.addEventListener("resize", handleResize);
 
         function handleResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
@@ -73,7 +66,6 @@ const ReviewSpace = () => {
             cancelAnimationFrame(req)
             window.removeEventListener("resize", handleResize)
             inputManager?.cleanup()
-            saveManager?.cleanup()
         })
     }, [])
 
