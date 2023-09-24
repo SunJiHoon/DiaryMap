@@ -1,6 +1,7 @@
 package diaryMap.DiaryScape.web.member;
 
 import diaryMap.DiaryScape.domain.member.Member;
+import diaryMap.DiaryScape.domain.member.MemberMongoRepository;
 import diaryMap.DiaryScape.domain.member.MemberRepository;
 import diaryMap.DiaryScape.web.login.LoginForm;
 import jakarta.servlet.http.Cookie;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class MemberController {
     private final MemberRepository memberRepository;
+    //private final MemberMongoRepository memberRepository;
     @GetMapping("/members/add")
     public String addForm(@ModelAttribute("member") Member member) {
         return "members/addMemberForm";
