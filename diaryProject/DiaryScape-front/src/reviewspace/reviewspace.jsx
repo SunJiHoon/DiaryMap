@@ -95,8 +95,8 @@ const ReviewSpace = () => {
             >
             <p>tripData.title : {tripData.title}</p>
             <p>tripData.mapId : {tripData.mapId}</p>
-            <p>tripData.x : {tripData.x}</p>
-            <p>tripData.y : {tripData.y}</p>
+            <p>tripData.startX : {tripData.startX}</p>
+            <p>tripData.startY : {tripData.startY}</p>
             </Box>
         </div>
     <div>
