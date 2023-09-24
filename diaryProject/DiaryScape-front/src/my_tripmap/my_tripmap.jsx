@@ -8,6 +8,7 @@ const MyTripmap = () => {
 
 
     const [isTest, setIsTest] = useState(false)
+    
     // true: 테스트 맵 데이터 사용
     // false: "api/my_tripmap"에 Get 요청 후 맵 데이터 가져옴.
 
@@ -28,9 +29,19 @@ const MyTripmap = () => {
 
     const [reviewData, setReviewData] = useState([])
     const [newReviewValue, setNewReviewValue] = useState([])
+    const [xValue, setXValue] = useState('')
+    const [yValue, setYValue] = useState('')
     
     const onNewReviewChange = useCallback((e) => {
         setNewReviewValue(e.target.value)
+    }, [])
+
+    const onXChange = useCallback((e) => {
+        setXValue(e.target.value)
+    }, [])
+
+    const onYChange = useCallback((e) => {
+        setYValue(e.target.value)
     }, [])
 
     const nextId = useRef(3)
@@ -41,8 +52,8 @@ const MyTripmap = () => {
         //     id: nextId.current
         // }))
         const newReviewNameReplaced = newReviewValue.replace(/ /g, "%20")
-        console.log(newReviewNameReplaced)
-        axios.post("http://localhost:8080/api/obj/create?mapName="+newReviewNameReplaced, {}, {withCredentials:true})
+        console.log(newReviewNameReplaced+"&x="+xValue+"&y="+yValue)
+        axios.post("http://localhost:8080/api/obj/create?mapName="+newReviewNameReplaced+"&x="+xValue+"&y="+yValue, {}, {withCredentials:true})
             .then((res) => {
                 axios.get('http://localhost:8080/api/obj/list').then((res) => {
                     setReviewData(res.data)
@@ -85,7 +96,9 @@ const MyTripmap = () => {
             <form onSubmit={onNewReviewSubmit}>
                 <Box display="flex" justifyContent="center">
                     <Box display="flex" justifyContent="center" w="100%" maxW="500px" mt={6} mb={6}>
-                    <Input type="text" placeholder="새 리뷰 추가" value={newReviewValue} onChange={onNewReviewChange}/>
+                    <Input type="text" placeholder="새 리뷰 추가" value={newReviewValue} onChange={onNewReviewChange} />
+                    <Input type="text" placeholder="x" value={xValue} onChange={onXChange} />
+                    <Input type="text" placeholder="y" value={yValue} onChange={onYChange} />
                     <Button type="submit" ml={4}>추가</Button>
                     </Box>
                 </Box>
