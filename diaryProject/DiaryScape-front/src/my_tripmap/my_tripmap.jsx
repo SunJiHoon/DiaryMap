@@ -1,14 +1,15 @@
 import { useDispatch, useSelector } from "react-redux"
 import { loginUser, clearUser } from '../reducer/user_slice'
+import { selectTrip, clearTrip } from '../reducer/trip_slice'
 import { Box, Input, Button, Heading} from '@chakra-ui/react'
 import { useState, useEffect, useCallback, useRef } from "react"
+import { useNavigate } from "react-router-dom"
 import axios from "axios"
 
 const MyTripmap = () => {
 
-
-    const [isTest, setIsTest] = useState(false)
-    
+    const [isTest, setIsTest] = useState(true)
+    const navigate = useNavigate()
     // true: 테스트 맵 데이터 사용
     // false: "api/my_tripmap"에 Get 요청 후 맵 데이터 가져옴.
 
@@ -44,6 +45,17 @@ const MyTripmap = () => {
         setYValue(e.target.value)
     }, [])
 
+    const onReviewClicked = (review) => {
+        console.log(review)
+        dispatch(selectTrip({
+            title: review.title,
+            mapId: review.mapId,
+            x: review.x,
+            y: review.y,
+        }))
+        navigate("/reviewspace")
+    }
+
     const nextId = useRef(3)
     const onNewReviewSubmit = useCallback((e) => {
         e.preventDefault()
@@ -70,11 +82,15 @@ const MyTripmap = () => {
             setReviewData([
                 {
                     title: "부산 리뷰",
-                    id: 1
+                    mapId: 1,
+                    x: 1,
+                    y: 1,
                 },
                 {
                     title: "제주도 리뷰",
-                    id: 2
+                    mapId: 2,
+                    x: -2,
+                    y: -2,
                 }
             ])
             console.log(reviewData)
@@ -104,12 +120,13 @@ const MyTripmap = () => {
                 </Box>
             </form>
             <Box display="flex" justifyContent="center">
-                <Box w="100%" maxW="500px">
+                <Box w="100%" maxW="500px" display="flex" flexDirection="column">
                     {reviewData.map((review) => (
-                        <Box border="1px" key={review.mapId} mb={6}>
+                        <Button border="1px" h="70px" key={review.mapId} mb={6} onClick={(e) => onReviewClicked(review)}>
                             {review.title}<br />
-                            {review.mapId}
-                        </Box>
+                            {review.mapId}<br />
+                            x: {review.x}, y: {review.y}
+                        </Button>
                     ))}
                 </Box>
             </Box>

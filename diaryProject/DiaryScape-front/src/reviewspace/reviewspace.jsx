@@ -4,9 +4,12 @@ import ObjectManager from "../components/manager/objectManager";
 import { useRef, useEffect } from "react";
 import { Link } from 'react-router-dom'
 import { Box, Button } from '@chakra-ui/react'
+import { useSelector } from "react-redux";
 
 const ReviewSpace = () => {
     const canvasRef = useRef(null)
+    const tripData = useSelector((state) => state.trip)
+    console.log(tripData)
 
     useEffect(() => {
         let renderer, scene, camera
@@ -84,13 +87,17 @@ const ReviewSpace = () => {
                     <Button colorScheme="teal">홈으로 돌아가기</Button>
                 </Link>
             </Box>
-            {/* <Box
+            <Box
+                display="flex"
+                flexDirection="column"
+                ml={4}
                 mt={4}
             >
-                { username &&
-                    <Box>{username} 님, 안녕하세요!</Box>
-                }
-            </Box> */}
+            <p>tripData.title : {tripData.title}</p>
+            <p>tripData.mapId : {tripData.mapId}</p>
+            <p>tripData.x : {tripData.x}</p>
+            <p>tripData.y : {tripData.y}</p>
+            </Box>
         </div>
     <div>
         <canvas ref={canvasRef}></canvas>
