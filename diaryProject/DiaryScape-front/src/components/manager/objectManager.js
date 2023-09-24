@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import Map from "../object/map.js";
 import Player from "../object/player.js";
+import Node from "../object/node.js";
 import axios from "axios";
 
 let scene;
@@ -35,19 +36,20 @@ class objectManager {
     playerMesh.name = "player";
     scene.add(playerMesh);
 
-    for (var i = 0; i < 5; i++) {
-      const tempGeometry = new THREE.BoxGeometry(2, 2, 2);
-      const tempMaterial = new THREE.MeshStandardMaterial();
-      const tempMesh = new THREE.Mesh(tempGeometry, tempMaterial);
-      tempMesh.position.set(posArr1[i].x, posArr1[i].y, posArr1[i].z);
-      tempMesh.userData = {
-        tag: "node",
-        name: "머시기" + i,
-        category: "카테고리" + i,
-      };
-      tempMesh.name = i;
-      scene.add(tempMesh);
-    }
+    axios.get("http://localhost:8080/api/openApi/node?contentType=음식점").then((res) => {
+      const startNode = new Node(res.data[0]);
+      scene.add(startNode);
+    });
+  }
+
+  loadNodes(index) {
+    console.log("loadNodes execute");
+    axios.get("http://localhost:8080/api/openApi/node?contentType=음식점").then((res) => {
+      const node1 = new Node(res.data[index * 2 + 1]);
+      const node2 = new Node(res.data[index * 2 + 2]);
+      node1.position.set(index * 10, 1, 0);
+      node2.position.set(0,1,index * 10);
+    });
   }
 
   deleteObj(object) {
@@ -82,6 +84,7 @@ class objectManager {
 
   loadObjs() {
     //load scene
+
     axios.get("http://localhost:8080/api/scene").then((res) => {
       if (res.data == "null") {
         //초기 작업(맵 생성, 캐릭터 생성); //회원 가입 시 한 유저 당 하나 씩 미리 생성
