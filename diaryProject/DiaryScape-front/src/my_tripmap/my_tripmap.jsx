@@ -40,7 +40,9 @@ const MyTripmap = () => {
         //     title: newReviewValue,
         //     id: nextId.current
         // }))
-        axios.post("http://localhost:8080/api/obj/create?mapName="+newReviewValue, {}, {withCredentials:true})
+        const newReviewNameReplaced = newReviewValue.replace(/ /g, "%20")
+        console.log(newReviewNameReplaced)
+        axios.post("http://localhost:8080/api/obj/create?mapName="+newReviewNameReplaced, {}, {withCredentials:true})
             .then((res) => {
                 axios.get('http://localhost:8080/api/obj/list').then((res) => {
                     setReviewData(res.data)
