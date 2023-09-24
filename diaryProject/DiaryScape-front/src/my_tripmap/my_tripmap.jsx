@@ -8,7 +8,7 @@ import axios from "axios"
 
 const MyTripmap = () => {
 
-    const [isTest, setIsTest] = useState(true)
+    const [isTest, setIsTest] = useState(false)
     const navigate = useNavigate()
     // true: 테스트 맵 데이터 사용
     // false: "api/my_tripmap"에 Get 요청 후 맵 데이터 가져옴.
@@ -50,8 +50,8 @@ const MyTripmap = () => {
         dispatch(selectTrip({
             title: review.title,
             mapId: review.mapId,
-            x: review.x,
-            y: review.y,
+            startX: review.startX,
+            startY: review.startY,
         }))
         navigate("/reviewspace")
     }
@@ -83,14 +83,14 @@ const MyTripmap = () => {
                 {
                     title: "부산 리뷰",
                     mapId: 1,
-                    x: 1,
-                    y: 1,
+                    startX: 1,
+                    startY: 1,
                 },
                 {
                     title: "제주도 리뷰",
                     mapId: 2,
-                    x: -2,
-                    y: -2,
+                    startX: -2,
+                    startY: -2,
                 }
             ])
             console.log(reviewData)
@@ -125,7 +125,7 @@ const MyTripmap = () => {
                         <Button border="1px" h="70px" key={review.mapId} mb={6} onClick={(e) => onReviewClicked(review)}>
                             {review.title}<br />
                             {review.mapId}<br />
-                            x: {review.x}, y: {review.y}
+                            startX: {review.startX}, startY: {review.startY}
                         </Button>
                     ))}
                 </Box>

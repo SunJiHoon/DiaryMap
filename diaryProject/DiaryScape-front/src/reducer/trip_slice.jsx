@@ -5,22 +5,22 @@ const tripSlice = createSlice({
     initialState: {
         title: "",
         mapId: "",
-        x: 0,
-        y: 0,
+        startX: 0,
+        startY: 0,
     },
     reducers: {
         selectTrip: (state, action) => {
         state.title = action.payload.title
         state.mapId = action.payload.mapId
-        state.x = action.payload.x
-        state.y = action.payload.y
+        state.startX = action.payload.startX
+        state.startY = action.payload.startY
         return state
         },
         clearTrip: (state) => {
         state.title = ""
         state.mapId = ""
-        state.x = action.payload.x
-        state.y = action.payload.y
+        state.startX = action.payload.startX
+        state.startY = action.payload.startY
         return state
         },
     },
