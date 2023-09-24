@@ -89,6 +89,7 @@ class inputManager {
         
         drawLine(character.position, intersectObjects[0].object.position);
         objectManager.loadNodes(testIndex++);//test
+        objectManager.invisibleOptions(intersectObjects[0].object);
 
         character.userData.myNode.push(intersectObjects[0].object);
         console.log(character.userData.myNode);

@@ -5,6 +5,9 @@ import Node from "../object/node.js";
 import axios from "axios";
 
 let scene;
+
+let cur_options = [];
+
 const loader = new THREE.ObjectLoader();
 
 let posArr1 = [
@@ -47,9 +50,24 @@ class objectManager {
     axios.get("http://localhost:8080/api/openApi/node?contentType=음식점").then((res) => {
       const node1 = new Node(res.data[index * 2 + 1]);
       const node2 = new Node(res.data[index * 2 + 2]);
-      node1.position.set(index * 10, 1, 0);
-      node2.position.set(0,1,index * 10);
+      cur_options.push(node1);
+      cur_options.push(node2);
+      console.log(node1);
+      console.log(node2);
+      node1.position.set((index + 1) * 10, 1, 0);//node.js 안에서 처리하기
+      node2.position.set(0,1,(index + 1) * 10);//node.js 안에서 처리하기
+      scene.add(node1);
+      scene.add(node2);
     });
+  }
+
+  invisibleOptions(select_option){
+    for(let i =0;i<cur_options.length;i++){
+      if(cur_options[i] != select_option){
+        scene.remove(cur_options[i]);
+      }
+    }
+    cur_options = [];
   }
 
   deleteObj(object) {
