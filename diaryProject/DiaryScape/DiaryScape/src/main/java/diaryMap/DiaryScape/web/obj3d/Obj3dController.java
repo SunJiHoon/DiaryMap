@@ -55,6 +55,8 @@ public class Obj3dController {
         Obj3d obj3d1 = new Obj3d();
         obj3d1.setObjName(paraMap.get("mapName"));
         obj3d1.setJson_obj(stringSource.getJsonInitData());
+        obj3d1.setStartX(paraMap.get("x"));
+        obj3d1.setStartY(paraMap.get("y"));
         obj3dRepository.save(obj3d1);
 
         log.info(obj3d1.getObjName());

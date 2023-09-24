@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class NodeDTO {
+    private String contentid;
+    private String contentTypeId;
     private String title;// = jsonObject.getString("title");
     private String tel;// = jsonObject.getString("tel");
     private String mapx;// = jsonObject.getString("mapx");

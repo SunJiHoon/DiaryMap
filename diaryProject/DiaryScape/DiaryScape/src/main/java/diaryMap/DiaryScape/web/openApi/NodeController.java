@@ -61,7 +61,7 @@ public class NodeController {
         else if(contentType.equals("음식점")){
             contentTypeId = 39;
         }
-
+///openApi/node?mapX=126.981611&mapY=37.568477&radius=100000&contentTypeId=관광지
         URL url = new URL(makeApiQuery(5,1,126.981611,37.568477,10000, contentTypeId));
         String line;
         StringBuilder sb = new StringBuilder();
@@ -97,12 +97,14 @@ public class NodeController {
             JSONObject item = itemArray.getJSONObject(i);
 
             // "title", "tel", "mapx", "mapy" 정보를 추출하여 객체에 저장
+            String contentid = item.getString("contentid");
+            //tring contentTypeId = item.getString("contentTypeId");
             String title = item.getString("title");
             String tel = item.getString("tel");
             String mapx = item.getString("mapx");
             String mapy = item.getString("mapy");
             String addr1 = item.getString("addr1");
-            nodeDTOList.add(new NodeDTO(title, tel, mapx, mapy, addr1));
+            nodeDTOList.add(new NodeDTO(contentid, Integer.toString(contentTypeId), title, tel, mapx, mapy, addr1));
         }
 
         JSONArray returnjsonArray = new JSONArray();
@@ -113,6 +115,93 @@ public class NodeController {
             tempjsonObject.put("mapx", nodeDTO.getMapx());
             tempjsonObject.put("mapy", nodeDTO.getMapy());
             tempjsonObject.put("addr1", nodeDTO.getAddr1());
+            tempjsonObject.put("contentid", nodeDTO.getContentid());
+            tempjsonObject.put("contentTypeId", nodeDTO.getContentTypeId());
+            returnjsonArray.put(tempjsonObject);
+        }
+
+        return returnjsonArray.toString();
+    }
+
+
+    //관광타입(12:관광지, 14:문화시설, 15:축제공연행사, 25:여행코스, 28:레포츠, 32:숙박, 38:쇼핑, 39:음식점) ID
+    // db Obj3dRepository에서 해당하는 mapid에 nodeInfo를 모두 싹다 저장
+    // /openApi/node/one?contentTypeId=123123&
+    @GetMapping(value = "/openApi/node/one",produces = "application/json")
+    public String showMeNodeOneInfo(
+            @RequestParam Map<String, String> paraMap//url+?키=value&키=value //John%20Doe
+    ) throws IOException {
+        // stringURL 에는 API URL 넣기
+        int contentTypeId = -1;
+        String contentType = paraMap.get("contentType");
+        if (contentType.equals("관광지")){
+            contentTypeId = 12;
+        }
+        else if(contentType.equals("문화시설")){
+            contentTypeId = 14;
+        }
+        else if(contentType.equals("쇼핑")){
+            contentTypeId = 38;
+        }
+        else if(contentType.equals("음식점")){
+            contentTypeId = 39;
+        }
+///openApi/node?mapX=126.981611&mapY=37.568477&radius=100000&contentTypeId=관광지
+        URL url = new URL(makeApiQuery(5,1,126.981611,37.568477,10000, contentTypeId));
+        String line;
+        StringBuilder sb = new StringBuilder();
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json; charset=UTF-8");
+
+        // API 응답메시지를 불러와서 문자열로 저장
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream(), "UTF-8"));
+        }
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+        String text = sb.toString();
+
+        JSONObject jsonObject = new JSONObject(text);
+        // "items" 객체 안에 있는 "item" 배열을 추출
+        JSONObject items = jsonObject.getJSONObject("response")
+                .getJSONObject("body")
+                .getJSONObject("items");
+        JSONArray itemArray = items.getJSONArray("item");
+
+        // item 배열을 순회하면서 데이터 추출
+        List<NodeDTO> nodeDTOList = new ArrayList<>();
+
+        for (int i = 0; i < itemArray.length(); i++) {
+            JSONObject item = itemArray.getJSONObject(i);
+
+            // "title", "tel", "mapx", "mapy" 정보를 추출하여 객체에 저장
+            String contentid = item.getString("contentid");
+            //tring contentTypeId = item.getString("contentTypeId");
+            String title = item.getString("title");
+            String tel = item.getString("tel");
+            String mapx = item.getString("mapx");
+            String mapy = item.getString("mapy");
+            String addr1 = item.getString("addr1");
+            nodeDTOList.add(new NodeDTO(contentid, Integer.toString(contentTypeId), title, tel, mapx, mapy, addr1));
+        }
+
+        JSONArray returnjsonArray = new JSONArray();
+        for (NodeDTO nodeDTO : nodeDTOList) {
+            JSONObject tempjsonObject = new JSONObject();
+            tempjsonObject.put("title", nodeDTO.getTitle());
+            tempjsonObject.put("tel", nodeDTO.getTel());
+            tempjsonObject.put("mapx", nodeDTO.getMapx());
+            tempjsonObject.put("mapy", nodeDTO.getMapy());
+            tempjsonObject.put("addr1", nodeDTO.getAddr1());
+            tempjsonObject.put("contentid", nodeDTO.getContentid());
+            tempjsonObject.put("contentTypeId", nodeDTO.getContentTypeId());
             returnjsonArray.put(tempjsonObject);
         }
 

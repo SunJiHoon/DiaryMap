@@ -8,7 +8,7 @@ import axios from "axios"
 
 const MyTripmap = () => {
 
-    const [isTest, setIsTest] = useState(true)
+    const [isTest, setIsTest] = useState(false)
     const navigate = useNavigate()
     // true: 테스트 맵 데이터 사용
     // false: "api/my_tripmap"에 Get 요청 후 맵 데이터 가져옴.
