@@ -84,6 +84,16 @@ class inputManager {
           0,
           intersectObjects[0].object.position.z
         );
+
+        const points = [];
+        points.push(character.position);
+        points.push(intersectObjects[0].object.position);
+        const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+        const lineMaterial = new THREE.LineBasicMaterial();
+        const line = new THREE.Line(lineGeometry, lineMaterial);
+        scene.add(line);
+        character.userData.myNode.push(intersectObjects[0].object);
+        console.log(character.userData.myNode);
         move(targetPos);
       }
     }
@@ -91,7 +101,6 @@ class inputManager {
 }
 
 function move(targetPos) {
-  console.log(cur_index);
   cur_state = InputState.MOVE;
   let angle = new THREE.Vector2(0, 1).angleTo(
     new THREE.Vector2(

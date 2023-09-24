@@ -40,7 +40,11 @@ class objectManager {
       const tempMaterial = new THREE.MeshStandardMaterial();
       const tempMesh = new THREE.Mesh(tempGeometry, tempMaterial);
       tempMesh.position.set(posArr1[i].x, posArr1[i].y, posArr1[i].z);
-      tempMesh.userData = { tag: "node" };
+      tempMesh.userData = {
+        tag: "node",
+        name: "머시기" + i,
+        category: "카테고리" + i,
+      };
       tempMesh.name = i;
       scene.add(tempMesh);
     }
