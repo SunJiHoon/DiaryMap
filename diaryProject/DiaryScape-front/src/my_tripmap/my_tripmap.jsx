@@ -50,8 +50,8 @@ const MyTripmap = () => {
         dispatch(selectTrip({
             title: review.title,
             mapId: review.mapId,
-            x: review.x,
-            y: review.y,
+            startX: review.startX,
+            startY: review.startY,
         }))
         navigate("/reviewspace")
     }
