@@ -6,6 +6,8 @@ let camera;
 let scene;
 let character;
 
+let testIndex = 0;
+
 const objectManager = new ObjectManager();
 const raycaster = new THREE.Raycaster();
 
@@ -84,17 +86,14 @@ class inputManager {
           0,
           intersectObjects[0].object.position.z
         );
+        
+        drawLine(character.position, intersectObjects[0].object.position);
+        objectManager.loadNodes(testIndex++);//test
 
-        const points = [];
-        points.push(character.position);
-        points.push(intersectObjects[0].object.position);
-        const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-        const lineMaterial = new THREE.LineBasicMaterial();
-        const line = new THREE.Line(lineGeometry, lineMaterial);
-        scene.add(line);
         character.userData.myNode.push(intersectObjects[0].object);
         console.log(character.userData.myNode);
         move(targetPos);
+        //axios.post("/api/obj/update?mapId=asdf");
       }
     }
   }
@@ -127,6 +126,16 @@ function move(targetPos) {
     y: angle,
     duration: 0.3,
   });
+}
+
+function drawLine(startNode, endNode) {
+  const points = [];
+  points.push(startNode);
+  points.push(endNode);
+  const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+  const lineMaterial = new THREE.LineBasicMaterial();
+  const line = new THREE.Line(lineGeometry, lineMaterial);
+  scene.add(line);
 }
 
 export default inputManager;

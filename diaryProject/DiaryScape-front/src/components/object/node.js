@@ -11,7 +11,8 @@ Object.freeze(Category);
 
 class node {
   objectLoader = new THREE.ObjectLoader();
-  constructor() {
+
+  constructor(infos) {
     const objGeometry = new THREE.BoxGeometry(2, 2, 2);
     const objMaterial = new THREE.MeshStandardMaterial();
     const obj = new THREE.Mesh(objGeometry, objMaterial);
@@ -32,15 +33,14 @@ class node {
     });
     */
     obj.userData = {
-      name: "",
       tag: "node",
-      address: "",
-      category: Category.NONE,
-      tel: "",
-      pos: new THREE.Vector3(0, 0, 0),
-      reviews: [],
-      star: 0,
+      addr1: infos.addr1,
+      mapx: infos.mapx,
+      mapy: infos.mapy,
+      tel: infos.tel,
+      title: infos.title,
     };
+
     return obj;
   }
 }
