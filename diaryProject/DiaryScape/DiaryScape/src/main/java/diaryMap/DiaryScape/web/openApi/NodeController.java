@@ -1,5 +1,7 @@
 package diaryMap.DiaryScape.web.openApi;
 
+import diaryMap.DiaryScape.domain.obj3d.Obj3d;
+import diaryMap.DiaryScape.domain.obj3d.Obj3dRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -19,12 +21,16 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 @Slf4j
 public class NodeController {
+
+    private final Obj3dRepository obj3dRepository;
+
     private String makeApiQuery(int numOfRows, int pageNo, double mapX, double mapY, int radius, int contentTypeId){
         return "https://apis.data.go.kr/B551011/KorService1/locationBasedList1" +
                 "?serviceKey=2q1TgcBZMiSU3%2BDH9RAZej4JCO3rNDHHtjvAoeuAv6wxrDGIOw1BiBdaeYsDKBIUnMDMTvLcE0XKSYaqphQMzQ%3D%3D" +
@@ -45,6 +51,8 @@ public class NodeController {
     @GetMapping(value = "/openApi/node",produces = "application/json")
     public String showMeNodeInfo(
             @RequestParam Map<String, String> paraMap//url+?키=value&키=value //John%20Doe
+            //  /openApi/node?mapId=123&mapX=127.123123&mapY=36.123456&
+            // 돌려주는 값은 NodeDTO 배열(가게정보, 좌표, 상대좌표 정보가 담긴 것 반환.)
     ) throws IOException {
     // stringURL 에는 API URL 넣기
         int contentTypeId = -1;
@@ -61,8 +69,13 @@ public class NodeController {
         else if(contentType.equals("음식점")){
             contentTypeId = 39;
         }
+        String searchMapX = paraMap.get("mapX");
+        String searchMapY = paraMap.get("mapY");
+
 ///openApi/node?mapX=126.981611&mapY=37.568477&radius=100000&contentTypeId=관광지
-        URL url = new URL(makeApiQuery(5,1,126.981611,37.568477,10000, contentTypeId));
+        URL url = new URL(makeApiQuery(3,1,
+                Double.parseDouble(searchMapX), Double.parseDouble(searchMapY),
+                10000, contentTypeId));
         String line;
         StringBuilder sb = new StringBuilder();
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -90,6 +103,15 @@ public class NodeController {
                 .getJSONObject("items");
         JSONArray itemArray = items.getJSONArray("item");
 
+        String startX = "0";
+        String startY = "0";
+
+        Optional<Obj3d> findObj = obj3dRepository.findById(paraMap.get("mapId"));
+        if (findObj.isPresent()){
+            startX = findObj.get().getStartX();
+            startY = findObj.get().getStartX();
+        }
+
         // item 배열을 순회하면서 데이터 추출
         List<NodeDTO> nodeDTOList = new ArrayList<>();
 
@@ -103,8 +125,13 @@ public class NodeController {
             String tel = item.getString("tel");
             String mapx = item.getString("mapx");
             String mapy = item.getString("mapy");
+            String relativeX = calRelativeX(startX, mapx);
+            String relativeY = calRelativeX(startY, mapy);//calRelativeX를 Y에 재활용.
             String addr1 = item.getString("addr1");
-            nodeDTOList.add(new NodeDTO(contentid, Integer.toString(contentTypeId), title, tel, mapx, mapy, addr1));
+            nodeDTOList.add(new NodeDTO(contentid, Integer.toString(contentTypeId), title, tel,
+                    mapx, mapy,
+                    relativeX, relativeY,
+                    addr1));
         }
 
         JSONArray returnjsonArray = new JSONArray();
@@ -123,6 +150,14 @@ public class NodeController {
         return returnjsonArray.toString();
     }
 
+    String calRelativeX(String startX, String currX){
+        double relativeVal = Double.parseDouble(currX) - Double.parseDouble(startX);
+        double mul = 100; //위도상 0.063(5.6km거리)는 100을 곱하여 6을 반환하기로 했다.
+        return Double.toString(relativeVal * mul);
+    }
+
+
+/*
 
     //관광타입(12:관광지, 14:문화시설, 15:축제공연행사, 25:여행코스, 28:레포츠, 32:숙박, 38:쇼핑, 39:음식점) ID
     // db Obj3dRepository에서 해당하는 mapid에 nodeInfo를 모두 싹다 저장
@@ -207,5 +242,8 @@ public class NodeController {
 
         return returnjsonArray.toString();
     }
+
+ */
+
 
 }

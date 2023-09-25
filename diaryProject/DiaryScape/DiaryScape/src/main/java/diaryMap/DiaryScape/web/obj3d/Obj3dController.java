@@ -126,8 +126,10 @@ public class Obj3dController {
                 titleDataDtos.add(
                         new titleData_DTO(
                                 actualMember.getObj3dArrayList().get(i).getObjName(),
-                                actualMember.getObj3dArrayList().get(i).getId()
-                        ));
+                                actualMember.getObj3dArrayList().get(i).getId(),
+                                actualMember.getObj3dArrayList().get(i).getStartX(),
+                                actualMember.getObj3dArrayList().get(i).getStartY()
+                                ));
             }
             log.info("로그인된 id에 해당하는 map 리스트 추출 완료.");
 
@@ -177,7 +179,7 @@ public class Obj3dController {
         return objJson;
     }
 
-    @GetMapping(value = "/obj/update", produces = "application/json")
+    //@GetMapping(value = "/obj/update", produces = "application/json")
     public String temptestupdateOneMap(
             @RequestParam Map<String, String> paraMap
             //@RequestBody Obj3d obj3d

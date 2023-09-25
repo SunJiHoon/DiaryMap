@@ -12,5 +12,7 @@ public class NodeDTO {
     private String tel;// = jsonObject.getString("tel");
     private String mapx;// = jsonObject.getString("mapx");
     private String mapy;// = jsonObject.getString("mapy");
+    private String relativeX;
+    private String relativeY;
     private String addr1;
 }

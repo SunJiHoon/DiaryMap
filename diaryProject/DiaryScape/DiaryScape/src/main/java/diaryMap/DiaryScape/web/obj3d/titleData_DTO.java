@@ -8,4 +8,7 @@ import lombok.Data;
 public class titleData_DTO {
     private String title;
     private String mapId;
+    private String startX;
+    private String startY;
+
 }
