@@ -179,25 +179,33 @@ public class Obj3dController {
         return objJson;
     }
 
-    //@GetMapping(value = "/obj/update", produces = "application/json")
-    public String temptestupdateOneMap(
+    @GetMapping(value = "/obj/one/onlyMapJson", produces = "application/json")
+    public String getOneMapOnlyMapJson(
             @RequestParam Map<String, String> paraMap
-            //@RequestBody Obj3d obj3d
             //url+?키=value&키=value //John%20Doe
-            //@CookieValue(value = "memberId", required = false) String cookie
     )
     {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        Optional<Obj3d> obj3d = obj3dRepository.findById(paraMap.get("mapId"));
-        if (obj3d.isPresent()){
+        String queryMapId = paraMap.get("mapId");
+        Optional<Obj3d> findobj3d = obj3dRepository.findById(queryMapId);
+
+        String objJson = "{}";
+        if (findobj3d.isPresent()){
+            log.info("해당 id를 가진 map 발견");
+            Obj3d actualObj3d = findobj3d.get();
+
             try {
-                return objectMapper.writeValueAsString(obj3d.get());
+                objJson = objectMapper.writeValueAsString(actualObj3d.getJson_obj());
             } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+                //throw new RuntimeException(e);
             }
         }
-        return "x";
+        else{
+            log.info("해당 id를 가진 map이 존재하지 않습니다.");
+        }
+
+        return objJson;
     }
     @PostMapping(value = "/obj/update")
     public void updateOneMap(
