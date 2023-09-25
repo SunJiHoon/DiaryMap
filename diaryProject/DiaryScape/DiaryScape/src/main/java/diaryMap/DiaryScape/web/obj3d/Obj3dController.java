@@ -201,13 +201,26 @@ public class Obj3dController {
     }
     @PostMapping(value = "/obj/update")
     public void updateOneMap(
-            //@RequestParam Map<String, String> paraMap,
-            @RequestBody Obj3d obj3d
+            @RequestParam Map<String, String> paraMap,
+            @RequestBody Obj3d paramObj3d
             //url+?키=value&키=value //John%20Doe
             //@CookieValue(value = "memberId", required = false) String cookie
     )
     {
-        log.info(String.valueOf(obj3d));
-        obj3dRepository.save(obj3d);
+        Obj3d actualObj3d;
+        Optional<Obj3d> beingUpdateObj3d = obj3dRepository.findById(paraMap.get("mapId"));
+        if (beingUpdateObj3d.isPresent()){
+            actualObj3d = beingUpdateObj3d.get();
+            actualObj3d.setJson_obj(paramObj3d.getJson_obj());
+            log.info("저장수행");
+            obj3dRepository.save(actualObj3d);
+            //log.info(String.valueOf(actualObj3d));
+            log.info("저장완료");
+        }
+        else{
+            log.info("mapId불일치. 저장실패");
+
+        }
+
     }
 }
