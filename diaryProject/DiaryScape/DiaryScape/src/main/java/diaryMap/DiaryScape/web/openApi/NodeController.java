@@ -55,7 +55,12 @@ public class NodeController {
             // 돌려주는 값은 NodeDTO 배열(가게정보, 좌표, 상대좌표 정보가 담긴 것 반환.)
     ) throws IOException {
     // stringURL 에는 API URL 넣기
+
+        //contentTypeId 임의 배정
+        int contentTypeId = 12;
+        /*
         int contentTypeId = -1;
+
         String contentType = paraMap.get("contentType");
         if (contentType.equals("관광지")){
             contentTypeId = 12;
@@ -69,6 +74,8 @@ public class NodeController {
         else if(contentType.equals("음식점")){
             contentTypeId = 39;
         }
+
+         */
         String searchMapX = paraMap.get("mapX");
         String searchMapY = paraMap.get("mapY");
 
@@ -109,7 +116,7 @@ public class NodeController {
         Optional<Obj3d> findObj = obj3dRepository.findById(paraMap.get("mapId"));
         if (findObj.isPresent()){
             startX = findObj.get().getStartX();
-            startY = findObj.get().getStartX();
+            startY = findObj.get().getStartY();
         }
 
         // item 배열을 순회하면서 데이터 추출
@@ -128,22 +135,33 @@ public class NodeController {
             String relativeX = calRelativeX(startX, mapx);
             String relativeY = calRelativeX(startY, mapy);//calRelativeX를 Y에 재활용.
             String addr1 = item.getString("addr1");
-            nodeDTOList.add(new NodeDTO(contentid, Integer.toString(contentTypeId), title, tel,
+            nodeDTOList.add(
+                    new NodeDTO(
+                    contentid, Integer.toString(contentTypeId),
+                    title, tel,
                     mapx, mapy,
                     relativeX, relativeY,
-                    addr1));
+                    addr1)
+            );
         }
 
         JSONArray returnjsonArray = new JSONArray();
         for (NodeDTO nodeDTO : nodeDTOList) {
             JSONObject tempjsonObject = new JSONObject();
-            tempjsonObject.put("title", nodeDTO.getTitle());
-            tempjsonObject.put("tel", nodeDTO.getTel());
-            tempjsonObject.put("mapx", nodeDTO.getMapx());
-            tempjsonObject.put("mapy", nodeDTO.getMapy());
-            tempjsonObject.put("addr1", nodeDTO.getAddr1());
             tempjsonObject.put("contentid", nodeDTO.getContentid());
             tempjsonObject.put("contentTypeId", nodeDTO.getContentTypeId());
+
+            tempjsonObject.put("title", nodeDTO.getTitle());
+            tempjsonObject.put("tel", nodeDTO.getTel());
+
+            tempjsonObject.put("mapx", nodeDTO.getMapx());
+            tempjsonObject.put("mapy", nodeDTO.getMapy());
+
+            tempjsonObject.put("relativeX", nodeDTO.getRelativeX());
+            tempjsonObject.put("relativeY", nodeDTO.getRelativeY());
+
+            tempjsonObject.put("addr1", nodeDTO.getAddr1());
+
             returnjsonArray.put(tempjsonObject);
         }
 
@@ -153,7 +171,7 @@ public class NodeController {
     String calRelativeX(String startX, String currX){
         double relativeVal = Double.parseDouble(currX) - Double.parseDouble(startX);
         double mul = 100; //위도상 0.063(5.6km거리)는 100을 곱하여 6을 반환하기로 했다.
-        return Double.toString(relativeVal * mul);
+        return Integer.toString((int)(relativeVal * mul));
     }
 
 
