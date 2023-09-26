@@ -41,13 +41,13 @@ class objectManager {
   }
 
   initNode(mapID, startPos){
-    axios.get("/api/openApi/node?mapId=" + mapID + "&mapX=" + startPos.x + "&mapY=" + startPos.z).then((res) => {
+    axios.get("http://localhost:8080/api/openApi/node?mapId=" + mapID + "&mapX=" + startPos.x + "&mapY=" + startPos.z,).then((res) => {
       const startNode = new Node(res.data[0]);
       scene.add(startNode);
     });
   }
 
-  loadNodes(index) {
+  loadNodes(selectPos) {
     console.log("loadNodes execute");
     axios.get("http://localhost:8080/api/openApi/node?contentType=음식점").then((res) => {
       const node1 = new Node(res.data[index * 2 + 1]);
