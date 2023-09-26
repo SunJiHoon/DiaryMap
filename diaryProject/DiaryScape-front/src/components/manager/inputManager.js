@@ -81,22 +81,21 @@ class inputManager {
       const intersectObjects = raycaster.intersectObjects(scene.children);
 
       if (intersectObjects[0].object.userData?.tag == "node") {
+        const userData = intersectObjects[0].object.userData;
         const targetPos = new THREE.Vector3(
-          intersectObjects[0].object.position.x,
+          intersectObjects[0].object.userData.relativeX,
           0,
-          intersectObjects[0].object.position.z
+          intersectObjects[0].object.userData.relativeY
         );
         
         drawLine(character.position, intersectObjects[0].object.position);
-        objectManager.loadNodes(testIndex++);//test
+        console.log(userData.mapx, userData.mapy);
+        objectManager.loadNodes(new THREE.Vector3(userData.mapx, 1, userData.mapy));//test
         objectManager.invisibleOptions(intersectObjects[0].object);
 
         character.userData.myNode.push(intersectObjects[0].object);
-        console.log(character.userData.myNode);
         move(targetPos);
-        const sceneJSON = scene.toJSON();
-        console.log(sceneJSON);
-        //axios.post("/api/obj/update?mapId=");
+        objectManager.saveScene();
       }
     }
   }

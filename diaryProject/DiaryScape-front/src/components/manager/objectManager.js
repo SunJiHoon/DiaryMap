@@ -7,6 +7,7 @@ import axios from "axios";
 let scene;
 
 let cur_options = [];
+let mapID;
 
 const loader = new THREE.ObjectLoader();
 
@@ -40,8 +41,9 @@ class objectManager {
     scene.add(playerMesh);
   }
 
-  initNode(mapID, startPos){
-    axios.get("http://localhost:8080/api/openApi/node?mapId=" + mapID + "&mapX=" + startPos.x + "&mapY=" + startPos.z,).then((res) => {
+  initNode(_mapID, startPos) {
+    mapID = _mapID;
+    axios.get("http://localhost:8080/api/openApi/node?mapId=" + mapID + "&mapX=" + startPos.x + "&mapY=" + startPos.z).then((res) => {
       const startNode = new Node(res.data[0]);
       scene.add(startNode);
     });
@@ -49,31 +51,29 @@ class objectManager {
 
   loadNodes(selectPos) {
     console.log("loadNodes execute");
-    axios.get("http://localhost:8080/api/openApi/node?contentType=음식점").then((res) => {
-      const node1 = new Node(res.data[index * 2 + 1]);
-      const node2 = new Node(res.data[index * 2 + 2]);
-      cur_options.push(node1);
-      cur_options.push(node2);
-      console.log(node1);
-      console.log(node2);
-      node1.position.set((index + 1) * 10, 1, 0);//node.js 안에서 처리하기
-      node2.position.set(0,1,(index + 1) * 10);//node.js 안에서 처리하기
-      scene.add(node1);
-      scene.add(node2);
+    console.log(selectPos.z);
+    axios.get("http://localhost:8080/api/openApi/node?mapId=" + mapID + "&mapX=" + selectPos.x + "&mapY=" + selectPos.z).then((res) => {
+      console.log(res.data);
+      for (let i = 0; i < 3; i++) {
+        const tempNode = new Node(res.data[i]);
+        cur_options.push(tempNode);
+        scene.add(tempNode);
+      }
     });
   }
 
-  invisibleOptions(select_option){
-    for(let i =0;i<cur_options.length;i++){
-      if(cur_options[i] != select_option){
+  invisibleOptions(select_option) {
+    for (let i = 0; i < cur_options.length; i++) {
+      if (cur_options[i] != select_option) {
         scene.remove(cur_options[i]);
       }
     }
     cur_options = [];
   }
 
-  deleteObj(object) {
-    scene.remove(object);
+  saveScene() {
+    const sceneJSON = JSON.stringify(scene);
+    axios.post("http://localhost:8080/api/obj/update?mapId/=" + mapID, { sceneJSON }, { withCredentials: true });
   }
 
   //test용으로만 쓰일 듯?

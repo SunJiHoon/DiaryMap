@@ -33,15 +33,18 @@ class node {
     });
     */
     obj.userData = {
+      contentID: infos.contentid,
       tag: "node",
       addr1: infos.addr1,
-      mapx: infos.mapx,
-      mapy: infos.mapy,
+      relativeX: infos.relativeX,
+      relativeY: infos.relativeY,
+      mapX: infos.mapx,
+      mapY: infos.mapy,
       tel: infos.tel,
       title: infos.title,
     };
     
-    obj.position.set(0,1,0);
+    obj.position.set(obj.userData.relativeX,1,obj.userData.relativeY);
 
     return obj;
   }
