@@ -77,7 +77,7 @@ public class TestDataInit {
 
         Obj3d obj3d1 = new Obj3d();
         obj3d1.setObjName("부산탐방기");
-        obj3d1.setJson_obj(stringSource.getJsonInitData());
+        obj3d1.setSceneJSON(stringSource.getJsonInitData());
         obj3dRepository.save(obj3d1);
         List<Member> findmemberlist = memberMongoRepository.findByName("3");
         if (findmemberlist.size() > 0) {
@@ -95,7 +95,7 @@ public class TestDataInit {
 
         Obj3d obj3d2 = new Obj3d();
         obj3d2.setObjName("대구탐방기");
-        obj3d2.setJson_obj(stringSource.getJsonInitData());
+        obj3d2.setSceneJSON(stringSource.getJsonInitData());
         //obj3d 1, 2를 mongoDB에 저장하는 코드
         //obj3dRepository.save(obj3d1);
         //obj3dRepository.save(obj3d2);

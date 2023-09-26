@@ -54,7 +54,7 @@ public class Obj3dController {
         StringSource stringSource = new StringSource();
         Obj3d obj3d1 = new Obj3d();
         obj3d1.setObjName(paraMap.get("mapName"));
-        obj3d1.setJson_obj(stringSource.getJsonInitData());
+        obj3d1.setSceneJSON(stringSource.getJsonInitData());
         obj3d1.setStartX(paraMap.get("x"));
         obj3d1.setStartY(paraMap.get("y"));
         obj3dRepository.save(obj3d1);
@@ -196,7 +196,7 @@ public class Obj3dController {
             Obj3d actualObj3d = findobj3d.get();
 
             try {
-                objJson = objectMapper.writeValueAsString(actualObj3d.getJson_obj());
+                objJson = objectMapper.writeValueAsString(actualObj3d.getSceneJSON());
             } catch (JsonProcessingException e) {
                 //throw new RuntimeException(e);
             }
@@ -219,7 +219,7 @@ public class Obj3dController {
         Optional<Obj3d> beingUpdateObj3d = obj3dRepository.findById(paraMap.get("mapId"));
         if (beingUpdateObj3d.isPresent()){
             actualObj3d = beingUpdateObj3d.get();
-            actualObj3d.setJson_obj(paramObj3d.getJson_obj());
+            actualObj3d.setSceneJSON(paramObj3d.getSceneJSON());
             log.info("저장수행");
             obj3dRepository.save(actualObj3d);
             //log.info(String.valueOf(actualObj3d));

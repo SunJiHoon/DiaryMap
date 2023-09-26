@@ -13,5 +13,7 @@ public class Obj3d {
     private String startX;
     private String startY;
     private String objName;
-    private String json_obj;
+    //private String json_obj;
+    private String sceneJSON;
+
 }
