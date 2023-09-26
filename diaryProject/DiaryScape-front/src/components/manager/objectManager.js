@@ -73,7 +73,14 @@ class objectManager {
 
   saveScene() {
     const sceneJSON = JSON.stringify(scene);
-    axios.post("http://localhost:8080/api/obj/update?mapId/=" + mapID, { sceneJSON }, { withCredentials: true });
+    console.log(sceneJSON);
+    axios.post("http://localhost:8080/api/obj/update?mapId=" + mapID, { sceneJSON }, { withCredentials: true });
+  }
+
+  loadScene(){
+    axios.get("http://localhost:8080/api/obj/one?mapId=" + mapID).then((res) =>{
+      console.log(res.data);
+    })
   }
 
   //test용으로만 쓰일 듯?

@@ -63,9 +63,7 @@ class inputManager {
       } else if (event.key == "ArrowLeft" && cur_index > 0) {
         move(posArr[--cur_index]);
       } else if (event.key == "a") {
-        // const testObj = scene.getObjectByName("testObj");
-        // const saveJson = objectManager.saveObj(testObj);
-        // scene.remove(testObj);
+        objectManager.loadScene();
       }
     }
   }
