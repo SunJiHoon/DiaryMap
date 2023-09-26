@@ -94,7 +94,9 @@ class inputManager {
         character.userData.myNode.push(intersectObjects[0].object);
         console.log(character.userData.myNode);
         move(targetPos);
-        //axios.post("/api/obj/update?mapId=asdf");
+        const sceneJSON = scene.toJSON();
+        console.log(sceneJSON);
+        //axios.post("/api/obj/update?mapId=");
       }
     }
   }

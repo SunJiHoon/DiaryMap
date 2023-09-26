@@ -38,8 +38,10 @@ class objectManager {
     const playerMesh = await player.loadGltf(characterName);
     playerMesh.name = "player";
     scene.add(playerMesh);
+  }
 
-    axios.get("http://localhost:8080/api/openApi/node?contentType=음식점").then((res) => {
+  initNode(mapID, startPos){
+    axios.get("/api/openApi/node?mapId=" + mapID + "&mapX=" + startPos.x + "&mapY=" + startPos.z).then((res) => {
       const startNode = new Node(res.data[0]);
       scene.add(startNode);
     });

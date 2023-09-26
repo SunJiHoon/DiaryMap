@@ -38,7 +38,7 @@ const ReviewSpace = () => {
             camera.lookAt(0,0,0);
 
             objectManager = new ObjectManager(scene);
-            objectManager.newMap("spongebob").then(()=> { inputManager = new InputManager(camera, scene) });
+            objectManager.newMap("spongebob").then(()=> { inputManager = new InputManager(camera, scene) }).then(objectManager.initNode(tripData.mapId, new THREE.Vector3(tripData.startX, 1, tripData.startY)));
 
             // document.body.appendChild(renderer.domElement);
             renderer.setSize(window.innerWidth, window.innerHeight);

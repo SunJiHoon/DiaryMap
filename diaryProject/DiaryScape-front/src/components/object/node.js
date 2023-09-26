@@ -40,6 +40,7 @@ class node {
       tel: infos.tel,
       title: infos.title,
     };
+    
     obj.position.set(0,1,0);
 
     return obj;
