@@ -41,30 +41,31 @@ class objectManager {
     scene.add(playerMesh);
   }
 
-  initNode(_mapID, startPos) {
-    mapID = _mapID;
-    axios.get("http://localhost:8080/api/openApi/node?mapId=" + mapID + "&mapX=" + startPos.x + "&mapY=" + startPos.z).then((res) => {
-      const startNode = new Node(res.data[0]);
-      scene.add(startNode);
-    });
+  loadMap(objs){
+    //objs[0].position.set(-10,10,20);//DirectionalLight
   }
 
-  loadNodes(selectPos) {
-    console.log("loadNodes execute");
-    console.log(selectPos.z);
-    axios.get("http://localhost:8080/api/openApi/node?mapId=" + mapID + "&mapX=" + selectPos.x + "&mapY=" + selectPos.z).then((res) => {
-      console.log(res.data);
-      for (let i = 0; i < 3; i++) {
-        const tempNode = new Node(res.data[i]);
-        cur_options.push(tempNode);
-        scene.add(tempNode);
-      }
-    });
+  async initNode(_mapID, startPos) {
+    mapID = _mapID;
+
+    const res = await axios.get("http://localhost:8080/api/openApi/node?mapId=" + mapID + "&mapX=" + startPos.x + "&mapY=" + startPos.z);
+    const startNode = await new Node(res.data[0]);
+    scene.add(startNode);
+  }
+
+  async loadNodes(selectPos) {
+    const res = await axios.get("http://localhost:8080/api/openApi/node?mapId=" + mapID + "&mapX=" + selectPos.x + "&mapY=" + selectPos.z);
+    for (let i = 0; i < res.data.length; i++) {
+      var tempNode = await new Node(res.data[i]);
+      scene.add(tempNode);
+      cur_options.push(tempNode);
+      scene.add(tempNode);
+    }
   }
 
   invisibleOptions(select_option) {
     for (let i = 0; i < cur_options.length; i++) {
-      if (cur_options[i] != select_option) {
+      if (cur_options[i].children[0] != select_option) {//너무 하드 코딩인데
         scene.remove(cur_options[i]);
       }
     }
@@ -72,25 +73,24 @@ class objectManager {
   }
 
   saveScene() {
+    scene.updateMatrixWorld();
     const sceneJSON = JSON.stringify(scene);
-    console.log(sceneJSON);
     axios.post("http://localhost:8080/api/obj/update?mapId=" + mapID, { sceneJSON }, { withCredentials: true });
   }
 
-  loadScene(){
-    axios.get("http://localhost:8080/api/obj/one?mapId=" + mapID).then((res) =>{
-      console.log(res.data);
+  loadScene() {
+    axios.get("http://localhost:8080/api/obj/one?mapId=" + mapID).then((res) => {
+      scene.clear();
+      const sceneData = JSON.parse(res.data.sceneJSON);
+      const loader = new THREE.ObjectLoader();
+      scene = loader.parse(sceneData);
+      this.loadMap(scene.children);
+      const newG = new THREE.BoxGeometry(3,3,3);
+      const newM = new THREE.MeshBasicMaterial();
+      const newMesh = new THREE.Mesh(newG, newM);
+      scene.add(newMesh);
+      console.log(scene);
     })
-  }
-
-  //test용으로만 쓰일 듯?
-  saveObj(object) {
-    const objectJson = object.toJSON();
-    console.log(objectJson);
-    console.log(object.position);
-    console.log(object.rotation);
-    axios.post("http://localhost:8080/api/save/Obj");
-    return objectJson;
   }
 
   saveObjs() {

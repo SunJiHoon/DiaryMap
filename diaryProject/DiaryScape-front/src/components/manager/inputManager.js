@@ -6,8 +6,6 @@ let camera;
 let scene;
 let character;
 
-let testIndex = 0;
-
 const objectManager = new ObjectManager();
 const raycaster = new THREE.Raycaster();
 
@@ -67,7 +65,7 @@ class inputManager {
       }
     }
   }
-  handleMouseDown(event) {
+  async handleMouseDown(event) {
     if (cur_state == InputState.IDLE) {
       const pointer = new THREE.Vector2();
 
@@ -78,22 +76,23 @@ class inputManager {
 
       const intersectObjects = raycaster.intersectObjects(scene.children);
 
-      if (intersectObjects[0].object.userData?.tag == "node") {
-        const userData = intersectObjects[0].object.userData;
-        const targetPos = new THREE.Vector3(
-          intersectObjects[0].object.userData.relativeX,
-          0,
-          intersectObjects[0].object.userData.relativeY
-        );
-        
-        drawLine(character.position, intersectObjects[0].object.position);
-        console.log(userData.mapx, userData.mapy);
-        objectManager.loadNodes(new THREE.Vector3(userData.mapx, 1, userData.mapy));//test
-        objectManager.invisibleOptions(intersectObjects[0].object);
+      for(let i = 0;i<intersectObjects.length;i++){
+        if (intersectObjects[i].object.userData?.tag == "node") {
+          const userData = intersectObjects[i].object.userData;
+          const targetPos = new THREE.Vector3(
+            intersectObjects[i].object.position.x,
+            0,
+            intersectObjects[i].object.position.z,
+          );
+          
+          drawLine(character.position, intersectObjects[i].object.position);
+          objectManager.loadNodes(new THREE.Vector3(userData.mapX, 1, userData.mapY));
+          objectManager.invisibleOptions(intersectObjects[i].object);
 
-        character.userData.myNode.push(intersectObjects[0].object);
-        move(targetPos);
-        objectManager.saveScene();
+          character.userData.myNode.push(intersectObjects[i].object);
+          move(targetPos);
+          objectManager.saveScene();
+        }
       }
     }
   }
@@ -121,7 +120,7 @@ function move(targetPos) {
       z: cameraOrigin.z + targetPos.z,
       duration: 1,
     })
-    .then(() => (cur_state = InputState.IDLE));
+    .then(() => {cur_state = InputState.IDLE;});
   gsap.to(character.rotation, {
     y: angle,
     duration: 0.3,

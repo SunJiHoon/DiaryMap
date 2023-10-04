@@ -1,5 +1,8 @@
-import axios from "axios";
-import * as THREE from "three";
+import * as THREE from "three"
+import { Group } from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+
+const foods = ["chinese", "japanese", "korean", "western"];
 
 const Category = {
   NONE: "none",
@@ -10,43 +13,40 @@ const Category = {
 Object.freeze(Category);
 
 class node {
-  objectLoader = new THREE.ObjectLoader();
-
   constructor(infos) {
-    const objGeometry = new THREE.BoxGeometry(2, 2, 2);
-    const objMaterial = new THREE.MeshStandardMaterial();
+    return this.loadObj(infos);
+  }
+
+  async loadObj(infos){
+    const objGeometry = new THREE.SphereGeometry(2);
+    const objMaterial = new THREE.MeshBasicMaterial();
     const obj = new THREE.Mesh(objGeometry, objMaterial);
-    /*
-    axios.get("http://localhost:8080/api/Obj/" + objectName).then((res) => {
-      console.log(res.data);
-      const obj = loader.parse(res.data);
-      obj.userData = {
-        name: "",
-        address: "",
-        category: Category.NONE,
-        tel: "",
-        pos: new THREE.Vector3(10, 0, 10),
-        reviews: [],
-        star: 0,
-      };
-      return object;
-    });
-    */
+
+    const gltfLoader = new GLTFLoader();
+    const temp = await gltfLoader.loadAsync("/assets/foods/chinese/scene.gltf");
+    const eventObj = temp.scene;
+
     obj.userData = {
       contentID: infos.contentid,
       tag: "node",
       addr1: infos.addr1,
-      relativeX: infos.relativeX,
-      relativeY: infos.relativeY,
+      relativeX: Number(infos.relativeX),
+      relativeY: Number(infos.relativeY),
       mapX: infos.mapx,
       mapY: infos.mapy,
       tel: infos.tel,
       title: infos.title,
     };
-    
-    obj.position.set(obj.userData.relativeX,1,obj.userData.relativeY);
 
-    return obj;
+    eventObj.scale.set(7,7,7);
+    obj.position.set(obj.userData.relativeX,0,obj.userData.relativeY);
+    eventObj.position.set(obj.userData.relativeX,2,obj.userData.relativeY);
+    
+    const group = new Group();
+    group.add(obj);
+    group.add(eventObj);
+
+    return group;
   }
 }
 
