@@ -8,7 +8,7 @@ import axios from "axios"
 
 const MyTripmap = () => {
 
-    const [isTest, setIsTest] = useState(false)
+    const [isTest, setIsTest] = useState(true)
     const navigate = useNavigate()
     // true: 테스트 맵 데이터 사용
     // false: "api/my_tripmap"에 Get 요청 후 맵 데이터 가져옴.
@@ -30,19 +30,16 @@ const MyTripmap = () => {
 
     const [reviewData, setReviewData] = useState([])
     const [newReviewValue, setNewReviewValue] = useState([])
-    const [xValue, setXValue] = useState('')
-    const [yValue, setYValue] = useState('')
+    const [searchValue, setSearchValue] = useState('')
+    const [searchResultData, setSearchResultData] = useState([])
     
     const onNewReviewChange = useCallback((e) => {
         setNewReviewValue(e.target.value)
     }, [])
 
-    const onXChange = useCallback((e) => {
-        setXValue(e.target.value)
-    }, [])
-
-    const onYChange = useCallback((e) => {
-        setYValue(e.target.value)
+    const onSearchChange = useCallback((e) => {
+        setSearchValue(e.target.value)
+        setSearchResultData([{id:1, name:"af", x:"a", y:"b"}])
     }, [])
 
     const onReviewClicked = (review) => {
@@ -112,15 +109,29 @@ const MyTripmap = () => {
             <form onSubmit={onNewReviewSubmit}>
                 <Box display="flex" justifyContent="center">
                     <Box display="flex" justifyContent="center" w="100%" maxW="500px" mt={6} mb={6}>
-                    <Input type="text" placeholder="새 리뷰 추가" value={newReviewValue} onChange={onNewReviewChange} />
-                    <Input type="text" placeholder="x" value={xValue} onChange={onXChange} />
-                    <Input type="text" placeholder="y" value={yValue} onChange={onYChange} />
+                    <Input type="text" placeholder="새 리뷰 이름" value={newReviewValue} onChange={onNewReviewChange} />
+                    <Input type="text" placeholder="시작 장소" value={searchValue} onChange={onSearchChange} />
                     <Button type="submit" ml={4}>추가</Button>
                     </Box>
                 </Box>
             </form>
+            
+            <Box display="flex" justifyContent="center" mb={8}>
+                <Box w="100%" maxW="500px" display="flex" flexDirection="column">
+                    <Box fontSize="1.4em" mb={4}>시작 가능한 장소</Box>
+                    {searchResultData.length == 0 && <Box>장소 이름을 입력해주세요!</Box>}
+                    {searchResultData.map((result) => (
+                        <Button colorScheme="teal" variant="outline" h="40px" key={result.id} mb={6}>
+                            {result.name},&nbsp;
+                            x: {result.x}, y: {result.y}
+                        </Button>
+                    ))}
+                </Box>
+            </Box>
+
             <Box display="flex" justifyContent="center">
                 <Box w="100%" maxW="500px" display="flex" flexDirection="column">
+                    <Box fontSize="1.8em" mb={4}>여행 리스트</Box>
                     {reviewData.map((review) => (
                         <Button border="1px" h="70px" key={review.mapId} mb={6} onClick={(e) => onReviewClicked(review)}>
                             {review.title}<br />
