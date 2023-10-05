@@ -49,7 +49,7 @@ const MyTripmap = () => {
             .then((res) => {
                 setSearchResultData(res.data)
             })
-        setSearchResultData([{contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"}])
+        // setSearchResultData([{contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"}])
     }, [])
 
     const onStartNodeSelect = (nodeData) => {
