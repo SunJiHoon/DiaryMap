@@ -39,7 +39,13 @@ const MyTripmap = () => {
 
     const onSearchChange = useCallback((e) => {
         setSearchValue(e.target.value)
-        setSearchResultData([{id:1, name:"af", x:"a", y:"b"}])
+        const searchValueReplaced = searchValue.replace(/ /g, "%20")
+        console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
+        axios.get("http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
+            .then((res) => {
+                setSearchResultData(res.data)
+            })
+        //setSearchResultData([{contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"}])
     }, [])
 
     const onReviewClicked = (review) => {
@@ -121,9 +127,10 @@ const MyTripmap = () => {
                     <Box fontSize="1.4em" mb={4}>시작 가능한 장소</Box>
                     {searchResultData.length == 0 && <Box>장소 이름을 입력해주세요!</Box>}
                     {searchResultData.map((result) => (
-                        <Button colorScheme="teal" variant="outline" h="40px" key={result.id} mb={6}>
-                            {result.name},&nbsp;
-                            x: {result.x}, y: {result.y}
+                        <Button colorScheme="teal" variant="outline" h="40px" key={result.contentid} mb={6}>
+                            {result.title},&nbsp;
+                            {result.addr1},&nbsp;
+                            x: {result.mapx}, y: {result.mapy}
                         </Button>
                     ))}
                 </Box>
