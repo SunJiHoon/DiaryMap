@@ -44,7 +44,7 @@ const LoginBox = () => {
       .then((res) => {
         console.log(res.data)
         dispatch(loginUser(res.data))
-        navigate("/map")
+        navigate("/my_tripmap")
       })
   }
 

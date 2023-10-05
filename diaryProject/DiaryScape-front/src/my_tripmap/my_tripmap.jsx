@@ -8,21 +8,20 @@ import axios from "axios"
 
 const MyTripmap = () => {
 
-    const [isTest, setIsTest] = useState(true)
+    const [isTest, setIsTest] = useState(false)
     const navigate = useNavigate()
     // true: 테스트 맵 데이터 사용
     // false: "api/my_tripmap"에 Get 요청 후 맵 데이터 가져옴.
 
 
-    // 로그인은 일단 프론트에서만 수행하도록 구현함
-    const dispatch = useDispatch()
+    //const dispatch = useDispatch()
     
-    const testLoginData = {
-        name:"Tester",
-        loginId: "tester_id"
-    }
+    // const testLoginData = {
+    //     name:"Tester",
+    //     loginId: "tester_id"
+    // }
 
-    dispatch(loginUser(testLoginData))
+    //dispatch(loginUser(testLoginData))
 
     const username = useSelector((state) => state.user.name)
 
@@ -32,7 +31,9 @@ const MyTripmap = () => {
     const [newReviewValue, setNewReviewValue] = useState([])
     const [searchValue, setSearchValue] = useState('')
     const [searchResultData, setSearchResultData] = useState([])
-    
+    const [startNodeSelected, setStartNodeSelected] = useState(false)
+    const [selectedData, setSelectedData] = useState({})
+
     const onNewReviewChange = useCallback((e) => {
         setNewReviewValue(e.target.value)
     }, [])
@@ -40,15 +41,21 @@ const MyTripmap = () => {
     // 불필요한 get 요청 방지 구현 예정
     const onSearchChange = useCallback((e) => {
         setSearchValue(e.target.value)
-        console.log(e.target.value)
+        setStartNodeSelected(false)
+        // console.log(e.target.value)
         const searchValueReplaced = e.target.value.replace(/ /g, "%20")
-        console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
+        // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
         axios.get("http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
             .then((res) => {
                 setSearchResultData(res.data)
             })
-        //setSearchResultData([{contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"}])
+        setSearchResultData([{contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"}])
     }, [])
+
+    const onStartNodeSelect = (nodeData) => {
+        setStartNodeSelected(true)
+        setSelectedData(nodeData)
+    }
 
     const onReviewClicked = (review) => {
         console.log(review)
@@ -68,9 +75,17 @@ const MyTripmap = () => {
         //     title: newReviewValue,
         //     id: nextId.current
         // }))
+        if(newReviewValue=="") {
+            console.log("새 리뷰 제목 비어있음!")
+            return
+        }
+        if(!startNodeSelected) {
+            console.log("시작 장소 선택되지 않음!")
+            return
+        }
         const newReviewNameReplaced = newReviewValue.replace(/ /g, "%20")
-        console.log(newReviewNameReplaced+"&x="+xValue+"&y="+yValue)
-        axios.post("http://localhost:8080/api/obj/create?mapName="+newReviewNameReplaced+"&x="+xValue+"&y="+yValue, {}, {withCredentials:true})
+        console.log("post 요청: api/obj/create?mapName="+newReviewNameReplaced+"&x="+selectedData.mapx+"&y="+selectedData.mapy)
+        axios.post("http://localhost:8080/api/obj/create?mapName="+newReviewNameReplaced+"&x="+selectedData.mapx+"&y="+selectedData.mapy, {}, {withCredentials:true})
             .then((res) => {
                 axios.get('http://localhost:8080/api/obj/list').then((res) => {
                     setReviewData(res.data)
@@ -126,15 +141,26 @@ const MyTripmap = () => {
             
             <Box display="flex" justifyContent="center" mb={8}>
                 <Box w="100%" maxW="500px" display="flex" flexDirection="column">
+                    { !startNodeSelected && <>
                     <Box fontSize="1.4em" mb={4}>시작 가능한 장소</Box>
                     {searchResultData.length == 0 && <Box>장소 이름을 입력해주세요!</Box>}
                     {searchResultData.map((result) => (
-                        <Button colorScheme="teal" variant="outline" h="40px" key={result.contentid} mb={6}>
+                        <Button colorScheme="teal" variant="outline" h="40px" key={result.contentid} mb={2} onClick={(e) => onStartNodeSelect(result)}>
                             {result.title},&nbsp;
                             {result.addr1},&nbsp;
                             x: {result.mapx}, y: {result.mapy}
                         </Button>
                     ))}
+                    </>}
+
+                    { startNodeSelected && <>
+                    <Box fontSize="1.4em" mb={4}>시작 장소 선택됨</Box>
+                    <Button colorScheme="teal" h="40px" mb={2}>
+                        {selectedData.title},&nbsp;
+                        {selectedData.addr1},&nbsp;
+                        x: {selectedData.mapx}, y: {selectedData.mapy}
+                    </Button>
+                    </>}
                 </Box>
             </Box>
 
