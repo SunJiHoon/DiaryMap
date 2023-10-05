@@ -168,7 +168,7 @@ public class NodeController {
         return returnjsonArray.toString();
     }
 
-    String calRelativeX(String startX, String currX){
+    public static String calRelativeX(String startX, String currX){
         double relativeVal = Double.parseDouble(currX) - Double.parseDouble(startX);
         double mul = 100; //위도상 0.063(5.6km거리)는 500을 곱하여 30을 반환하기로 했다.
         return Integer.toString((int)(relativeVal * mul) * 5);
