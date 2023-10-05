@@ -37,9 +37,11 @@ const MyTripmap = () => {
         setNewReviewValue(e.target.value)
     }, [])
 
+    // 불필요한 get 요청 방지 구현 예정
     const onSearchChange = useCallback((e) => {
         setSearchValue(e.target.value)
-        const searchValueReplaced = searchValue.replace(/ /g, "%20")
+        console.log(e.target.value)
+        const searchValueReplaced = e.target.value.replace(/ /g, "%20")
         console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
         axios.get("http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
             .then((res) => {
