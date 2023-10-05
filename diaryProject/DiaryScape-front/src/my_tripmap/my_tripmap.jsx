@@ -14,7 +14,7 @@ const MyTripmap = () => {
     // false: "api/my_tripmap"에 Get 요청 후 맵 데이터 가져옴.
 
 
-    //const dispatch = useDispatch()
+    const dispatch = useDispatch()
     
     // const testLoginData = {
     //     name:"Tester",
