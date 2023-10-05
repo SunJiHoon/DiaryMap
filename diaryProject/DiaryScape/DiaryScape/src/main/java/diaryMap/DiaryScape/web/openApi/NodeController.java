@@ -156,6 +156,7 @@ public class NodeController {
 
             tempjsonObject.put("mapx", nodeDTO.getMapx());
             tempjsonObject.put("mapy", nodeDTO.getMapy());
+            //log.info(nodeDTO.getMapx());
 
             tempjsonObject.put("relativeX", nodeDTO.getRelativeX());
             tempjsonObject.put("relativeY", nodeDTO.getRelativeY());
@@ -164,7 +165,6 @@ public class NodeController {
 
             returnjsonArray.put(tempjsonObject);
         }
-
         return returnjsonArray.toString();
     }
 
