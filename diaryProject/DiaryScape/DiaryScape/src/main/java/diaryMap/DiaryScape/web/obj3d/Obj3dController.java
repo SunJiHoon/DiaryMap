@@ -7,19 +7,12 @@ import diaryMap.DiaryScape.domain.member.MemberMongoRepository;
 import diaryMap.DiaryScape.domain.obj3d.Obj3d;
 import diaryMap.DiaryScape.domain.obj3d.Obj3dRepository;
 import diaryMap.DiaryScape.source.StringSource;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.json.JSONParser;
+import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -196,21 +189,78 @@ public class Obj3dController {
         if (findobj3d.isPresent()){
             log.info("해당 id를 가진 map 발견");
             Obj3d actualObj3d = findobj3d.get();
+            objJson = (actualObj3d.getSceneJSON());
 
+            /*
             try {
-                objJson = objectMapper.writeValueAsString(actualObj3d.getSceneJSON());
+                //objJson = objectMapper.writeValueAsString(actualObj3d.getSceneJSON());
             } catch (JsonProcessingException e) {
                 //throw new RuntimeException(e);
             }
+            */
+
+        }
+        else{
+            log.info("해당 id를 가진 map이 존재하지 않습니다.");
+        }
+        return objJson;
+    }
+
+    //sceneJson 분석용
+    @GetMapping(value = "/obj/one/onlyMapJson/parse", produces = "application/json")
+    public String getOneMapOnlyMapJsonParse(
+            @RequestParam Map<String, String> paraMap
+            //url+?키=value&키=value //John%20Doe
+    )
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String queryMapId = paraMap.get("mapId");
+        Optional<Obj3d> findobj3d = obj3dRepository.findById(queryMapId);
+
+
+        String objJson = "{}";
+        if (findobj3d.isPresent()){
+            log.info("해당 id를 가진 map 발견");
+            Obj3d actualObj3d = findobj3d.get();
+            objJson = (actualObj3d.getSceneJSON());
+
+            /*
+            try {
+                //objJson = objectMapper.writeValueAsString(actualObj3d.getSceneJSON());
+            } catch (JsonProcessingException e) {
+                //throw new RuntimeException(e);
+            }
+            */
+
         }
         else{
             log.info("해당 id를 가진 map이 존재하지 않습니다.");
         }
 
-        return objJson;
+        JSONObject jsonObject = new JSONObject(objJson);
+        // "items" 객체 안에 있는 "item" 배열을 추출
+        JSONArray childrenArr = jsonObject.getJSONObject("object")
+                .getJSONArray("children");
+//                .getJSONObject("items");
+        //JSONArray itemArray = items.getJSONArray("item");
+
+        JSONObject actualObject = null;
+
+        for (int i = 0; i < childrenArr.length(); i++){
+            // JSON 객체로 변환
+            JSONObject provisoformyNode = childrenArr.getJSONObject(i);
+            // 특정 키를 가지고 있는지 확인
+            if (provisoformyNode.has("userData")) {
+                actualObject = provisoformyNode.getJSONObject("userData");
+                break;
+            }
+        }
+
+        return actualObject.getJSONArray("myNode").toString();
     }
     @PostMapping(value = "/obj/update")
-    public void updateOneMap(
+    public String updateOneMap(
             @RequestParam Map<String, String> paraMap,
             @RequestBody Obj3d paramObj3d
             //url+?키=value&키=value //John%20Doe
@@ -221,6 +271,7 @@ public class Obj3dController {
         Optional<Obj3d> beingUpdateObj3d = obj3dRepository.findById(paraMap.get("mapId"));
         if (beingUpdateObj3d.isPresent()){
             actualObj3d = beingUpdateObj3d.get();
+            //log.info("들어온 내용 :" + paramObj3d.getSceneJSON());
             actualObj3d.setSceneJSON(paramObj3d.getSceneJSON());
             log.info("저장수행");
             obj3dRepository.save(actualObj3d);
@@ -231,6 +282,7 @@ public class Obj3dController {
             log.info("mapId불일치. 저장실패");
 
         }
-
+        //저장된 내용 반환하기
+        return paramObj3d.getSceneJSON();
     }
 }

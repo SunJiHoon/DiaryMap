@@ -1,0 +1,11 @@
+Model Information:
+* title:	Kimchi Jjigae
+* source:	https://sketchfab.com/3d-models/kimchi-jjigae-3ff006d296224ad1b8a85ea3bcfc0870
+* author:	carysgooi (https://sketchfab.com/carysgooi)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Kimchi Jjigae" (https://sketchfab.com/3d-models/kimchi-jjigae-3ff006d296224ad1b8a85ea3bcfc0870) by carysgooi (https://sketchfab.com/carysgooi) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
