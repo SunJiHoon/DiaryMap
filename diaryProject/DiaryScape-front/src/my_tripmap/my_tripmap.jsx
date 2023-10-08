@@ -1,7 +1,20 @@
 import { useDispatch, useSelector } from "react-redux"
 import { loginUser, clearUser } from '../reducer/user_slice'
 import { selectTrip, clearTrip } from '../reducer/trip_slice'
-import { Box, Input, Button, Heading} from '@chakra-ui/react'
+import {
+    Box,
+    Input,
+    Button, 
+    Heading,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure
+} from '@chakra-ui/react'
 import { useState, useEffect, useCallback, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
@@ -33,6 +46,8 @@ const MyTripmap = () => {
     const [searchResultData, setSearchResultData] = useState([])
     const [startNodeSelected, setStartNodeSelected] = useState(false)
     const [selectedData, setSelectedData] = useState({})
+
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     const onNewReviewChange = useCallback((e) => {
         setNewReviewValue(e.target.value)
@@ -128,11 +143,20 @@ const MyTripmap = () => {
             <Box display="inline" color="blue">{username}</Box>의 Trip Zone
         </Heading>
         <Box>
-            <Heading as="h3" size="lg">여행 리뷰 맵 리스트</Heading>
+            <Heading as="h3" size="lg" mb={6}>여행 리뷰 맵 리스트</Heading>
+
+            <Button colorScheme="teal" onClick={onOpen} mb={6}>새 여행 작성</Button>
+
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>새 여행 추가</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
             <form onSubmit={onNewReviewSubmit}>
                 <Box display="flex" justifyContent="center">
                     <Box display="flex" justifyContent="center" w="100%" maxW="500px" mt={6} mb={6}>
-                    <Input type="text" placeholder="새 리뷰 이름" value={newReviewValue} onChange={onNewReviewChange} />
+                    <Input type="text" placeholder="새 여행 이름" value={newReviewValue} onChange={onNewReviewChange} />
                     <Input type="text" placeholder="시작 장소" value={searchValue} onChange={onSearchChange} />
                     <Button type="submit" ml={4}>추가</Button>
                     </Box>
@@ -152,7 +176,7 @@ const MyTripmap = () => {
                         </Button>
                     ))}
                     </>}
-
+                    
                     { startNodeSelected && <>
                     <Box fontSize="1.4em" mb={4}>시작 장소 선택됨</Box>
                     <Button colorScheme="teal" h="40px" mb={2}>
@@ -163,6 +187,9 @@ const MyTripmap = () => {
                     </>}
                 </Box>
             </Box>
+            </ModalBody>
+            </ModalContent>
+            </Modal>
 
             <Box display="flex" justifyContent="center">
                 <Box w="100%" maxW="500px" display="flex" flexDirection="column">
@@ -174,6 +201,7 @@ const MyTripmap = () => {
                             startX: {review.startX}, startY: {review.startY}
                         </Button>
                     ))}
+                    {reviewData.length == 0 && <p>새 리뷰를 작성해주세요!</p>}
                 </Box>
             </Box>
         </Box>
