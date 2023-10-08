@@ -9,6 +9,11 @@ axios.defaults.withCredentials = true;//axios가 웹 브라우져 내에서 항�
 
 
 const LoginBox = () => {
+  const axiosConfig = {
+    baseURL: import.meta.env.VITE_API_URL
+  }
+
+  const client = axios.create(axiosConfig)
 
   const username = useSelector((state) => state.user.name)
   const dispatch = useDispatch()
@@ -40,7 +45,7 @@ const LoginBox = () => {
       password,
     }
 
-    axios.post("http://localhost:8080/api/login", body, {withCredentials:true})//login
+    client.post("/api/login", body, {withCredentials:true})//login
       .then((res) => {
         console.log(res.data)
         dispatch(loginUser(res.data))
