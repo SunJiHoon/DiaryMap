@@ -34,7 +34,6 @@ class inputManager {
     camera = _camera;
     scene = _scene;
     character = scene.getObjectByName("player");
-    console.log(character);
 
     this.inputManage();
   }

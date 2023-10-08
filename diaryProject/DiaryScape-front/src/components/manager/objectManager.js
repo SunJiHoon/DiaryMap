@@ -22,13 +22,13 @@ class objectManager {
 
   async checkMapSave(){
     const res = await axios.get("http://localhost:8080/api/obj/one?mapId=" + tripData.mapId);
-    console.log(res.data.sceneJSON);
-    if(res.data){
-      await this.loadScene();
-    }
-    else{
-      await this.newMap("spongebob").then(this.initNode());//캐릭터 이름 넣기
-    }
+    // if(res.data){
+    //   await this.loadScene();
+    // }
+    // else{
+    //   await this.newMap("spongebob").then(this.initNode());//캐릭터 이름 넣기
+    // }
+    await this.newMap("spongebob").then(this.initNode());
   }
 
   async newMap(characterName) {
@@ -83,6 +83,7 @@ class objectManager {
   saveScene() {
     scene.updateMatrixWorld();
     const sceneJSON = JSON.stringify(scene);
+    console.log(sceneJSON);
     axios.post("http://localhost:8080/api/obj/update?mapId=" + tripData.mapId, { sceneJSON }, { withCredentials: true });
   }
 
