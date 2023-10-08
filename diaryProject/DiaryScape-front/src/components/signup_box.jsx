@@ -5,7 +5,13 @@ import axios from 'axios'
 import { Box, Input, Button } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 
+
 const SignUpBox = () => {
+  const axiosConfig = {
+    baseURL: import.meta.env.VITE_API_URL
+  }
+  
+  const client = axios.create(axiosConfig)
   const username = useSelector((state) => state.user.name)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -38,7 +44,7 @@ const SignUpBox = () => {
       password,
     }
 
-    axios.post("http://${serverIPAddress}:8080/api/register", body) //register
+    client.post("/api/register", body) //register
       .then((res) => {
         console.log(res.data)
         if(res.data.code == 200) {
