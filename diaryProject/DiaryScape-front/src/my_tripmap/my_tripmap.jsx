@@ -216,10 +216,11 @@ const MyTripmap = () => {
                 <Box w="100%" maxW="500px" display="flex" flexDirection="column">
                     <Box fontSize="1.8em" mb={4}>여행 리스트</Box>
                     {reviewData.map((review) => (
-                        <Button border="1px" h="70px" key={review.mapId} mb={6} onClick={(e) => onReviewClicked(review)}>
-                            {review.title}<br />
-                            {review.mapId}<br />
-                            startX: {review.startX}, startY: {review.startY}
+                        <Button h="70px" key={review.mapId} mb={6} onClick={(e) => onReviewClicked(review)} colorScheme="teal" variant="outline">
+                            <Box fontSize="1.6em">{review.title}</Box>&nbsp;
+                            <Box>
+                            mapId: {review.mapId} / 시작 좌표: ({review.startX}, {review.startY})
+                            </Box>
                         </Button>
                     ))}
                     {reviewData.length == 0 && <p>새 여행을 작성해주세요!</p>}
