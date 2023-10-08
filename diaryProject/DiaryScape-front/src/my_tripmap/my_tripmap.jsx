@@ -21,7 +21,7 @@ import client from "../utility/client"
 
 const MyTripmap = () => {
 
-    const [isTest, setIsTest] = useState(false)
+    const [isTest, setIsTest] = useState(true)
     const navigate = useNavigate()
     // true: 테스트 맵 데이터 사용
     // false: "api/my_tripmap"에 Get 요청 후 맵 데이터 가져옴.
@@ -217,9 +217,11 @@ const MyTripmap = () => {
                     <Box fontSize="1.8em" mb={4}>여행 리스트</Box>
                     {reviewData.map((review) => (
                         <Button h="70px" key={review.mapId} mb={6} onClick={(e) => onReviewClicked(review)} colorScheme="teal" variant="outline">
-                            <Box fontSize="1.6em">{review.title}</Box>&nbsp;
+                            <Box display="flex" flexDirection="column">
+                            <Box fontSize="1.6em" mb={1}>{review.title}</Box>
                             <Box>
                             mapId: {review.mapId} / 시작 좌표: ({review.startX}, {review.startY})
+                            </Box>
                             </Box>
                         </Button>
                     ))}
