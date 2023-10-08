@@ -64,7 +64,19 @@ const MyTripmap = () => {
             .then((res) => {
                 setSearchResultData(res.data)
             })
-        // setSearchResultData([{contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"}])
+
+        // setSearchResultData([
+        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
+        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
+        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
+        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
+        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
+        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
+        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
+        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
+        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
+        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
+        // ])
     }, [])
 
     const onStartNodeSelect = (nodeData) => {
@@ -168,13 +180,15 @@ const MyTripmap = () => {
                                 { !startNodeSelected && <>
                                 <Box fontSize="1.4em" mb={4}>시작 가능한 장소</Box>
                                 {searchResultData.length == 0 && <Box>장소 이름을 입력해주세요!</Box>}
-                                {searchResultData.map((result) => (
-                                    <Button colorScheme="teal" variant="outline" h="40px" key={result.contentid} mb={2} onClick={(e) => onStartNodeSelect(result)}>
-                                        {result.title},&nbsp;
-                                        {result.addr1},&nbsp;
-                                        x: {result.mapx}, y: {result.mapy}
-                                    </Button>
-                                ))}
+                                <Box maxH={300} overflowY="scroll">
+                                    {searchResultData.map((result) => (
+                                        <Button colorScheme="teal" variant="outline" h="40px" key={result.contentid} mb={2} onClick={(e) => onStartNodeSelect(result)}>
+                                            {result.title},&nbsp;
+                                            {result.addr1},&nbsp;
+                                            x: {result.mapx}, y: {result.mapy}
+                                        </Button>
+                                    ))}
+                                </Box>
                                 </>}
                                 
                                 { startNodeSelected && <>
