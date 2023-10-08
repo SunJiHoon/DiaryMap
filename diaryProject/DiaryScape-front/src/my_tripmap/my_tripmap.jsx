@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { useState, useEffect, useCallback, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import axios from "axios"
+import client from "../utility/client"
 
 const MyTripmap = () => {
 
@@ -60,7 +60,7 @@ const MyTripmap = () => {
         // console.log(e.target.value)
         const searchValueReplaced = e.target.value.replace(/ /g, "%20")
         // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
-        axios.get("http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
+        client.get("/api/openApi/start/list?userKeyword=" + searchValueReplaced)
             .then((res) => {
                 setSearchResultData(res.data)
             })
@@ -112,9 +112,9 @@ const MyTripmap = () => {
         }
         const newReviewNameReplaced = newReviewValue.replace(/ /g, "%20")
         console.log("post 요청: api/obj/create?mapName="+newReviewNameReplaced+"&x="+selectedData.mapx+"&y="+selectedData.mapy)
-        axios.post("http://localhost:8080/api/obj/create?mapName="+newReviewNameReplaced+"&x="+selectedData.mapx+"&y="+selectedData.mapy, {}, {withCredentials:true})
+        client.post("/api/obj/create?mapName="+newReviewNameReplaced+"&x="+selectedData.mapx+"&y="+selectedData.mapy, {}, {withCredentials:true})
             .then((res) => {
-                axios.get('http://localhost:8080/api/obj/list').then((res) => {
+                client.get('/api/obj/list').then((res) => {
                     setReviewData(res.data)
                 })
             })
@@ -143,7 +143,7 @@ const MyTripmap = () => {
             console.log(reviewData)
         }
         else {
-            axios.get('http://localhost:8080/api/obj/list').then((res) => {
+            client.get('/api/obj/list').then((res) => {
                 setReviewData(res.data)
             })
         }
