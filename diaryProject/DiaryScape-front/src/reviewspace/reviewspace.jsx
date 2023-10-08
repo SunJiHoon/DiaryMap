@@ -1,23 +1,23 @@
 import * as THREE from "three";
 import InputManager from "../components/manager/inputManager";
 import ObjectManager from "../components/manager/objectManager";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
 import { Box, Button } from '@chakra-ui/react'
 import { useSelector } from "react-redux";
-import objectManager from "../components/manager/objectManager";
+// import objectManager from "../components/manager/objectManager";
 
 const ReviewSpace = () => {
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
-
     let objectManager;
+
+    const newMapFunctionRef = useRef(null)
 
     useEffect(() => {
         let renderer, scene, camera
         
         let inputManager
-
         async function init() {
             scene = new THREE.Scene();
 
@@ -39,6 +39,8 @@ const ReviewSpace = () => {
             camera.lookAt(0,0,0);
 
             objectManager = new ObjectManager(scene, camera, tripData);
+            newMapFunctionRef.current = objectManager.newMap
+
             objectManager.checkMapSave().then(()=> { inputManager = new InputManager(camera, scene) });
             
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -64,6 +66,7 @@ const ReviewSpace = () => {
         }
         anim();
 
+        
         return (() => {
             cancelAnimationFrame(req)
             window.removeEventListener("resize", handleResize)
@@ -71,6 +74,12 @@ const ReviewSpace = () => {
         })
     }, [])
 
+    function onResetButtonClick() {
+        if(newMapFunctionRef.current) {
+            newMapFunctionRef.current("spongebob")
+        }
+    }
+    
     return (<>
         <div style={{
             position:"fixed",
@@ -98,10 +107,9 @@ const ReviewSpace = () => {
             <p>tripData.startY : {tripData.startY}</p>
             </Box>
             <Box>
-                {objectManager && <Button onClick={objectManager.newMap}>
+                <Button onClick={onResetButtonClick}>
                     reset
-                </Button>}
-                awef
+                </Button>
             </Box>
         </div>
     <div>
