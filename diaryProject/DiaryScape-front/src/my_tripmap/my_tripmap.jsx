@@ -108,7 +108,7 @@ const MyTripmap = () => {
             })
 
         setNewReviewValue('')
-
+        setStartNodeSelected(false)
         nextId.current++
     })
 
@@ -143,9 +143,9 @@ const MyTripmap = () => {
             <Box display="inline" color="blue">{username}</Box>의 Trip Zone
         </Heading>
         <Box>
-            <Heading as="h3" size="lg" mb={6}>여행 리뷰 맵 리스트</Heading>
+            <Heading as="h3" size="lg" mb={10}>여행 리뷰 맵 리스트</Heading>
 
-            <Button colorScheme="teal" onClick={onOpen} mb={6}>새 여행 작성</Button>
+            <Button w="60%" maxW={500} colorScheme="teal" onClick={onOpen} mb={10}>새 여행 작성</Button>
 
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
@@ -153,45 +153,48 @@ const MyTripmap = () => {
                     <ModalHeader>새 여행 추가</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-            <form onSubmit={onNewReviewSubmit}>
-                <Box display="flex" justifyContent="center">
-                    <Box display="flex" justifyContent="center" w="100%" maxW="500px" mt={6} mb={6}>
-                    <Input type="text" placeholder="새 여행 이름" value={newReviewValue} onChange={onNewReviewChange} />
-                    <Input type="text" placeholder="시작 장소" value={searchValue} onChange={onSearchChange} />
-                    <Button type="submit" ml={4}>추가</Button>
-                    </Box>
-                </Box>
-            </form>
-            
-            <Box display="flex" justifyContent="center" mb={8}>
-                <Box w="100%" maxW="500px" display="flex" flexDirection="column">
-                    { !startNodeSelected && <>
-                    <Box fontSize="1.4em" mb={4}>시작 가능한 장소</Box>
-                    {searchResultData.length == 0 && <Box>장소 이름을 입력해주세요!</Box>}
-                    {searchResultData.map((result) => (
-                        <Button colorScheme="teal" variant="outline" h="40px" key={result.contentid} mb={2} onClick={(e) => onStartNodeSelect(result)}>
-                            {result.title},&nbsp;
-                            {result.addr1},&nbsp;
-                            x: {result.mapx}, y: {result.mapy}
-                        </Button>
-                    ))}
-                    </>}
-                    
-                    { startNodeSelected && <>
-                    <Box fontSize="1.4em" mb={4}>시작 장소 선택됨</Box>
-                    <Button colorScheme="teal" h="40px" mb={2}>
-                        {selectedData.title},&nbsp;
-                        {selectedData.addr1},&nbsp;
-                        x: {selectedData.mapx}, y: {selectedData.mapy}
-                    </Button>
-                    </>}
-                </Box>
-            </Box>
-            </ModalBody>
-            </ModalContent>
+                        <form onSubmit={onNewReviewSubmit}>
+                            <Box display="flex" justifyContent="center">
+                                <Box display="flex" justifyContent="center" w="100%" maxW="500px" mt={6} mb={6}>
+                                <Input type="text" placeholder="새 여행 이름" value={newReviewValue} onChange={onNewReviewChange} />
+                                <Input type="text" placeholder="시작 장소" value={searchValue} onChange={onSearchChange} />
+                                <Button type="submit" colorScheme="teal" ml={4}>추가</Button>
+                                </Box>
+                            </Box>
+                        </form>
+                        
+                        <Box display="flex" justifyContent="center" mb={8}>
+                            <Box w="100%" maxW="500px" display="flex" flexDirection="column">
+                                { !startNodeSelected && <>
+                                <Box fontSize="1.4em" mb={4}>시작 가능한 장소</Box>
+                                {searchResultData.length == 0 && <Box>장소 이름을 입력해주세요!</Box>}
+                                {searchResultData.map((result) => (
+                                    <Button colorScheme="teal" variant="outline" h="40px" key={result.contentid} mb={2} onClick={(e) => onStartNodeSelect(result)}>
+                                        {result.title},&nbsp;
+                                        {result.addr1},&nbsp;
+                                        x: {result.mapx}, y: {result.mapy}
+                                    </Button>
+                                ))}
+                                </>}
+                                
+                                { startNodeSelected && <>
+                                <Box fontSize="1.4em" mb={4}>시작 장소 선택됨</Box>
+                                <Button colorScheme="teal" h="40px" mb={2}>
+                                    {selectedData.title},&nbsp;
+                                    {selectedData.addr1},&nbsp;
+                                    x: {selectedData.mapx}, y: {selectedData.mapy}
+                                </Button>
+                                </>}
+                            </Box>
+                        </Box>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={onClose} colorScheme="teal">닫기</Button>
+                    </ModalFooter>
+                </ModalContent>
             </Modal>
 
-            <Box display="flex" justifyContent="center">
+            <Box display="flex" justifyContent="center" mb={10}>
                 <Box w="100%" maxW="500px" display="flex" flexDirection="column">
                     <Box fontSize="1.8em" mb={4}>여행 리스트</Box>
                     {reviewData.map((review) => (
@@ -201,10 +204,11 @@ const MyTripmap = () => {
                             startX: {review.startX}, startY: {review.startY}
                         </Button>
                     ))}
-                    {reviewData.length == 0 && <p>새 리뷰를 작성해주세요!</p>}
+                    {reviewData.length == 0 && <p>새 여행을 작성해주세요!</p>}
                 </Box>
             </Box>
         </Box>
+        <Button colorScheme="teal" variant="outline" onClick={() => navigate("/")}>홈으로</Button>
     </Box>
     )
 }
