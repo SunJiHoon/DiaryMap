@@ -46,7 +46,7 @@ const MyTripmap = () => {
     const [searchResultData, setSearchResultData] = useState([])
     const [startNodeSelected, setStartNodeSelected] = useState(false)
     const [selectedData, setSelectedData] = useState({})
-
+    const [searchResultDataLoading, setSearchResultDataLoading] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const onNewReviewChange = useCallback((e) => {
@@ -60,8 +60,11 @@ const MyTripmap = () => {
         // console.log(e.target.value)
         const searchValueReplaced = e.target.value.replace(/ /g, "%20")
         // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
+        
+        setSearchResultDataLoading(true)
         client.get("/api/openApi/start/list?userKeyword=" + searchValueReplaced)
             .then((res) => {
+                setSearchResultDataLoading(false)
                 setSearchResultData(res.data)
             })
 
@@ -179,7 +182,8 @@ const MyTripmap = () => {
                             <Box w="100%" maxW="500px" display="flex" flexDirection="column">
                                 { !startNodeSelected && <>
                                 <Box fontSize="1.4em" mb={4}>시작 가능한 장소</Box>
-                                {searchResultData.length == 0 && <Box>장소 이름을 입력해주세요!</Box>}
+                                {searchValue.length == 0 && <Box>장소 이름을 입력해주세요!</Box>}
+                                {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
                                 <Box maxH={300} overflowY="scroll">
                                     {searchResultData.map((result) => (
                                         <Button colorScheme="teal" variant="outline" h="40px" key={result.contentid} mb={2} onClick={(e) => onStartNodeSelect(result)}>
