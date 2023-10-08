@@ -26,7 +26,7 @@ public class DiaryScapeAllplication {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
 						.allowedOrigins("http://localhost:5173", "http://m.tongtongtripmap.com:80", "http://m.tongtongtripmap.com:8080", "https://m.tongtongtripmap.com:443")
-						.allowedMethods("GET", "POST", "PUT", "DELETE")
+						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTION")
 						.allowCredentials(true).allowedHeaders("*");//;;
 
 					////.allowedHeaders("*");;
