@@ -273,7 +273,6 @@ public class Obj3dController {
         Obj3d actualObj3d;
         Optional<Obj3d> beingUpdateObj3d = obj3dRepository.findById(paraMap.get("mapId"));
         if (beingUpdateObj3d.isPresent()) {
-
             LocalDateTime currentTime = LocalDateTime.now();
             // 시간 형식 지정 (예: "yyyy-MM-dd HH:mm:ss")
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -281,10 +280,10 @@ public class Obj3dController {
             String formattedTime = currentTime.format(formatter);
             log.info("객체 수정 시점: " + formattedTime);
 
-
             actualObj3d = beingUpdateObj3d.get();
             //log.info("들어온 내용 :" + paramObj3d.getSceneJSON());
             actualObj3d.setSceneJSON(paramObj3d.getSceneJSON());
+            log.info(paramObj3d.getSceneJSON());
             actualObj3d.setModifiedTime(formattedTime);
             log.info("저장수행");
             obj3dRepository.save(actualObj3d);

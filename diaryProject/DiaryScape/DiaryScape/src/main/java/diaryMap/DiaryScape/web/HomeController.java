@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
     private final MemberRepository memberRepository;
 
+
+
     //@GetMapping("/")
     public String home() {
         return "home";
