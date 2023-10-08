@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 const ReviewSpace = () => {
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
-    console.log(tripData)
 
     useEffect(() => {
         let renderer, scene, camera
@@ -37,9 +36,9 @@ const ReviewSpace = () => {
             camera.position.set(-35, 45, 45);
             camera.lookAt(0,0,0);
 
-            objectManager = new ObjectManager(scene);
-            objectManager.newMap("spongebob").then(()=> { inputManager = new InputManager(camera, scene) }).then(objectManager.initNode(tripData.mapId, new THREE.Vector3(tripData.startX, 1, tripData.startY)));
-
+            objectManager = new ObjectManager(scene, camera, tripData);
+            objectManager.checkMapSave().then(()=> { inputManager = new InputManager(camera, scene) });
+            
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
         

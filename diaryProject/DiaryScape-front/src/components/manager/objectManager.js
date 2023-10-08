@@ -5,23 +5,29 @@ import Node from "../object/node.js";
 import axios from "axios";
 
 let scene;
+let camera;
 
 let cur_options = [];
-let mapID;
+let tripData;
+let playerMesh;
 
 const loader = new THREE.ObjectLoader();
 
-let posArr1 = [
-  new THREE.Vector3(0, 1, 0), //역
-  new THREE.Vector3(10, 1, 0), //음식점1
-  new THREE.Vector3(10, 1, 10), //음식점2
-  new THREE.Vector3(10, 1, 20), //음식점3
-  new THREE.Vector3(20, 1, 20), //관광지1
-];
-
 class objectManager {
-  constructor(_scene) {
+  constructor(_scene, _camera, _tripData) {
     scene = _scene;
+    camera = _camera;
+    tripData = _tripData;
+  }
+
+  async checkMapSave(){
+    const res = await axios.get("http://localhost:8080/api/obj/one?mapId=" + tripData.mapId);
+    if(res.data){
+      await this.loadScene();
+    }
+    else{
+      await this.newMap("spongebob").then(this.initNode());//캐릭터 이름 넣기
+    }
   }
 
   async newMap(characterName) {
@@ -36,25 +42,23 @@ class objectManager {
     scene.add(map.mesh);
 
     const player = new Player();
-    const playerMesh = await player.loadGltf(characterName);
+    playerMesh = await player.loadGltf(characterName);
     playerMesh.name = "player";
     scene.add(playerMesh);
   }
 
-  loadMap(objs){
-    //objs[0].position.set(-10,10,20);//DirectionalLight
-  }
-
-  async initNode(_mapID, startPos) {
-    mapID = _mapID;
-
-    const res = await axios.get("http://localhost:8080/api/openApi/node?mapId=" + mapID + "&mapX=" + startPos.x + "&mapY=" + startPos.z);
+  async initNode() {
+    const res = await axios.get("http://localhost:8080/api/openApi/node?mapId=" + tripData.mapId + "&mapX=" + tripData.startX + "&mapY=" + tripData.startY);
     const startNode = await new Node(res.data[0]);
+    playerMesh.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
+    camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
+    playerMesh.userData.myNodes.push(startNode)
+    this.loadNodes(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
 
   async loadNodes(selectPos) {
-    const res = await axios.get("http://localhost:8080/api/openApi/node?mapId=" + mapID + "&mapX=" + selectPos.x + "&mapY=" + selectPos.z);
+    const res = await axios.get("http://localhost:8080/api/openApi/node?mapId=" + tripData.mapId + "&mapX=" + selectPos.x + "&mapY=" + selectPos.z);
     for (let i = 0; i < res.data.length; i++) {
       var tempNode = await new Node(res.data[i]);
       scene.add(tempNode);
@@ -65,7 +69,7 @@ class objectManager {
 
   invisibleOptions(select_option) {
     for (let i = 0; i < cur_options.length; i++) {
-      if (cur_options[i].children[0] != select_option) {//너무 하드 코딩인데
+      if (cur_options[i] != select_option) {
         scene.remove(cur_options[i]);
       }
     }
@@ -75,22 +79,21 @@ class objectManager {
   saveScene() {
     scene.updateMatrixWorld();
     const sceneJSON = JSON.stringify(scene);
-    axios.post("http://localhost:8080/api/obj/update?mapId=" + mapID, { sceneJSON }, { withCredentials: true });
+    axios.post("http://localhost:8080/api/obj/update?mapId=" + tripData.mapId, { sceneJSON }, { withCredentials: true });
   }
 
-  loadScene() {
-    axios.get("http://localhost:8080/api/obj/one?mapId=" + mapID).then((res) => {
-      scene.clear();
-      const sceneData = JSON.parse(res.data.sceneJSON);
-      const loader = new THREE.ObjectLoader();
-      scene = loader.parse(sceneData);
-      this.loadMap(scene.children);
-      const newG = new THREE.BoxGeometry(3,3,3);
-      const newM = new THREE.MeshBasicMaterial();
-      const newMesh = new THREE.Mesh(newG, newM);
-      scene.add(newMesh);
-      console.log(scene);
-    })
+  async loadScene() {
+    scene.clear();
+    const res = await axios.get("http://localhost:8080/api/obj/one?mapId=" + tripData.mapId)
+    const sceneData = JSON.parse(res.data.sceneJSON);
+    const objectLoader = new THREE.ObjectLoader();
+    const tempScene = objectLoader.parse(sceneData);
+    scene.children = tempScene.children;
+    camera.position.set(-35, 45, 45);
+    const size = scene.children[3].userData.myNodes.length;
+    const userData = scene.children[3].userData.myNodes[size-1].object.userData;
+    camera.position.add(new THREE.Vector3(userData.relativeX, 0, userData.relativeY));
+    console.log(scene);
   }
 
   saveObjs() {

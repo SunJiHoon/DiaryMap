@@ -34,6 +34,7 @@ class inputManager {
     camera = _camera;
     scene = _scene;
     character = scene.getObjectByName("player");
+    console.log(character);
 
     this.inputManage();
   }
@@ -62,6 +63,8 @@ class inputManager {
         move(posArr[--cur_index]);
       } else if (event.key == "a") {
         objectManager.loadScene();
+      } else if (event.key == 'b') {
+        console.log(scene);
       }
     }
   }
@@ -76,22 +79,24 @@ class inputManager {
 
       const intersectObjects = raycaster.intersectObjects(scene.children);
 
-      for(let i = 0;i<intersectObjects.length;i++){
+      for (let i = 0; i < intersectObjects.length; i++) {
         if (intersectObjects[i].object.userData?.tag == "node") {
+          if(character.userData.myNodes[character.userData.myNodes.length-1] == intersectObjects[i].object){
+            break;
+          }
           const userData = intersectObjects[i].object.userData;
           const targetPos = new THREE.Vector3(
             intersectObjects[i].object.position.x,
             0,
             intersectObjects[i].object.position.z,
           );
-          
+
           drawLine(character.position, intersectObjects[i].object.position);
           objectManager.loadNodes(new THREE.Vector3(userData.mapX, 1, userData.mapY));
           objectManager.invisibleOptions(intersectObjects[i].object);
 
-          character.userData.myNode.push(intersectObjects[i].object);
+          character.userData.myNodes.push(intersectObjects[i].object);
           move(targetPos);
-          objectManager.saveScene();
         }
       }
     }
@@ -120,7 +125,10 @@ function move(targetPos) {
       z: cameraOrigin.z + targetPos.z,
       duration: 1,
     })
-    .then(() => {cur_state = InputState.IDLE;});
+    .then(() => { 
+      cur_state = InputState.IDLE; 
+      objectManager.saveScene();
+    });
   gsap.to(character.rotation, {
     y: angle,
     duration: 0.3,

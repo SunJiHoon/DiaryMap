@@ -30,8 +30,8 @@ class node {
       contentID: infos.contentid,
       tag: "node",
       addr1: infos.addr1,
-      relativeX: Number(infos.relativeX),
-      relativeY: Number(infos.relativeY),
+      relativeX: Number(infos.relativeX) * 0.7,
+      relativeY: Number(infos.relativeY) * 0.7,
       mapX: infos.mapx,
       mapY: infos.mapy,
       tel: infos.tel,
@@ -41,12 +41,9 @@ class node {
     eventObj.scale.set(7,7,7);
     obj.position.set(obj.userData.relativeX,0,obj.userData.relativeY);
     eventObj.position.set(obj.userData.relativeX,2,obj.userData.relativeY);
-    
-    const group = new Group();
-    group.add(obj);
-    group.add(eventObj);
+    obj.children.push(eventObj);
 
-    return group;
+    return obj;
   }
 }
 
