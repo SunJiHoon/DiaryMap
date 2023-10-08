@@ -18,6 +18,7 @@ import {
 import { useState, useEffect, useCallback, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import client from "../utility/client"
+import axios from "axios"
 
 const MyTripmap = () => {
 
@@ -54,7 +55,13 @@ const MyTripmap = () => {
     }, [])
 
     // 불필요한 get 요청 방지 구현 예정
+
+    const source = axios.CancelToken.source()
+
     const onSearchChange = useCallback((e) => {
+        if(source) {
+            source.cancel()
+        }
         setSearchValue(e.target.value)
         setStartNodeSelected(false)
         // console.log(e.target.value)
@@ -62,7 +69,7 @@ const MyTripmap = () => {
         // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
         
         setSearchResultDataLoading(true)
-        client.get("/api/openApi/start/list?userKeyword=" + searchValueReplaced)
+        client.get("/api/openApi/start/list?userKeyword=" + searchValueReplaced, { cancelToken: source.token })
             .then((res) => {
                 setSearchResultDataLoading(false)
                 setSearchResultData(res.data)
