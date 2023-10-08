@@ -75,7 +75,7 @@ const ReviewSpace = () => {
 
     function onResetButtonClick() {
         if(newMapFunctionRef.current) {
-            newMapFunctionRef.current("spongebob")
+            newMapFunctionRef.current("spongebob");
         }
     }
     

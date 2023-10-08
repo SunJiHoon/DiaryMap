@@ -22,17 +22,21 @@ class objectManager {
 
   async checkMapSave(){
     const res = await axios.get("http://localhost:8080/api/obj/one?mapId=" + tripData.mapId);
-    // if(res.data){
-    //   await this.loadScene();
-    // }
-    // else{
-    //   await this.newMap("spongebob").then(this.initNode());//캐릭터 이름 넣기
-    // }
-    await this.newMap("spongebob").then(this.initNode());
+    const isFirst = await axios.get("http://localhost:8080/api/obj/isFirst?mapId=" + tripData.mapId);
+
+    console.log(isFirst.data);
+    if(isFirst.data == "first"){
+      await this.newMap("spongebob");
+    }
+    else if(isFirst.data == "modified"){
+      await this.loadScene();
+    }
   }
 
   async newMap(characterName) {
     scene.clear();
+
+    camera.position.set(-35,45,45);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
     directionalLight.position.set(-10, 10, 20);
@@ -48,6 +52,8 @@ class objectManager {
     playerMesh = await player.loadGltf(characterName);
     playerMesh.name = "player";
     scene.add(playerMesh);
+
+    this.initNode();
   }
 
   async initNode() {
@@ -58,6 +64,7 @@ class objectManager {
     scene.add(startNode);
     playerMesh.userData.myNodes.push(startNode)
     await this.loadNodes(new THREE.Vector3(tripData.startX, 1, tripData.startY));
+    console.log("end load nodes");
     this.saveScene();
   }
 
@@ -82,19 +89,21 @@ class objectManager {
 
   saveScene() {
     scene.updateMatrixWorld();
-    const sceneJSON = JSON.stringify(scene);
-    console.log(sceneJSON);
-    axios.post("http://localhost:8080/api/obj/update?mapId=" + tripData.mapId, { sceneJSON }, { withCredentials: true });
+    const json_obj = JSON.stringify(scene);
+    axios.post("http://localhost:8080/api/obj/update?mapId=" + tripData.mapId, { json_obj }, { withCredentials: true });
   }
 
   async loadScene() {
+    camera.position.set(-35, 45, 45);
+
     scene.clear();
+
     const res = await axios.get("http://localhost:8080/api/obj/one?mapId=" + tripData.mapId)
     const sceneData = JSON.parse(res.data.sceneJSON);
     const objectLoader = new THREE.ObjectLoader();
     const tempScene = objectLoader.parse(sceneData);
     scene.children = tempScene.children;
-    camera.position.set(-35, 45, 45);
+    
     const size = scene.children[3].userData.myNodes.length;
     const userData = scene.children[3].userData.myNodes[size-1].object.userData;
     camera.position.add(new THREE.Vector3(userData.relativeX, 0, userData.relativeY));

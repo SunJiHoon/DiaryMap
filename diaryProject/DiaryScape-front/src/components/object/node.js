@@ -23,7 +23,7 @@ class node {
     const obj = new THREE.Mesh(objGeometry, objMaterial);
 
     const gltfLoader = new GLTFLoader();
-    const temp = await gltfLoader.loadAsync("/assets/foods/chinese/scene.gltf");
+    const temp = await gltfLoader.loadAsync("/assets/foods/"+foods[0]+"/scene.gltf");
     const eventObj = temp.scene;
 
     obj.userData = {
@@ -38,7 +38,7 @@ class node {
       title: infos.title,
     };
 
-    eventObj.scale.set(7,7,7);
+    eventObj.scale.set(5,5,5);
     obj.position.set(obj.userData.relativeX, 0 ,obj.userData.relativeY);
     eventObj.position.set(obj.userData.relativeX, 2 ,obj.userData.relativeY);
     obj.children.push(eventObj);
