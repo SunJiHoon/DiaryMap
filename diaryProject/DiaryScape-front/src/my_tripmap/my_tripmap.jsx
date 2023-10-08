@@ -55,13 +55,14 @@ const MyTripmap = () => {
     }, [])
 
     // 불필요한 get 요청 방지 구현 예정
-
-    const source = axios.CancelToken.source()
-
+    let source
     const onSearchChange = useCallback((e) => {
         if(source) {
             source.cancel()
         }
+
+        source = axios.CancelToken.source()
+        
         setSearchValue(e.target.value)
         setStartNodeSelected(false)
         // console.log(e.target.value)
