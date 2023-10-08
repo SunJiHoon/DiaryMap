@@ -5,7 +5,6 @@ import { useRef, useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
 import { Box, Button } from '@chakra-ui/react'
 import { useSelector } from "react-redux";
-// import objectManager from "../components/manager/objectManager";
 
 const ReviewSpace = () => {
     const canvasRef = useRef(null)
