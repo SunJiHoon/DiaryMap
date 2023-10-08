@@ -25,17 +25,9 @@ public class DiaryScapeAllplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:5173")
+						.allowedOrigins("http://localhost:5173", "http://w.tongtongtripmap:8080", "https://w.tongtongtripmap:443")
 						.allowedMethods("GET", "POST", "PUT", "DELETE")
 						.allowCredentials(true);////.allowedHeaders("*");;
-				registry.addMapping("/**")
-						.allowedOrigins("http://w.tongtongtripmap:8080")
-						.allowedMethods("GET", "POST", "PUT", "DELETE")
-						.allowCredentials(true);
-				registry.addMapping("/**")
-						.allowedOrigins("https://w.tongtongtripmap:443")
-						.allowedMethods("GET", "POST", "PUT", "DELETE")
-						.allowCredentials(true);
 			}
 		};
 	}
