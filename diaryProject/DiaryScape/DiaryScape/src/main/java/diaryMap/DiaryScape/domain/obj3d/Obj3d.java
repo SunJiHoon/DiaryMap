@@ -16,4 +16,8 @@ public class Obj3d {
     //private String json_obj;
     private String sceneJSON;
 
+    private String createdTime;
+    private String modifiedTime;
+
+
 }
