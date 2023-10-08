@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch , useSelector } from 'react-redux'
 import { loginUser, clearUser } from '../reducer/user_slice'
-import axios from 'axios'
 import { Input, Button, Box } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-
-axios.defaults.withCredentials = true;//axios가 웹 브라우져 내에서 항상 캐시를 소유할 수 있게 변경
+import client from '../utility/client'
 
 
 const LoginBox = () => {
-  const axiosConfig = {
-    baseURL: import.meta.env.VITE_API_URL
-  }
-
-  const client = axios.create(axiosConfig)
 
   const username = useSelector((state) => state.user.name)
   const dispatch = useDispatch()

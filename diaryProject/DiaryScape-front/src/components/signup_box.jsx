@@ -4,14 +4,9 @@ import { loginUser } from '../reducer/user_slice'
 import axios from 'axios'
 import { Box, Input, Button } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-
+import client from '../utility/client'
 
 const SignUpBox = () => {
-  const axiosConfig = {
-    baseURL: import.meta.env.VITE_API_URL
-  }
-  
-  const client = axios.create(axiosConfig)
   const username = useSelector((state) => state.user.name)
   const dispatch = useDispatch()
   const navigate = useNavigate()
