@@ -39,8 +39,8 @@ class node {
     };
 
     eventObj.scale.set(7,7,7);
-    obj.position.set(obj.userData.relativeX,0,obj.userData.relativeY);
-    eventObj.position.set(obj.userData.relativeX,2,obj.userData.relativeY);
+    obj.position.set(obj.userData.relativeX, 0 ,obj.userData.relativeY);
+    eventObj.position.set(obj.userData.relativeX, 2 ,obj.userData.relativeY);
     obj.children.push(eventObj);
 
     return obj;

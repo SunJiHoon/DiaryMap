@@ -22,6 +22,7 @@ class objectManager {
 
   async checkMapSave(){
     const res = await axios.get("http://localhost:8080/api/obj/one?mapId=" + tripData.mapId);
+    console.log(res.data.sceneJSON);
     if(res.data){
       await this.loadScene();
     }
@@ -31,6 +32,8 @@ class objectManager {
   }
 
   async newMap(characterName) {
+    scene.clear();
+
     const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
     directionalLight.position.set(-10, 10, 20);
     scene.add(directionalLight);
@@ -54,7 +57,8 @@ class objectManager {
     camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
     playerMesh.userData.myNodes.push(startNode)
-    this.loadNodes(new THREE.Vector3(tripData.startX, 1, tripData.startY));
+    await this.loadNodes(new THREE.Vector3(tripData.startX, 1, tripData.startY));
+    this.saveScene();
   }
 
   async loadNodes(selectPos) {
@@ -93,54 +97,8 @@ class objectManager {
     const size = scene.children[3].userData.myNodes.length;
     const userData = scene.children[3].userData.myNodes[size-1].object.userData;
     camera.position.add(new THREE.Vector3(userData.relativeX, 0, userData.relativeY));
-    console.log(scene);
   }
 
-  saveObjs() {
-    const sceneJSON = scene.toJSON();
-    console.log(sceneJSON);
-    axios.post("http://localhost:8080/api/save/Objs").then((res) => {
-      console.log(res.data);
-    });
-  }
-
-  loadObj(objectName) {
-    axios.get("http://localhost:8080/api/Obj/" + objectName).then((res) => {
-      console.log(res.data);
-      const object = loader.parse(res.data);
-      return object;
-    });
-  }
-
-  loadObjs() {
-    //load scene
-
-    axios.get("http://localhost:8080/api/scene").then((res) => {
-      if (res.data == "null") {
-        //초기 작업(맵 생성, 캐릭터 생성); //회원 가입 시 한 유저 당 하나 씩 미리 생성
-      } else {
-        scene = loader.parse(res.data);
-        axios.get("http://localhost:8080/api/Objs").then((res) => {
-          res.data.foreach((object) => {
-            const obj = scene.getObjectByName(object.name);
-            obj.position.set(object.pos);
-            obj.rotation.set(object.rot);
-          });
-          for (var i = 0; i < posArr1.length - 1; i++) {
-            const x1 = posArr1[i].x;
-            const z1 = posArr1[i].z;
-            const x2 = posArr1[i + 1].x;
-            const z2 = posArr1[i + 1].z;
-
-            const lineGeometry = new THREE.PlaneGeometry();
-            const lineMaterial = new THREE.MeshStandardMaterial();
-            const line = new THREE.Mesh(lineGeometry, lineMaterial);
-            scene.add(line);
-          }
-        });
-      }
-    });
-  }
 }
 
 export default objectManager;

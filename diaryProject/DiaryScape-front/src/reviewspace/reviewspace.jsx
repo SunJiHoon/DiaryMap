@@ -5,16 +5,18 @@ import { useRef, useEffect } from "react";
 import { Link } from 'react-router-dom'
 import { Box, Button } from '@chakra-ui/react'
 import { useSelector } from "react-redux";
+import objectManager from "../components/manager/objectManager";
 
 const ReviewSpace = () => {
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
 
+    let objectManager;
+
     useEffect(() => {
         let renderer, scene, camera
         
         let inputManager
-        let objectManager
 
         async function init() {
             scene = new THREE.Scene();
@@ -94,6 +96,12 @@ const ReviewSpace = () => {
             <p>tripData.mapId : {tripData.mapId}</p>
             <p>tripData.startX : {tripData.startX}</p>
             <p>tripData.startY : {tripData.startY}</p>
+            </Box>
+            <Box>
+                {objectManager && <Button onClick={objectManager.newMap}>
+                    reset
+                </Button>}
+                awef
             </Box>
         </div>
     <div>
