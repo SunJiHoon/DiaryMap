@@ -28,6 +28,14 @@ public class DiaryScapeAllplication {
 						.allowedOrigins("http://localhost:5173")
 						.allowedMethods("GET", "POST", "PUT", "DELETE")
 						.allowCredentials(true);////.allowedHeaders("*");;
+				registry.addMapping("/**")
+						.allowedOrigins("http://w.tongtongtripmap:8080")
+						.allowedMethods("GET", "POST", "PUT", "DELETE")
+						.allowCredentials(true);
+				registry.addMapping("/**")
+						.allowedOrigins("https://w.tongtongtripmap:8080")
+						.allowedMethods("GET", "POST", "PUT", "DELETE")
+						.allowCredentials(true);
 			}
 		};
 	}
