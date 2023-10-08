@@ -38,7 +38,7 @@ const SignUpBox = () => {
       password,
     }
 
-    axios.post("http://localhost:8080/api/register", body) //register
+    axios.post("http://${serverIPAddress}:8080/api/register", body) //register
       .then((res) => {
         console.log(res.data)
         if(res.data.code == 200) {
