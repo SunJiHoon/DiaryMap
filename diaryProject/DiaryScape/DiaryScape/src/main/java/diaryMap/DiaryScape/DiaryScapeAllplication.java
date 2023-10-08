@@ -33,7 +33,7 @@ public class DiaryScapeAllplication {
 						.allowedMethods("GET", "POST", "PUT", "DELETE")
 						.allowCredentials(true);
 				registry.addMapping("/**")
-						.allowedOrigins("https://w.tongtongtripmap:8080")
+						.allowedOrigins("https://w.tongtongtripmap:443")
 						.allowedMethods("GET", "POST", "PUT", "DELETE")
 						.allowCredentials(true);
 			}
