@@ -9,9 +9,9 @@ let camera;
 
 let cur_options = [];
 let tripData;
-let playerMesh;
+let player;
 
-const loader = new THREE.ObjectLoader();
+const originCameraPos = new THREE.Vector3(-35,45,45);
 
 class objectManager {
   constructor(_scene, _camera, _tripData) {
@@ -20,23 +20,23 @@ class objectManager {
     tripData = _tripData;
   }
 
-  async checkMapSave(){
-    const res = await axios.get("http://localhost:8080/api/obj/one?mapId=" + tripData.mapId);
+  async checkMapSave() {
+    await this.newMap("spongebob");
+    
     const isFirst = await axios.get("http://localhost:8080/api/obj/isFirst?mapId=" + tripData.mapId);
-
     console.log(isFirst.data);
-    if(isFirst.data == "first"){
-      await this.newMap("spongebob");
+    if (isFirst.data == "first") {
+      await this.initNode();
     }
-    else if(isFirst.data == "modified"){
-      await this.loadScene();
+    else if (isFirst.data == "modified") {
+      await this.loadMyNodes();
     }
   }
 
-  async newMap(characterName) {
+  newMap = async (characterName) => {
     scene.clear();
 
-    camera.position.set(-35,45,45);
+    camera.position.set(originCameraPos.x, originCameraPos.y, originCameraPos.z);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
     directionalLight.position.set(-10, 10, 20);
@@ -48,27 +48,23 @@ class objectManager {
     const map = new Map();
     scene.add(map.mesh);
 
-    const player = new Player();
-    playerMesh = await player.loadGltf(characterName);
-    playerMesh.name = "player";
-    scene.add(playerMesh);
-
-    this.initNode();
+    const playerLoader = new Player();
+    player = await playerLoader.loadGltf(characterName);
+    player.name = "player";
+    scene.add(player);
   }
 
   async initNode() {
     const res = await axios.get("http://localhost:8080/api/openApi/node?mapId=" + tripData.mapId + "&mapX=" + tripData.startX + "&mapY=" + tripData.startY);
     const startNode = await new Node(res.data[0]);
-    playerMesh.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
+    player.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
     camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
-    playerMesh.userData.myNodes.push(startNode)
-    await this.loadNodes(new THREE.Vector3(tripData.startX, 1, tripData.startY));
-    console.log("end load nodes");
-    this.saveScene();
+    player.userData.myNodes.push(startNode)
+    await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
 
-  async loadNodes(selectPos) {
+  async loadOptions(selectPos) {
     const res = await axios.get("http://localhost:8080/api/openApi/node?mapId=" + tripData.mapId + "&mapX=" + selectPos.x + "&mapY=" + selectPos.z);
     for (let i = 0; i < res.data.length; i++) {
       var tempNode = await new Node(res.data[i]);
@@ -76,6 +72,7 @@ class objectManager {
       cur_options.push(tempNode);
       scene.add(tempNode);
     }
+    console.log("end load nodes");
   }
 
   invisibleOptions(select_option) {
@@ -87,26 +84,32 @@ class objectManager {
     cur_options = [];
   }
 
-  saveScene() {
-    scene.updateMatrixWorld();
-    const json_obj = JSON.stringify(scene);
-    axios.post("http://localhost:8080/api/obj/update?mapId=" + tripData.mapId, { json_obj }, { withCredentials: true });
+  saveMyNodes() {
+    const objArr = [];
+    const size = player.userData.myNodes.length;
+    for (let i = 0; i < size; i++) {
+      const objData = player.userData.myNodes[i].userData;
+      objArr.push(objData);
+    }
+    const jsonArr = JSON.stringify(objArr);
+    console.log(objArr);
+    console.log(jsonArr);
+    axios.post("http://localhost:8080/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
   }
 
-  async loadScene() {
-    camera.position.set(-35, 45, 45);
-
-    scene.clear();
-
+  async loadMyNodes() {
     const res = await axios.get("http://localhost:8080/api/obj/one?mapId=" + tripData.mapId)
-    const sceneData = JSON.parse(res.data.sceneJSON);
+    console.log(res.data);
+    /*const sceneData = JSON.parse(res.data.sceneJSON);
+    console.log(res.data.sceneJSON);
+    console.log(sceneData);
     const objectLoader = new THREE.ObjectLoader();
     const tempScene = objectLoader.parse(sceneData);
     scene.children = tempScene.children;
-    
+
     const size = scene.children[3].userData.myNodes.length;
-    const userData = scene.children[3].userData.myNodes[size-1].object.userData;
-    camera.position.add(new THREE.Vector3(userData.relativeX, 0, userData.relativeY));
+    const userData = scene.children[3].userData.myNodes[size - 1].object.userData;
+    camera.position.add(new THREE.Vector3(userData.relativeX, 0, userData.relativeY));*/
   }
 
 }

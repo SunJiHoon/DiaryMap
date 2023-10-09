@@ -1,6 +1,7 @@
 import * as THREE from "three"
 import { Group } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { randInt } from "three/src/math/MathUtils";
 
 const foods = ["chinese", "japanese", "korean", "western"];
 
@@ -23,19 +24,22 @@ class node {
     const obj = new THREE.Mesh(objGeometry, objMaterial);
 
     const gltfLoader = new GLTFLoader();
+    const ranNum = randInt(0, foods.length);
+    randInt
     const temp = await gltfLoader.loadAsync("/assets/foods/"+foods[0]+"/scene.gltf");
     const eventObj = temp.scene;
 
     obj.userData = {
-      contentID: infos.contentid,
       tag: "node",
-      addr1: infos.addr1,
-      relativeX: Number(infos.relativeX),
-      relativeY: Number(infos.relativeY),
+      contentID: infos.contentid,
+      contentType: infos.contentTypeId,
+      title: infos.title,
+      tel: infos.tel,
       mapX: infos.mapx,
       mapY: infos.mapy,
-      tel: infos.tel,
-      title: infos.title,
+      relativeX: Number(infos.relativeX),
+      relativeY: Number(infos.relativeY),
+      addr1: infos.addr1,
     };
 
     eventObj.scale.set(5,5,5);
