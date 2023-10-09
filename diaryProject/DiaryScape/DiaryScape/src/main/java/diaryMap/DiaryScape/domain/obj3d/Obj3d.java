@@ -3,6 +3,8 @@ package diaryMap.DiaryScape.domain.obj3d;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import diaryMap.DiaryScape.web.openApi.NodeDTO;
+
 import javax.persistence.*;
 
 @Document(collection = "obj3ds")
@@ -14,8 +16,8 @@ public class Obj3d {
     private String startY;
     private String objName;
     //private String json_obj;
-    private String sceneJSON;
-
+    //private String sceneJSON;
+    private NodeDTO[] jsonArr;
     private String createdTime;
     private String modifiedTime;
 

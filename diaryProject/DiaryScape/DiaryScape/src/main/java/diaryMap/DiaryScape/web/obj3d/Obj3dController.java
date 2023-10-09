@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @RestController
@@ -51,7 +48,8 @@ public class Obj3dController {
         StringSource stringSource = new StringSource();
         Obj3d obj3d1 = new Obj3d();
         obj3d1.setObjName(paraMap.get("mapName"));
-        obj3d1.setSceneJSON(stringSource.getJsonInitData());
+        //obj3d1.setSceneJSON(stringSource.getJsonInitData());
+        //obj3d1.setJsonArr();
         obj3d1.setStartX(paraMap.get("x"));
         obj3d1.setStartY(paraMap.get("y"));
 
@@ -185,7 +183,7 @@ public class Obj3dController {
     public String getOneMapOnlyMapJson(
             @RequestParam Map<String, String> paraMap
             //url+?키=value&키=value //John%20Doe
-    ) {
+    ) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
 
         String queryMapId = paraMap.get("mapId");
@@ -195,7 +193,8 @@ public class Obj3dController {
         if (findobj3d.isPresent()) {
             log.info("해당 id를 가진 map 발견");
             Obj3d actualObj3d = findobj3d.get();
-            objJson = (actualObj3d.getSceneJSON());
+            //objJson = Arrays.toString((actualObj3d.getJsonArr()));
+            objJson = objectMapper.writeValueAsString((actualObj3d.getJsonArr()));
 
             /*
             try {
@@ -212,6 +211,7 @@ public class Obj3dController {
     }
 
     //sceneJson 분석용
+    /*
     @GetMapping(value = "/obj/one/onlyMapJson/parse", produces = "application/json")
     public String getOneMapOnlyMapJsonParse(
             @RequestParam Map<String, String> paraMap
@@ -228,15 +228,6 @@ public class Obj3dController {
             log.info("해당 id를 가진 map 발견");
             Obj3d actualObj3d = findobj3d.get();
             objJson = (actualObj3d.getSceneJSON());
-
-            /*
-            try {
-                //objJson = objectMapper.writeValueAsString(actualObj3d.getSceneJSON());
-            } catch (JsonProcessingException e) {
-                //throw new RuntimeException(e);
-            }
-            */
-
         } else {
             log.info("해당 id를 가진 map이 존재하지 않습니다.");
         }
@@ -262,7 +253,7 @@ public class Obj3dController {
 
         return actualObject.getJSONArray("myNode").toString();
     }
-
+*/
     @PostMapping(value = "/obj/update")
     public String updateOneMap(
             @RequestParam Map<String, String> paraMap,
@@ -282,8 +273,8 @@ public class Obj3dController {
 
             actualObj3d = beingUpdateObj3d.get();
             //log.info("들어온 내용 :" + paramObj3d.getSceneJSON());
-            actualObj3d.setSceneJSON(paramObj3d.getSceneJSON());
-            log.info(paramObj3d.getSceneJSON());
+            actualObj3d.setJsonArr(paramObj3d.getJsonArr());
+            log.info(paramObj3d.getJsonArr().toString());
             actualObj3d.setModifiedTime(formattedTime);
             log.info("저장수행");
             obj3dRepository.save(actualObj3d);
@@ -294,7 +285,7 @@ public class Obj3dController {
 
         }
         //저장된 내용 반환하기
-        return paramObj3d.getSceneJSON();
+        return paramObj3d.getJsonArr().toString();
     }
 
 
