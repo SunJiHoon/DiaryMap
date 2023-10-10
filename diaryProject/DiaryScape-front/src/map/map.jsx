@@ -68,7 +68,7 @@ const Map = () => {
 
         const table = []
         const meshes = []
-        client.get('http://localhost:8080/api/reviews',).then((res) => {
+        client.get('/api/reviews',).then((res) => {
             const reviewData = res.data
             console.log(reviewData)
             for (const review of reviewData) {
