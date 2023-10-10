@@ -56,7 +56,9 @@ class inputManager {
   }
   handleKeyDown(event) {
     if (cur_state == InputState.IDLE) {
-      
+      if(event.key == 'a'){
+        objectManager.loadMyNodes();
+      }
     }
   }
   async handleMouseDown(event) {
@@ -82,7 +84,7 @@ class inputManager {
             intersectObjects[i].object.position.z,
           );
 
-          drawLine(character.position, intersectObjects[i].object.position);
+          objectManager.drawLine(character.position, intersectObjects[i].object.position);
           objectManager.loadOptions(new THREE.Vector3(userData.mapX, 1, userData.mapY));
           objectManager.invisibleOptions(intersectObjects[i].object);
 
@@ -124,16 +126,6 @@ function move(targetPos) {
     y: angle,
     duration: 0.3,
   });
-}
-
-function drawLine(startNode, endNode) {
-  const points = [];
-  points.push(startNode);
-  points.push(endNode);
-  const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-  const lineMaterial = new THREE.LineBasicMaterial();
-  const line = new THREE.Line(lineGeometry, lineMaterial);
-  scene.add(line);
 }
 
 export default inputManager;
