@@ -80,7 +80,7 @@ public class NodeController {
         String searchMapY = paraMap.get("mapY");
 
 ///openApi/node?mapX=126.981611&mapY=37.568477&radius=100000&contentTypeId=관광지
-        URL url = new URL(makeApiQuery(5,1,
+        URL url = new URL(makeApiQuery(30,1,
                 Double.parseDouble(searchMapX), Double.parseDouble(searchMapY),
                 10000, contentTypeId));
         String line;
