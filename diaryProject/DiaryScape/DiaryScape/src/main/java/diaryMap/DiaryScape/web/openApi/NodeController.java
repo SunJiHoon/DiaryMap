@@ -80,7 +80,7 @@ public class NodeController {
         String searchMapY = paraMap.get("mapY");
 
 ///openApi/node?mapX=126.981611&mapY=37.568477&radius=100000&contentTypeId=관광지
-        URL url = new URL(makeApiQuery(30,1,
+        URL url = new URL(makeApiQuery(5,1,
                 Double.parseDouble(searchMapX), Double.parseDouble(searchMapY),
                 10000, contentTypeId));
         String line;
@@ -124,7 +124,6 @@ public class NodeController {
 
         for (int i = 0; i < itemArray.length(); i++) {
             JSONObject item = itemArray.getJSONObject(i);
-
             // "title", "tel", "mapx", "mapy" 정보를 추출하여 객체에 저장
             String contentid = item.getString("contentid");
             //tring contentTypeId = item.getString("contentTypeId");

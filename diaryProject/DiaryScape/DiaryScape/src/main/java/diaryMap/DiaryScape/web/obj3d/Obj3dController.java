@@ -1,12 +1,15 @@
 package diaryMap.DiaryScape.web.obj3d;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import diaryMap.DiaryScape.domain.member.Member;
 import diaryMap.DiaryScape.domain.member.MemberMongoRepository;
 import diaryMap.DiaryScape.domain.obj3d.Obj3d;
 import diaryMap.DiaryScape.domain.obj3d.Obj3dRepository;
 import diaryMap.DiaryScape.source.StringSource;
+import diaryMap.DiaryScape.web.openApi.NodeDTO;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -257,10 +260,11 @@ public class Obj3dController {
     @PostMapping(value = "/obj/update")
     public String updateOneMap(
             @RequestParam Map<String, String> paraMap,
-            @RequestBody Obj3d paramObj3d
+            //@RequestBody Obj3d paramObj3d
+            @RequestBody jsonArr_Value paramjsonArr_Value
             //url+?키=value&키=value //John%20Doe
             //@CookieValue(value = "memberId", required = false) String cookie
-    ) {
+    ) throws JsonProcessingException {
         Obj3d actualObj3d;
         Optional<Obj3d> beingUpdateObj3d = obj3dRepository.findById(paraMap.get("mapId"));
         if (beingUpdateObj3d.isPresent()) {
@@ -273,8 +277,40 @@ public class Obj3dController {
 
             actualObj3d = beingUpdateObj3d.get();
             //log.info("들어온 내용 :" + paramObj3d.getSceneJSON());
-            actualObj3d.setJsonArr(paramObj3d.getJsonArr());
-            log.info(paramObj3d.getJsonArr().toString());
+
+
+            // JSON 배열을 파싱하여 JSON 객체로 변환
+            //JSONArray jsonArray = new JSONArray(paramjsonArr_Value.getJsonArr());
+
+
+            //nodeDto[]를 jsonArray로 만들기
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            log.info(paramjsonArr_Value.getJsonArr());
+            NodeDTO_for_update[] NodeDTOs_for_update = objectMapper.readValue(paramjsonArr_Value.getJsonArr(), NodeDTO_for_update[].class);
+
+            NodeDTO[] NodeDTOs = new NodeDTO[NodeDTOs_for_update.length];
+            // NodeDTO_for_update 배열을 NodeDTO 배열로 변환 및 복사
+            for (int i = 0; i < NodeDTOs_for_update.length; i++) {
+                NodeDTO_for_update sourceNodeDTO = NodeDTOs_for_update[i];
+
+                NodeDTO destinationNodeDTO = new NodeDTO();
+
+                destinationNodeDTO.setContentid(sourceNodeDTO.getContentID());
+                destinationNodeDTO.setContentTypeId(sourceNodeDTO.getContentType());
+                destinationNodeDTO.setTitle(sourceNodeDTO.getTitle());
+                destinationNodeDTO.setTel(sourceNodeDTO.getTel());
+                destinationNodeDTO.setMapx(sourceNodeDTO.getMapX());
+                destinationNodeDTO.setMapy(sourceNodeDTO.getMapY());
+                destinationNodeDTO.setRelativeX(sourceNodeDTO.getRelativeX());
+                destinationNodeDTO.setRelativeY(sourceNodeDTO.getRelativeY());
+                destinationNodeDTO.setAddr1(sourceNodeDTO.getAddr1());
+                // 다른 필드 복사
+                NodeDTOs[i] = destinationNodeDTO;
+            }
+
+            actualObj3d.setJsonArr(NodeDTOs);
+            log.info(NodeDTOs.toString());
             actualObj3d.setModifiedTime(formattedTime);
             log.info("저장수행");
             obj3dRepository.save(actualObj3d);
@@ -285,7 +321,7 @@ public class Obj3dController {
 
         }
         //저장된 내용 반환하기
-        return paramObj3d.getJsonArr().toString();
+        return "...";
     }
 
 
@@ -315,4 +351,25 @@ public class Obj3dController {
         return "mapId를 다시 확인해주세요";
     }
 
+}
+
+@Data
+@RequiredArgsConstructor
+class jsonArr_Value{
+    private String jsonArr;
+}
+
+@Data
+@RequiredArgsConstructor
+class NodeDTO_for_update{
+    private String tag;
+    private String contentID;
+    private String contentType;
+    private String title;// = jsonObject.getString("title");
+    private String tel;// = jsonObject.getString("tel");
+    private String mapX;// = jsonObject.getString("mapx");
+    private String mapY;// = jsonObject.getString("mapy");
+    private String relativeX;
+    private String relativeY;
+    private String addr1;
 }
