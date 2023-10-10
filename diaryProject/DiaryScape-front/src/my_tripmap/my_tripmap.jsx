@@ -140,8 +140,8 @@ const MyTripmap = () => {
             +"&relativeY="+selectedData.relativeY
             +"&contentid="+selectedData.contentid
             +"&contentTypeId="+selectedData.contentTypeId
-            +"&tel"+telReplaced
-            +"&title"+titleReplaced
+            +"&tel="+telReplaced
+            +"&title="+titleReplaced
             +"&mapx="+selectedData.mapx
             +"&mapy="+selectedData.mapy
             , {}, {withCredentials:true})
