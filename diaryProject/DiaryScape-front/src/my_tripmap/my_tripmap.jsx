@@ -101,8 +101,8 @@ const MyTripmap = () => {
         dispatch(selectTrip({
             title: review.title,
             mapId: review.mapId,
-            startX: review.startX,
-            startY: review.startY,
+            startX: review.mapX,
+            startY: review.mapY,
         }))
         dispatch(selectStartnode({
             reviewTitle: review.reviewTitle,
