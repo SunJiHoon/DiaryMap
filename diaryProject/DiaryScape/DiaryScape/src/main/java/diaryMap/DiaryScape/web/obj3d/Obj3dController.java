@@ -56,6 +56,17 @@ public class Obj3dController {
         //obj3d1.setJsonArr();
         obj3d1.setStartX(paraMap.get("x"));
         obj3d1.setStartY(paraMap.get("y"));
+        NodeDTO tempStartNode = new NodeDTO();
+        tempStartNode.setAddr1(paraMap.get("addr1"));
+        tempStartNode.setRelativeY(paraMap.get("relativeY"));
+        tempStartNode.setRelativeX(paraMap.get("relativeX"));
+        tempStartNode.setContentid(paraMap.get("contentid"));
+        tempStartNode.setContentTypeId(paraMap.get("contentTypeId"));
+        tempStartNode.setTel(paraMap.get("tel"));
+        tempStartNode.setTitle(paraMap.get("title"));
+        tempStartNode.setMapy(paraMap.get("mapy"));
+        tempStartNode.setMapx(paraMap.get("mapx"));
+        obj3d1.setStartNode(tempStartNode);
 
         LocalDateTime currentTime = LocalDateTime.now();
         // 시간 형식 지정 (예: "yyyy-MM-dd HH:mm:ss")
@@ -135,8 +146,15 @@ public class Obj3dController {
                         new titleData_DTO(
                                 actualMember.getObj3dArrayList().get(i).getObjName(),
                                 actualMember.getObj3dArrayList().get(i).getId(),
-                                actualMember.getObj3dArrayList().get(i).getStartX(),
-                                actualMember.getObj3dArrayList().get(i).getStartY()
+                                actualMember.getObj3dArrayList().get(i).getStartNode().getContentid(),
+                                actualMember.getObj3dArrayList().get(i).getStartNode().getContentTypeId(),
+                                actualMember.getObj3dArrayList().get(i).getStartNode().getTitle(),
+                                actualMember.getObj3dArrayList().get(i).getStartNode().getTel(),
+                                actualMember.getObj3dArrayList().get(i).getStartNode().getMapx(),
+                                actualMember.getObj3dArrayList().get(i).getStartNode().getMapy(),
+                                actualMember.getObj3dArrayList().get(i).getStartNode().getRelativeX(),
+                                actualMember.getObj3dArrayList().get(i).getStartNode().getRelativeY(),
+                                actualMember.getObj3dArrayList().get(i).getStartNode().getAddr1()
                         ));
             }
             log.info("로그인된 id에 해당하는 map 리스트 추출 완료.");
