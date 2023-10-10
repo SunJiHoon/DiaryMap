@@ -115,8 +115,8 @@ public class NodeController {
 
         Optional<Obj3d> findObj = obj3dRepository.findById(paraMap.get("mapId"));
         if (findObj.isPresent()){
-            startX = findObj.get().getStartX();
-            startY = findObj.get().getStartY();
+            startX = findObj.get().getStartNode().getMapx();
+            startY = findObj.get().getStartNode().getMapy();
         }
 
         // item 배열을 순회하면서 데이터 추출
@@ -251,8 +251,8 @@ public class NodeController {
 
         Optional<Obj3d> findObj = obj3dRepository.findById(mapId);
         if (findObj.isPresent()){
-            startX = findObj.get().getStartX();
-            startY = findObj.get().getStartY();
+            startX = findObj.get().getStartNode().getMapx();
+            startY = findObj.get().getStartNode().getMapy();
         }
 
         // item 배열을 순회하면서 데이터 추출
