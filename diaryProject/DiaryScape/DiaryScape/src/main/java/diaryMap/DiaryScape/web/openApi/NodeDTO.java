@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class NodeDTO {
+
     private String contentid;
     private String contentTypeId;
     private String title;// = jsonObject.getString("title");

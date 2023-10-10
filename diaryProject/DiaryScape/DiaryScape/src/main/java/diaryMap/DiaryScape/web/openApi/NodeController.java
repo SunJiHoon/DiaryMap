@@ -48,7 +48,7 @@ public class NodeController {
                 ;
     }
 //관광타입(12:관광지, 14:문화시설, 15:축제공연행사, 25:여행코스, 28:레포츠, 32:숙박, 38:쇼핑, 39:음식점) ID
-    @GetMapping(value = "/openApi/node",produces = "application/json")
+    //@GetMapping(value = "/openApi/node",produces = "application/json")
     public String showMeNodeInfo(
             @RequestParam Map<String, String> paraMap//url+?키=value&키=value //John%20Doe
             //  /openApi/node?mapId=123&mapX=127.123123&mapY=36.123456&
@@ -167,6 +167,121 @@ public class NodeController {
         return returnjsonArray.toString();
     }
 
+    @GetMapping(value = "/openApi/node",produces = "application/json")
+    public String showMeNodeInfo_enhance(
+            @RequestParam Map<String, String> paraMap//url+?키=value&키=value //John%20Doe
+            //  /openApi/node?mapId=123&mapX=127.123123&mapY=36.123456&
+            // 돌려주는 값은 NodeDTO 배열(가게정보, 좌표, 상대좌표 정보가 담긴 것 반환.)
+    ) throws IOException {
+        // stringURL 에는 API URL 넣기
+
+        String searchMapX = paraMap.get("mapX");
+        String searchMapY = paraMap.get("mapY");
+
+        //관광타입(12:관광지, 14:문화시설, 15:축제공연행사, 25:여행코스, 28:레포츠, 32:숙박, 38:쇼핑, 39:음식점) ID
+
+        // item 배열을 순회하면서 데이터 추출
+        List<NodeDTO> nodeDTOList = new ArrayList<>();
+        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 12, 2));//관광지
+        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
+        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 15, 2));//문화시설
+        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 25, 2));//문화시설
+        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 28, 2));//문화시설
+        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 32, 2));//문화시설
+        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 38, 2));//쇼핑
+        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 39, 2));//음식점
+
+        JSONArray returnjsonArray = new JSONArray();
+        for (NodeDTO nodeDTO : nodeDTOList) {
+            JSONObject tempjsonObject = new JSONObject();
+            tempjsonObject.put("contentid", nodeDTO.getContentid());
+            tempjsonObject.put("contentTypeId", nodeDTO.getContentTypeId());
+
+            tempjsonObject.put("title", nodeDTO.getTitle());
+            tempjsonObject.put("tel", nodeDTO.getTel());
+
+            tempjsonObject.put("mapx", nodeDTO.getMapx());
+            tempjsonObject.put("mapy", nodeDTO.getMapy());
+            //log.info(nodeDTO.getMapx());
+
+            tempjsonObject.put("relativeX", nodeDTO.getRelativeX());
+            tempjsonObject.put("relativeY", nodeDTO.getRelativeY());
+
+            tempjsonObject.put("addr1", nodeDTO.getAddr1());
+
+            returnjsonArray.put(tempjsonObject);
+        }
+        return returnjsonArray.toString();
+    }
+
+    public List<NodeDTO> giveMetourDestination(String searchMapX, String searchMapY, String mapId, int contentTypeId, int numOfSearch) throws IOException {
+        ///openApi/node?mapX=126.981611&mapY=37.568477&radius=100000&contentTypeId=관광지
+        URL url = new URL(makeApiQuery(numOfSearch,1,
+                Double.parseDouble(searchMapX), Double.parseDouble(searchMapY),
+                10000, contentTypeId));
+        String line;
+        StringBuilder sb = new StringBuilder();
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json; charset=UTF-8");
+
+        // API 응답메시지를 불러와서 문자열로 저장
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream(), "UTF-8"));
+        }
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+        String text = sb.toString();
+        log.info(text);
+        JSONObject jsonObject = new JSONObject(text);
+        // "items" 객체 안에 있는 "item" 배열을 추출
+        JSONObject items = jsonObject.getJSONObject("response")
+                .getJSONObject("body")
+                .getJSONObject("items");
+        JSONArray itemArray = items.getJSONArray("item");
+
+        String startX = "0";
+        String startY = "0";
+
+        Optional<Obj3d> findObj = obj3dRepository.findById(mapId);
+        if (findObj.isPresent()){
+            startX = findObj.get().getStartX();
+            startY = findObj.get().getStartY();
+        }
+
+        // item 배열을 순회하면서 데이터 추출
+        List<NodeDTO> nodeDTOList = new ArrayList<>();
+
+        for (int i = 0; i < itemArray.length(); i++) {
+            JSONObject item = itemArray.getJSONObject(i);
+            // "title", "tel", "mapx", "mapy" 정보를 추출하여 객체에 저장
+            String contentid = item.getString("contentid");
+            //tring contentTypeId = item.getString("contentTypeId");
+            String title = item.getString("title");
+            String tel = item.getString("tel");
+            String mapx = item.getString("mapx");
+            String mapy = item.getString("mapy");
+            String relativeX = calRelativeX(startX, mapx);
+            String relativeY = calRelativeX(startY, mapy);//calRelativeX를 Y에 재활용.
+            String addr1 = item.getString("addr1");
+            nodeDTOList.add(
+                    new NodeDTO(
+                            contentid, Integer.toString(contentTypeId),
+                            title, tel,
+                            mapx, mapy,
+                            relativeX, relativeY,
+                            addr1)
+            );
+        }
+
+        return nodeDTOList;
+    }
     public static String calRelativeX(String startX, String currX){
         double relativeVal = Double.parseDouble(currX) - Double.parseDouble(startX);
         double mul = 100; //위도상 0.063(5.6km거리)는 500을 곱하여 30을 반환하기로 했다.
