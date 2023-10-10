@@ -85,21 +85,21 @@ class objectManager {
   }
 
   saveMyNodes() {
-    const objArr = [];
+    let jsonArr = [];
     const size = player.userData.myNodes.length;
     for (let i = 0; i < size; i++) {
       const objData = player.userData.myNodes[i].userData;
-      objArr.push(objData);
+      jsonArr.push(objData);
     }
-    const jsonArr = JSON.stringify(objArr);
-    console.log(objArr);
+    const temp = {jsonArr};
+    console.log(temp);
+    jsonArr = JSON.stringify(temp);
     console.log(jsonArr);
     axios.post("http://localhost:8080/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
   }
 
   async loadMyNodes() {
     const res = await axios.get("http://localhost:8080/api/obj/one?mapId=" + tripData.mapId)
-    console.log(res.data);
     /*const sceneData = JSON.parse(res.data.sceneJSON);
     console.log(res.data.sceneJSON);
     console.log(sceneData);
