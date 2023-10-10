@@ -54,8 +54,8 @@ public class Obj3dController {
         obj3d1.setObjName(paraMap.get("mapName"));
         //obj3d1.setSceneJSON(stringSource.getJsonInitData());
         //obj3d1.setJsonArr();
-        obj3d1.setStartX(paraMap.get("x"));
-        obj3d1.setStartY(paraMap.get("y"));
+        //obj3d1.setStartX(paraMap.get("x"));
+        //obj3d1.setStartY(paraMap.get("y"));
         NodeDTO tempStartNode = new NodeDTO();
         tempStartNode.setAddr1(paraMap.get("addr1"));
         tempStartNode.setRelativeY(paraMap.get("relativeY"));

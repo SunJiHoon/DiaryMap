@@ -106,8 +106,8 @@ public class kakaoKeywordController {
 
         Optional<Obj3d> findObj = obj3dRepository.findById(paraMap.get("mapId"));
         if (findObj.isPresent()){
-            startX = findObj.get().getStartX();
-            startY = findObj.get().getStartY();
+            startX = findObj.get().getStartNode().getMapx();
+            startY = findObj.get().getStartNode().getMapy();
         }
 
 

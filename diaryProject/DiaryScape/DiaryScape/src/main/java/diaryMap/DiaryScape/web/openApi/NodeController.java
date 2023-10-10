@@ -115,8 +115,8 @@ public class NodeController {
 
         Optional<Obj3d> findObj = obj3dRepository.findById(paraMap.get("mapId"));
         if (findObj.isPresent()){
-            startX = findObj.get().getStartX();
-            startY = findObj.get().getStartY();
+            startX = findObj.get().getStartNode().getMapx();
+            startY = findObj.get().getStartNode().getMapy();
         }
 
         // item 배열을 순회하면서 데이터 추출
@@ -183,12 +183,12 @@ public class NodeController {
         // item 배열을 순회하면서 데이터 추출
         List<NodeDTO> nodeDTOList = new ArrayList<>();
         nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 12, 2));//관광지
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 15, 2));//문화시설
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 25, 2));//문화시설
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 28, 2));//문화시설
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 32, 2));//문화시설
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 38, 2));//쇼핑
+        //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
+        //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 15, 2));//축제공연행사
+        //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 25, 2));//여행코스
+        //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 28, 2));//레포츠
+        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 32, 2));//숙박
+        //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 38, 2));//쇼핑
         nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 39, 2));//음식점
 
         JSONArray returnjsonArray = new JSONArray();
@@ -251,8 +251,8 @@ public class NodeController {
 
         Optional<Obj3d> findObj = obj3dRepository.findById(mapId);
         if (findObj.isPresent()){
-            startX = findObj.get().getStartX();
-            startY = findObj.get().getStartY();
+            startX = findObj.get().getStartNode().getMapx();
+            startY = findObj.get().getStartNode().getMapy();
         }
 
         // item 배열을 순회하면서 데이터 추출
