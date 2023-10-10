@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { useRef, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Box, Button } from '@chakra-ui/react' 
-import axios from 'axios'
+import client from '../utility/client'
 import { useSelector } from 'react-redux'
 
 const testData = {
@@ -68,7 +68,7 @@ const Map = () => {
 
         const table = []
         const meshes = []
-        axios.get('http://localhost:8080/api/reviews',).then((res) => {
+        client.get('http://localhost:8080/api/reviews',).then((res) => {
             const reviewData = res.data
             console.log(reviewData)
             for (const review of reviewData) {
