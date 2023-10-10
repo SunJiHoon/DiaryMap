@@ -6,7 +6,7 @@ import Home from './home/home'
 import Map from './map/map'
 import ReviewSpace from './reviewspace/reviewspace'
 import MyTripmap from './my_tripmap/my_tripmap'
-
+import { Navigate } from 'react-router-dom'
 function App() {
 
   return (
@@ -14,10 +14,11 @@ function App() {
       <Routes>
           <Route path="/" element = {<Home />} />
           <Route path="/signin" element = {<SignIn />} />
-          <Route path="signup" element = {<SignUp />} />
-          <Route path="map" element = {<Map />} />
-          <Route path="reviewspace" element = {<ReviewSpace />} />
-          <Route path="my_tripmap" element = {<MyTripmap />} />
+          <Route path="/signup" element = {<SignUp />} />
+          <Route path="/map" element = {<Map />} />
+          <Route path="/reviewspace" element = {<ReviewSpace />} />
+          <Route path="/my_tripmap" element = {<MyTripmap />} />
+          <Route path="/*" element = {<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   )
