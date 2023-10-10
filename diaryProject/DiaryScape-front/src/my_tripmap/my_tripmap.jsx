@@ -131,8 +131,20 @@ const MyTripmap = () => {
             return
         }
         const newReviewNameReplaced = newReviewValue.replace(/ /g, "%20")
-        console.log("post 요청: api/obj/create?mapName="+newReviewNameReplaced+"&x="+selectedData.mapx+"&y="+selectedData.mapy)
-        client.post("/api/obj/create?mapName="+newReviewNameReplaced+"&x="+selectedData.mapx+"&y="+selectedData.mapy, {}, {withCredentials:true})
+        const addr1Replaced = selectedData.addr1.replace(/ /g, "%20")
+        const telReplaced = selectedData.tel.replace(/ /g, "%20")
+        const titleReplaced = selectedData.title.replace(/ /g, "%20")
+        client.post("/api/obj/create?mapName="+newReviewNameReplaced
+            +"&addr1="+addr1Replaced
+            +"&relativeX="+selectedData.relativeX
+            +"&relativeY="+selectedData.relativeY
+            +"&contentid="+selectedData.contentid
+            +"&contentTypeId="+selectedData.contentTypeId
+            +"&tel"+telReplaced
+            +"&title"+titleReplaced
+            +"&mapx="+selectedData.mapx
+            +"&mapy="+selectedData.mapy
+            , {}, {withCredentials:true})
             .then((res) => {
                 client.get('/api/obj/list').then((res) => {
                     setReviewData(res.data)
