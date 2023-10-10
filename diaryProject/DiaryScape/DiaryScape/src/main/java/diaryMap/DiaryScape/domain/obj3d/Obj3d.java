@@ -20,6 +20,7 @@ public class Obj3d {
     private NodeDTO[] jsonArr;
     private String createdTime;
     private String modifiedTime;
+    private NodeDTO startNode;
 
 
 }
