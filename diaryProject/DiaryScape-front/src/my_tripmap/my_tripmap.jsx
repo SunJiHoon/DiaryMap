@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { loginUser, clearUser } from '../reducer/user_slice'
 import { selectTrip, clearTrip } from '../reducer/trip_slice'
+import { selectStartnode, clearStartnode } from "../reducer/startnode_slice"
 import {
     Box,
     Input,
@@ -103,16 +104,24 @@ const MyTripmap = () => {
             startX: review.startX,
             startY: review.startY,
         }))
+        dispatch(selectStartnode({
+            reviewTitle: review.reviewTitle,
+            mapId: review.mapId,
+            contentId: review.contentId,
+            contentTypeId: review.contentTypeId,
+            title: review.title,
+            tel: review.tel,
+            mapX: review.mapX,
+            mapY: review.mapY,
+            relativeX: review.relativeX,
+            relativeY: review.relative,
+            addr1: review.addr1,
+        }))
         navigate("/reviewspace")
     }
 
-    const nextId = useRef(3)
     const onNewReviewSubmit = useCallback((e) => {
         e.preventDefault()
-        // setReviewData(reviewData.concat({
-        //     title: newReviewValue,
-        //     id: nextId.current
-        // }))
         if(newReviewValue=="") {
             console.log("새 리뷰 제목 비어있음!")
             return
@@ -132,7 +141,6 @@ const MyTripmap = () => {
 
         setNewReviewValue('')
         setStartNodeSelected(false)
-        nextId.current++
     })
 
     useEffect(() => {
@@ -228,7 +236,7 @@ const MyTripmap = () => {
                             <Box display="flex" flexDirection="column">
                             <Box fontSize="1.6em" mb={1}>{review.title}</Box>
                             <Box>
-                            mapId: {review.mapId} / 시작 좌표: ({review.startX}, {review.startY})
+                            mapId: {review.mapId} / 시작 좌표: ({review.mapX}, {review.mapY})
                             </Box>
                             </Box>
                         </Button>

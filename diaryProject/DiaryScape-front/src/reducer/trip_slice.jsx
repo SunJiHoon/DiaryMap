@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const tripSlice = createSlice({
-    name: "user",
+    name: "trip",
     initialState: {
         title: "",
         mapId: "",
@@ -19,8 +19,8 @@ const tripSlice = createSlice({
         clearTrip: (state) => {
         state.title = ""
         state.mapId = ""
-        state.startX = action.payload.startX
-        state.startY = action.payload.startY
+        state.startX = 0
+        state.startY = 0
         return state
         },
     },
