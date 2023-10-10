@@ -11,7 +11,7 @@ let cur_options = [];
 let tripData;
 let player;
 
-const originCameraPos = new THREE.Vector3(-35,45,45);
+const originCameraPos = new THREE.Vector3(-35, 45, 45);
 
 class objectManager {
   constructor(_scene, _camera, _tripData) {
@@ -22,7 +22,7 @@ class objectManager {
 
   async checkMapSave() {
     await this.newMap("spongebob");
-    
+
     const isFirst = await client.get("/api/obj/isFirst?mapId=" + tripData.mapId);
     console.log(isFirst.data);
     if (isFirst.data == "first") {
@@ -60,7 +60,7 @@ class objectManager {
     player.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
     camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
-    player.userData.myNodes.push(startNode)
+    player.userData.myNodes.push(startNode);
     await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
 
@@ -98,11 +98,20 @@ class objectManager {
 
   async loadMyNodes() {
     const res = await client.get("/api/obj/one?mapId=" + tripData.mapId);
-    console.log(res);
-    const nodeArr = JSON.parse(res.data.jsonArr);
-    for(let i=0;i<nodeArr.length;i++){
-      
+    const nodeArr = res.data.jsonArr;
+    player.userData.myNodes = nodeArr;
+
+    const startNode = await new Node(nodeArr[0]);
+    scene.add(startNode);
+
+    const size = res.data.jsonArr.length;
+
+    for (let i = 0; i < size - 1; i++) {
+      const nextNode = await new Node(nodeArr[i + 1]);
+      scene.add(nextNode);
+      this.drawLine(new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY), new THREE.Vector3(nodeArr[i + 1].relativeX, 0, nodeArr[i + 1].relativeY));
     }
+
     /*const sceneData = JSON.parse(res.data.sceneJSON);
     console.log(res.data.sceneJSON);
     console.log(sceneData);
@@ -115,6 +124,15 @@ class objectManager {
     camera.position.add(new THREE.Vector3(userData.relativeX, 0, userData.relativeY));*/
   }
 
+  drawLine(startNode, endNode) {
+    const points = [];
+    points.push(startNode);
+    points.push(endNode);
+    const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+    const lineMaterial = new THREE.LineBasicMaterial();
+    const line = new THREE.Line(lineGeometry, lineMaterial);
+    scene.add(line);
+  }
 }
 
 export default objectManager;

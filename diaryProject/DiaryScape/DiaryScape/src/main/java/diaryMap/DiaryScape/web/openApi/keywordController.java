@@ -86,7 +86,7 @@ public class keywordController {
 
 
         // item 배열을 순회하면서 데이터 추출
-        List<KeywordDTO> keywordDTOList = new ArrayList<>();
+        List<NodeDTO> keywordDTOList = new ArrayList<>();
 
         for (int i = 0; i < itemArray.length(); i++) {
             JSONObject item = itemArray.getJSONObject(i);
@@ -100,16 +100,17 @@ public class keywordController {
             String mapy = item.getString("mapy");
             String addr1 = item.getString("addr1");
             keywordDTOList.add(
-                    new KeywordDTO(
+                    new NodeDTO(
                             contentid, contentTypeId,
                             title, tel,
                             mapx, mapy,
+                            "0", "0",
                             addr1)
             );
         }
 
         JSONArray returnjsonArray = new JSONArray();
-        for (KeywordDTO keywordDTO : keywordDTOList) {
+        for (NodeDTO keywordDTO : keywordDTOList) {
             JSONObject tempjsonObject = new JSONObject();
             tempjsonObject.put("contentid", keywordDTO.getContentid());
             tempjsonObject.put("contentTypeId", keywordDTO.getContentTypeId());
@@ -119,6 +120,10 @@ public class keywordController {
 
             tempjsonObject.put("mapx", keywordDTO.getMapx());
             tempjsonObject.put("mapy", keywordDTO.getMapy());
+
+            tempjsonObject.put("relativeX", keywordDTO.getRelativeX());
+            tempjsonObject.put("relativeY", keywordDTO.getRelativeY());
+
 
             tempjsonObject.put("addr1", keywordDTO.getAddr1());
 
