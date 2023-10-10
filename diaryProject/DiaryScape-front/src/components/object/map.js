@@ -3,7 +3,7 @@ import * as THREE from "three";
 class Map {
   constructor() {
     const mapGeometry = new THREE.PlaneGeometry(1000, 1000, 500, 500);
-    const mapMaterial = new THREE.MeshStandardMaterial({
+    const mapMaterial = new THREE.MeshBasicMaterial({
       color: "green",
       wireframe: false,
       side: THREE.DoubleSide,

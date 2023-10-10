@@ -2,7 +2,7 @@ import * as THREE from "three";
 import Map from "../object/map.js";
 import Player from "../object/player.js";
 import Node from "../object/node.js";
-import axios from "axios";
+import client from "../../utility/client.jsx";
 
 let scene;
 let camera;
@@ -23,7 +23,7 @@ class objectManager {
   async checkMapSave() {
     await this.newMap("spongebob");
     
-    const isFirst = await axios.get("http://localhost:8080/api/obj/isFirst?mapId=" + tripData.mapId);
+    const isFirst = await client.get("/api/obj/isFirst?mapId=" + tripData.mapId);
     console.log(isFirst.data);
     if (isFirst.data == "first") {
       await this.initNode();
@@ -55,8 +55,8 @@ class objectManager {
   }
 
   async initNode() {
-    const res = await axios.get("http://localhost:8080/api/openApi/node?mapId=" + tripData.mapId + "&mapX=" + tripData.startX + "&mapY=" + tripData.startY);
-    const startNode = await new Node(res.data[0]);
+    const res = await client.get("/api/openApi/node?mapId=" + tripData.mapId + "&mapX=" + tripData.startX + "&mapY=" + tripData.startY);
+    const startNode = await new Node(res.data[0]);//0으로 받으면 주변에 가장 가까운 노드가 입력되게 됨. 주변 노드가 아닌 해당 노드를 받을 수 있는 함수가 필요함.
     player.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
     camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
@@ -65,7 +65,7 @@ class objectManager {
   }
 
   async loadOptions(selectPos) {
-    const res = await axios.get("http://localhost:8080/api/openApi/node?mapId=" + tripData.mapId + "&mapX=" + selectPos.x + "&mapY=" + selectPos.z);
+    const res = await client.get("/api/openApi/node?mapId=" + tripData.mapId + "&mapX=" + selectPos.x + "&mapY=" + selectPos.z);
     for (let i = 0; i < res.data.length; i++) {
       var tempNode = await new Node(res.data[i]);
       scene.add(tempNode);
@@ -85,21 +85,24 @@ class objectManager {
   }
 
   saveMyNodes() {
+    console.log(player.userData.myNodes);
     let jsonArr = [];
     const size = player.userData.myNodes.length;
     for (let i = 0; i < size; i++) {
-      const objData = player.userData.myNodes[i].userData;
-      jsonArr.push(objData);
+      jsonArr.push(player.userData.myNodes[i].userData);
     }
-    const temp = {jsonArr};
-    console.log(temp);
-    jsonArr = JSON.stringify(temp);
+    jsonArr = JSON.stringify(jsonArr);
     console.log(jsonArr);
-    axios.post("http://localhost:8080/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
+    client.post("/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
   }
 
   async loadMyNodes() {
-    const res = await axios.get("http://localhost:8080/api/obj/one?mapId=" + tripData.mapId)
+    const res = await client.get("/api/obj/one?mapId=" + tripData.mapId);
+    console.log(res);
+    const nodeArr = JSON.parse(res.data.jsonArr);
+    for(let i=0;i<nodeArr.length;i++){
+      
+    }
     /*const sceneData = JSON.parse(res.data.sceneJSON);
     console.log(res.data.sceneJSON);
     console.log(sceneData);
