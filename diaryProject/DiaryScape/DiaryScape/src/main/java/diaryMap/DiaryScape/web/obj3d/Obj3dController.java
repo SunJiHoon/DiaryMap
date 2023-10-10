@@ -288,12 +288,13 @@ public class Obj3dController {
             ObjectMapper objectMapper = new ObjectMapper();
 
             log.info(paramjsonArr_Value.getJsonArr());
-
+            NodeDTO_for_update[] NodeDTOs_for_update = objectMapper.readValue(paramjsonArr_Value.getJsonArr(), NodeDTO_for_update[].class);
+/*
             JsonNode rootNode = objectMapper.readTree(paramjsonArr_Value.getJsonArr());
             JsonNode jsonArrNode = rootNode.get("jsonArr");
             log.info(jsonArrNode.toString());
             NodeDTO_for_update[] NodeDTOs_for_update = objectMapper.readValue(jsonArrNode.toString(), NodeDTO_for_update[].class);
-
+ */
             NodeDTO[] NodeDTOs = new NodeDTO[NodeDTOs_for_update.length];
             // NodeDTO_for_update 배열을 NodeDTO 배열로 변환 및 복사
             for (int i = 0; i < NodeDTOs_for_update.length; i++) {
