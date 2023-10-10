@@ -105,7 +105,7 @@ const MyTripmap = () => {
             startY: review.mapY,
         }))
         dispatch(selectStartnode({
-            reviewTitle: review.reviewTitle,
+            reviewtitle: review.reviewtitle,
             mapId: review.mapId,
             contentId: review.contentId,
             contentTypeId: review.contentTypeId,
@@ -114,7 +114,7 @@ const MyTripmap = () => {
             mapX: review.mapX,
             mapY: review.mapY,
             relativeX: review.relativeX,
-            relativeY: review.relative,
+            relativeY: review.relativeY,
             addr1: review.addr1,
         }))
         navigate("/reviewspace")
@@ -246,7 +246,7 @@ const MyTripmap = () => {
                     {reviewData.map((review) => (
                         <Button h="70px" key={review.mapId} mb={6} onClick={(e) => onReviewClicked(review)} colorScheme="teal" variant="outline">
                             <Box display="flex" flexDirection="column">
-                            <Box fontSize="1.6em" mb={1}>{review.title}</Box>
+                            <Box fontSize="1.6em" mb={1}>{review.reviewtitle}</Box>
                             <Box>
                             mapId: {review.mapId} / 시작 좌표: ({review.mapX}, {review.mapY})
                             </Box>

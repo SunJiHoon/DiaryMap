@@ -17,9 +17,9 @@ const startnodeSlice = createSlice({
     },
     reducers: {
         selectStartnode: (state, action) => {
-            state.reviewTitle = action.payload.reviewTitle
+            state.reviewtitle = action.payload.reviewTitle
             state.mapId = action.payload.mapId
-            state.contentId =action.payload.contentId
+            state.contentId = action.payload.contentId
             state.contentTypeId = action.payload.contentTypeId
             state.title = action.payload.title
             state.tel = action.payload.tel
