@@ -57,17 +57,18 @@ const MyTripmap = () => {
 
     // 불필요한 get 요청 방지 구현 예정
     let source
-    const onSearchChange = useCallback((e) => {
+    const onSearch = useCallback((e) => {
+
         if(source) {
             source.cancel()
         }
 
         source = axios.CancelToken.source()
         
-        setSearchValue(e.target.value)
+        // setSearchValue(e.target.value)
         setStartNodeSelected(false)
         // console.log(e.target.value)
-        const searchValueReplaced = e.target.value.replace(/ /g, "%20")
+        const searchValueReplaced = searchValue.replace(/ /g, "%20")
         // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
         
         setSearchResultDataLoading(true)
@@ -196,11 +197,25 @@ const MyTripmap = () => {
                     <ModalHeader>새 여행 추가</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <form onSubmit={onNewReviewSubmit}>
+                        <form onSubmit={onNewReviewSubmit} onKeyDown={(e) => {
+                            if(e.code == "Enter") {
+                                e.preventDefault()
+                            }
+                        }}>
                             <Box display="flex" justifyContent="center">
                                 <Box display="flex" justifyContent="center" w="100%" maxW="500px" mt={6} mb={6}>
                                 <Input type="text" placeholder="새 여행 이름" value={newReviewValue} onChange={onNewReviewChange} />
-                                <Input type="text" placeholder="시작 장소" value={searchValue} onChange={onSearchChange} />
+                                <Input
+                                    type="text"
+                                    placeholder="시작 장소"
+                                    value={searchValue}
+                                    onChange={(e) => setSearchValue(e.target.value)}
+                                    onKeyUp={(e) => {
+                                        if(e.key=="Enter") {
+                                            onSearch()
+                                        }
+                                    }}
+                                />
                                 <Button type="submit" colorScheme="teal" ml={4}>추가</Button>
                                 </Box>
                             </Box>
