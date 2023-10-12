@@ -62,7 +62,7 @@ public class NodeController {
 
         // item 배열을 순회하면서 데이터 추출
         List<NodeDTO> nodeDTOList = new ArrayList<>();
-        //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 12, 2));//관광지
+        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 12, 2));//관광지
         //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
         //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 15, 2));//축제공연행사
         //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 25, 2));//여행코스
@@ -71,7 +71,14 @@ public class NodeController {
         //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 38, 2));//쇼핑
         //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 39, 2));//음식점
 
+        //nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 12, 2));//관광지
         nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
+        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 15, 2));//축제공연행사
+        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 25, 2));//여행코스
+        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 28, 2));//레포츠
+        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 32, 2));//숙박
+        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 38, 2));//쇼핑
+        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 39, 2));//음식점
 
 
         JSONArray returnjsonArray = new JSONArray();
@@ -191,15 +198,15 @@ public class NodeController {
 
         for (int i = 0; i < numOfSearch; i++) {
             // "title", "tel", "mapx", "mapy" 정보를 추출하여 객체에 저장
-            String contentid = "dummy";
+            String contentid = "dummy_id";
             //tring contentTypeId = item.getString("contentTypeId");
-            String title = "dummy";
-            String tel = "dummy";
+            String title = "dummy_title";
+            String tel = "dummy_tel";
             String mapx = Double.toString(Double.parseDouble(searchMapX) + (Math.random()-0.5)*2 *0.1);
             String mapy = Double.toString(Double.parseDouble(searchMapY) + (Math.random()-0.5)*2 *0.1);
             String relativeX = calRelativeX(startX, mapx);
             String relativeY = calRelativeX(startY, mapy);//calRelativeX를 Y에 재활용.
-            String addr1 = "dummy";
+            String addr1 = "dummy_addr";
             nodeDTOList.add(
                     new NodeDTO(
                             contentid, Integer.toString(contentTypeId),
