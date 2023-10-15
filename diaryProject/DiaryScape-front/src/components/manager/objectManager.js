@@ -93,7 +93,6 @@ class objectManager {
       jsonArr.push(player.userData.myNodes[i].userData);
     }
     jsonArr = JSON.stringify(jsonArr);
-    console.log(jsonArr);
     client.post("/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
   }
 

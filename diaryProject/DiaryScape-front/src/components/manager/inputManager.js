@@ -62,11 +62,9 @@ class inputManager {
     }
   }
   async handleMouseDown(event) {
-    setNodeMenuOn(false)
+    //setNodeMenuOn(false)
     if (cur_state == InputState.IDLE) {
       const pointer = new THREE.Vector2();
-
-      console.log(event.clientX, event.clientY);
 
       pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       pointer.y = -((event.clientY / window.innerHeight) * 2 - 1);  
@@ -91,20 +89,22 @@ class inputManager {
             intersectObjects[i].object.position.z,
           );
 
-          objectManager.drawLine(new THREE.Vector3(cur_node.userData.relativeX, 1, cur_node.relativeY), intersectObjects[i].object.position);
-          objectManager.loadOptions(new THREE.Vector3(userData.mapX, 1, userData.mapY));
-          objectManager.invisibleOptions(intersectObjects[i].object);
-
-          character.userData.myNodes.push(intersectObjects[i].object);
-          objectManager.saveMyNodes();
-          move(targetPos);
+          selectOption(cur_node, userData, intersectObjects[i].object, targetPos);
         }
       }
     }
   }
 }
 
+function selectOption(cur_node, userData, intersectObject, targetPos){
+  objectManager.drawLine(cur_node.position, intersectObject.position);
+  objectManager.loadOptions(new THREE.Vector3(userData.mapX, 1, userData.mapY));
+  objectManager.invisibleOptions(intersectObject);
 
+  character.userData.myNodes.push(intersectObject);
+  objectManager.saveMyNodes();
+  move(targetPos);
+}
 
 function move(targetPos) {
   cur_state = InputState.MOVE;
