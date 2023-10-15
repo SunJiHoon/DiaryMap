@@ -140,7 +140,11 @@ const ReviewSpace = () => {
             bgColor="white"
         >
             Node Menu
- 
+            {selectOptionData.select_option && <Box>
+            {selectOptionData.select_option.userData.tel}<br />
+            {selectOptionData.select_option.userData.title}<br />
+            </Box>
+            }
             <Button
                 onClick={onAddNodeButtonClick}
                 colorScheme="teal"
