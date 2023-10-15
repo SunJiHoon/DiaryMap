@@ -12,6 +12,7 @@ const ReviewSpace = () => {
     let objectManager;
 
     const newMapFunctionRef = useRef(null)
+    const [nodeMenuOn, setNodeMenuOn] = useState(false)
 
     useEffect(() => {
         let renderer, scene, camera
@@ -40,7 +41,7 @@ const ReviewSpace = () => {
             objectManager = new ObjectManager(scene, camera, tripData);
             newMapFunctionRef.current = objectManager.newMap
 
-            objectManager.checkMapSave().then(()=> { inputManager = new InputManager(camera, scene) });
+            objectManager.checkMapSave().then(()=> { inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn) });
             
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
@@ -114,6 +115,22 @@ const ReviewSpace = () => {
     <div>
         <canvas ref={canvasRef}></canvas>
     </div>
+    { nodeMenuOn &&
+    <div
+    style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        zIndex: 4,
+    }}
+    >
+        <Box
+        bgColor="white"
+        >
+            Node Menu
+        </Box>
+    </div>
+    }
     </>)
 }
 

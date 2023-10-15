@@ -5,6 +5,8 @@ import ObjectManager from "./objectManager";
 let camera;
 let scene;
 let character;
+let nodeMenuOn;
+let setNodeMenuOn;
 
 const objectManager = new ObjectManager();
 const raycaster = new THREE.Raycaster();
@@ -30,9 +32,14 @@ const InputState = {
 Object.freeze(InputState);
 
 class inputManager {
-  constructor(_camera, _scene) {
+  constructor(_camera, _scene, _nodeMenuOn, _setNodeMenuOn) {
     camera = _camera;
     scene = _scene;
+    nodeMenuOn = _nodeMenuOn;
+    setNodeMenuOn = _setNodeMenuOn;
+
+    //setNodeMenuOn(true)
+    //console.log("menu on")
     character = scene.getObjectByName("player");
 
     this.inputManage();
@@ -77,6 +84,9 @@ class inputManager {
           if (character.userData.myNodes[character.userData.myNodes.length - 1] == intersectObjects[i].object) {
             break;
           }
+          
+          setNodeMenuOn(true)
+
           const userData = intersectObjects[i].object.userData;
           const targetPos = new THREE.Vector3(
             intersectObjects[i].object.position.x,
