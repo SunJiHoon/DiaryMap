@@ -13,17 +13,10 @@ const objectManager = new ObjectManager();
 const raycaster = new THREE.Raycaster();
 
 let cur_state;
-let cur_index = 0;
 
 let cameraOrigin;
 
-let posArr = [
-  new THREE.Vector3(0, 0, 0),
-  new THREE.Vector3(10, 0, 0),
-  new THREE.Vector3(10, 0, 10),
-  new THREE.Vector3(10, 0, 20),
-  new THREE.Vector3(20, 0, 20),
-];
+let select_option;
 
 const InputState = {
   IDLE: "idle",
@@ -65,50 +58,59 @@ class inputManager {
   }
   handleKeyDown(event) {
     if (cur_state == InputState.IDLE) {
-      if(event.key == 'a'){
+      if (event.key == 'a') {
         objectManager.loadMyNodes();
       }
     }
   }
   async handleMouseDown(event) {
-    setNodeMenuOn(false)
+    select_option = null;
+    //setNodeMenuOn(false)
     if (cur_state == InputState.IDLE) {
       const pointer = new THREE.Vector2();
 
       pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-      pointer.y = -((event.clientY / window.innerHeight) * 2 - 1);
+      pointer.y = -((event.clientY / window.innerHeight) * 2 - 1);  
 
       raycaster.setFromCamera(pointer, camera);
 
+      const cur_node = character.userData.myNodes[character.userData.myNodes.length - 1];
       const intersectObjects = raycaster.intersectObjects(scene.children);
 
       for (let i = 0; i < intersectObjects.length; i++) {
         if (intersectObjects[i].object.userData?.tag == "node") {
-          if (character.userData.myNodes[character.userData.myNodes.length - 1] == intersectObjects[i].object) {
+          select_option = intersectObjects[i].object;
+          if (cur_node == select_option) {
             break;
           }
-          
           setNodeMenuOn(true)
           setNodeMenuPosition({x:event.clientX, y:event.clientY})
 
-          const userData = intersectObjects[i].object.userData;
-          const targetPos = new THREE.Vector3(
-            intersectObjects[i].object.position.x,
-            0,
-            intersectObjects[i].object.position.z,
-          );
-
-          objectManager.drawLine(character.position, intersectObjects[i].object.position);
-          objectManager.loadOptions(new THREE.Vector3(userData.mapX, 1, userData.mapY));
-          objectManager.invisibleOptions(intersectObjects[i].object);
-
-          character.userData.myNodes.push(intersectObjects[i].object);
-          objectManager.saveMyNodes();
-          move(targetPos);
+          selectOption();
         }
       }
     }
   }
+}
+
+function selectOption(){
+  const userData = select_option.userData;
+  const cur_node = character.userData.myNodes[character.userData.myNodes.length - 1];
+
+  objectManager.drawLine(cur_node.position, select_option.position);
+  objectManager.loadOptions(new THREE.Vector3(userData.mapX, 1, userData.mapY));
+  objectManager.invisibleOptions(select_option);
+
+  character.userData.myNodes.push(select_option);
+  objectManager.saveMyNodes();
+
+  const targetPos = new THREE.Vector3(
+    select_option.position.x,
+    1,
+    select_option.position.z
+  );
+
+  move(targetPos);
 }
 
 function move(targetPos) {

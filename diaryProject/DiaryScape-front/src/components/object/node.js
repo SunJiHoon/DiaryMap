@@ -42,6 +42,10 @@ class node {
       addr1: infos.addr1,
     };
 
+    if(obj.userData.contentType == 50){
+      tag = "subway";
+    }
+
     eventObj.scale.set(eventIdx[1], eventIdx[2], eventIdx[3]);
     obj.position.set(obj.userData.relativeX, 0, obj.userData.relativeY);
     eventObj.position.set(obj.userData.relativeX, 2, obj.userData.relativeY);

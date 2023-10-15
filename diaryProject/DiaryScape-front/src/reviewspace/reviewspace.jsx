@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 const ReviewSpace = () => {
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
+    const startnodeData = useSelector((state) => state.startnode)
     let objectManager;
 
     const newMapFunctionRef = useRef(null)
@@ -40,7 +41,7 @@ const ReviewSpace = () => {
             camera.position.set(-35, 45, 45);
             camera.lookAt(0,0,0);
 
-            objectManager = new ObjectManager(scene, camera, tripData);
+            objectManager = new ObjectManager(scene, camera, tripData, startnodeData);
             newMapFunctionRef.current = objectManager.newMap
             objectManager.checkMapSave().then(()=> {
                 inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition)

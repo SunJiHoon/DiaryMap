@@ -69,14 +69,13 @@ const MyTripmap = () => {
         setStartNodeSelected(false)
         // console.log(e.target.value)
 
-
         const searchValueReplaced = searchValue.replace(/ /g, "%20")
         console.log("search: " + searchValueReplaced)
 
         // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
         
         setSearchResultDataLoading(true)
-        client.get("/api/openApi/start/list?userKeyword=" + searchValueReplaced, { cancelToken: source.token })
+        client.get("/api/openApi/start/list?userKeyword=" + searchValue, { cancelToken: source.token })
             .then((res) => {
                 setSearchResultDataLoading(false)
                 setSearchResultData(res.data)
