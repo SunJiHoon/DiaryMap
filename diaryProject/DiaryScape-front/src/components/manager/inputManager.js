@@ -16,6 +16,8 @@ let cur_state;
 
 let cameraOrigin;
 
+let select_option;
+
 const InputState = {
   IDLE: "idle",
   CREATE: "create",
@@ -62,6 +64,7 @@ class inputManager {
     }
   }
   async handleMouseDown(event) {
+    select_option = null;
     //setNodeMenuOn(false)
     if (cur_state == InputState.IDLE) {
       const pointer = new THREE.Vector2();
@@ -71,38 +74,42 @@ class inputManager {
 
       raycaster.setFromCamera(pointer, camera);
 
+      const cur_node = character.userData.myNodes[character.userData.myNodes.length - 1];
       const intersectObjects = raycaster.intersectObjects(scene.children);
 
       for (let i = 0; i < intersectObjects.length; i++) {
         if (intersectObjects[i].object.userData?.tag == "node") {
-          const cur_node = character.userData.myNodes[character.userData.myNodes.length - 1];
-          if (cur_node == intersectObjects[i].object) {
+          select_option = intersectObjects[i].object;
+          if (cur_node == select_option) {
             break;
           }
           setNodeMenuOn(true)
           setNodeMenuPosition({x:event.clientX, y:event.clientY})
 
-          const userData = intersectObjects[i].object.userData;
-          const targetPos = new THREE.Vector3(
-            intersectObjects[i].object.position.x,
-            0,
-            intersectObjects[i].object.position.z,
-          );
-
-          selectOption(cur_node, userData, intersectObjects[i].object, targetPos);
+          selectOption();
         }
       }
     }
   }
 }
 
-function selectOption(cur_node, userData, intersectObject, targetPos){
-  objectManager.drawLine(cur_node.position, intersectObject.position);
-  objectManager.loadOptions(new THREE.Vector3(userData.mapX, 1, userData.mapY));
-  objectManager.invisibleOptions(intersectObject);
+function selectOption(){
+  const userData = select_option.userData;
+  const cur_node = character.userData.myNodes[character.userData.myNodes.length - 1];
 
-  character.userData.myNodes.push(intersectObject);
+  objectManager.drawLine(cur_node.position, select_option.position);
+  objectManager.loadOptions(new THREE.Vector3(userData.mapX, 1, userData.mapY));
+  objectManager.invisibleOptions(select_option);
+
+  character.userData.myNodes.push(select_option);
   objectManager.saveMyNodes();
+
+  const targetPos = new THREE.Vector3(
+    select_option.position.x,
+    1,
+    select_option.position.z
+  );
+
   move(targetPos);
 }
 

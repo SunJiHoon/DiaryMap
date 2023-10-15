@@ -58,6 +58,7 @@ class objectManager {
 
   async initNode() {
     const startNode = await new Node(startNodeData);
+    console.log(startNode);
     player.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
     camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
