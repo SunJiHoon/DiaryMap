@@ -9,27 +9,29 @@ let camera;
 
 let cur_options = [];
 let tripData;
+let startNodeData;
 let player;
 
 const originCameraPos = new THREE.Vector3(-35, 45, 45);
 
 class objectManager {
-  constructor(_scene, _camera, _tripData) {
+  constructor(_scene, _camera, _tripData, _startNodeData) {
     scene = _scene;
     camera = _camera;
     tripData = _tripData;
+    startNodeData = _startNodeData;
   }
 
   async checkMapSave() {
     await this.newMap("spongebob");
 
     const isFirst = await client.get("/api/obj/isFirst?mapId=" + tripData.mapId);
-    console.log(isFirst.data);
     if (isFirst.data == "first") {
       await this.initNode();
     }
     else if (isFirst.data == "modified") {
-      await this.loadMyNodes();
+      //await this.loadMyNodes();
+      await this.initNode();
     }
   }
 
@@ -55,8 +57,7 @@ class objectManager {
   }
 
   async initNode() {
-    const res = await client.get("/api/openApi/node?mapId=" + tripData.mapId + "&mapX=" + tripData.startX + "&mapY=" + tripData.startY);
-    const startNode = await new Node(res.data[0]);//0으로 받으면 주변에 가장 가까운 노드가 입력되게 됨. 주변 노드가 아닌 해당 노드를 받을 수 있는 함수가 필요함.
+    const startNode = await new Node(startNodeData);
     player.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
     camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
@@ -112,16 +113,8 @@ class objectManager {
       this.drawLine(new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY), new THREE.Vector3(nodeArr[i + 1].relativeX, 0, nodeArr[i + 1].relativeY));
     }
 
-    /*const sceneData = JSON.parse(res.data.sceneJSON);
-    console.log(res.data.sceneJSON);
-    console.log(sceneData);
-    const objectLoader = new THREE.ObjectLoader();
-    const tempScene = objectLoader.parse(sceneData);
-    scene.children = tempScene.children;
-
-    const size = scene.children[3].userData.myNodes.length;
-    const userData = scene.children[3].userData.myNodes[size - 1].object.userData;
-    camera.position.add(new THREE.Vector3(userData.relativeX, 0, userData.relativeY));*/
+    player.position.set(nodeArr[size-1].relativeX, 0, nodeArr[size-1].relativeY);
+    camera.position.set(nodeArr[size-1].relativeX + originCameraPos.x, 0 + originCameraPos.y, nodeArr[size-1].relativeY + originCameraPos.z);
   }
 
   drawLine(startNode, endNode) {
