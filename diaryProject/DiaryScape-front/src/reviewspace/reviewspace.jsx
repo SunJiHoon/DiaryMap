@@ -12,6 +12,7 @@ const ReviewSpace = () => {
     let objectManager;
 
     const newMapFunctionRef = useRef(null)
+    const addNodeFunctionRef = useRef(null)
     const [nodeMenuOn, setNodeMenuOn] = useState(false)
     const [nodeMenuPosition, setNodeMenuPosition] = useState({x: 0, y: 0,})
 
@@ -41,9 +42,10 @@ const ReviewSpace = () => {
 
             objectManager = new ObjectManager(scene, camera, tripData);
             newMapFunctionRef.current = objectManager.newMap
-
-            objectManager.checkMapSave().then(()=> { inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition) });
-            
+            objectManager.checkMapSave().then(()=> {
+                inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition)
+                addNodeFunctionRef.current = inputManager.selectOption
+            });
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
         
@@ -78,6 +80,12 @@ const ReviewSpace = () => {
     function onResetButtonClick() {
         if(newMapFunctionRef.current) {
             newMapFunctionRef.current("spongebob");
+        }
+    }
+    
+    function onAddNodeButtonClick() {
+        if(addNodeFunctionRef.current) {
+            addNodeFunctionRef.current();
         }
     }
     
@@ -118,7 +126,6 @@ const ReviewSpace = () => {
     </div>
     <div
     style={{
-        visiblity: nodeMenuOn ? "visible" : "hidden",
         position: "fixed",
         top: nodeMenuPosition.y,
         left: nodeMenuPosition.x,
@@ -126,9 +133,17 @@ const ReviewSpace = () => {
     }}
     >
         <Box
-        bgColor="white"
+            visiblity={nodeMenuOn ? "visible" : "hidden"}
+            bgColor="white"
         >
             Node Menu
+ 
+            <Button
+                onClick={onAddNodeButtonClick}
+                colorScheme="teal"
+            >
+                노드 추가
+            </Button>
         </Box>
     </div>
     </>)
