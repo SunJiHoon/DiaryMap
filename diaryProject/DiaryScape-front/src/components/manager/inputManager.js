@@ -7,6 +7,7 @@ let scene;
 let character;
 let nodeMenuOn;
 let setNodeMenuOn;
+let setNodeMenuPosition;
 
 const objectManager = new ObjectManager();
 const raycaster = new THREE.Raycaster();
@@ -32,11 +33,12 @@ const InputState = {
 Object.freeze(InputState);
 
 class inputManager {
-  constructor(_camera, _scene, _nodeMenuOn, _setNodeMenuOn) {
+  constructor(_camera, _scene, _nodeMenuOn, _setNodeMenuOn, _setNodeMenuPosition) {
     camera = _camera;
     scene = _scene;
     nodeMenuOn = _nodeMenuOn;
     setNodeMenuOn = _setNodeMenuOn;
+    setNodeMenuPosition = _setNodeMenuPosition;
 
     //setNodeMenuOn(true)
     //console.log("menu on")
@@ -69,6 +71,7 @@ class inputManager {
     }
   }
   async handleMouseDown(event) {
+    setNodeMenuOn(false)
     if (cur_state == InputState.IDLE) {
       const pointer = new THREE.Vector2();
 
@@ -86,6 +89,7 @@ class inputManager {
           }
           
           setNodeMenuOn(true)
+          setNodeMenuPosition({x:event.clientX, y:event.clientY})
 
           const userData = intersectObjects[i].object.userData;
           const targetPos = new THREE.Vector3(

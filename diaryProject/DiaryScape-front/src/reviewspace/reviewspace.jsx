@@ -13,6 +13,7 @@ const ReviewSpace = () => {
 
     const newMapFunctionRef = useRef(null)
     const [nodeMenuOn, setNodeMenuOn] = useState(false)
+    const [nodeMenuPosition, setNodeMenuPosition] = useState({x: 0, y: 0,})
 
     useEffect(() => {
         let renderer, scene, camera
@@ -41,7 +42,7 @@ const ReviewSpace = () => {
             objectManager = new ObjectManager(scene, camera, tripData);
             newMapFunctionRef.current = objectManager.newMap
 
-            objectManager.checkMapSave().then(()=> { inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn) });
+            objectManager.checkMapSave().then(()=> { inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition) });
             
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
@@ -115,12 +116,12 @@ const ReviewSpace = () => {
     <div>
         <canvas ref={canvasRef}></canvas>
     </div>
-    { nodeMenuOn &&
     <div
     style={{
+        visiblity: nodeMenuOn ? "visible" : "hidden",
         position: "fixed",
-        top: 0,
-        left: 0,
+        top: nodeMenuPosition.y,
+        left: nodeMenuPosition.x,
         zIndex: 4,
     }}
     >
@@ -130,7 +131,6 @@ const ReviewSpace = () => {
             Node Menu
         </Box>
     </div>
-    }
     </>)
 }
 

@@ -68,7 +68,11 @@ const MyTripmap = () => {
         // setSearchValue(e.target.value)
         setStartNodeSelected(false)
         // console.log(e.target.value)
+
+
         const searchValueReplaced = searchValue.replace(/ /g, "%20")
+        console.log("search: " + searchValueReplaced)
+
         // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
         
         setSearchResultDataLoading(true)
@@ -112,8 +116,8 @@ const MyTripmap = () => {
             contentTypeId: review.contentTypeId,
             title: review.title,
             tel: review.tel,
-            mapX: review.mapX,
-            mapY: review.mapY,
+            mapx: review.mapx,
+            mapy: review.mapy,
             relativeX: review.relativeX,
             relativeY: review.relativeY,
             addr1: review.addr1,
@@ -209,7 +213,7 @@ const MyTripmap = () => {
                                     type="text"
                                     placeholder="시작 장소"
                                     value={searchValue}
-                                    onChange={(e) => setSearchValue(e.target.value)}
+                                    onChange={(e) => {setSearchValue(e.target.value)}}
                                     onKeyUp={(e) => {
                                         if(e.key=="Enter") {
                                             onSearch()

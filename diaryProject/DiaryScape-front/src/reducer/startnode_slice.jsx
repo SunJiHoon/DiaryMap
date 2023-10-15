@@ -9,8 +9,8 @@ const startnodeSlice = createSlice({
         contentTypeId: "",
         title: "",
         tel: "",
-        mapX: 0,
-        mapY: 0,
+        mapx: 0,
+        mapy: 0,
         relativeX: 0,
         relativeY: 0,
         addr1: "",
@@ -23,8 +23,8 @@ const startnodeSlice = createSlice({
             state.contentTypeId = action.payload.contentTypeId
             state.title = action.payload.title
             state.tel = action.payload.tel
-            state.mapX = action.payload.mapX
-            state.mapY = action.payload.mapY
+            state.mapx = action.payload.mapx
+            state.mapy = action.payload.mapy
             state.relativeX = action.payload.relativeX
             state.relativeY = action.payload.relativeY
             state.addr1 = action.payload.addr1
@@ -37,8 +37,8 @@ const startnodeSlice = createSlice({
             state.contentTypeId = ""
             state.title = ""
             state.tel = ""
-            state.mapX = 0,
-            state.mapY = 0,
+            state.mapx = 0,
+            state.mapy = 0,
             state.relativeX = 0
             state.relativeY = 0
             state.addr1 = ""
