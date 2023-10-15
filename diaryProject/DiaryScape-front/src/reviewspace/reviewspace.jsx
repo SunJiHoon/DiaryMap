@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import InputManager from "../components/manager/inputManager";
+import InputManager, { selectOption } from "../components/manager/inputManager";
 import ObjectManager from "../components/manager/objectManager";
 import { useRef, useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
@@ -16,6 +16,8 @@ const ReviewSpace = () => {
     const addNodeFunctionRef = useRef(null)
     const [nodeMenuOn, setNodeMenuOn] = useState(false)
     const [nodeMenuPosition, setNodeMenuPosition] = useState({x: 0, y: 0,})
+
+    const [selectOptionData, setSelectOptionData] = useState({})
 
     useEffect(() => {
         let renderer, scene, camera
@@ -44,8 +46,8 @@ const ReviewSpace = () => {
             objectManager = new ObjectManager(scene, camera, tripData, startnodeData);
             newMapFunctionRef.current = objectManager.newMap
             objectManager.checkMapSave().then(()=> {
-                inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition)
-                addNodeFunctionRef.current = inputManager.selectOption
+                inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
+                addNodeFunctionRef.current = selectOption
             });
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
@@ -86,7 +88,7 @@ const ReviewSpace = () => {
     
     function onAddNodeButtonClick() {
         if(addNodeFunctionRef.current) {
-            addNodeFunctionRef.current();
+            addNodeFunctionRef.current(selectOptionData);
         }
     }
     
