@@ -55,9 +55,8 @@ const MyTripmap = () => {
         setNewReviewValue(e.target.value)
     }, [])
 
-    // 불필요한 get 요청 방지 구현 예정
     let source
-    const onSearch = useCallback((e) => {
+    const onSearch = ((e) => {
 
         if(source) {
             source.cancel()
@@ -68,7 +67,7 @@ const MyTripmap = () => {
         // setSearchValue(e.target.value)
         setStartNodeSelected(false)
         // console.log(e.target.value)
-
+        
         const searchValueReplaced = searchValue.replace(/ /g, "%20")
         console.log("search: " + searchValueReplaced)
 
@@ -93,7 +92,7 @@ const MyTripmap = () => {
         //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
         //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
         // ])
-    }, [])
+    })
 
     const onStartNodeSelect = (nodeData) => {
         setStartNodeSelected(true)
@@ -206,31 +205,32 @@ const MyTripmap = () => {
                             }
                         }}>
                             <Box display="flex" justifyContent="center">
-                                <Box display="flex" justifyContent="center" w="100%" maxW="500px" mt={6} mb={6}>
-                                <Input type="text" placeholder="새 여행 이름" value={newReviewValue} onChange={onNewReviewChange} />
-                                <Input
-                                    type="text"
-                                    placeholder="시작 장소"
-                                    value={searchValue}
-                                    onChange={(e) => {setSearchValue(e.target.value)}}
-                                    onKeyUp={(e) => {
-                                        if(e.key=="Enter") {
-                                            onSearch()
-                                        }
-                                    }}
-                                />
-                                <Button type="submit" colorScheme="teal" ml={4}>추가</Button>
+                                <Box display="flex" flexDirection="column" justifyContent="center" w="100%" maxW="500px" mt={2} mb={6}>
+                                <Input type="text" placeholder="새 여행 이름" value={newReviewValue} onChange={onNewReviewChange} mb={2}/>
+                                <Box display="flex" mb={2}>
+                                    <Input
+                                        type="text"
+                                        placeholder="시작 장소"
+                                        value={searchValue}
+                                        onChange={(e) => {setSearchValue(e.target.value)}}
+                                        mr={2}
+                                    />
+                                    <Button onClick={onSearch} colorScheme="teal" variant="outline">
+                                        검색
+                                    </Button>
+                                </Box>
+                                <Button type="submit" colorScheme="teal">여행 생성</Button>
                                 </Box>
                             </Box>
                         </form>
                         
-                        <Box display="flex" justifyContent="center" mb={8}>
+                        <Box display="flex" justifyContent="center" mb={2}>
                             <Box w="100%" maxW="500px" display="flex" flexDirection="column">
                                 { !startNodeSelected && <>
                                 <Box fontSize="1.4em" mb={4}>시작 가능한 장소</Box>
                                 {searchValue.length == 0 && <Box>장소 이름을 입력해주세요!</Box>}
                                 {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
-                                <Box maxH={300} overflowY="scroll">
+                                <Box maxH={260} overflowY="scroll">
                                     {searchResultData.map((result) => (
                                         <Button colorScheme="teal" variant="outline" h="40px" key={result.contentid} mb={2} onClick={(e) => onStartNodeSelect(result)}>
                                             {result.title},&nbsp;
@@ -245,8 +245,8 @@ const MyTripmap = () => {
                                 <Box fontSize="1.4em" mb={4}>시작 장소 선택됨</Box>
                                 <Button colorScheme="teal" h="40px" mb={2}>
                                     {selectedData.title},&nbsp;
-                                    {selectedData.addr1},&nbsp;
-                                    x: {selectedData.mapx}, y: {selectedData.mapy}
+                                    {selectedData.addr1}
+                                    {/* ,&nbsp; x: {selectedData.mapx}, y: {selectedData.mapy} */}
                                 </Button>
                                 </>}
                             </Box>

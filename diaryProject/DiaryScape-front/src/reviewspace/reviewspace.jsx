@@ -136,18 +136,23 @@ const ReviewSpace = () => {
     }}
     >
         <Box
-            visiblity={nodeMenuOn ? "visible" : "hidden"}
+            visibility={nodeMenuOn ? "visible" : "hidden"}
             bgColor="white"
+            borderRadius="2px"
+            w="200px"
+            opacity={nodeMenuOn ? "0.8" : "0"}
+            transition="all 0.3s"
         >
-            Node Menu
+            <Box fontWeight="bold">노드 정보</Box>
             {selectOptionData.select_option && <Box>
-            {selectOptionData.select_option.userData.tel}<br />
             {selectOptionData.select_option.userData.title}<br />
+            {selectOptionData.select_option.userData.tel}<br />
             </Box>
             }
             <Button
                 onClick={onAddNodeButtonClick}
                 colorScheme="teal"
+                mb={2}
             >
                 노드 추가
             </Button>

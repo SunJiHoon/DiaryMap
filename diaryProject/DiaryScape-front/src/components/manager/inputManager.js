@@ -67,8 +67,10 @@ class inputManager {
     }
   }
   async handleMouseDown(event) {
+    setNodeMenuOn(false)
+    console.log("set nodemenu hidden")
+    console.log(nodeMenuOn)
     select_option = null;
-    //setNodeMenuOn(false)
     if (cur_state == InputState.IDLE) {
       const pointer = new THREE.Vector2();
 
