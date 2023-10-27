@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import InputManager from "../components/manager/inputManager";
+import InputManager, { selectOption } from "../components/manager/inputManager";
 import ObjectManager from "../components/manager/objectManager";
 import { useRef, useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
@@ -9,9 +9,15 @@ import { useSelector } from "react-redux";
 const ReviewSpace = () => {
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
+    const startnodeData = useSelector((state) => state.startnode)
     let objectManager;
 
     const newMapFunctionRef = useRef(null)
+    const addNodeFunctionRef = useRef(null)
+    const [nodeMenuOn, setNodeMenuOn] = useState(false)
+    const [nodeMenuPosition, setNodeMenuPosition] = useState({x: 0, y: 0,})
+
+    const [selectOptionData, setSelectOptionData] = useState({})
 
     useEffect(() => {
         let renderer, scene, camera
@@ -37,11 +43,12 @@ const ReviewSpace = () => {
             camera.position.set(-35, 45, 45);
             camera.lookAt(0,0,0);
 
-            objectManager = new ObjectManager(scene, camera, tripData);
+            objectManager = new ObjectManager(scene, camera, tripData, startnodeData);
             newMapFunctionRef.current = objectManager.newMap
-
-            objectManager.checkMapSave().then(()=> { inputManager = new InputManager(camera, scene) });
-            
+            objectManager.checkMapSave().then(()=> {
+                inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
+                addNodeFunctionRef.current = selectOption
+            });
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
         
@@ -79,6 +86,12 @@ const ReviewSpace = () => {
         }
     }
     
+    function onAddNodeButtonClick() {
+        if(addNodeFunctionRef.current) {
+            addNodeFunctionRef.current(selectOptionData);
+        }
+    }
+    
     return (<>
         <div style={{
             position:"fixed",
@@ -113,6 +126,37 @@ const ReviewSpace = () => {
         </div>
     <div>
         <canvas ref={canvasRef}></canvas>
+    </div>
+    <div
+    style={{
+        position: "fixed",
+        top: nodeMenuPosition.y,
+        left: nodeMenuPosition.x,
+        zIndex: 4,
+    }}
+    >
+        <Box
+            visibility={nodeMenuOn ? "visible" : "hidden"}
+            bgColor="white"
+            borderRadius="2px"
+            w="200px"
+            opacity={nodeMenuOn ? "0.8" : "0"}
+            transition="all 0.3s"
+        >
+            <Box fontWeight="bold">노드 정보</Box>
+            {selectOptionData.select_option && <Box>
+            {selectOptionData.select_option.userData.title}<br />
+            {selectOptionData.select_option.userData.tel}<br />
+            </Box>
+            }
+            <Button
+                onClick={onAddNodeButtonClick}
+                colorScheme="teal"
+                mb={2}
+            >
+                노드 추가
+            </Button>
+        </Box>
     </div>
     </>)
 }
