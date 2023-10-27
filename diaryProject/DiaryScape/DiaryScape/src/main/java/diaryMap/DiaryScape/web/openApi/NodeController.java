@@ -2,6 +2,8 @@ package diaryMap.DiaryScape.web.openApi;
 
 import diaryMap.DiaryScape.domain.obj3d.Obj3d;
 import diaryMap.DiaryScape.domain.obj3d.Obj3dRepository;
+import diaryMap.DiaryScape.web.openApi.metroModule.metroInfo;
+import diaryMap.DiaryScape.web.openApi.metroModule.metro_obj;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -18,10 +20,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
+import diaryMap.DiaryScape.web.openApi.metroModule.metroInfo.*;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -70,6 +72,7 @@ public class NodeController {
         //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 32, 2));//숙박
         //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 38, 2));//쇼핑
         //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 39, 2));//음식점
+        nodeDTOList.addAll(giveMetroInfo(searchMapX, searchMapY, paraMap.get("mapId"), 50));//지하철
 
         //nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 12, 2));//관광지
         nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
@@ -102,6 +105,37 @@ public class NodeController {
             returnjsonArray.put(tempjsonObject);
         }
         return returnjsonArray.toString();
+    }
+
+    private List<NodeDTO> giveMetroInfo(String searchMapX, String searchMapY, String mapId, int contentTypeid) {
+
+        metroInfo me = new metroInfo();
+        ArrayList<metro_obj> metroarr = me.getSpecificJsonMetroDataObject(searchMapY, searchMapX, "2000");
+//20000은 20km인데 근처 지하철 너무 많이떠서 2000 2km으로 재설정함.
+
+
+
+        String startX = "0";
+        String startY = "0";
+
+        Optional<Obj3d> findObj = obj3dRepository.findById(mapId);
+        if (findObj.isPresent()){
+            startX = findObj.get().getStartNode().getMapx();
+            startY = findObj.get().getStartNode().getMapy();
+        }
+        List<NodeDTO> returnArr = new ArrayList<>();//longitude 경도 127도 mapX
+        for (int i=0;i<metroarr.size();i++){
+            returnArr.add(
+                    new NodeDTO
+                    (
+                            metroarr.get(i).getCode(), "50",
+                            metroarr.get(i).getLine() + " " + metroarr.get(i).getName(), "noetel",
+                            metroarr.get(i).getLng(), metroarr.get(i).getLat(),
+                            calRelativeX(startX, metroarr.get(i).getLng()), calRelativeX(startY, metroarr.get(i).getLat()),
+                    metroarr.get(i).getLine() + " " + metroarr.get(i).getName())
+            );
+        }
+        return returnArr;
     }
 
     public List<NodeDTO> giveMetourDestination(String searchMapX, String searchMapY, String mapId, int contentTypeId, int numOfSearch) throws IOException {
