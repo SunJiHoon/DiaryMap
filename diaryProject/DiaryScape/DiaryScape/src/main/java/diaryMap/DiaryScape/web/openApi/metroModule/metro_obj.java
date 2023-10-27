@@ -12,4 +12,5 @@ class metro_obj{
     private String code;
     private String lat;
     private String lng;
+    //
 }

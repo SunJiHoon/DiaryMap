@@ -1,5 +1,6 @@
 package diaryMap.DiaryScape.web.openApi.metroModule;
 
+import diaryMap.DiaryScape.web.openApi.metroModule.metro_obj;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.json.JSONArray;
