@@ -68,15 +68,15 @@ public class NodeController {
         nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 12, 2));//관광지
 
         nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 15, 2));//축제공연행사
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 25, 2));//여행코스
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 28, 2));//레포츠
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 32, 2));//숙박
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 38, 2));//쇼핑
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 39, 2));//음식점
+        //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 15, 2));//축제공연행사
+        //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 25, 2));//여행코스
+        //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 28, 2));//레포츠
+        //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 32, 2));//숙박
+        //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 38, 2));//쇼핑
+        //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 39, 2));//음식점
         //nodeDTOList.addAll(giveMetroInfo(searchMapX, searchMapY, paraMap.get("mapId"), 50));//지하철
 
-        /*
+
 
         nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 12, 2));//관광지
         nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
@@ -86,7 +86,7 @@ public class NodeController {
         nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 32, 2));//숙박
         nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 38, 2));//쇼핑
         nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 39, 2));//음식점
- */
+
 
 
         JSONArray returnjsonArray = new JSONArray();
