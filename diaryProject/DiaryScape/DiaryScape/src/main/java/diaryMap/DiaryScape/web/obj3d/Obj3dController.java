@@ -396,4 +396,5 @@ class NodeDTO_for_update{
     private String relativeX;
     private String relativeY;
     private String addr1;
+
 }
