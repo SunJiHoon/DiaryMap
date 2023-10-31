@@ -44,6 +44,7 @@ const MyTripmap = () => {
 
     const [reviewData, setReviewData] = useState([])
     const [newReviewValue, setNewReviewValue] = useState([])
+    const [newReviewDateValue, setNewReviewDateValue] = useState([])
     const [searchValue, setSearchValue] = useState('')
     const [searchResultData, setSearchResultData] = useState([])
     const [startNodeSelected, setStartNodeSelected] = useState(false)
@@ -54,6 +55,10 @@ const MyTripmap = () => {
     const onNewReviewChange = useCallback((e) => {
         setNewReviewValue(e.target.value)
     }, [])
+
+    const onNewReviewDateChange = (e) => {
+        setNewReviewDateValue(e.target.value)
+    }
 
     let source
     const onSearch = ((e) => {
@@ -106,6 +111,7 @@ const MyTripmap = () => {
             mapId: review.mapId,
             startX: review.mapX,
             startY: review.mapY,
+            date: review.date,
         }))
         dispatch(selectStartnode({
             reviewtitle: review.reviewtitle,
@@ -137,7 +143,9 @@ const MyTripmap = () => {
         const addr1Replaced = selectedData.addr1.replace(/ /g, "%20")
         const telReplaced = selectedData.tel.replace(/ /g, "%20")
         const titleReplaced = selectedData.title.replace(/ /g, "%20")
+        console.log(newReviewDateValue)
         client.post("/api/obj/create?mapName="+newReviewNameReplaced
+            +"&date="+newReviewDateValue
             +"&addr1="+addr1Replaced
             +"&relativeX="+selectedData.relativeX
             +"&relativeY="+selectedData.relativeY
@@ -185,11 +193,11 @@ const MyTripmap = () => {
 
     return (
     <Box p={6}>
-        <Heading as="h2" size="xl">
-            <Box display="inline" color="blue">{username}</Box>의 Trip Zone
+        <Heading as="h2" size="xl" mb={6}>
+            <Box display="inline" color="blue">{username}</Box>의 여행 리스트
         </Heading>
+        <Button colorScheme="teal" variant="outline" mb={6} onClick={() => dispatch(clearUser())}>로그아웃</Button>
         <Box>
-            <Heading as="h3" size="lg" mb={10}>여행 리뷰 맵 리스트</Heading>
 
             <Button w="60%" maxW={500} colorScheme="teal" onClick={onOpen} mb={10}>새 여행 작성</Button>
 
@@ -206,7 +214,8 @@ const MyTripmap = () => {
                         }}>
                             <Box display="flex" justifyContent="center">
                                 <Box display="flex" flexDirection="column" justifyContent="center" w="100%" maxW="500px" mt={2} mb={6}>
-                                <Input type="text" placeholder="새 여행 이름" value={newReviewValue} onChange={onNewReviewChange} mb={2}/>
+                                <Input type="text" placeholder="새 여행 이름" value={newReviewValue} onChange={onNewReviewChange} mb={2} />
+                                <Input type="date" value={newReviewDateValue} onChange={onNewReviewDateChange} mb={2} />
                                 <Box display="flex" mb={2}>
                                     <Input
                                         type="text"
@@ -275,7 +284,6 @@ const MyTripmap = () => {
                 </Box>
             </Box>
         </Box>
-        <Button colorScheme="teal" variant="outline" onClick={() => navigate("/")}>홈으로</Button>
     </Box>
     )
 }

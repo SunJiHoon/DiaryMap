@@ -42,9 +42,9 @@ const SignUpBox = () => {
     client.post("/api/register", body) //register
       .then((res) => {
         console.log(res.data)
-        if(res.data.code == 200) {
+        if(res.data.code==200) { // 회원가입 완료 문구 띄운 후 '홈으로' 버튼 누르면 돌아가게
           dispatch(loginUser(res.data.userInfo))
-          navigate("/map")
+          navigate("/")
         }
       })
   }

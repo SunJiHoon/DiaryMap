@@ -7,6 +7,7 @@ const tripSlice = createSlice({
         mapId: "",
         startX: 0,
         startY: 0,
+        date: 0,
     },
     reducers: {
         selectTrip: (state, action) => {
@@ -14,6 +15,7 @@ const tripSlice = createSlice({
         state.mapId = action.payload.mapId
         state.startX = action.payload.startX
         state.startY = action.payload.startY
+        state.date = action.payload.date
         return state
         },
         clearTrip: (state) => {
@@ -21,6 +23,7 @@ const tripSlice = createSlice({
         state.mapId = ""
         state.startX = 0
         state.startY = 0
+        state.date = 0
         return state
         },
     },
