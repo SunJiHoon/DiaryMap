@@ -39,7 +39,7 @@ class node {
       relativeX: Number(infos.relativeX),
       relativeY: Number(infos.relativeY),
       addr1: infos.addr1,
-      //visitData: infos.머시기
+      visitData: infos.visitData
     };
 
     // if(obj.userData.contentType == 50){
