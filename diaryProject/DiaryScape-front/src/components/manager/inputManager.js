@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
 import ObjectManager from "./objectManager";
-import NodePathManager from "./nodePathManager"
 
 let camera;
 let scene;
@@ -16,6 +15,7 @@ const objectManager = new ObjectManager();
 const raycaster = new THREE.Raycaster();
 
 let cur_state;
+//let cur_date;
 
 let cameraOrigin;
 
@@ -127,6 +127,7 @@ export const selectOption = (selectOptionDataState) => {
   objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY));
   objectManager.invisibleOptions(select_option);
 
+  select_option.userData.visitDate = "2023.11.01";//cur_date;
   character.userData.myNodes.push(select_option);
   objectManager.saveMyNodes();
 

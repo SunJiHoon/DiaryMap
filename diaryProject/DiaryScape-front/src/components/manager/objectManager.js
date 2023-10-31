@@ -61,7 +61,7 @@ class objectManager {
     player.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
     camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
-    //startNode.userData.
+    startNode.userData.visitDate = "2023.10.31"//tripData.startDate
     player.userData.myNodes.push(startNode);
     await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }

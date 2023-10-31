@@ -147,6 +147,8 @@ const ReviewSpace = () => {
             {selectOptionData.select_option && <Box>
             {selectOptionData.select_option.userData.title}<br />
             {selectOptionData.select_option.userData.tel}<br />
+            위치: {selectOptionData.select_option.userData.address} <br/>
+
             </Box>
             }
             <Button
