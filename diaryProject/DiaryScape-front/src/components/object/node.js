@@ -1,5 +1,4 @@
 import * as THREE from "three"
-import { Group } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { randInt } from "three/src/math/MathUtils";
 
@@ -40,11 +39,12 @@ class node {
       relativeX: Number(infos.relativeX),
       relativeY: Number(infos.relativeY),
       addr1: infos.addr1,
+      //visitData: infos.머시기
     };
 
-    if(obj.userData.contentType == 50){
-      tag = "subway";
-    }
+    // if(obj.userData.contentType == 50){
+    //   tag = "subway";
+    // }
 
     eventObj.scale.set(eventIdx[1], eventIdx[2], eventIdx[3]);
     obj.position.set(obj.userData.relativeX, 0, obj.userData.relativeY);

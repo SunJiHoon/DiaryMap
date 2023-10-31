@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
 import ObjectManager from "./objectManager";
+import NodePathManager from "./nodePathManager"
 
 let camera;
 let scene;
@@ -171,4 +172,3 @@ function move(targetPos) {
 }
 
 export default inputManager;
-//아랫쪽 보고 있을 때 아랫쪽 반대 방향 누르면 너무 많이 회전함

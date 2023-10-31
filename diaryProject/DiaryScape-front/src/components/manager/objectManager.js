@@ -4,13 +4,13 @@ import Player from "../object/player.js";
 import Node from "../object/node.js";
 import client from "../../utility/client.jsx";
 
-let scene;
-let camera;
-
 let cur_options = [];
-let tripData;
-let startNodeData;
-let player;
+
+var scene;
+var camera;
+var player;
+var tripData;
+var startNodeData;
 
 const originCameraPos = new THREE.Vector3(-35, 45, 45);
 
@@ -30,7 +30,7 @@ class objectManager {
       await this.initNode();
     }
     else if (isFirst.data == "modified") {
-      //await this.loadMyNodes();
+      // await this.loadMyNodes();//load 가능해지면 주석 풀기
       await this.initNode();
     }
   }
@@ -61,6 +61,7 @@ class objectManager {
     player.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
     camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
+    //startNode.userData.
     player.userData.myNodes.push(startNode);
     await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
