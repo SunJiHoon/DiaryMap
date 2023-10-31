@@ -49,8 +49,8 @@ public class Obj3dController {
         tempStartNode.setContentTypeId(paraMap.get("contentTypeId"));
         tempStartNode.setTel(paraMap.get("tel"));
         tempStartNode.setTitle(paraMap.get("title"));
-        tempStartNode.setMapx(paraMap.get("mapy"));
-        tempStartNode.setMapy(paraMap.get("mapx"));
+        tempStartNode.setMapx(paraMap.get("mapx"));
+        tempStartNode.setMapy(paraMap.get("mapy"));
         tempStartNode.setVisitDate(paraMap.get("date"));
 
 
@@ -196,7 +196,7 @@ public class Obj3dController {
     }
 
     //jsonArr를 날짜별로 그룹화해서 반환함
-    @GetMapping(value = "/obj/one/onlyMapJsonGroupByDate")
+    @GetMapping(value = "/obj/one/onlyMapJsonGroupByDate", produces = "application/json")
     public String getOneMapOnlyMapJsonGroupByDate(
             @RequestParam Map<String, String> paraMap
             //url+?키=value&키=value //John%20Doe
@@ -210,11 +210,31 @@ public class Obj3dController {
         if (findobj3d.isPresent()) {
             log.info("해당 id를 가진 map 발견");
             Obj3d actualObj3d = findobj3d.get();
-            //objJson = Arrays.toString((actualObj3d.getJsonArr()));
-            //mapJsonGroupByDateDTO
-            //objJson = objectMapper.writeValueAsString((actualObj3d.getJsonArr()));
             NodeDTO_for_update[] tempJsonArr = actualObj3d.getJsonArr();
 
+            String compareDate = "-1";
+            List<mapJsonGroupByDateDTO> mjgbddList = new ArrayList<>();
+            for(int i = 0; i < tempJsonArr.length; i++){
+                log.info(Integer.toString(i) + "번째");
+                log.info("크기 " + Integer.toString(mjgbddList.size()));
+                log.info(String.valueOf(compareDate.equals(tempJsonArr[i].getVisitDate())));
+                log.info(compareDate);
+                log.info(tempJsonArr[i].getVisitDate());
+                if (!compareDate.equals(tempJsonArr[i].getVisitDate())){
+                    //문자열이 다르면
+                    mapJsonGroupByDateDTO mjgbdd = new mapJsonGroupByDateDTO();
+                    mjgbdd.setVisitDate(tempJsonArr[i].getVisitDate());
+                    compareDate = new String(tempJsonArr[i].getVisitDate());
+                    mjgbdd.setNodes(new ArrayList<>());
+                    mjgbdd.getNodes().add(tempJsonArr[i]);
+                    mjgbddList.add(mjgbdd);
+                }
+                else{//문자열이 같으면
+                    mapJsonGroupByDateDTO mjgbdd = mjgbddList.get(mjgbddList.size() -1);
+                    mjgbdd.getNodes().add(tempJsonArr[i]);
+                }
+            }
+            objJson = objectMapper.writeValueAsString(mjgbddList);
 
         } else {
             log.info("해당 id를 가진 map이 존재하지 않습니다.");
@@ -256,7 +276,6 @@ public class Obj3dController {
             trashDTO[] trashDTO_for_NodeDTOs_for_update = objectMapper.readValue(paramjsonArr_Value.getJsonArr(), trashDTO[].class);
             NodeDTO_for_update[] NodeDTOs_for_update = new NodeDTO_for_update[trashDTO_for_NodeDTOs_for_update.length];
 
-
             // trashDTO_for_NodeDTOs_for_update 배열을 NodeDTO_for_update 배열로 변환 및 복사
             for (int i = 0; i < trashDTO_for_NodeDTOs_for_update.length; i++) {
                 trashDTO sourceNodeDTO = trashDTO_for_NodeDTOs_for_update[i];
@@ -272,7 +291,7 @@ public class Obj3dController {
                 destinationNodeDTO.setRelativeX(sourceNodeDTO.getRelativeX());
                 destinationNodeDTO.setRelativeY(sourceNodeDTO.getRelativeY());
                 destinationNodeDTO.setAddr1(sourceNodeDTO.getAddr1());
-                destinationNodeDTO.setAddr1(sourceNodeDTO.getVisitDate());
+                destinationNodeDTO.setVisitDate(sourceNodeDTO.getVisitDate());
                 // 다른 필드 복사
                 NodeDTOs_for_update[i] = destinationNodeDTO;
             }

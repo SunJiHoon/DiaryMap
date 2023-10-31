@@ -67,7 +67,7 @@ public class NodeController {
         List<NodeDTO> nodeDTOList = new ArrayList<>();
         nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 12, 2));//관광지
 
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
+        //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
         //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 15, 2));//축제공연행사
         //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 25, 2));//여행코스
         //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 28, 2));//레포츠
@@ -78,7 +78,7 @@ public class NodeController {
 
 
 
-        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 12, 2));//관광지
+        //nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 12, 2));//관광지
         nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
         nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 15, 2));//축제공연행사
         nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 25, 2));//여행코스
@@ -146,6 +146,9 @@ public class NodeController {
     public List<NodeDTO> giveMetourDestination(String searchMapX, String searchMapY, String mapId, int contentTypeId, int numOfSearch) throws IOException {
         ///openApi/node?mapX=126.981611&mapY=37.568477&radius=100000&contentTypeId=관광지
         URL url = new URL(makeApiQuery(numOfSearch,1,
+                Double.parseDouble(searchMapX), Double.parseDouble(searchMapY),
+                10000, contentTypeId));
+        log.info(makeApiQuery(numOfSearch,1,
                 Double.parseDouble(searchMapX), Double.parseDouble(searchMapY),
                 10000, contentTypeId));
         String line;
