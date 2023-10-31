@@ -114,6 +114,7 @@ const ReviewSpace = () => {
                 mt={4}
             >
             <p>tripData.title : {tripData.title}</p>
+            <p>tripData.date : {tripData.date}</p>
             <p>tripData.mapId : {tripData.mapId}</p>
             <p>tripData.startX : {tripData.startX}</p>
             <p>tripData.startY : {tripData.startY}</p>

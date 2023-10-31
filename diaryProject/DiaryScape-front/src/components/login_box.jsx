@@ -42,7 +42,6 @@ const LoginBox = () => {
       .then((res) => {
         console.log(res.data)
         dispatch(loginUser(res.data))
-        navigate("/my_tripmap")
       })
   }
 
@@ -50,11 +49,11 @@ const LoginBox = () => {
       <Box
         w={300}
       >
-        { username && <><p>{username}로 로그인함</p> <button onClick={clearUser}>로그아웃</button></> }
+        { username && <><p>{username}로 로그인함</p> <button onClick={() => dispatch(clearUser())}>로그아웃</button></> }
         <form onSubmit={handleLogin}>
           <Input type="text" placeholder="ID" value={loginId} onChange={(e) => setId(e.target.value)} />
           <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} mt={2} />
-          <Button w={300} type="submit" colorScheme="teal" mt={2}>로그인</Button>
+          <Button w={300} type="submit" colorScheme="teal" mt={4}>로그인</Button>
         </form>
       </Box>
   </>)
