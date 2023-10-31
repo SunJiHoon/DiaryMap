@@ -18,4 +18,5 @@ public class titleData_DTO {
     private String relativeX;
     private String relativeY;
     private String addr1;
+    private String visitDate;
 }

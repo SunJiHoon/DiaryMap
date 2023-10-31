@@ -1,8 +1,6 @@
 package diaryMap.DiaryScape.web.obj3d;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import diaryMap.DiaryScape.domain.member.Member;
 import diaryMap.DiaryScape.domain.member.MemberMongoRepository;
@@ -13,8 +11,6 @@ import diaryMap.DiaryScape.web.openApi.NodeDTO;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -31,17 +27,6 @@ public class Obj3dController {
     private final Obj3dRepository obj3dRepository;
     private final MemberMongoRepository memberMongoRepository;
 
-    /*
-    const ToDoListHandler = () => {
-    axios.get('https://localhost:4000/sendlist/todo',
-      {userId: userId},
-      { withCredentials: true }
-    )
-    .then((res)=> {
-      setToDoList(res.data.data)
-    })
-  }
-  */
     @PostMapping("/obj/create")// obj/create?mapName=척척박사//postMapping도 가능하다.
     public String createNewObj(
             @RequestParam Map<String, String> paraMap,//url+?키=value&키=value //John%20Doe
@@ -56,7 +41,7 @@ public class Obj3dController {
         //obj3d1.setJsonArr();
         //obj3d1.setStartX(paraMap.get("x"));
         //obj3d1.setStartY(paraMap.get("y"));
-        NodeDTO tempStartNode = new NodeDTO();
+        NodeDTO_for_update tempStartNode = new NodeDTO_for_update();
         tempStartNode.setAddr1(paraMap.get("addr1"));
         tempStartNode.setRelativeY(paraMap.get("relativeY"));
         tempStartNode.setRelativeX(paraMap.get("relativeX"));
@@ -64,8 +49,11 @@ public class Obj3dController {
         tempStartNode.setContentTypeId(paraMap.get("contentTypeId"));
         tempStartNode.setTel(paraMap.get("tel"));
         tempStartNode.setTitle(paraMap.get("title"));
-        tempStartNode.setMapy(paraMap.get("mapy"));
-        tempStartNode.setMapx(paraMap.get("mapx"));
+        tempStartNode.setMapx(paraMap.get("mapy"));
+        tempStartNode.setMapy(paraMap.get("mapx"));
+        tempStartNode.setVisitDate(paraMap.get("date"));
+
+
         obj3d1.setStartNode(tempStartNode);
 
         LocalDateTime currentTime = LocalDateTime.now();
@@ -105,20 +93,6 @@ public class Obj3dController {
             // Member 객체를 찾지 못한 경우의 처리
             // 예를 들어, 오류 처리 또는 다른 작업을 수행
         }
-        /*
-        List<Member> findmemberlist = memberMongoRepository.findByName("3");
-        if (findmemberlist.size() > 0) {
-            if(findmemberlist.get(0).getObj3dArrayList() == null){
-                findmemberlist.get(0).setObj3dArrayList(new ArrayList<>());
-                findmemberlist.get(0).getObj3dArrayList().add(obj3d1);
-                memberMongoRepository.save(findmemberlist.get(0));
-            }
-            else{
-                findmemberlist.get(0).getObj3dArrayList().add(obj3d1);
-                memberMongoRepository.save(findmemberlist.get(0));
-            }
-        }
-*/
 
         log.info(paraMap.get("mapName"));
         log.info(cookie);
@@ -131,17 +105,12 @@ public class Obj3dController {
     ) {
         ObjectMapper objectMapper = new ObjectMapper();
         List<titleData_DTO> titleDataDtos = new ArrayList<>();
-        //mapDataDtos.add(new mapData_DTO("title1","id1"));
-        //mapDataDtos.add(new mapData_DTO("title2","id2"));
 
-        //log.info(cookie);
         Optional<Member> loginMember = memberMongoRepository.findById(cookie);
 
         if (loginMember.isPresent()) {
             Member actualMember = loginMember.get();
             for (int i = 0; i < actualMember.getObj3dArrayList().size(); i++) {
-                //log.info(actualMember.getObj3dArrayList().get(i).getObjName());
-                //log.info(actualMember.getObj3dArrayList().get(i).getId());
                 titleDataDtos.add(
                         new titleData_DTO(
                                 actualMember.getObj3dArrayList().get(i).getObjName(),
@@ -154,7 +123,8 @@ public class Obj3dController {
                                 actualMember.getObj3dArrayList().get(i).getStartNode().getMapy(),
                                 actualMember.getObj3dArrayList().get(i).getStartNode().getRelativeX(),
                                 actualMember.getObj3dArrayList().get(i).getStartNode().getRelativeY(),
-                                actualMember.getObj3dArrayList().get(i).getStartNode().getAddr1()
+                                actualMember.getObj3dArrayList().get(i).getStartNode().getAddr1(),
+                                actualMember.getObj3dArrayList().get(i).getStartNode().getVisitDate()
                         ));
             }
             log.info("로그인된 id에 해당하는 map 리스트 추출 완료.");
@@ -201,6 +171,7 @@ public class Obj3dController {
         return objJson;
     }
 
+    //jsonArr를 반환
     @GetMapping(value = "/obj/one/onlyMapJson", produces = "application/json")
     public String getOneMapOnlyMapJson(
             @RequestParam Map<String, String> paraMap
@@ -218,13 +189,32 @@ public class Obj3dController {
             //objJson = Arrays.toString((actualObj3d.getJsonArr()));
             objJson = objectMapper.writeValueAsString((actualObj3d.getJsonArr()));
 
-            /*
-            try {
-                //objJson = objectMapper.writeValueAsString(actualObj3d.getSceneJSON());
-            } catch (JsonProcessingException e) {
-                //throw new RuntimeException(e);
-            }
-            */
+        } else {
+            log.info("해당 id를 가진 map이 존재하지 않습니다.");
+        }
+        return objJson;
+    }
+
+    //jsonArr를 날짜별로 그룹화해서 반환함
+    @GetMapping(value = "/obj/one/onlyMapJsonGroupByDate")
+    public String getOneMapOnlyMapJsonGroupByDate(
+            @RequestParam Map<String, String> paraMap
+            //url+?키=value&키=value //John%20Doe
+    ) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String queryMapId = paraMap.get("mapId");
+        Optional<Obj3d> findobj3d = obj3dRepository.findById(queryMapId);
+
+        String objJson = "{}";
+        if (findobj3d.isPresent()) {
+            log.info("해당 id를 가진 map 발견");
+            Obj3d actualObj3d = findobj3d.get();
+            //objJson = Arrays.toString((actualObj3d.getJsonArr()));
+            //mapJsonGroupByDateDTO
+            //objJson = objectMapper.writeValueAsString((actualObj3d.getJsonArr()));
+            NodeDTO_for_update[] tempJsonArr = actualObj3d.getJsonArr();
+
 
         } else {
             log.info("해당 id를 가진 map이 존재하지 않습니다.");
@@ -232,50 +222,6 @@ public class Obj3dController {
         return objJson;
     }
 
-    //sceneJson 분석용
-    /*
-    @GetMapping(value = "/obj/one/onlyMapJson/parse", produces = "application/json")
-    public String getOneMapOnlyMapJsonParse(
-            @RequestParam Map<String, String> paraMap
-            //url+?키=value&키=value //John%20Doe
-    ) {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        String queryMapId = paraMap.get("mapId");
-        Optional<Obj3d> findobj3d = obj3dRepository.findById(queryMapId);
-
-
-        String objJson = "{}";
-        if (findobj3d.isPresent()) {
-            log.info("해당 id를 가진 map 발견");
-            Obj3d actualObj3d = findobj3d.get();
-            objJson = (actualObj3d.getSceneJSON());
-        } else {
-            log.info("해당 id를 가진 map이 존재하지 않습니다.");
-        }
-
-        JSONObject jsonObject = new JSONObject(objJson);
-        // "items" 객체 안에 있는 "item" 배열을 추출
-        JSONArray childrenArr = jsonObject.getJSONObject("object")
-                .getJSONArray("children");
-//                .getJSONObject("items");
-        //JSONArray itemArray = items.getJSONArray("item");
-
-        JSONObject actualObject = null;
-
-        for (int i = 0; i < childrenArr.length(); i++) {
-            // JSON 객체로 변환
-            JSONObject provisoformyNode = childrenArr.getJSONObject(i);
-            // 특정 키를 가지고 있는지 확인
-            if (provisoformyNode.has("userData")) {
-                actualObject = provisoformyNode.getJSONObject("userData");
-                break;
-            }
-        }
-
-        return actualObject.getJSONArray("myNode").toString();
-    }
-*/
     @PostMapping(value = "/obj/update")
     public String updateOneMap(
             @RequestParam Map<String, String> paraMap,
@@ -306,19 +252,16 @@ public class Obj3dController {
             ObjectMapper objectMapper = new ObjectMapper();
 
             log.info(paramjsonArr_Value.getJsonArr());
-            NodeDTO_for_update[] NodeDTOs_for_update = objectMapper.readValue(paramjsonArr_Value.getJsonArr(), NodeDTO_for_update[].class);
-/*
-            JsonNode rootNode = objectMapper.readTree(paramjsonArr_Value.getJsonArr());
-            JsonNode jsonArrNode = rootNode.get("jsonArr");
-            log.info(jsonArrNode.toString());
-            NodeDTO_for_update[] NodeDTOs_for_update = objectMapper.readValue(jsonArrNode.toString(), NodeDTO_for_update[].class);
- */
-            NodeDTO[] NodeDTOs = new NodeDTO[NodeDTOs_for_update.length];
-            // NodeDTO_for_update 배열을 NodeDTO 배열로 변환 및 복사
-            for (int i = 0; i < NodeDTOs_for_update.length; i++) {
-                NodeDTO_for_update sourceNodeDTO = NodeDTOs_for_update[i];
+            //NodeDTO_for_update[] NodeDTOs_for_update = objectMapper.readValue(paramjsonArr_Value.getJsonArr(), NodeDTO_for_update[].class);
+            trashDTO[] trashDTO_for_NodeDTOs_for_update = objectMapper.readValue(paramjsonArr_Value.getJsonArr(), trashDTO[].class);
+            NodeDTO_for_update[] NodeDTOs_for_update = new NodeDTO_for_update[trashDTO_for_NodeDTOs_for_update.length];
 
-                NodeDTO destinationNodeDTO = new NodeDTO();
+
+            // trashDTO_for_NodeDTOs_for_update 배열을 NodeDTO_for_update 배열로 변환 및 복사
+            for (int i = 0; i < trashDTO_for_NodeDTOs_for_update.length; i++) {
+                trashDTO sourceNodeDTO = trashDTO_for_NodeDTOs_for_update[i];
+
+                NodeDTO_for_update destinationNodeDTO = new NodeDTO_for_update();
 
                 destinationNodeDTO.setContentid(sourceNodeDTO.getContentID());
                 destinationNodeDTO.setContentTypeId(sourceNodeDTO.getContentType());
@@ -329,12 +272,13 @@ public class Obj3dController {
                 destinationNodeDTO.setRelativeX(sourceNodeDTO.getRelativeX());
                 destinationNodeDTO.setRelativeY(sourceNodeDTO.getRelativeY());
                 destinationNodeDTO.setAddr1(sourceNodeDTO.getAddr1());
+                destinationNodeDTO.setAddr1(sourceNodeDTO.getVisitDate());
                 // 다른 필드 복사
-                NodeDTOs[i] = destinationNodeDTO;
+                NodeDTOs_for_update[i] = destinationNodeDTO;
             }
 
-            actualObj3d.setJsonArr(NodeDTOs);
-            log.info(NodeDTOs.toString());
+            actualObj3d.setJsonArr(NodeDTOs_for_update);
+            log.info(NodeDTOs_for_update.toString());
             actualObj3d.setModifiedTime(formattedTime);
             log.info("저장수행");
             obj3dRepository.save(actualObj3d);
@@ -375,6 +319,7 @@ public class Obj3dController {
         return "mapId를 다시 확인해주세요";
     }
 
+
 }
 
 @Data
@@ -385,7 +330,7 @@ class jsonArr_Value{
 
 @Data
 @RequiredArgsConstructor
-class NodeDTO_for_update{
+class trashDTO{
     private String tag;
     private String contentID;
     private String contentType;
@@ -396,5 +341,11 @@ class NodeDTO_for_update{
     private String relativeX;
     private String relativeY;
     private String addr1;
-
+    private String visitDate;
+}
+@Data
+@RequiredArgsConstructor
+class mapJsonGroupByDateDTO{
+    private String visitDate;
+    private List<NodeDTO_for_update> nodes;
 }
