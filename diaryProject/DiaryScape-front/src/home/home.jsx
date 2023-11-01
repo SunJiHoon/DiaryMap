@@ -27,7 +27,7 @@ const Home = () => {
           </Box>
           <Box>
             <Link to="signup">
-              <Button colorScheme="teal" p={2} w={300}>
+              <Button colorScheme="teal" p={2} w={300} boxShadow="md">
                 회원가입
               </Button>
             </Link>

@@ -55,10 +55,10 @@ const SignUpBox = () => {
       >
         { username && <p>logined as {username}</p> }
         <form onSubmit={handleLogin}>
-          <Input type="text" placeholder="ID" value={loginId} onChange={(e) => setId(e.target.value)} />
-          <Input type="text" placeholder="Username" mt={2} value={name} onChange={(e) => setUsername(e.target.value)} />
-          <Input type="password" placeholder="Password" mt={2} value={password} onChange={(e) => setPassword(e.target.value)} />
-          <Button w={300} type="submit" colorScheme="teal" mt={2}>회원가입</Button>
+          <Input type="text" placeholder="ID" value={loginId} onChange={(e) => setId(e.target.value)} boxShadow="md" />
+          <Input type="text" placeholder="Username" mt={2} value={name} onChange={(e) => setUsername(e.target.value)} boxShadow="md" />
+          <Input type="password" placeholder="Password" mt={2} value={password} onChange={(e) => setPassword(e.target.value)} boxShadow="md" />
+          <Button w={300} type="submit" colorScheme="teal" mt={2} boxShadow="md">회원가입</Button>
           
         </form>
       </Box>

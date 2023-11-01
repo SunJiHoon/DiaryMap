@@ -16,7 +16,7 @@ const SignUp = () => {
             >
                 <SignUpBox />
                 <Link to='/'>
-                    <Button mt={2} w={300} colorScheme="teal" variant="outline">
+                    <Button mt={2} w={300} colorScheme="teal" variant="outline" boxShadow="md">
                         뒤로가기
                     </Button>
                 </Link>

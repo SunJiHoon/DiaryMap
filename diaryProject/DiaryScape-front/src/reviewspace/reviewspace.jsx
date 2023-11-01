@@ -20,7 +20,7 @@ const ReviewSpace = () => {
     const [selectOptionData, setSelectOptionData] = useState({})
 
     const [dayMenuOpen, setDayMenuOpenk] = useState([false])
-    
+
     useEffect(() => {
         let renderer, scene, camera
         
@@ -110,16 +110,15 @@ const ReviewSpace = () => {
                 border={1}
                 borderRadius={4}
                 borderColor="gray"
-                // backdropFilter="auto"
-                // backdropBlur="8px"
                 display="flex"
                 flexDirection="column"
                 alignItems="flex-start"
                 marginLeft="1.6em"
+                boxShadow="2xl"
             >
                 <Box>
                     <Link to="/">
-                        <Button colorScheme="teal">홈 화면으로</Button>
+                        <Button colorScheme="gray">홈 화면으로</Button>
                     </Link>
                 </Box>
                 <Box mt={4}>
@@ -158,9 +157,8 @@ const ReviewSpace = () => {
                 border={1}
                 borderRadius={4}
                 borderColor="gray"
-                // backdropFilter="auto"
-                // backdropBlur="8px"
                 textAlign="left"
+                boxShadow="2xl"
             >
                 <Box
                     display="flex"
