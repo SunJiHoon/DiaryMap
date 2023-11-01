@@ -5,7 +5,7 @@ import { useRef, useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
 import { Box, Button } from '@chakra-ui/react'
 import { useSelector } from "react-redux";
-
+import { Checkbox } from "@chakra-ui/react";
 const ReviewSpace = () => {
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
@@ -19,6 +19,8 @@ const ReviewSpace = () => {
 
     const [selectOptionData, setSelectOptionData] = useState({})
 
+    const [dayMenuOpen, setDayMenuOpenk] = useState([false])
+    
     useEffect(() => {
         let renderer, scene, camera
         
@@ -97,32 +99,76 @@ const ReviewSpace = () => {
             position:"fixed",
             top:"0",
             left:"0",
-            zIndex:"2"
+            zIndex:"2",
         }}>
             <Box
-                ml={4}
                 mt={4}
-            >
-                <Link to="/">
-                    <Button colorScheme="teal">홈으로 돌아가기</Button>
-                </Link>
-            </Box>
-            <Box
+                p={4}
+                w="200px"
+                minH="300px"
+                bgColor="#ffffff"
+                border={1}
+                borderRadius={4}
+                borderColor="gray"
+                // backdropFilter="auto"
+                // backdropBlur="8px"
                 display="flex"
                 flexDirection="column"
-                ml={4}
-                mt={4}
+                alignItems="flex-start"
+                marginLeft="1.6em"
             >
-            <p>tripData.title : {tripData.title}</p>
-            <p>tripData.date : {tripData.date}</p>
-            <p>tripData.mapId : {tripData.mapId}</p>
-            <p>tripData.startX : {tripData.startX}</p>
-            <p>tripData.startY : {tripData.startY}</p>
+                <Box>
+                    <Link to="/">
+                        <Button colorScheme="teal">홈 화면으로</Button>
+                    </Link>
+                </Box>
+                <Box mt={4}>
+                    <Button onClick={onResetButtonClick} colorScheme="blue">
+                        reset
+                    </Button>
+                </Box>
+                <Box
+                    mt={4}
+                    textAlign="left"
+                >
+                <p>tripData.title : {tripData.title}</p>
+                <p>tripData.date : {tripData.date}</p>
+                <p>tripData.mapId : {tripData.mapId}</p>
+                <p>tripData.startX : {tripData.startX}</p>
+                <p>tripData.startY : {tripData.startY}</p>
+                </Box>
             </Box>
-            <Box>
-                <Button onClick={onResetButtonClick}>
-                    reset
-                </Button>
+        </div>
+        <div style={{
+            position:"fixed",
+            top:"0",
+            right:"0",
+            zIndex:"2",
+            display:"flex",
+            flexDirection:"column",
+            alignItems:"flex-start",
+            marginRight:"1.6em",
+        }}>
+            <Box
+                mt={4}
+                p={4}
+                w="240px"
+                minH="300px"
+                bgColor="#ffffff"
+                border={1}
+                borderRadius={4}
+                borderColor="gray"
+                // backdropFilter="auto"
+                // backdropBlur="8px"
+                textAlign="left"
+            >
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                >
+                <Box fontSize="2xl">Day1</Box>
+                <Checkbox defaultChecked></Checkbox>
+                </Box>
             </Box>
         </div>
     <div>
