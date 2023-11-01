@@ -3,9 +3,11 @@ import InputManager, { selectOption } from "../components/manager/inputManager";
 import ObjectManager from "../components/manager/objectManager";
 import { useRef, useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
-import { Box, Button } from '@chakra-ui/react'
+import { Box, Button, IconButton } from '@chakra-ui/react'
 import { useSelector } from "react-redux";
 import { Checkbox } from "@chakra-ui/react";
+import { IoChevronDown, IoRemove } from "react-icons/io5"
+
 const ReviewSpace = () => {
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
@@ -19,6 +21,7 @@ const ReviewSpace = () => {
 
     const [selectOptionData, setSelectOptionData] = useState({})
 
+    const [debugMenuOpen, setDebugMenuOpen] = useState(false)
     const [dayMenuOpen, setDayMenuOpenk] = useState([false])
 
     useEffect(() => {
@@ -104,12 +107,11 @@ const ReviewSpace = () => {
             <Box
                 mt={4}
                 p={4}
-                w="200px"
-                minH="300px"
+                w="240px"
                 bgColor="#ffffff"
-                border={1}
+                borderWidth={1}
                 borderRadius={4}
-                borderColor="gray"
+                borderColor="gray.300"
                 display="flex"
                 flexDirection="column"
                 alignItems="flex-start"
@@ -126,15 +128,47 @@ const ReviewSpace = () => {
                         reset
                     </Button>
                 </Box>
+
                 <Box
-                    mt={4}
-                    textAlign="left"
+                    borderTop="1px"
+                    borderBottom="1px"
+                    borderColor="gray.300"
+                    // boxShadow="md"
+                    mt={6}
+                    p={2}
+                    w="100%"
                 >
-                <p>tripData.title : {tripData.title}</p>
-                <p>tripData.date : {tripData.date}</p>
-                <p>tripData.mapId : {tripData.mapId}</p>
-                <p>tripData.startX : {tripData.startX}</p>
-                <p>tripData.startY : {tripData.startY}</p>
+                    <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="space-between"
+                    >
+                        <Box fontWeight="semibold">디버그 출력</Box>
+                        <IconButton
+                            variant="ghost"
+                            colorScheme="blackAlpha"
+                            size="sm"
+                            icon={debugMenuOpen ? <IoRemove /> : <IoChevronDown />}
+                            onClick={() => setDebugMenuOpen(!debugMenuOpen)}
+                        >
+                            열기
+                        </IconButton>
+                    </Box>
+                    <Box
+                        textAlign="left"
+                        visibility={debugMenuOpen ? "visible" : "hidden"}
+                        opacity={debugMenuOpen ? "1" : "0"}
+                        maxH={debugMenuOpen ? "100vh" : "0vh"}
+                        mt={debugMenuOpen ? 2 : 0}
+                        overflowX="auto"
+                        transition="all 0.6s ease-in-out"
+                    >
+                        <p>tripData.title : {tripData.title}</p>
+                        <p>tripData.date : {tripData.date}</p>
+                        <p>tripData.mapId : {tripData.mapId}</p>
+                        <p>tripData.startX : {tripData.startX}</p>
+                        <p>tripData.startY : {tripData.startY}</p>
+                    </Box>
                 </Box>
             </Box>
         </div>
