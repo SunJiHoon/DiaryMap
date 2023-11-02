@@ -7,8 +7,12 @@ import { Box, Button, IconButton } from '@chakra-ui/react'
 import { useSelector } from "react-redux";
 import { Checkbox } from "@chakra-ui/react";
 import { IoChevronDown, IoRemove } from "react-icons/io5"
+import { useNavigate } from "react-router-dom";
+
+let nextDayMenuId = 2
 
 const ReviewSpace = () => {
+    const navigate = useNavigate()
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
     const startnodeData = useSelector((state) => state.startnode)
@@ -17,16 +21,17 @@ const ReviewSpace = () => {
     const newMapFunctionRef = useRef(null)
     const addNodeFunctionRef = useRef(null)
     const [nodeMenuOn, setNodeMenuOn] = useState(false)
-    const [nodeMenuPosition, setNodeMenuPosition] = useState({x: 0, y: 0,})
+    const [nodeMenuPosition, setNodeMenuPosition] = useState({ x: 0, y: 0, })
 
     const [selectOptionData, setSelectOptionData] = useState({})
 
     const [debugMenuOpen, setDebugMenuOpen] = useState(false)
-    const [dayMenuOpen, setDayMenuOpenk] = useState([false])
+    const [dayMenuOpenList, setDayMenuOpenList] = useState([false, false])
+    const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: "day1 data" }])
 
     useEffect(() => {
         let renderer, scene, camera
-        
+
         let inputManager
         async function init() {
             scene = new THREE.Scene();
@@ -46,17 +51,17 @@ const ReviewSpace = () => {
             );
             camera.rotation.y = Math.PI / 4;
             camera.position.set(-35, 45, 45);
-            camera.lookAt(0,0,0);
+            camera.lookAt(0, 0, 0);
 
             objectManager = new ObjectManager(scene, camera, tripData, startnodeData);
             newMapFunctionRef.current = objectManager.newMap
-            objectManager.checkMapSave().then(()=> {
+            objectManager.checkMapSave().then(() => {
                 inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
                 addNodeFunctionRef.current = selectOption
             });
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
-        
+
         init()
 
         window.addEventListener("resize", handleResize);
@@ -77,7 +82,7 @@ const ReviewSpace = () => {
         }
         anim();
 
-        
+
         return (() => {
             cancelAnimationFrame(req)
             window.removeEventListener("resize", handleResize)
@@ -86,23 +91,23 @@ const ReviewSpace = () => {
     }, [])
 
     function onResetButtonClick() {
-        if(newMapFunctionRef.current) {
+        if (newMapFunctionRef.current) {
             newMapFunctionRef.current("spongebob");
         }
     }
-    
+
     function onAddNodeButtonClick() {
-        if(addNodeFunctionRef.current) {
+        if (addNodeFunctionRef.current) {
             addNodeFunctionRef.current(selectOptionData);
         }
     }
-    
+
     return (<>
         <div style={{
-            position:"fixed",
-            top:"0",
-            left:"0",
-            zIndex:"2",
+            position: "fixed",
+            top: "0",
+            left: "0",
+            zIndex: "2",
         }}>
             <Box
                 mt={4}
@@ -119,9 +124,7 @@ const ReviewSpace = () => {
                 boxShadow="2xl"
             >
                 <Box>
-                    <Link to="/">
-                        <Button colorScheme="gray">홈 화면으로</Button>
-                    </Link>
+                    <Button colorScheme="gray" onClick={() => navigate("/")}>홈 화면으로</Button>
                 </Box>
                 <Box mt={4}>
                     <Button onClick={onResetButtonClick} colorScheme="blue">
@@ -150,9 +153,7 @@ const ReviewSpace = () => {
                             size="sm"
                             icon={debugMenuOpen ? <IoRemove /> : <IoChevronDown />}
                             onClick={() => setDebugMenuOpen(!debugMenuOpen)}
-                        >
-                            열기
-                        </IconButton>
+                        />
                     </Box>
                     <Box
                         textAlign="left"
@@ -173,14 +174,14 @@ const ReviewSpace = () => {
             </Box>
         </div>
         <div style={{
-            position:"fixed",
-            top:"0",
-            right:"0",
-            zIndex:"2",
-            display:"flex",
-            flexDirection:"column",
-            alignItems:"flex-start",
-            marginRight:"1.6em",
+            position: "fixed",
+            top: "0",
+            right: "0",
+            zIndex: "2",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            marginRight: "1.6em",
         }}>
             <Box
                 mt={4}
@@ -194,51 +195,110 @@ const ReviewSpace = () => {
                 textAlign="left"
                 boxShadow="2xl"
             >
-                <Box
-                    display="flex"
-                    justifyContent="space-between"
-                >
-                <Box fontSize="2xl">Day1</Box>
-                <Checkbox defaultChecked></Checkbox>
-                </Box>
+                {dayModuleList.map((dayModule) => (
+                    <Box key={dayModule.id} mb={6} pt={2} pb={2} borderTop="1px" borderBottom="1px" borderColor="gray.300">
+                        <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            mb={2}
+                        >
+                            <Box fontSize="2xl">Day {dayModule.id}</Box>
+                            <Checkbox defaultChecked></Checkbox>
+                        </Box>
+                        <Box
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="space-between"
+                        >
+                            <Box fontWeight="semibold">Day 정보</Box>
+                            <IconButton
+                                variant="ghost"
+                                colorScheme="blackAlpha"
+                                size="sm"
+                                icon={dayMenuOpenList[dayModule.id - 1] ? <IoRemove /> : <IoChevronDown />}
+                                onClick={(e) => {
+                                    const nextDayMenuOpenList = dayMenuOpenList.map((menuOpen, i) => {
+                                        if (i + 1 == dayModule.id) {
+                                            return !menuOpen
+                                        }
+                                        else {
+                                            return menuOpen
+                                        }
+                                    })
+                                    setDayMenuOpenList(nextDayMenuOpenList)
+                                }}
+                            />
+                        </Box>
+                        <Box
+                            textAlign="left"
+                            visibility={dayMenuOpenList[dayModule.id - 1] ? "visible" : "hidden"}
+                            opacity={dayMenuOpenList[dayModule.id - 1] ? "1" : "0"}
+                            maxH={dayMenuOpenList[dayModule.id - 1] ? "100vh" : "0vh"}
+                            mt={dayMenuOpenList[dayModule.id - 1] ? 1 : 0}
+                            overflowX="auto"
+                            transition="all 0.3s ease-in-out"
+                        >
+                            {dayModule.data}
+                        </Box>
+                    </Box>
+                ))}
+                <Button onClick={(e) => {
+                    setDayModuleList(
+                        [
+                            ...dayModuleList,
+                            { id: nextDayMenuId++, data: "day information", }
+                        ]
+                    )
+                    setDayMenuOpenList(
+                        [
+                            ...dayMenuOpenList,
+                            false
+                        ]
+                    )
+                }}>
+                    Day 추가
+                </Button>
             </Box>
         </div>
-    <div>
-        <canvas ref={canvasRef}></canvas>
-    </div>
-    <div
-    style={{
-        position: "fixed",
-        top: nodeMenuPosition.y,
-        left: nodeMenuPosition.x,
-        zIndex: 4,
-    }}
-    >
-        <Box
-            visibility={nodeMenuOn ? "visible" : "hidden"}
-            bgColor="white"
-            borderRadius="2px"
-            w="200px"
-            opacity={nodeMenuOn ? "0.8" : "0"}
-            transition="all 0.3s"
+        <div>
+            <canvas ref={canvasRef}></canvas>
+        </div>
+        <div
+            style={{
+                position: "fixed",
+                top: nodeMenuPosition.y,
+                left: nodeMenuPosition.x,
+                zIndex: 4,
+            }}
         >
-            <Box fontWeight="bold">노드 정보</Box>
-            {selectOptionData.select_option && <Box>
-            {selectOptionData.select_option.userData.title}<br />
-            {selectOptionData.select_option.userData.tel}<br />
-            위치: {selectOptionData.select_option.userData.address} <br/>
-
-            </Box>
-            }
-            <Button
-                onClick={onAddNodeButtonClick}
-                colorScheme="teal"
-                mb={2}
+            <Box
+                visibility={nodeMenuOn ? "visible" : "hidden"}
+                bgColor="white"
+                borderRadius="2px"
+                w="200px"
+                opacity={nodeMenuOn ? "1" : "0"}
+                boxShadow="2xl"
+                textAlign="left"
+                p={4}
+                transition="all .3s ease-in-out .05s"
             >
-                노드 추가
-            </Button>
-        </Box>
-    </div>
+                <Box fontWeight="bold">노드 정보</Box>
+                {selectOptionData.select_option && <Box>
+                    {selectOptionData.select_option.userData.title}<br />
+                    {selectOptionData.select_option.userData.tel}<br />
+                    위치: {selectOptionData.select_option.userData.address} <br />
+
+                </Box>
+                }
+                <Button
+                    onClick={onAddNodeButtonClick}
+                    colorScheme="teal"
+                    mt={2}
+                >
+                    노드 추가
+                </Button>
+            </Box>
+        </div>
     </>)
 }
 
