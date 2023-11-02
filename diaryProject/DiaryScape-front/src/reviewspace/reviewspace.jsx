@@ -3,9 +3,8 @@ import InputManager, { selectOption } from "../components/manager/inputManager";
 import ObjectManager from "../components/manager/objectManager";
 import { useRef, useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
-import { Box, Button, IconButton } from '@chakra-ui/react'
+import { Box, Button, IconButton, Checkbox, Select } from '@chakra-ui/react'
 import { useSelector } from "react-redux";
-import { Checkbox } from "@chakra-ui/react";
 import { IoChevronDown, IoRemove } from "react-icons/io5"
 import { useNavigate } from "react-router-dom";
 
@@ -26,8 +25,11 @@ const ReviewSpace = () => {
     const [selectOptionData, setSelectOptionData] = useState({})
 
     const [debugMenuOpen, setDebugMenuOpen] = useState(false)
-    const [dayMenuOpenList, setDayMenuOpenList] = useState([false, false])
+
     const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: "day1 data" }])
+    const [dayMenuOpenList, setDayMenuOpenList] = useState([false])
+    const [dayCheckedList, setDayCheckedList] = useState([true])
+    const [currentDay, setCurrentDay] = useState(nextDayMenuId - 1)
 
     useEffect(() => {
         let renderer, scene, camera
@@ -179,10 +181,29 @@ const ReviewSpace = () => {
             right: "0",
             zIndex: "2",
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
             alignItems: "flex-start",
             marginRight: "1.6em",
         }}>
+            <Box
+                mt={4}
+                p={4}
+                mr={4}
+                w="240px"
+                minH="30px"
+                bgColor="#ffffff"
+                border={1}
+                borderRadius={4}
+                borderColor="gray"
+                textAlign="left"
+                boxShadow="2xl"
+            >
+                <Select value={currentDay} onChange={(e) => setCurrentDay(e.target.value)}>
+                    {dayModuleList.map((dayModule) => (
+                        <option key={"option" + dayModule.id} value={dayModule.id} > Day {dayModule.id}</option>
+                    ))}
+                </Select>
+            </Box>
             <Box
                 mt={4}
                 p={4}
@@ -203,7 +224,16 @@ const ReviewSpace = () => {
                             mb={2}
                         >
                             <Box fontSize="2xl">Day {dayModule.id}</Box>
-                            <Checkbox defaultChecked></Checkbox>
+                            <Checkbox defaultChecked isChecked={dayCheckedList[dayModule.id - 1]} onChange={(e) => {
+                                const nextDayCheckedList = dayCheckedList.map((dayChecked, i) => {
+                                    if (i + 1 == dayModule.id) {
+                                        return !dayChecked
+                                    } else {
+                                        return dayChecked
+                                    }
+                                })
+                                setDayCheckedList(nextDayCheckedList)
+                            }}></Checkbox>
                         </Box>
                         <Box
                             display="flex"
@@ -246,7 +276,7 @@ const ReviewSpace = () => {
                     setDayModuleList(
                         [
                             ...dayModuleList,
-                            { id: nextDayMenuId++, data: "day information", }
+                            { id: nextDayMenuId, data: "day information", }
                         ]
                     )
                     setDayMenuOpenList(
@@ -255,11 +285,18 @@ const ReviewSpace = () => {
                             false
                         ]
                     )
+                    setDayCheckedList(
+                        [
+                            ...dayCheckedList,
+                            true
+                        ]
+                    )
+                    setCurrentDay(nextDayMenuId++)
                 }}>
                     Day 추가
                 </Button>
             </Box>
-        </div>
+        </div >
         <div>
             <canvas ref={canvasRef}></canvas>
         </div>
