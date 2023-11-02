@@ -3,6 +3,7 @@ import Map from "../object/map.js";
 import Player from "../object/player.js";
 import Node from "../object/node.js";
 import client from "../../utility/client.jsx";
+import DayManager from "./dayManager.js";
 
 let cur_options = [];
 
@@ -11,6 +12,7 @@ var camera;
 var player;
 var tripData;
 var startNodeData;
+var dayManager;
 
 const originCameraPos = new THREE.Vector3(-35, 45, 45);
 
@@ -24,6 +26,7 @@ class objectManager {
 
   async checkMapSave() {
     await this.newMap("spongebob");
+    dayManager = new DayManager();
 
     const isFirst = await client.get("/api/obj/isFirst?mapId=" + tripData.mapId);
     if (isFirst.data == "first") {
@@ -47,8 +50,8 @@ class objectManager {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambientLight);
 
-    const map = new Map();
-    scene.add(map.mesh);
+    const map = await new Map();
+    scene.add(map);
 
     const playerLoader = new Player();
     player = await playerLoader.loadGltf(characterName);
@@ -61,7 +64,7 @@ class objectManager {
     player.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
     camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
-    startNode.userData.visitDate = "2023.10.31"//tripData.startDate
+    startNode.userData.visitDate = "2023-10-31"//tripData.startDate
     player.userData.myNodes.push(startNode);
     await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
@@ -87,7 +90,6 @@ class objectManager {
   }
 
   saveMyNodes() {
-    console.log(player.userData.myNodes);
     let jsonArr = [];
     const size = player.userData.myNodes.length;
     for (let i = 0; i < size; i++) {
@@ -95,6 +97,7 @@ class objectManager {
     }
     jsonArr = JSON.stringify(jsonArr);
     client.post("/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
+    this.drawDay(dayManager.getCurDay());
   }
 
   async loadMyNodes() {
@@ -117,12 +120,31 @@ class objectManager {
     camera.position.set(nodeArr[size-1].relativeX + originCameraPos.x, 0 + originCameraPos.y, nodeArr[size-1].relativeY + originCameraPos.z);
   }
 
-  drawLine(startNode, endNode) {
+  async drawDay(dayIdx){
+    const res = await client.get("/api/obj/one/onlyMapJsonGroupByDate?mapId=" + tripData.mapId);
+    nodeArr = res.data[dayIdx];
+    const size = nodeArr.length;
+
+    if(size > 0){
+    const startNode = await new Node(nodeArr[0]);
+    scene.add(startNode);
+    }
+
+    for(var i=0;i<size-1;i++){
+      const nextNode = await new Node(nodeArr[i + 1]);
+      scene.add(nextNode);
+      this.drawLine(new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY),
+      new THREE.Vector3(nodeArr[i + 1].relativeX,0, nodeArr[i + 1].relativeY),
+      dayManager.getDayColor(dayIdx));
+    }
+  }
+
+  drawLine(startNode, endNode, dayColor) {
     const points = [];
     points.push(startNode);
     points.push(endNode);
     const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-    const lineMaterial = new THREE.LineBasicMaterial();
+    const lineMaterial = new THREE.LineBasicMaterial({color: dayColor});
     const line = new THREE.Line(lineGeometry, lineMaterial);
     scene.add(line);
   }

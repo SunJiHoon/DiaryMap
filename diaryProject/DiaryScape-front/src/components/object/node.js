@@ -39,7 +39,7 @@ class node {
       relativeX: Number(infos.relativeX),
       relativeY: Number(infos.relativeY),
       addr1: infos.addr1,
-      visitData: infos.visitData
+      visitDate: infos.visitDate
     };
 
     // if(obj.userData.contentType == 50){

@@ -15,7 +15,6 @@ const objectManager = new ObjectManager();
 const raycaster = new THREE.Raycaster();
 
 let cur_state;
-//let cur_date;
 
 let cameraOrigin;
 
@@ -120,14 +119,13 @@ class inputManager {
 
 export const selectOption = (selectOptionDataState) => {
   const {character, select_option} = selectOptionDataState;
-  console.log(select_option);
   const cur_node = character.userData.myNodes[character.userData.myNodes.length - 1];
 
   objectManager.drawLine(cur_node.position, select_option.position);
   objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY));
   objectManager.invisibleOptions(select_option);
 
-  select_option.userData.visitDate = "2023.11.01";//cur_date;
+  select_option.userData.visitDate = "2023-11-01";//cur_date;
   character.userData.myNodes.push(select_option);
   objectManager.saveMyNodes();
 
