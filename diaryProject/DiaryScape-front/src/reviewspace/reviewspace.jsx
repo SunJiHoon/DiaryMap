@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import InputManager, { selectOption } from "../components/manager/inputManager";
 import ObjectManager from "../components/manager/objectManager";
+import SaveManager from "../components/manager/saveManager";
 import { useRef, useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
 import { Box, Button, IconButton, Checkbox, Select } from '@chakra-ui/react'
@@ -15,7 +16,7 @@ const ReviewSpace = () => {
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
     const startnodeData = useSelector((state) => state.startnode)
-    let objectManager;
+    let objectManager, saveManager, inputManager;
 
     const newMapFunctionRef = useRef(null)
     const addNodeFunctionRef = useRef(null)
@@ -56,8 +57,10 @@ const ReviewSpace = () => {
             camera.lookAt(0, 0, 0);
 
             objectManager = new ObjectManager(scene, camera, tripData, startnodeData);
-            newMapFunctionRef.current = objectManager.newMap
-            objectManager.checkMapSave().then(() => {
+            await objectManager.newMap("spongebob");
+            newMapFunctionRef.current = objectManager.newMap;
+            saveManager = new SaveManager(tripData);
+            saveManager.checkIsFirst().then(()=> {
                 inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
                 addNodeFunctionRef.current = selectOption
             });

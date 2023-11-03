@@ -1,41 +1,77 @@
+import ObjectManager from "./objectManager";
+
 let instance;
+
+var objectManager;
 
 var cur_day = 0;
 var max_day = 0;
-var dayColor = [];
+var dayColor = ["blue"];//나중에 설정해주기
 
 var nodes = [];
 
 class dayManager{
     constructor(){
         if(instance){ return instance; }
-        this.colorList = ["red", "blue", "white", "black"]
+        this.colorList = ["blue", "red", "white", "black"]
+        var temp = [];
+        nodes.push(temp);
         instance = this;
     }
 
+    setObjectManager(_objectManager){
+        objectManager = _objectManager;
+    }
+
+    setNodes(_nodes){//saveManager에서 load할 때 넣어주기
+        nodes = _nodes;
+    }
+
     plusDay(){
+        var temp = [];
+        nodes.push(temp);
         max_day++;
         dayColor.push(this.colorList[max_day % this.colorList.length]);
     }
 
-    drawDay(dayIdx){
-
+    visibleDay(dayIdx){
+        const size = nodes[dayIdx].length;
+        for(let i =0;i<size;i++){
+            nodes[dayIdx][i].visible = true;
+        }
     }
 
-    eraseDay(dayIdx){
+    invisibleDay(dayIdx){
+        const size = nodes[dayIdx].length;
+        for(let i =0;i<size;i++){
+            nodes[dayIdx][i].visible = false;
+        }
+    }
 
+    plusDayNode(line, node){
+        nodes[cur_day].push(line);
+        nodes[cur_day].push(node);
     }
 
     removeDayNode(dayIdx, index){
-
+        objectManager.removeObject();
     }
 
     getCurDay(){
         return cur_day;
     }
 
-    getDayColor(){
+    getMaxDay(){
+        return max_day;
+    }
 
+    getDayColor(dayIdx){
+        return dayColor[dayIdx];
+    }
+
+    getNodes(dayIdx){
+        console.log(nodes[dayIdx]);
+        return nodes[dayIdx];
     }
 }
 

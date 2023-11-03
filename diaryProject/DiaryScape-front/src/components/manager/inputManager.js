@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
 import ObjectManager from "./objectManager";
+import DayManager from "./dayManager";
+import SaveManager from "./saveManager";
 
 let camera;
 let scene;
@@ -12,6 +14,7 @@ let selectOptionData;
 let setSelectOptionData;
 
 const objectManager = new ObjectManager();
+const dayManager = new DayManager();
 const raycaster = new THREE.Raycaster();
 
 let cur_state;
@@ -75,22 +78,25 @@ class inputManager {
       const pointer = new THREE.Vector2();
 
       pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-      pointer.y = -((event.clientY / window.innerHeight) * 2 - 1);  
+      pointer.y = -((event.clientY / window.innerHeight) * 2 - 1);
 
       raycaster.setFromCamera(pointer, camera);
 
-      const cur_node = character.userData.myNodes[character.userData.myNodes.length - 1];
+      const cur_day = dayManager.getCurDay();
+      const nodes = dayManager.getNodes(cur_day);
+      const index = nodes.length - 1;
+      const cur_node = nodes[index];
       const intersectObjects = raycaster.intersectObjects(scene.children);
 
       for (let i = 0; i < intersectObjects.length; i++) {
         if (intersectObjects[i].object.userData?.tag == "node") {
           select_option = intersectObjects[i].object;
-          setSelectOptionData({character, select_option})
+          setSelectOptionData({ character, select_option })
           if (cur_node == select_option) {
             break;
           }
           setNodeMenuOn(true)
-          setNodeMenuPosition({x:event.clientX, y:event.clientY})
+          setNodeMenuPosition({ x: event.clientX, y: event.clientY })
         }
       }
     }
@@ -99,35 +105,39 @@ class inputManager {
   // selectOption = () => {
   //   console.log(select_option);
   //   const cur_node = character.userData.myNodes[character.userData.myNodes.length - 1];
-  
+
   //   objectManager.drawLine(cur_node.position, select_option.position);
   //   objectManager.loadOptions(new THREE.Vector3(userData.mapX, 1, userData.mapY));
   //   objectManager.invisibleOptions(select_option);
-  
+
   //   character.userData.myNodes.push(select_option);
   //   objectManager.saveMyNodes();
-  
+
   //   const targetPos = new THREE.Vector3(
   //     select_option.position.x,
   //     1,
   //     select_option.position.z
   //   );
-  
+
   //   move(targetPos);
   // }
 }
 
 export const selectOption = (selectOptionDataState) => {
-  const {character, select_option} = selectOptionDataState;
-  const cur_node = character.userData.myNodes[character.userData.myNodes.length - 1];
+  const { character, select_option } = selectOptionDataState;
+  const cur_day = dayManager.getCurDay();
+  const nodes = dayManager.getNodes(cur_day);
+  const index = nodes.length - 1;
+  const cur_node = nodes[index];
 
-  objectManager.drawLine(cur_node.position, select_option.position);
+  const line = objectManager.drawLine(cur_node.position, select_option.position, dayManager.getDayColor(cur_day));
   objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY));
   objectManager.invisibleOptions(select_option);
 
   select_option.userData.visitDate = "2023-11-01";//cur_date;
-  character.userData.myNodes.push(select_option);
-  objectManager.saveMyNodes();
+  dayManager.plusDayNode(line, select_option);
+
+  // objectManager.saveMyNodes();
 
   const targetPos = new THREE.Vector3(
     select_option.position.x,

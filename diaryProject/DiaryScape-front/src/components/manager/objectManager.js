@@ -5,6 +5,8 @@ import Node from "../object/node.js";
 import client from "../../utility/client.jsx";
 import DayManager from "./dayManager.js";
 
+let instance;
+
 let cur_options = [];
 
 var scene;
@@ -12,7 +14,7 @@ var camera;
 var player;
 var tripData;
 var startNodeData;
-var dayManager;
+const dayManager = new DayManager();
 
 const originCameraPos = new THREE.Vector3(-35, 45, 45);
 
@@ -22,20 +24,7 @@ class objectManager {
     camera = _camera;
     tripData = _tripData;
     startNodeData = _startNodeData;
-  }
-
-  async checkMapSave() {
-    await this.newMap("spongebob");
-    dayManager = new DayManager();
-
-    const isFirst = await client.get("/api/obj/isFirst?mapId=" + tripData.mapId);
-    if (isFirst.data == "first") {
-      await this.initNode();
-    }
-    else if (isFirst.data == "modified") {
-      // await this.loadMyNodes();//load 가능해지면 주석 풀기
-      await this.initNode();
-    }
+    dayManager.setObjectManager(this);
   }
 
   newMap = async (characterName) => {
@@ -65,7 +54,7 @@ class objectManager {
     camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
     startNode.userData.visitDate = "2023-10-31"//tripData.startDate
-    player.userData.myNodes.push(startNode);
+    dayManager.plusDayNode(null, startNode);
     await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
 
@@ -77,7 +66,6 @@ class objectManager {
       cur_options.push(tempNode);
       scene.add(tempNode);
     }
-    console.log("end load nodes");
   }
 
   invisibleOptions(select_option) {
@@ -89,64 +77,75 @@ class objectManager {
     cur_options = [];
   }
 
-  saveMyNodes() {
-    let jsonArr = [];
-    const size = player.userData.myNodes.length;
-    for (let i = 0; i < size; i++) {
-      jsonArr.push(player.userData.myNodes[i].userData);
-    }
-    jsonArr = JSON.stringify(jsonArr);
-    client.post("/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
-    this.drawDay(dayManager.getCurDay());
+  removeObject(object){
+    scene.remove(object);
   }
 
-  async loadMyNodes() {
-    const res = await client.get("/api/obj/one?mapId=" + tripData.mapId);
-    const nodeArr = res.data.jsonArr;
-    player.userData.myNodes = nodeArr;
+  // saveMyNodes() {
+  //   let jsonArr = [];
+  //   const size = player.userData.myNodes.length;
+  //   for (let i = 0; i < size; i++) {
+  //     jsonArr.push(player.userData.myNodes[i].userData);
+  //   }
+  //   jsonArr = JSON.stringify(jsonArr);
+  //   client.post("/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
+  //   this.drawDay(dayManager.getCurDay());
+  // }
 
-    const startNode = await new Node(nodeArr[0]);
-    scene.add(startNode);
+  // async loadMyNodes() {
+  //   const res = await client.get("/api/obj/one?mapId=" + tripData.mapId);
+  //   const nodeArr = res.data.jsonArr;
+  //   player.userData.myNodes = nodeArr;
 
-    const size = res.data.jsonArr.length;
+  //   const startNode = await new Node(nodeArr[0]);
+  //   scene.add(startNode);
 
-    for (let i = 0; i < size - 1; i++) {
-      const nextNode = await new Node(nodeArr[i + 1]);
-      scene.add(nextNode);
-      this.drawLine(new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY), new THREE.Vector3(nodeArr[i + 1].relativeX, 0, nodeArr[i + 1].relativeY));
-    }
+  //   const size = res.data.jsonArr.length;
 
-    player.position.set(nodeArr[size-1].relativeX, 0, nodeArr[size-1].relativeY);
-    camera.position.set(nodeArr[size-1].relativeX + originCameraPos.x, 0 + originCameraPos.y, nodeArr[size-1].relativeY + originCameraPos.z);
-  }
+  //   for (let i = 0; i < size - 1; i++) {
+  //     const nextNode = await new Node(nodeArr[i + 1]);
+  //     scene.add(nextNode);
+  //     this.drawLine(new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY), new THREE.Vector3(nodeArr[i + 1].relativeX, 0, nodeArr[i + 1].relativeY));
+  //   }
+
+  //   player.position.set(nodeArr[size-1].relativeX, 0, nodeArr[size-1].relativeY);
+  //   camera.position.set(nodeArr[size-1].relativeX + originCameraPos.x, 0 + originCameraPos.y, nodeArr[size-1].relativeY + originCameraPos.z);
+  // }
 
   async drawDay(dayIdx){
     const res = await client.get("/api/obj/one/onlyMapJsonGroupByDate?mapId=" + tripData.mapId);
+    if(res.data.length < dayIdx){ console.log("day 없음"); return;}
     nodeArr = res.data[dayIdx];
     const size = nodeArr.length;
+    const dayColor = dayManager.getDayColor(dayIdx);
+
+    var objectArr = [];
 
     if(size > 0){
     const startNode = await new Node(nodeArr[0]);
     scene.add(startNode);
+    objectArr.push(startNode);
     }
 
     for(var i=0;i<size-1;i++){
       const nextNode = await new Node(nodeArr[i + 1]);
       scene.add(nextNode);
-      this.drawLine(new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY),
+      const line = this.drawLine(new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY),
       new THREE.Vector3(nodeArr[i + 1].relativeX,0, nodeArr[i + 1].relativeY),
-      dayManager.getDayColor(dayIdx));
+      dayColor);
+      objectArr.push(line); objectArr.push(nextNode);
     }
   }
 
-  drawLine(startNode, endNode, dayColor) {
+  drawLine(startNode, endNode, lineColor) {
     const points = [];
     points.push(startNode);
     points.push(endNode);
     const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-    const lineMaterial = new THREE.LineBasicMaterial({color: dayColor});
+    const lineMaterial = new THREE.LineBasicMaterial({color: lineColor});
     const line = new THREE.Line(lineGeometry, lineMaterial);
     scene.add(line);
+    return line;
   }
 }
 
