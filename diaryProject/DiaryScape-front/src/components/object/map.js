@@ -30,7 +30,7 @@ class map {
     this.initMap();
   }
   initMap(){
-    mapboxgl.accessToken = 'pk.eyJ1IjoiMHJ5dW5nIiwiYSI6ImNsb2k5NXg2NjFjYW4ybHJ3MHQ0c3U2c3QifQ.Xq5bPxVFzNOa3wjmYJVU4A';
+    //mapboxgl.accessToken = 'pk.eyJ1IjoiMHJ5dW5nIiwiYSI6ImNsb2k5NXg2NjFjYW4ybHJ3MHQ0c3U2c3QifQ.Xq5bPxVFzNOa3wjmYJVU4A';
     var map = new mapboxgl.Map({
       style: 'mapbox://styles/mapbox/light-v11',
       center: [-74.0066, 40.7135],
