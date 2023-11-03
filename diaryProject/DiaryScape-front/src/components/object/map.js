@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+/*import * as THREE from 'three';
 
 class Map {
   constructor() {
@@ -22,8 +22,8 @@ class Map {
 }
 
 export default Map;
-/*
-import * as mapboxgl from '../../../node_modules/mapbox-gl/dist/mapbox-gl.js';
+*/
+import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
 
 class map {
   constructor() {
@@ -90,8 +90,7 @@ class map {
         labelLayerId
       );
     });
-  }
+  }*/
 }
 
 export default map;
-*/
