@@ -17,10 +17,11 @@ const ReviewSpace = () => {
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
     const startnodeData = useSelector((state) => state.startnode)
-    let objectManager, saveManager, inputManager, dayMangaer;
+    let objectManager, saveManager, inputManager, dayManager;
 
     const newMapFunctionRef = useRef(null)
     const addNodeFunctionRef = useRef(null)
+    // const setStateDataRef = useRef(null)
     const [nodeMenuOn, setNodeMenuOn] = useState(false)
     const [nodeMenuPosition, setNodeMenuPosition] = useState({ x: 0, y: 0, })
 
@@ -60,8 +61,6 @@ const ReviewSpace = () => {
 
             objectManager = new ObjectManager(scene, camera, tripData, startnodeData);
             await objectManager.newMap("spongebob");
-            dayManager = new DayManager();
-            dayManager.setDayModuleList(dayModuleList);
             newMapFunctionRef.current = objectManager.newMap;
             saveManager = new SaveManager(tripData);
             saveManager.checkIsFirst().then(() => {
@@ -69,6 +68,9 @@ const ReviewSpace = () => {
                 addNodeFunctionRef.current = selectOption
             });
             renderer.setSize(window.innerWidth, window.innerHeight);
+            dayManager = new DayManager()
+            // setStateDataRef.current = dayManager.setStateData
+            dayManager.setStateData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
         }
 
         init()
@@ -98,6 +100,10 @@ const ReviewSpace = () => {
             inputManager?.cleanup()
         })
     }, [])
+
+    // if (setStateDataRef.current) {
+    //     setStateDataRef.current(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
+    // }
 
     function onResetButtonClick() {
         if (newMapFunctionRef.current) {
