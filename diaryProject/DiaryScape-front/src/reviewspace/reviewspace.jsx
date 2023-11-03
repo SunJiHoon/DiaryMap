@@ -107,22 +107,22 @@ const ReviewSpace = () => {
             },
             render: function (gl, matrix) {
                 this.renderer.render(this.scene, this.camera);
-                // window.addEventListener("resize", handleResize);
+                window.addEventListener("resize", handleResize);
 
-                // function handleResize() {
-                //     this.camera.aspect = window.innerWidth / window.innerHeight;
-                //     this.camera.updateProjectionMatrix();
+                function handleResize() {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
 
-                //     this.renderer.setSize(window.innerWidth, window.innerHeight);
-                //     this.renderer.render(this.scene, this.camera);
-                // }
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                    this.renderer.render(this.scene, this.camera);
+                }
 
-                // const anim = () => {
-                //     this.renderer.render(this.scene, this.camera);
+                const anim = () => {
+                    this.renderer.render(this.scene, this.camera);
 
-                //     req = requestAnimationFrame(anim);
-                // }
-                // anim();
+                    req = requestAnimationFrame(anim);
+                }
+                anim();
             }
         }
 
@@ -410,7 +410,8 @@ const ReviewSpace = () => {
                     position: "fixed",
                     top: nodeMenuPosition.y,
                     left: nodeMenuPosition.x,
-                    zIndex: 4,
+                    zIndex: nodeMenuOn ? 4 : -2,
+                    transition: "z-index .1s linear .4s"
                 }}
             >
                 <Box
