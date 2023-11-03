@@ -1,6 +1,6 @@
 import ObjectManager from "./objectManager";
 
-let instance;
+let instance = null;
 
 let objectManager;
 // let cur_day = 0;
@@ -11,16 +11,16 @@ var nodes = [];
 
 class DayManager {
     constructor(_dayModuleList,) {
-        if (instance) { return instance; }
+        if (instance) { console.log(instance); return instance; }
         this.colorList = ["blue", "red", "white", "black"]
         var temp = [];
         nodes.push(temp);
-        instance = this;
         this.dayModuleList = null;
         this.setDayModuleList = null;
         this.dayCheckedList = null;
         this.currentDay = null;
         this.maxDay = null;
+        instance = this;
     }
 
     setObjectManager(_objectManager) {
@@ -37,7 +37,8 @@ class DayManager {
     }
 
     printStateData() {
-        console.log(dayModuleList)
+        console.log(this.dayModuleList)
+        console.log(this.currentDay)
     }
 
     setNodes(_nodes) {//saveManager에서 load할 때 넣어주기
@@ -76,8 +77,8 @@ class DayManager {
     }
 
     plusDayNode(line, node) {
-        nodes[this.currentDay-1].push(line);
-        nodes[this.currentDay-1].push(node);
+        nodes[this.currentDay - 1].push(line);
+        nodes[this.currentDay - 1].push(node);
     }
 
     removeDayNode(dayIdx, index) {

@@ -9,7 +9,7 @@ import { Box, Button, IconButton, Checkbox, Select } from '@chakra-ui/react'
 import { useSelector } from "react-redux";
 import { IoChevronDown, IoRemove } from "react-icons/io5"
 import { useNavigate } from "react-router-dom";
-
+import Map from "../components/object/map";
 
 const ReviewSpace = () => {
 
@@ -17,11 +17,12 @@ const ReviewSpace = () => {
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
     const startnodeData = useSelector((state) => state.startnode)
-    let objectManager, saveManager, inputManager, dayManager;
+    let objectManager, saveManager, inputManager, dayManager = new DayManager();
 
     const newMapFunctionRef = useRef(null)
     const addNodeFunctionRef = useRef(null)
-    // const setStateDataRef = useRef(null)
+    const setStateDataRef = useRef(null)
+    const printStateDataRef = useRef(null)
     const [nodeMenuOn, setNodeMenuOn] = useState(false)
     const [nodeMenuPosition, setNodeMenuPosition] = useState({ x: 0, y: 0, })
 
@@ -68,12 +69,19 @@ const ReviewSpace = () => {
                 addNodeFunctionRef.current = selectOption
             });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            dayManager = new DayManager()
-            // setStateDataRef.current = dayManager.setStateData
-            dayManager.setStateData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
+
         }
 
+
         init()
+
+
+        // dayManager = new DayManager()
+        // setStateDataRef.current = dayManager.setStateData
+        dayManager.setStateData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
+        setStateDataRef.current = dayManager.setStateData
+        printStateDataRef.current = dayManager.printStateData
+        dayManager.printStateData()
 
         window.addEventListener("resize", handleResize);
 
@@ -118,6 +126,7 @@ const ReviewSpace = () => {
     }
 
     return (<>
+        <Map />
         <div style={{
             position: "fixed",
             top: "0",
@@ -308,6 +317,8 @@ const ReviewSpace = () => {
                         )
                         setCurrentDay(nextDayMenuId)
                         setNextDayMenuId(nextDayMenuId + 1)
+                        setStateDataRef.current(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
+                        printStateDataRef.current()
                     }}>
                     Day 추가
                 </Button>
