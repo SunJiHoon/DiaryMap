@@ -9,9 +9,9 @@ import { useSelector } from "react-redux";
 import { IoChevronDown, IoRemove } from "react-icons/io5"
 import { useNavigate } from "react-router-dom";
 
-let nextDayMenuId = 2
 
 const ReviewSpace = () => {
+
     const navigate = useNavigate()
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
@@ -30,7 +30,8 @@ const ReviewSpace = () => {
     const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: "day1 data" }])
     const [dayMenuOpenList, setDayMenuOpenList] = useState([false])
     const [dayCheckedList, setDayCheckedList] = useState([true])
-    const [currentDay, setCurrentDay] = useState(nextDayMenuId - 1)
+    const [nextDayMenuId, setNextDayMenuId] = useState(2)
+    const [currentDay, setCurrentDay] = useState(1)
 
     useEffect(() => {
         let renderer, scene, camera
@@ -60,7 +61,7 @@ const ReviewSpace = () => {
             await objectManager.newMap("spongebob");
             newMapFunctionRef.current = objectManager.newMap;
             saveManager = new SaveManager(tripData);
-            saveManager.checkIsFirst().then(()=> {
+            saveManager.checkIsFirst().then(() => {
                 inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
                 addNodeFunctionRef.current = selectOption
             });
@@ -275,27 +276,30 @@ const ReviewSpace = () => {
                         </Box>
                     </Box>
                 ))}
-                <Button onClick={(e) => {
-                    setDayModuleList(
-                        [
-                            ...dayModuleList,
-                            { id: nextDayMenuId, data: "day information", }
-                        ]
-                    )
-                    setDayMenuOpenList(
-                        [
-                            ...dayMenuOpenList,
-                            false
-                        ]
-                    )
-                    setDayCheckedList(
-                        [
-                            ...dayCheckedList,
-                            true
-                        ]
-                    )
-                    setCurrentDay(nextDayMenuId++)
-                }}>
+                <Button
+                    colorScheme="blue"
+                    onClick={(e) => {
+                        setDayModuleList(
+                            [
+                                ...dayModuleList,
+                                { id: nextDayMenuId, data: "day information", }
+                            ]
+                        )
+                        setDayMenuOpenList(
+                            [
+                                ...dayMenuOpenList,
+                                false
+                            ]
+                        )
+                        setDayCheckedList(
+                            [
+                                ...dayCheckedList,
+                                true
+                            ]
+                        )
+                        setCurrentDay(nextDayMenuId)
+                        setNextDayMenuId(nextDayMenuId + 1)
+                    }}>
                     Day 추가
                 </Button>
             </Box>
