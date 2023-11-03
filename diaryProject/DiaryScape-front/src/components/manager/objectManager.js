@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import Map from "../object/map.js";
+// import Map from "../object/map.js";
 import Player from "../object/player.js";
 import Node from "../object/node.js";
 import client from "../../utility/client.jsx";
@@ -37,8 +37,8 @@ class objectManager {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambientLight);
 
-    const map = await new Map();
-    scene.add(map);
+    // const map = await new Map();
+    // scene.add(map);
 
     const playerLoader = new Player();
     player = await playerLoader.loadGltf(characterName);

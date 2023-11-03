@@ -11,7 +11,7 @@ var nodes = [];
 
 class DayManager {
     constructor(_dayModuleList,) {
-        if (instance) { console.log(instance); return instance; }
+        if (instance) { return instance; }
         this.colorList = ["blue", "red", "white", "black"]
         var temp = [];
         nodes.push(temp);
