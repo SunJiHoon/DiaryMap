@@ -8,7 +8,7 @@ import { persistReducer } from "redux-persist"
 const persistConfig = {
     key: "root",
     storage: sessionStorage,
-    whitelist: ["user"],
+    whitelist: ["user", "trip", "startnode"],
 }
 const reducer = combineReducers({
     user: userSlice,
