@@ -75,7 +75,7 @@ class objectManager {
     cur_options = [];
   }
 
-  removeObject(object){
+  removeObject(object) {
     scene.remove(object);
   }
 
@@ -110,27 +110,27 @@ class objectManager {
   //   camera.position.set(nodeArr[size-1].relativeX + originCameraPos.x, 0 + originCameraPos.y, nodeArr[size-1].relativeY + originCameraPos.z);
   // }
 
-  async drawDay(dayIdx){
+  async drawDay(dayIdx) {
     const res = await client.get("/api/obj/one/onlyMapJsonGroupByDate?mapId=" + tripData.mapId);
-    if(res.data.length < dayIdx){ console.log("day 없음"); return;}
+    if (res.data.length < dayIdx) { console.log("day 없음"); return; }
     nodeArr = res.data[dayIdx];
     const size = nodeArr.length;
     const dayColor = dayManager.getDayColor(dayIdx);
 
     var objectArr = [];
 
-    if(size > 0){
-    const startNode = await new Node(nodeArr[0]);
-    scene.add(startNode);
-    objectArr.push(startNode);
+    if (size > 0) {
+      const startNode = await new Node(nodeArr[0]);
+      scene.add(startNode);
+      objectArr.push(startNode);
     }
 
-    for(var i=0;i<size-1;i++){
+    for (var i = 0; i < size - 1; i++) {
       const nextNode = await new Node(nodeArr[i + 1]);
       scene.add(nextNode);
       const line = this.drawLine(new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY),
-      new THREE.Vector3(nodeArr[i + 1].relativeX,0, nodeArr[i + 1].relativeY),
-      dayColor);
+        new THREE.Vector3(nodeArr[i + 1].relativeX, 0, nodeArr[i + 1].relativeY),
+        dayColor);
       objectArr.push(line); objectArr.push(nextNode);
     }
   }
@@ -140,7 +140,7 @@ class objectManager {
     points.push(startNode);
     points.push(endNode);
     const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-    const lineMaterial = new THREE.LineBasicMaterial({color: lineColor});
+    const lineMaterial = new THREE.LineBasicMaterial({ color: lineColor });
     const line = new THREE.Line(lineGeometry, lineMaterial);
     scene.add(line);
     return line;

@@ -24,9 +24,11 @@ class Map {
 export default Map;
 */
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useContext } from 'react'
+import { CanvasContext } from '../../reviewspace/reviewspace';
 
 const Map = () => {
+  const [value, setValue] = useContext(CanvasContext)
   mapboxgl.accessToken = 'pk.eyJ1IjoiMHJ5dW5nIiwiYSI6ImNsb2k5NXg2NjFjYW4ybHJ3MHQ0c3U2c3QifQ.Xq5bPxVFzNOa3wjmYJVU4A';
   const map = useRef(null)
   const mapContainer = useRef(null)
@@ -47,7 +49,7 @@ const Map = () => {
       const labelLayerId = layers.find(
         (layer) => layer.type === 'symbol' && layer.layout['text-field']
       ).id;
-  
+
       // The 'building' layer in the Mapbox Streets
       // vector tileset contains building height data
       // from OpenStreetMap.
@@ -61,7 +63,7 @@ const Map = () => {
           'minzoom': 15,
           'paint': {
             'fill-extrusion-color': '#aaa',
-  
+
             // Use an 'interpolate' expression to
             // add a smooth transition effect to
             // the buildings as the user zooms in.
@@ -88,9 +90,9 @@ const Map = () => {
         },
         labelLayerId
       );
-  })
-  
-  
+    })
+
+    setValue(map.current.getCanvas())
   });
   return <div>
     <div ref={mapContainer}></div>
