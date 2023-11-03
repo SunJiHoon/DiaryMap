@@ -86,7 +86,7 @@ class inputManager {
       raycaster.setFromCamera(pointer, camera);
 
       const cur_day = dayManager.getCurDay();
-      const nodes = dayManager.getNodes(cur_day);
+      const nodes = dayManager.getNodes(cur_day - 1);
       const index = nodes.length - 1;
       const cur_node = nodes[index];
       const intersectObjects = raycaster.intersectObjects(scene.children);
@@ -129,7 +129,7 @@ class inputManager {
 export const selectOption = (selectOptionDataState) => {
   const { character, select_option } = selectOptionDataState;
   const cur_day = dayManager.getCurDay();
-  const nodes = dayManager.getNodes(cur_day);
+  const nodes = dayManager.getNodes(cur_day - 1);
   const index = nodes.length - 1;
   const cur_node = nodes[index];
 

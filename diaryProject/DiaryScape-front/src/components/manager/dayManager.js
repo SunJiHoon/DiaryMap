@@ -76,8 +76,8 @@ class DayManager {
     }
 
     plusDayNode(line, node) {
-        nodes[this.currentDay].push(line);
-        nodes[this.currentDay].push(node);
+        nodes[this.currentDay-1].push(line);
+        nodes[this.currentDay-1].push(node);
     }
 
     removeDayNode(dayIdx, index) {
