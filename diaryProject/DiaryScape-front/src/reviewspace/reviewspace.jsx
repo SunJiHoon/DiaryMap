@@ -2,6 +2,7 @@ import * as THREE from "three";
 import InputManager, { selectOption } from "../components/manager/inputManager";
 import ObjectManager from "../components/manager/objectManager";
 import SaveManager from "../components/manager/saveManager";
+import DayManager from "../components/manager/dayManager";
 import { useRef, useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
 import { Box, Button, IconButton, Checkbox, Select } from '@chakra-ui/react'
@@ -16,7 +17,7 @@ const ReviewSpace = () => {
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
     const startnodeData = useSelector((state) => state.startnode)
-    let objectManager, saveManager, inputManager;
+    let objectManager, saveManager, inputManager, dayMangaer;
 
     const newMapFunctionRef = useRef(null)
     const addNodeFunctionRef = useRef(null)
@@ -59,6 +60,8 @@ const ReviewSpace = () => {
 
             objectManager = new ObjectManager(scene, camera, tripData, startnodeData);
             await objectManager.newMap("spongebob");
+            dayManager = new DayManager();
+            dayManager.setDayModuleList(dayModuleList);
             newMapFunctionRef.current = objectManager.newMap;
             saveManager = new SaveManager(tripData);
             saveManager.checkIsFirst().then(() => {

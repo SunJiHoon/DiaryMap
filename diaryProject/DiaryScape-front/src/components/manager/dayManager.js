@@ -6,6 +6,8 @@ var objectManager;
 
 var cur_day = 0;
 var max_day = 0;
+var dayModuleList;
+var dayCheckedList;
 var dayColor = ["blue"];//나중에 설정해주기
 
 var nodes = [];
@@ -21,6 +23,12 @@ class dayManager{
 
     setObjectManager(_objectManager){
         objectManager = _objectManager;
+    }
+
+    setFrontData(_dayModuleList, _dayCheckedList, _currentDay){
+        cur_day = _currentDay;
+        dayModuleList = _dayModuleList;
+        dayCheckedList = _dayCheckedList;
     }
 
     setNodes(_nodes){//saveManager에서 load할 때 넣어주기

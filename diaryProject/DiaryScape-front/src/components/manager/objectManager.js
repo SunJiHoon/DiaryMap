@@ -5,8 +5,6 @@ import Node from "../object/node.js";
 import client from "../../utility/client.jsx";
 import DayManager from "./dayManager.js";
 
-let instance;
-
 let cur_options = [];
 
 var scene;
