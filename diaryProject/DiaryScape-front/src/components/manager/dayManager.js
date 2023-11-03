@@ -27,24 +27,34 @@ class dayManager{
         nodes = _nodes;
     }
 
+    clearNodes(){
+        var temp = [];
+        nodes = temp;
+    }
+
     plusDay(){
         var temp = [];
         nodes.push(temp);
         max_day++;
         dayColor.push(this.colorList[max_day % this.colorList.length]);
+        console.log(this.colorList[max_day % this.colorList.length]);
     }
 
     visibleDay(dayIdx){
         const size = nodes[dayIdx].length;
         for(let i =0;i<size;i++){
-            nodes[dayIdx][i].visible = true;
+            if(nodes[dayIdx][i] != null){
+                nodes[dayIdx][i].visible = true;
+            }
         }
     }
 
     invisibleDay(dayIdx){
         const size = nodes[dayIdx].length;
         for(let i =0;i<size;i++){
-            nodes[dayIdx][i].visible = false;
+            if(nodes[dayIdx][i] != null){
+                nodes[dayIdx][i].visible = false;
+            }
         }
     }
 
@@ -70,7 +80,6 @@ class dayManager{
     }
 
     getNodes(dayIdx){
-        console.log(nodes[dayIdx]);
         return nodes[dayIdx];
     }
 }

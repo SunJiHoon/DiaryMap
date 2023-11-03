@@ -65,7 +65,10 @@ class inputManager {
   handleKeyDown(event) {
     if (cur_state == InputState.IDLE) {
       if (event.key == 'a') {
-        objectManager.loadMyNodes();
+        dayManager.invisibleDay(0);
+      }
+      else if(event.key == 'b'){
+        dayManager.visibleDay(0);
       }
     }
   }
