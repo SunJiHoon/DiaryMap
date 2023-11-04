@@ -57,19 +57,34 @@ const ReviewSpace = () => {
         });
 
 
-        // let renderer, scene, camera
+        let renderer, scene, camera
 
         let req
+
+        function handleResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.render(scene, camera);
+        }
+
+        const anim = () => {
+            renderer.render(scene, camera);
+
+            req = requestAnimationFrame(anim);
+        }
+
         const customLayer = {
             id: '3d-model',
             type: 'custom',
             renderingMode: '3d',
-            onAdd: function (map, gl) {
-                let inputManager
+            onAdd: (map, gl) => {
+                // let inputManager
                 // async function init() {
-                this.scene = new THREE.Scene();
+                scene = new THREE.Scene();
 
-                this.renderer = new THREE.WebGLRenderer({
+                renderer = new THREE.WebGLRenderer({
                     canvas: map.getCanvas(),
                     context: gl,
                     // antialias: true,
@@ -77,25 +92,25 @@ const ReviewSpace = () => {
                 });
                 // this.renderer.setClearColor(0x80ffff, 1);
 
-                this.camera = new THREE.PerspectiveCamera(
+                camera = new THREE.PerspectiveCamera(
                     75,
                     window.innerWidth / window.innerHeight,
                     1,
                     300
                 );
-                this.camera.rotation.y = Math.PI / 4;
-                this.camera.position.set(-35, 45, 45);
-                this.camera.lookAt(0, 0, 0);
+                camera.rotation.y = Math.PI / 4;
+                camera.position.set(-35, 45, 45);
+                camera.lookAt(0, 0, 0);
 
-                objectManager = new ObjectManager(this.scene, this.camera, tripData, startnodeData);
+                objectManager = new ObjectManager(scene, camera, tripData, startnodeData);
                 objectManager.newMap("spongebob");
                 newMapFunctionRef.current = objectManager.newMap;
                 saveManager = new SaveManager(tripData);
                 saveManager.checkIsFirst().then(() => {
-                    inputManager = new InputManager(this.camera, this.scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
+                    inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
                     addNodeFunctionRef.current = selectOption
                 });
-                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setSize(window.innerWidth, window.innerHeight);
                 dayManager.setStateData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
                 setStateDataRef.current = dayManager.setStateData
                 printStateDataRef.current = dayManager.printStateData
@@ -105,23 +120,11 @@ const ReviewSpace = () => {
 
                 // init()
             },
-            render: function (gl, matrix) {
-                this.renderer.render(this.scene, this.camera);
+            render: (gl, matrix) => {
+                renderer.render(scene, camera);
                 window.addEventListener("resize", handleResize);
 
-                function handleResize() {
-                    this.camera.aspect = window.innerWidth / window.innerHeight;
-                    this.camera.updateProjectionMatrix();
 
-                    this.renderer.setSize(window.innerWidth, window.innerHeight);
-                    this.renderer.render(this.scene, this.camera);
-                }
-
-                const anim = () => {
-                    this.renderer.render(this.scene, this.camera);
-
-                    req = requestAnimationFrame(anim);
-                }
                 anim();
             }
         }
@@ -173,6 +176,9 @@ const ReviewSpace = () => {
                 },
                 labelLayerId
             );
+        })
+        map.current.on('load', () => {
+
             map.current.addLayer(customLayer, 'building')
         })
 
@@ -183,7 +189,7 @@ const ReviewSpace = () => {
 
         return (() => {
             cancelAnimationFrame(req)
-            // window.removeEventListener("resize", handleResize)
+            window.removeEventListener("resize", handleResize)
             inputManager?.cleanup()
             map.current.remove()
         })
