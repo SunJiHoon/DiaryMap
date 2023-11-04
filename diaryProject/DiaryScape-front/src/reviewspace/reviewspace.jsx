@@ -122,10 +122,11 @@ const ReviewSpace = () => {
             },
             render: (gl, matrix) => {
                 renderer.render(scene, camera);
+                map.current.triggerRepaint()
                 window.addEventListener("resize", handleResize);
 
 
-                anim();
+                // anim();
             }
         }
 
