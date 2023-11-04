@@ -28,7 +28,7 @@ class objectManager {
   newMap = async (characterName) => {
     scene.clear();
 
-    camera.position.set(originCameraPos.x, originCameraPos.y, originCameraPos.z);
+    // camera.position.set(originCameraPos.x, originCameraPos.y, originCameraPos.z);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
     directionalLight.position.set(-10, 10, 20);
@@ -48,8 +48,8 @@ class objectManager {
 
   async initNode() {
     const startNode = await new Node(startNodeData);
-    player.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
-    camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
+    // player.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
+    // camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
     startNode.userData.visitDate = "2023-10-31"//tripData.startDate
     dayManager.plusDayNode(null, startNode);

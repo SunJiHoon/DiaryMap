@@ -62,19 +62,23 @@ class inputManager {
     window.removeEventListener("mousedown", this.handleMouseDown);
     console.log("cleanup inputManager");
   }
+
+  setCamera(_camera) {
+    camera = _camera
+  }
+
   handleKeyDown(event) {
     if (cur_state == InputState.IDLE) {
       if (event.key == 'a') {
         dayManager.invisibleDay(0);
       }
-      else if(event.key == 'b'){
+      else if (event.key == 'b') {
         dayManager.visibleDay(0);
       }
     }
   }
   async handleMouseDown(event) {
     setNodeMenuOn(false)
-    console.log("set nodemenu hidden")
     console.log(nodeMenuOn)
     select_option = null;
     if (cur_state == InputState.IDLE) {

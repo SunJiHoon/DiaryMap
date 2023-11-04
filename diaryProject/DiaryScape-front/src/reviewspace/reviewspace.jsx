@@ -23,7 +23,6 @@ const ReviewSpace = () => {
     const canvasRef = useRef(null)
     const tripData = useSelector((state) => state.trip)
     const startnodeData = useSelector((state) => state.startnode)
-    let objectManager, saveManager, inputManager, dayManager = new DayManager();
 
     const newMapFunctionRef = useRef(null)
     const addNodeFunctionRef = useRef(null)
@@ -50,16 +49,19 @@ const ReviewSpace = () => {
         map.current = new mapboxgl.Map({
             style: 'mapbox://styles/mapbox/light-v11',
             center: [tripData.startX, tripData.startY],
-            zoom: 15.5,
+            zoom: 19.5,
             pitch: 45,
             bearing: -17.6,
             container: mapContainer.current,
             antialias: true
         });
+        // map.current.dragRotate.disable()
+        // map.current.touchZoomRotate.disableRotation()
         map.current.addControl(new MapboxLanguage({
             defaultLanguage: 'ko'
         }));
 
+        let objectManager, saveManager, inputManager, dayManager = new DayManager();
 
         let renderer, scene, camera
 
@@ -79,12 +81,30 @@ const ReviewSpace = () => {
             req = requestAnimationFrame(anim);
         }
 
+        const modelOrigin = [tripData.startX, tripData.startY];
+        const modelAltitude = 0;
+        const modelRotate = [Math.PI / 2, 0, 0];
+
+        const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
+            modelOrigin,
+            modelAltitude
+        );
+
+        const modelTransform = {
+            translateX: modelAsMercatorCoordinate.x,
+            translateY: modelAsMercatorCoordinate.y,
+            translateZ: modelAsMercatorCoordinate.z,
+            rotateX: modelRotate[0],
+            rotateY: modelRotate[1],
+            rotateZ: modelRotate[2],
+            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits()
+        };
+
         const customLayer = {
             id: '3d-model',
             type: 'custom',
             renderingMode: '3d',
             onAdd: (map, gl) => {
-                // let inputManager
                 // async function init() {
                 scene = new THREE.Scene();
 
@@ -102,9 +122,9 @@ const ReviewSpace = () => {
                     1,
                     300
                 );
-                camera.rotation.y = Math.PI / 4;
-                camera.position.set(-35, 45, 45);
-                camera.lookAt(0, 0, 0);
+                // camera.rotation.y = Math.PI / 4;
+                // camera.position.set(-35, 45, 45);
+                // camera.lookAt(0, 0, 0);
 
                 objectManager = new ObjectManager(scene, camera, tripData, startnodeData);
                 objectManager.newMap("spongebob");
@@ -123,15 +143,50 @@ const ReviewSpace = () => {
                 // }
 
                 // init()
+                renderer.autoClear = false
             },
             render: (gl, matrix) => {
+                const rotationX = new THREE.Matrix4().makeRotationAxis(
+                    new THREE.Vector3(1, 0, 0),
+                    modelTransform.rotateX
+                );
+                const rotationY = new THREE.Matrix4().makeRotationAxis(
+                    new THREE.Vector3(0, 1, 0),
+                    modelTransform.rotateY
+                );
+                const rotationZ = new THREE.Matrix4().makeRotationAxis(
+                    new THREE.Vector3(0, 0, 1),
+                    modelTransform.rotateZ
+                );
+
+                const m = new THREE.Matrix4().fromArray(matrix);
+                const l = new THREE.Matrix4()
+                    .makeTranslation(
+                        modelTransform.translateX,
+                        modelTransform.translateY,
+                        modelTransform.translateZ
+                    )
+                    .scale(
+                        new THREE.Vector3(
+                            modelTransform.scale,
+                            -modelTransform.scale,
+                            modelTransform.scale
+                        )
+                    )
+                    .multiply(rotationX)
+                    .multiply(rotationY)
+                    .multiply(rotationZ);
+
+                camera.projectionMatrix = m.multiply(l);
+                // if (inputManager) inputManager.setCamera(camera)
+                renderer.resetState();
                 renderer.render(scene, camera);
                 map.current.triggerRepaint()
                 window.addEventListener("resize", handleResize);
 
 
                 // anim();
-            }
+            },
         }
 
         map.current.on('style.load', () => {
@@ -183,12 +238,11 @@ const ReviewSpace = () => {
             );
         })
         map.current.on('load', () => {
-
-            map.current.addLayer(customLayer, 'building')
+            map.current.addLayer(customLayer)
         })
 
-        dayManager = new DayManager()
-        setStateDataRef.current = dayManager.setStateData
+        // dayManager = new DayManager()
+        // setStateDataRef.current = dayManager.setStateData
 
 
 
