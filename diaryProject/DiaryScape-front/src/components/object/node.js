@@ -19,11 +19,11 @@ class node {
 
   async loadObj(infos) {
     const objGeometry = new THREE.SphereGeometry(2);
-    const objMaterial = new THREE.MeshBasicMaterial();
+    const objMaterial = new THREE.MeshBasicMaterial({ color: "yellow" });
     const obj = new THREE.Mesh(objGeometry, objMaterial);
 
     const gltfLoader = new GLTFLoader();
-    const ranNum = randInt(0, foods.length-1);
+    const ranNum = randInt(0, foods.length - 1);
     const eventIdx = foods[ranNum];
     const temp = await gltfLoader.loadAsync("/assets/foods/" + eventIdx[0] + "/scene.gltf");
     const eventObj = temp.scene;

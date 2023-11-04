@@ -12,6 +12,7 @@ let setNodeMenuOn;
 let setNodeMenuPosition;
 let selectOptionData;
 let setSelectOptionData;
+
 let mglCameraPosition;
 let mglCameraPositionTransformed;
 let map
@@ -88,6 +89,9 @@ class inputManager {
       else if (event.key == 'b') {
         dayManager.visibleDay(0);
       }
+    }
+    if (event.key == 't') {
+      dayManager.printStateData()
     }
   }
   async handleMouseDown(event) {

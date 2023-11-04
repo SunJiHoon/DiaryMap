@@ -10,35 +10,47 @@ let dayColor = ["blue"];//나중에 설정해주기
 var nodes = [];
 
 class DayManager {
-    constructor(_dayModuleList,) {
-        if (instance) { return instance; }
+    constructor() {
+        if (instance) return instance
         this.colorList = ["blue", "red", "white", "black"]
         var temp = [];
         nodes.push(temp);
+
         this.dayModuleList = null;
         this.setDayModuleList = null;
         this.dayCheckedList = null;
         this.currentDay = null;
         this.maxDay = null;
-        instance = this;
+        instance = this
     }
 
     setObjectManager(_objectManager) {
         objectManager = _objectManager;
     }
 
-    setStateData(_dayModuleList, _setDayModuleList, _dayCheckedList, _currentDay, _nextDayMenuId) {
+    setStateSetter(_setDayModuleList) {
+        this.setDayModuleList = _setDayModuleList
+    }
+
+    updateFromFrontData(_dayModuleList, _dayCheckedList, _currentDay, _nextDayMenuId) {
         this.dayModuleList = _dayModuleList;
-        this.setDayModuleList = _setDayModuleList;
         this.dayCheckedList = _dayCheckedList;
         this.currentDay = _currentDay;
         this.maxDay = _nextDayMenuId;
-        // console.log(this.dayModuleList)
+    }
+
+    dataPropagationTest() {
+        this.setDayModuleList([
+            ...this.dayModuleList,
+            { id: 33, data: "test" },
+        ])
     }
 
     printStateData() {
         console.log(this.dayModuleList)
+        console.log(this.dayCheckedList)
         console.log(this.currentDay)
+        console.log(this.maxDay)
     }
 
     setNodes(_nodes) {//saveManager에서 load할 때 넣어주기

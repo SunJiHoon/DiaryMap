@@ -26,8 +26,8 @@ const ReviewSpace = () => {
 
     const newMapFunctionRef = useRef(null)
     const addNodeFunctionRef = useRef(null)
-    const setStateDataRef = useRef(null)
-    const printStateDataRef = useRef(null)
+    // const setStateDataRef = useRef(null)
+    // const printStateDataRef = useRef(null)
     const [nodeMenuOn, setNodeMenuOn] = useState(false)
     const [nodeMenuPosition, setNodeMenuPosition] = useState({ x: 0, y: 0, })
 
@@ -44,7 +44,21 @@ const ReviewSpace = () => {
     mapboxgl.accessToken = 'pk.eyJ1IjoiMHJ5dW5nIiwiYSI6ImNsb2k5NXg2NjFjYW4ybHJ3MHQ0c3U2c3QifQ.Xq5bPxVFzNOa3wjmYJVU4A';
     const map = useRef(null)
     const mapContainer = useRef(null)
+
+    let objectManager, saveManager, inputManager, dayManager = new DayManager();
+
+    dayManager.setStateSetter(setDayModuleList)
+
+    dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId)
+
+
     useEffect(() => {
+        dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId)
+        dayManager.printStateData()
+    }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId])
+
+    useEffect(() => {
+        // dayManager.dataPropagationTest()
         if (map.current) return;
         map.current = new mapboxgl.Map({
             style: 'mapbox://styles/mapbox/light-v11',
@@ -62,7 +76,6 @@ const ReviewSpace = () => {
         }));
 
 
-        let objectManager, saveManager, inputManager, dayManager = new DayManager();
         // let mglCameraPosition = new mapboxgl.MercatorCoordinate(0, 0, 0)
         let renderer, scene, camera
 
@@ -144,10 +157,6 @@ const ReviewSpace = () => {
                     addNodeFunctionRef.current = selectOption
                 });
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                dayManager.setStateData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
-                setStateDataRef.current = dayManager.setStateData
-                printStateDataRef.current = dayManager.printStateData
-                dayManager.printStateData()
 
                 // let _cameraPosition = map.getFreeCameraOptions().position;
                 // cameraPosition.set(_cameraPosition.x, _cameraPosition.y, _cameraPosition.z)
@@ -267,7 +276,7 @@ const ReviewSpace = () => {
 
 
         return (() => {
-            cancelAnimationFrame(req)
+            // cancelAnimationFrame(req)
             window.removeEventListener("resize", handleResize)
             inputManager?.cleanup()
             map.current.remove()
@@ -386,7 +395,11 @@ const ReviewSpace = () => {
                     textAlign="left"
                     boxShadow="2xl"
                 >
-                    <Select value={currentDay} onChange={(e) => setCurrentDay(e.target.value)}>
+                    <Select value={currentDay} onChange={(e) => {
+                        setCurrentDay(e.target.value)
+                        // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
+                        // dayManager.printStateData()
+                    }}>
                         {dayModuleList.map((dayModule) => (
                             <option key={"option" + dayModule.id} value={dayModule.id} > Day {dayModule.id}</option>
                         ))}
@@ -421,6 +434,8 @@ const ReviewSpace = () => {
                                         }
                                     })
                                     setDayCheckedList(nextDayCheckedList)
+                                    // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
+                                    // dayManager.printStateData()
                                 }}></Checkbox>
                             </Box>
                             <Box
@@ -444,6 +459,8 @@ const ReviewSpace = () => {
                                             }
                                         })
                                         setDayMenuOpenList(nextDayMenuOpenList)
+                                        // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
+                                        // dayManager.printStateData()
                                     }}
                                 />
                             </Box>
@@ -462,7 +479,7 @@ const ReviewSpace = () => {
                     ))}
                     <Button
                         colorScheme="blue"
-                        onClick={(e) => {
+                        onClick={async (e) => {
                             setDayModuleList(
                                 [
                                     ...dayModuleList,
@@ -483,8 +500,6 @@ const ReviewSpace = () => {
                             )
                             setCurrentDay(nextDayMenuId)
                             setNextDayMenuId(nextDayMenuId + 1)
-                            setStateDataRef.current(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
-                            printStateDataRef.current()
                         }}>
                         Day 추가
                     </Button>
