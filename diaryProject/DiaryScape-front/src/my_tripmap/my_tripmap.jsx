@@ -239,9 +239,9 @@ const MyTripmap = () => {
                                     <Box fontSize="1.4em" mb={2}>시작 장소 선택</Box>
                                     {/* {startNodeSelected && <Box>{selectedData.contentid}</Box>} */}
                                     {searchValue.length == 0 && <Box>장소 이름을 입력해주세요!</Box>}
-                                    {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
-                                    <Box maxH={260} overflowY="scroll">
-                                        {searchResultData.map((result) => (
+                                    <Box h={260} overflowY="scroll">
+                                        {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
+                                        {!searchResultDataLoading && searchResultData.map((result) => (
                                             <Button
                                                 border="0px"
                                                 borderBottom="1px"

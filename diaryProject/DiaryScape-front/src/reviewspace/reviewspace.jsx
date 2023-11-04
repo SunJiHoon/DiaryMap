@@ -183,8 +183,9 @@ const ReviewSpace = () => {
 
         return (() => {
             cancelAnimationFrame(req)
-            window.removeEventListener("resize", handleResize)
+            // window.removeEventListener("resize", handleResize)
             inputManager?.cleanup()
+            map.current.remove()
         })
     }, [])
 
