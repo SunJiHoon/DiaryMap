@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 // import Map from "../components/object/map";
 import { createContext, useContext } from "react";
 import mapboxgl from "mapbox-gl";
+import MapboxLanguage from "@mapbox/mapbox-gl-language";
 
 export const CanvasContext = createContext()
 
@@ -48,13 +49,16 @@ const ReviewSpace = () => {
         if (map.current) return;
         map.current = new mapboxgl.Map({
             style: 'mapbox://styles/mapbox/light-v11',
-            center: [-74.0066, 40.7135],
+            center: [tripData.startX, tripData.startY],
             zoom: 15.5,
             pitch: 45,
             bearing: -17.6,
             container: mapContainer.current,
             antialias: true
         });
+        map.current.addControl(new MapboxLanguage({
+            defaultLanguage: 'ko'
+        }));
 
 
         let renderer, scene, camera
