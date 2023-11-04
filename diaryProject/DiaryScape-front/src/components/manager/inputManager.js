@@ -12,6 +12,10 @@ let setNodeMenuOn;
 let setNodeMenuPosition;
 let selectOptionData;
 let setSelectOptionData;
+let mglCameraPosition;
+let mglCameraPositionTransformed;
+let map
+let setMglCameraPosition
 
 const objectManager = new ObjectManager();
 const dayManager = new DayManager();
@@ -31,8 +35,10 @@ const InputState = {
 Object.freeze(InputState);
 
 class inputManager {
-  constructor(_camera, _scene, _nodeMenuOn, _setNodeMenuOn, _setNodeMenuPosition, _selectOptionData, _setSelectOptionData) {
+  constructor(_camera, _map, _setMglCameraPosition, _scene, _nodeMenuOn, _setNodeMenuOn, _setNodeMenuPosition, _selectOptionData, _setSelectOptionData) {
     camera = _camera;
+    map = _map
+    setMglCameraPosition = _setMglCameraPosition
     scene = _scene;
     nodeMenuOn = _nodeMenuOn;
     setNodeMenuOn = _setNodeMenuOn;
@@ -63,8 +69,15 @@ class inputManager {
     console.log("cleanup inputManager");
   }
 
-  setCamera(_camera) {
-    camera = _camera
+  setMglCameraPosition(_mglCameraPosition) {
+    mglCameraPosition = _mglCameraPosition
+    // console.log("set:")
+    // console.log(cameraPosition)
+  }
+  setMglCameraPositionTransformed(_mglCameraPositionTransformed) {
+    mglCameraPositionTransformed = _mglCameraPositionTransformed
+    // console.log("set:")
+    // console.log(cameraPosition)
   }
 
   handleKeyDown(event) {
@@ -82,18 +95,25 @@ class inputManager {
     console.log(nodeMenuOn)
     select_option = null;
     if (cur_state == InputState.IDLE) {
-      const pointer = new THREE.Vector2();
+      const pointer = new THREE.Vector4();
 
       pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       pointer.y = -((event.clientY / window.innerHeight) * 2 - 1);
-
-      raycaster.setFromCamera(pointer, camera);
-
+      pointer.z = 1
+      pointer.w = 1
+      // console.log(pointer)
+      let direction = pointer.clone().applyMatrix4(camera.projectionMatrix.clone().invert());
+      direction.divideScalar(direction.w);
+      raycaster.set(mglCameraPositionTransformed, direction.sub(mglCameraPositionTransformed).normalize());
+      var arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 8, 0xff0000);
+      scene.add(arrow);
+      // console.log(mglCameraPosition)
       const cur_day = dayManager.getCurDay();
       const nodes = dayManager.getNodes(cur_day - 1);
       const index = nodes.length - 1;
       const cur_node = nodes[index];
       const intersectObjects = raycaster.intersectObjects(scene.children);
+
 
       for (let i = 0; i < intersectObjects.length; i++) {
         if (intersectObjects[i].object.userData?.tag == "node") {
@@ -171,16 +191,20 @@ function move(targetPos) {
     x: targetPos.x,
     z: targetPos.z,
     duration: 1,
-  });
-  gsap
-    .to(camera.position, {
-      x: cameraOrigin.x + targetPos.x,
-      z: cameraOrigin.z + targetPos.z,
-      duration: 1,
-    })
+  })
     .then(() => {
-      cur_state = InputState.IDLE;
+      cur_state = InputState.IDLE
     });
+  // gsap
+  //   .to(camera.position, {
+  //     x: cameraOrigin.x + targetPos.x,
+  //     z: cameraOrigin.z + targetPos.z,
+  //     duration: 1,
+  //   })
+  //   .then(() => {
+  //     cur_state = InputState.IDLE;
+  //     setMglCameraPosition(mglCameraPosition.x + targetPos.x / 10000000, mglCameraPosition.y + targetPos.z / 10000000, mglCameraPosition.z)
+  //   });
   gsap.to(character.rotation, {
     y: angle,
     duration: 0.3,

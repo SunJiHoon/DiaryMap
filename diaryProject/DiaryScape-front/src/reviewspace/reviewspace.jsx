@@ -61,8 +61,9 @@ const ReviewSpace = () => {
             defaultLanguage: 'ko'
         }));
 
-        let objectManager, saveManager, inputManager, dayManager = new DayManager();
 
+        let objectManager, saveManager, inputManager, dayManager = new DayManager();
+        // let mglCameraPosition = new mapboxgl.MercatorCoordinate(0, 0, 0)
         let renderer, scene, camera
 
         let req
@@ -75,11 +76,19 @@ const ReviewSpace = () => {
             renderer.render(scene, camera);
         }
 
-        const anim = () => {
-            renderer.render(scene, camera);
-
-            req = requestAnimationFrame(anim);
+        const setMglCameraPosition = (x, y, z) => {
+            const mglcamera = map.current.getFreeCameraOptions()
+            mglcamera.position.x = x
+            mglcamera.position.y = y
+            mglcamera.position.z = z
+            map.current.setFreeCameraOptions(mglcamera)
         }
+
+        // const anim = () => {
+        //     renderer.render(scene, camera);
+
+        //     req = requestAnimationFrame(anim);
+        // }
 
         const modelOrigin = [tripData.startX, tripData.startY];
         const modelAltitude = 0;
@@ -131,7 +140,7 @@ const ReviewSpace = () => {
                 newMapFunctionRef.current = objectManager.newMap;
                 saveManager = new SaveManager(tripData);
                 saveManager.checkIsFirst().then(() => {
-                    inputManager = new InputManager(camera, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
+                    inputManager = new InputManager(camera, map, setMglCameraPosition, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
                     addNodeFunctionRef.current = selectOption
                 });
                 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -140,6 +149,9 @@ const ReviewSpace = () => {
                 printStateDataRef.current = dayManager.printStateData
                 dayManager.printStateData()
 
+                // let _cameraPosition = map.getFreeCameraOptions().position;
+                // cameraPosition.set(_cameraPosition.x, _cameraPosition.y, _cameraPosition.z)
+                // if (inputManager) inputManager.setCameraPosition(cameraPosition)
                 // }
 
                 // init()
@@ -164,7 +176,7 @@ const ReviewSpace = () => {
                     .makeTranslation(
                         modelTransform.translateX,
                         modelTransform.translateY,
-                        modelTransform.translateZ
+                        modelTransform.translateZ + 0.0000001
                     )
                     .scale(
                         new THREE.Vector3(
@@ -178,12 +190,20 @@ const ReviewSpace = () => {
                     .multiply(rotationZ);
 
                 camera.projectionMatrix = m.multiply(l);
-                // if (inputManager) inputManager.setCamera(camera)
                 renderer.resetState();
                 renderer.render(scene, camera);
+
+                // let _cameraPosition = map.current.getFreeCameraOptions().position;
+                // MglCameraPosition.set(_cameraPosition.x, _cameraPosition.y, _cameraPosition.z)
+                const freeCamera = map.current.getFreeCameraOptions();
+                let newMglCameraPosition = new THREE.Vector4(freeCamera.position.x, freeCamera.position.y, freeCamera.position.z, 1);
+                if (inputManager) inputManager.setMglCameraPosition(new mapboxgl.MercatorCoordinate(newMglCameraPosition.x, newMglCameraPosition.y, newMglCameraPosition.z))
+                // console.log(camera.position)
+                // console.log(newMglCameraPosition)
+                newMglCameraPosition.applyMatrix4(l.invert());
+                if (inputManager) inputManager.setMglCameraPositionTransformed(new mapboxgl.MercatorCoordinate(newMglCameraPosition.x, newMglCameraPosition.y, newMglCameraPosition.z))
                 map.current.triggerRepaint()
                 window.addEventListener("resize", handleResize);
-
 
                 // anim();
             },
