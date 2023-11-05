@@ -70,6 +70,8 @@ class DayManager {
     }
 
     plusDay(){
+        console.log("currentDay:")
+        console.log(this.currentDay)
         var temp = [];
         nodes.push(temp);
         dayColor.push(this.colorList[(this.maxDay - 2) % this.colorList.length]);

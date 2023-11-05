@@ -35,12 +35,13 @@ const ReviewSpace = () => {
 
     const [debugMenuOpen, setDebugMenuOpen] = useState(false)
 
-    const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: "day1 data" }])
+    const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: ["day information"] }])
     
     const [dayMenuOpenList, setDayMenuOpenList] = useState([false])
     const [dayCheckedList, setDayCheckedList] = useState([true])
     const [nextDayMenuId, setNextDayMenuId] = useState(2)
     const [currentDay, setCurrentDay] = useState(1)
+    const [onPlusDay, setOnPlusDay] = useState(1)
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiMHJ5dW5nIiwiYSI6ImNsb2k5NXg2NjFjYW4ybHJ3MHQ0c3U2c3QifQ.Xq5bPxVFzNOa3wjmYJVU4A';
     const map = useRef(null)
@@ -57,6 +58,10 @@ const ReviewSpace = () => {
         dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId)
         dayManager.printStateData()
     }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId])
+
+    useEffect(() => {
+        dayManager.plusDay()
+    }, [onPlusDay])
 
     useEffect(() => {
         // dayManager.dataPropagationTest()
@@ -470,7 +475,9 @@ const ReviewSpace = () => {
                                 overflowX="auto"
                                 transition="all 0.3s ease-in-out"
                             >
-                                {dayModule.data}
+                                {dayModule.data.map((node, i) => {
+                                    return(<p key="i">{i+1}. {node}</p>)
+                                })}
                             </Box>
                         </Box>
                     ))}
@@ -480,7 +487,7 @@ const ReviewSpace = () => {
                             setDayModuleList(
                                 [
                                     ...dayModuleList,
-                                    { id: nextDayMenuId, data: "day information", }
+                                    { id: nextDayMenuId, data: ["day information"], }
                                 ]
                             )
                             setDayMenuOpenList(
@@ -495,9 +502,10 @@ const ReviewSpace = () => {
                                     true
                                 ]
                             )
-                            setCurrentDay(nextDayMenuId)
+                            setCurrentDay(nextDayMenuId)        
+                            setOnPlusDay(nextDayMenuId)
+                            // dayManager.plusDay() // 이렇게 하면 plusDay 내에서 이전 currentDay 값 참조하게 됨
                             setNextDayMenuId(nextDayMenuId + 1)
-                            dayManager.plusDay()
                         }}>
                         Day 추가
                     </Button>
