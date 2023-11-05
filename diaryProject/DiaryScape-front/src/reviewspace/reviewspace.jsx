@@ -36,6 +36,7 @@ const ReviewSpace = () => {
     const [debugMenuOpen, setDebugMenuOpen] = useState(false)
 
     const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: "day1 data" }])
+    
     const [dayMenuOpenList, setDayMenuOpenList] = useState([false])
     const [dayCheckedList, setDayCheckedList] = useState([true])
     const [nextDayMenuId, setNextDayMenuId] = useState(2)
@@ -496,6 +497,7 @@ const ReviewSpace = () => {
                             )
                             setCurrentDay(nextDayMenuId)
                             setNextDayMenuId(nextDayMenuId + 1)
+                            dayManager.plusDay()
                         }}>
                         Day 추가
                     </Button>
