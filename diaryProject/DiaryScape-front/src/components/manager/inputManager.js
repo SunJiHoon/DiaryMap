@@ -112,15 +112,17 @@ class inputManager {
       var arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 8, 0xff0000);
       scene.add(arrow);
       // console.log(mglCameraPosition)
-      const cur_day = dayManager.getCurDay();
-      const nodes = dayManager.getNodes(cur_day - 1);
-      const index = nodes.length - 1;
-      const cur_node = nodes[index];
       const intersectObjects = raycaster.intersectObjects(scene.children);
 
 
       for (let i = 0; i < intersectObjects.length; i++) {
         if (intersectObjects[i].object.userData?.tag == "node") {
+          const cur_day = dayManager.getCurDay();
+          const nodes = dayManager.getNodes(cur_day - 1);
+          console.log(cur_day-1);
+          console.log(nodes);
+          const index = nodes.length - 1;
+          const cur_node = nodes[index];
           select_option = intersectObjects[i].object;
           setSelectOptionData({ character, select_option })
           if (cur_node == select_option) {

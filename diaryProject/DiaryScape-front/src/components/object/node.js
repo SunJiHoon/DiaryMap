@@ -19,8 +19,9 @@ class node {
 
   async loadObj(infos) {
     const objGeometry = new THREE.SphereGeometry(2);
-    const objMaterial = new THREE.MeshBasicMaterial({ color: "yellow" });
+    const objMaterial = new THREE.MeshBasicMaterial({ color: "gray" });
     const obj = new THREE.Mesh(objGeometry, objMaterial);
+    obj.scale.set(0.8,0.8,0.8);
 
     const gltfLoader = new GLTFLoader();
     const ranNum = randInt(0, foods.length - 1);

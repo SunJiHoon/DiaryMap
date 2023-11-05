@@ -16,6 +16,7 @@ class saveManager {
         const isFirst = await client.get("/api/obj/isFirst?mapId=" + tripData.mapId);
         if (isFirst.data == "first") {
             dayManager.clearNodes();
+            dayManager.plusDay();
             await objectManager.initNode();
         }
         else if (isFirst.data == "modified") {
