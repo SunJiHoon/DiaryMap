@@ -412,6 +412,8 @@ const ReviewSpace = () => {
                     p={4}
                     w="240px"
                     minH="300px"
+                    maxH="92vh"
+                    overflowY="scroll"
                     bgColor="#ffffff"
                     border={1}
                     borderRadius={4}
@@ -476,7 +478,9 @@ const ReviewSpace = () => {
                                 transition="all 0.3s ease-in-out"
                             >
                                 {dayModule.data.map((node, i) => {
-                                    return(<p key="i">{i+1}. {node}</p>)
+                                    const _key = "day "+dayModule.id + ": node " + i
+                                    console.log(_key)
+                                    return(<p key={_key}>{i+1}. {node}</p>)
                                 })}
                             </Box>
                         </Box>
