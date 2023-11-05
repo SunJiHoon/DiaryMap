@@ -24,6 +24,12 @@ class DayManager {
         instance = this
     }
 
+    clearNodes(){
+        nodes = [];
+        var temp = [];
+        nodes.push(temp);
+    }
+
     setObjectManager(_objectManager) {
         objectManager = _objectManager;
     }
@@ -55,11 +61,6 @@ class DayManager {
 
     setNodes(_nodes) {//saveManager에서 load할 때 넣어주기
         nodes = _nodes;
-    }
-
-    clearNodes() {
-        var temp = [];
-        nodes = temp;
     }
 
     // plusDay(){
