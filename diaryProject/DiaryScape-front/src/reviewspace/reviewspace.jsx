@@ -64,6 +64,13 @@ const ReviewSpace = () => {
     }, [onPlusDay])
 
     useEffect(() => {
+        dayCheckedList.map((dayChecked, i) => {
+            if(dayChecked) dayManager.visibleDay(i)
+            else dayManager.invisibleDay(i)
+        })
+    }, [dayCheckedList])
+
+    useEffect(() => {
         // dayManager.dataPropagationTest()
         if (map.current) return;
         map.current = new mapboxgl.Map({
