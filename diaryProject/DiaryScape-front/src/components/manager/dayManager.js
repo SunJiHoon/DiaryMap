@@ -73,6 +73,9 @@ class DayManager {
         console.log("currentDay:")
         console.log(this.currentDay)
         var temp = [];
+        if(this.currentDay > 2){
+            temp.push(nodes[this.currentDay - 2 ][nodes[this.currentDay - 2].length - 1]);
+        }
         nodes.push(temp);
         dayColor.push(this.colorList[(this.maxDay - 2) % this.colorList.length]);
     }
@@ -100,6 +103,8 @@ class DayManager {
     }
 
     plusDayNode(line, node) {
+        console.log(this.currentDay - 1);
+        console.log(nodes);
         nodes[this.currentDay - 1].push(line);
         nodes[this.currentDay - 1].push(node);
         this.updateDayNodesToFront();
