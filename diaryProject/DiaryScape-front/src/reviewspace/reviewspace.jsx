@@ -77,17 +77,16 @@ const ReviewSpace = () => {
 
 
         // let mglCameraPosition = new mapboxgl.MercatorCoordinate(0, 0, 0)
-        let renderer, scene, camera
 
-        let req
+        // let req
 
-        function handleResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
+        // function handleResize() {
+        //     camera.aspect = window.innerWidth / window.innerHeight;
+        //     camera.updateProjectionMatrix();
 
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.render(scene, camera);
-        }
+        //     renderer.setSize(window.innerWidth, window.innerHeight);
+        //     renderer.render(scene, camera);
+        // }
 
         const setMglCameraPosition = (x, y, z) => {
             const mglcamera = map.current.getFreeCameraOptions()
@@ -122,51 +121,48 @@ const ReviewSpace = () => {
             scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits()
         };
 
+        let mapCustomLayer
+
         const customLayer = {
             id: '3d-model',
             type: 'custom',
             renderingMode: '3d',
-            onAdd: (map, gl) => {
+            onAdd: function (map, gl) {
                 // async function init() {
-                scene = new THREE.Scene();
+                this.scene = new THREE.Scene();
 
-                renderer = new THREE.WebGLRenderer({
+                this.renderer = new THREE.WebGLRenderer({
                     canvas: map.getCanvas(),
                     context: gl,
-                    // antialias: true,
+                    antialias: true,
                     // alpha: true,
                 });
                 // this.renderer.setClearColor(0x80ffff, 1);
 
-                camera = new THREE.PerspectiveCamera(
-                    75,
-                    window.innerWidth / window.innerHeight,
-                    1,
-                    300
-                );
+                this.camera = new THREE.Camera()
                 // camera.rotation.y = Math.PI / 4;
                 // camera.position.set(-35, 45, 45);
                 // camera.lookAt(0, 0, 0);
 
-                objectManager = new ObjectManager(scene, camera, tripData, startnodeData);
+                objectManager = new ObjectManager(this.scene, this.camera, tripData, startnodeData);
                 objectManager.newMap("spongebob");
                 newMapFunctionRef.current = objectManager.newMap;
                 saveManager = new SaveManager(tripData);
                 saveManager.checkIsFirst().then(() => {
-                    inputManager = new InputManager(camera, map, setMglCameraPosition, scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
+                    inputManager = new InputManager(this.camera, map, setMglCameraPosition, this.scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
                     addNodeFunctionRef.current = selectOption
                 });
-                renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
 
                 // let _cameraPosition = map.getFreeCameraOptions().position;
                 // cameraPosition.set(_cameraPosition.x, _cameraPosition.y, _cameraPosition.z)
                 // if (inputManager) inputManager.setCameraPosition(cameraPosition)
                 // }
-
                 // init()
-                renderer.autoClear = false
+                this.renderer.autoClear = false
+                this.map = map
             },
-            render: (gl, matrix) => {
+            render: function (gl, matrix) {
                 const rotationX = new THREE.Matrix4().makeRotationAxis(
                     new THREE.Vector3(1, 0, 0),
                     modelTransform.rotateX
@@ -185,7 +181,7 @@ const ReviewSpace = () => {
                     .makeTranslation(
                         modelTransform.translateX,
                         modelTransform.translateY,
-                        modelTransform.translateZ + 0.0000001
+                        modelTransform.translateZ
                     )
                     .scale(
                         new THREE.Vector3(
@@ -198,21 +194,21 @@ const ReviewSpace = () => {
                     .multiply(rotationY)
                     .multiply(rotationZ);
 
-                camera.projectionMatrix = m.multiply(l);
-                renderer.resetState();
-                renderer.render(scene, camera);
+                this.camera.projectionMatrix = m.multiply(l);
+                this.renderer.resetState();
+                this.renderer.render(this.scene, this.camera);
 
                 // let _cameraPosition = map.current.getFreeCameraOptions().position;
                 // MglCameraPosition.set(_cameraPosition.x, _cameraPosition.y, _cameraPosition.z)
-                const freeCamera = map.current.getFreeCameraOptions();
+                const freeCamera = this.map.getFreeCameraOptions();
                 let newMglCameraPosition = new THREE.Vector4(freeCamera.position.x, freeCamera.position.y, freeCamera.position.z, 1);
                 if (inputManager) inputManager.setMglCameraPosition(new mapboxgl.MercatorCoordinate(newMglCameraPosition.x, newMglCameraPosition.y, newMglCameraPosition.z))
                 // console.log(camera.position)
                 // console.log(newMglCameraPosition)
                 newMglCameraPosition.applyMatrix4(l.invert());
                 if (inputManager) inputManager.setMglCameraPositionTransformed(new mapboxgl.MercatorCoordinate(newMglCameraPosition.x, newMglCameraPosition.y, newMglCameraPosition.z))
-                map.current.triggerRepaint()
-                window.addEventListener("resize", handleResize);
+                this.map.triggerRepaint()
+                // window.addEventListener("resize", handleResize);
 
                 // anim();
             },
@@ -277,7 +273,7 @@ const ReviewSpace = () => {
 
         return (() => {
             // cancelAnimationFrame(req)
-            window.removeEventListener("resize", handleResize)
+            // window.removeEventListener("resize", handleResize)
             inputManager?.cleanup()
             map.current.remove()
         })
