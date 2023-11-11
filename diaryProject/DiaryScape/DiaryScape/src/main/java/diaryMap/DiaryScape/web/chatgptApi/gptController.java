@@ -29,29 +29,30 @@ import org.apache.http.util.EntityUtils;
 @Slf4j
 public class gptController {
     @GetMapping(value = "/chatgptApi/sumedDiary",produces = "application/json")
-    public void giveMeSumedDiary() throws IOException {
+    public String giveMeSumedDiary() throws IOException {
         log.info("쿼리쏘기");
-        String apiKey = "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";
-        //String apiUrl = "https://api.openai.com/v1/chat/completions"; // API 엔드포인트 URL
-        //String apiKey = "YOUR_API_KEY";
-        String prompt = "Translate the following English text to French: 'Hello, how are you?'";
-        String apiUrl = "https://api.openai.com/v1/engines/davinci-codex/completions";
-
+        String apiUrl = "http://localhost:5000/chat";
+        String basicPrompt = "내가 말하는 모든 문장을 소재로 시로 써줘. ";
+        //String prompt = "Translate the following English text to French: 'Hello, how are you?'";
+        String addedPrompt = "아침엔 비가 왔다. 점심엔 소금빵을 먹었는데, 조금 짰다. 날은 하루종일 흐리다.";
         try {
             URL url = new URL(apiUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            conn.setRequestProperty("Authorization", "Bearer " + apiKey);
+            conn.setRequestProperty("Content-type", "application/json; charset=UTF-8");
+
+            // JSON 데이터를 요청 바디에 작성
+            String jsonInputString = "{\"user_message\": \"" +
+                    basicPrompt + addedPrompt +
+                    "\"}";
+
+            // Output 스트림을 열어서 JSON 데이터 전송
             conn.setDoOutput(true);
-
-            String postData = "{\"prompt\": \"" + prompt + "\", \"max_tokens\": 50}"; // Adjust max_tokens as needed
-
             try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = postData.getBytes("UTF-8");
+                byte[] input = jsonInputString.getBytes("utf-8");
                 os.write(input, 0, input.length);
             }
+
 
             int responseCode = conn.getResponseCode();
 
@@ -67,6 +68,7 @@ public class gptController {
 
                 String responseBody = response.toString();
                 System.out.println("Response: " + responseBody);
+                return responseBody;
             } else {
                 System.out.println("Request failed with response code: " + responseCode);
             }
@@ -75,6 +77,6 @@ public class gptController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return "실패";
     }
 }
