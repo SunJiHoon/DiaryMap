@@ -1,5 +1,9 @@
 package diaryMap.DiaryScape.web.chatgptApi;
 
+import diaryMap.DiaryScape.domain.obj3d.Obj3d;
+import diaryMap.DiaryScape.domain.obj3d.Obj3dRepository;
+import diaryMap.DiaryScape.domain.obj3d.dayReview;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +18,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -28,13 +34,39 @@ import org.apache.http.util.EntityUtils;
 @RequestMapping("/api")
 @Slf4j
 public class gptController {
+    private final Obj3dRepository obj3dRepository;
+
     @GetMapping(value = "/chatgptApi/sumedDiary",produces = "application/json")
-    public String giveMeSumedDiary() throws IOException {
+    public MyAnswer giveMeSumedDiary(
+            @RequestParam Map<String, String> paraMap
+    ) throws IOException {
+        String addedPrompt = "";
+
+        //actualObj3d로 addedPrompt를 구성할 것이다.
+        Obj3d actualObj3d;
+        Optional<Obj3d> LookingObj3d = obj3dRepository.findById(paraMap.get("mapId"));
+        if (LookingObj3d.isPresent()) {
+            actualObj3d = LookingObj3d.get();
+            ArrayList<dayReview> lookedDayReviews = actualObj3d.getDayReviews();
+            //log.info(String.valueOf(actualObj3d));
+            log.info("찾은 내용은 다음과 같습니다.");
+            for (int i=0;i<lookedDayReviews.size();i++){
+                addedPrompt += lookedDayReviews.get(i).getVisitDate() + " ";
+                addedPrompt += lookedDayReviews.get(i).getDayReview();
+                log.info("날짜 : " + lookedDayReviews.get(i).getVisitDate());
+                log.info("일일 리뷰 : " + lookedDayReviews.get(i).getDayReview());
+            }
+        } else {
+            MyAnswer myAnswer = new MyAnswer();
+            myAnswer.setAnswer("mapId불일치. 조회 실패");
+            return myAnswer;
+        }
+
+        ////
         log.info("쿼리쏘기");
         String apiUrl = "http://localhost:5000/chat";
-        String basicPrompt = "내가 말하는 모든 문장을 소재로 시로 써줘. ";
+        String basicPrompt = "내가 말하는 모든 문장을 소재로 다시 짧은 시를 써줘. ";
         //String prompt = "Translate the following English text to French: 'Hello, how are you?'";
-        String addedPrompt = "아침엔 비가 왔다. 점심엔 소금빵을 먹었는데, 조금 짰다. 날은 하루종일 흐리다.";
         try {
             URL url = new URL(apiUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -68,7 +100,10 @@ public class gptController {
 
                 String responseBody = response.toString();
                 System.out.println("Response: " + responseBody);
-                return responseBody;
+                MyAnswer myAnswer = new MyAnswer();
+                myAnswer.setAnswer(responseBody);
+                log.info(responseBody);
+                return myAnswer;
             } else {
                 System.out.println("Request failed with response code: " + responseCode);
             }
@@ -77,6 +112,14 @@ public class gptController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "실패";
+        MyAnswer myAnswer = new MyAnswer();
+        myAnswer.setAnswer("python 쿼리 실패");
+        return myAnswer;
     }
+}
+
+@Data
+@RequiredArgsConstructor
+class MyAnswer{
+    private String answer;
 }
