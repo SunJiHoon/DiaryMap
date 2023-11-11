@@ -29,11 +29,15 @@ class saveManager {
 
     saveMyNodes() {
         let jsonArr = [];
-        const max_day = dayManager.getMaxDay();
-        for(let j = 0; j<max_day;j++){
-            const size = dayManager.getNodes(j).length;
-            for (let i = 1; i < size; i+2) {
-                jsonArr.push(dayManager.getNodes(j)[i]);
+        const max_day = dayManager.getMaxDay() - 1;
+        console.log(max_day);
+        for (let j = 0; j < max_day; j++) {
+            var temp_nodes = dayManager.getNodes(j);
+            const size = temp_nodes.length;
+            console.log(temp_nodes);
+            console.log(size);
+            for (let i = 1; i < size; i += 2) {
+                jsonArr.push(temp_nodes[i]);
             }
         }
         console.log(jsonArr);

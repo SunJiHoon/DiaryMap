@@ -19,6 +19,7 @@ let map
 let setMglCameraPosition
 
 const objectManager = new ObjectManager();
+const saveManager = new SaveManager();
 const dayManager = new DayManager();
 const raycaster = new THREE.Raycaster();
 
@@ -170,7 +171,7 @@ export const selectOption = (selectOptionDataState) => {
   select_option.userData.visitDate = "2023-11-01";//cur_date;
   dayManager.plusDayNode(line, select_option);
 
-  // objectManager.saveMyNodes();
+  saveManager.saveMyNodes();
 
   const targetPos = new THREE.Vector3(
     select_option.position.x,

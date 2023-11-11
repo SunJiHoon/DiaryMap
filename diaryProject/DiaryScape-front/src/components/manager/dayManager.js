@@ -1,10 +1,8 @@
-import ObjectManager from "./objectManager";
-
 let instance = null;
 
 let objectManager;
-let dayColor = [];
 
+let dayColor = [];
 var nodes = [];
 
 class DayManager {
@@ -47,10 +45,10 @@ class DayManager {
     }
 
     printStateData() {
-        console.log(this.dayModuleList)
-        console.log(this.dayCheckedList)
-        console.log(this.currentDay)
-        console.log(this.maxDay)
+        // console.log(this.dayModuleList)
+        // console.log(this.dayCheckedList)
+        // console.log(this.currentDay)
+        // console.log(this.maxDay)
     }
 
     updateDayNodesToFront(){
@@ -58,8 +56,6 @@ class DayManager {
             if(dayModule.id == this.currentDay) {
                 var temp = [];
                 for(let index = 0;index<nodes[this.currentDay-1].length/2;index++){
-                    console.log(this.currentDay);
-                    console.log(nodes);
                     temp.push(nodes[this.currentDay-1][index * 2 + 1].userData.title);
                 }
                 dayModule.data = temp;
@@ -72,8 +68,6 @@ class DayManager {
     }
 
     plusDay(){
-        console.log("currentDay:")
-        console.log(this.currentDay)
         var temp = [];
         if(this.currentDay > 1){//전 날의 마지막 노드를 추가한 날의 첫 노드로 넣어줌
             temp.push(null);
@@ -121,7 +115,7 @@ class DayManager {
     }
 
     getMaxDay() {
-        return max_day;
+        return this.maxDay;
     }
 
     getDayColor(dayIdx) {
