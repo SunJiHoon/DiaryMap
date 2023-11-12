@@ -2,8 +2,8 @@ let instance = null;
 
 let objectManager;
 
-let dayColor = [];
 var nodes = [];
+var reviews = [];
 
 class DayManager {
     constructor() {
@@ -74,13 +74,9 @@ class DayManager {
             temp.push(nodes[this.currentDay - 2][nodes[this.currentDay - 2].length - 1]);
         }
         nodes.push(temp);
-        dayColor.push(this.colorList[(this.maxDay - 1) % this.colorList.length]);
+        reviews.push("");
     }
-
-    setNodes(_nodes) {//saveManager에서 load할 때 넣어주기
-        nodes = _nodes;
-    }
-
+    
     visibleDay(dayIdx) {
         const size = nodes[dayIdx].length;
         for (let i = 0; i < size; i++) {
@@ -99,31 +95,47 @@ class DayManager {
         }
     }
 
+    setNodes(_nodes) {//saveManager에서 load할 때 넣어주기
+        nodes = _nodes;
+    }
+
+    getNodes(){
+        return nodes;
+    }
+
     plusDayNode(line, node) {
         nodes[this.currentDay - 1].push(line);
         nodes[this.currentDay - 1].push(node);
         this.updateDayNodesToFront();
     }
 
-    removeDayNode(dayIdx, index) {
+    removeDayNode(dayIdx, index) {//구현하기
         objectManager.removeObject();
         this.updateDayNodesToFront();
+    }
+
+    getReviews(){
+        return reviews;
+    }
+
+    updateDayReview(idx, review){
+        reviews[idx] = review;
     }
 
     getCurDay() {
         return this.currentDay;
     }
 
+    getDate(){
+        
+    }
+
     getMaxDay() {
         return this.maxDay;
     }
 
-    getDayColor(dayIdx) {
-        return dayColor[dayIdx];
-    }
-
-    getNodes(dayIdx) {
-        return nodes[dayIdx];
+    getDayColor(Idx){
+        return this.colorList[Idx % 4];
     }
 }
 

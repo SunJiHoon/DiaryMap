@@ -84,11 +84,8 @@ class inputManager {
 
   handleKeyDown(event) {
     if (cur_state == InputState.IDLE) {
-      if (event.key == 'a') {
-        dayManager.invisibleDay(0);
-      }
-      else if (event.key == 'b') {
-        dayManager.visibleDay(0);
+      if(event.key == 'l'){
+        saveManager.loadMyNodes();
       }
     }
     if (event.key == 't') {
@@ -160,7 +157,7 @@ class inputManager {
 export const selectOption = (selectOptionDataState) => {
   const { character, select_option } = selectOptionDataState;
   const cur_day = dayManager.getCurDay();
-  const nodes = dayManager.getNodes(cur_day - 1);
+  const nodes = dayManager.getNodes()[cur_day-1];
   const index = nodes.length - 1;
   const cur_node = nodes[index];
 

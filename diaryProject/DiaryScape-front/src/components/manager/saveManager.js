@@ -20,8 +20,7 @@ class saveManager {
             await objectManager.initNode();
         }
         else if (isFirst.data == "modified") {
-            //client로 받아와서
-            //dayManager.setNodes();
+            // dayManager.clearNodes();//이거 있으면 안 됨. 왜?
             // await this.loadMyNodes();//load 가능해지면 주석 풀기
             await objectManager.initNode();
         }
@@ -30,19 +29,29 @@ class saveManager {
     saveMyNodes() {
         let jsonArr = [];
         const max_day = dayManager.getMaxDay() - 1;
-        console.log(max_day);
         for (let j = 0; j < max_day; j++) {
-            var temp_nodes = dayManager.getNodes(j);
+            var temp_nodes = dayManager.getNodes()[j];
             const size = temp_nodes.length;
-            console.log(temp_nodes);
-            console.log(size);
             for (let i = 1; i < size; i += 2) {
-                jsonArr.push(temp_nodes[i]);
+                jsonArr.push(temp_nodes[i].userData);
             }
         }
-        console.log(jsonArr);
         jsonArr = JSON.stringify(jsonArr);
+        console.log(jsonArr);
         client.post("/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
+    }
+
+    async loadMyNodes() {
+        const res = await client.get("/api/obj/one/onlyMapJsonGroupByDate?mapId=" + tripData.mapId);
+        console.log(res.data);
+        //cur_day랑 max_day 변경해주기
+        dayManager.setNodes(res.data);
+        // nodes 받아와서 draw days
+    }
+
+    saveReviews(){
+        const reviews = dayManager.getReviews();
+        client.post()
     }
 }
 

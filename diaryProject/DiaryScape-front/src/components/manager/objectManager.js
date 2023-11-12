@@ -8,18 +8,14 @@ import DayManager from "./dayManager.js";
 let cur_options = [];
 
 var scene;
-var camera;
 var player;
 var tripData;
 var startNodeData;
 const dayManager = new DayManager();
 
-const originCameraPos = new THREE.Vector3(-35, 45, 45);
-
 class objectManager {
   constructor(_scene, _camera, _tripData, _startNodeData) {
     scene = _scene;
-    camera = _camera;
     tripData = _tripData;
     startNodeData = _startNodeData;
     dayManager.setObjectManager(this);
@@ -79,38 +75,7 @@ class objectManager {
     scene.remove(object);
   }
 
-  // saveMyNodes() {
-  //   let jsonArr = [];
-  //   const size = player.userData.myNodes.length;
-  //   for (let i = 0; i < size; i++) {
-  //     jsonArr.push(player.userData.myNodes[i].userData);
-  //   }
-  //   jsonArr = JSON.stringify(jsonArr);
-  //   client.post("/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
-  //   this.drawDay(dayManager.getCurDay());
-  // }
-
-  // async loadMyNodes() {
-  //   const res = await client.get("/api/obj/one?mapId=" + tripData.mapId);
-  //   const nodeArr = res.data.jsonArr;
-  //   player.userData.myNodes = nodeArr;
-
-  //   const startNode = await new Node(nodeArr[0]);
-  //   scene.add(startNode);
-
-  //   const size = res.data.jsonArr.length;
-
-  //   for (let i = 0; i < size - 1; i++) {
-  //     const nextNode = await new Node(nodeArr[i + 1]);
-  //     scene.add(nextNode);
-  //     this.drawLine(new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY), new THREE.Vector3(nodeArr[i + 1].relativeX, 0, nodeArr[i + 1].relativeY));
-  //   }
-
-  //   player.position.set(nodeArr[size-1].relativeX, 0, nodeArr[size-1].relativeY);
-  //   camera.position.set(nodeArr[size-1].relativeX + originCameraPos.x, 0 + originCameraPos.y, nodeArr[size-1].relativeY + originCameraPos.z);
-  // }
-
-  async drawDay(dayIdx) {
+  async drawDay(nodeArr, dayIdx) {
     const res = await client.get("/api/obj/one/onlyMapJsonGroupByDate?mapId=" + tripData.mapId);
     if (res.data.length < dayIdx) { console.log("day 없음"); return; }
     nodeArr = res.data[dayIdx];
@@ -122,6 +87,7 @@ class objectManager {
     if (size > 0) {
       const startNode = await new Node(nodeArr[0]);
       scene.add(startNode);
+      objectArr.push(null);
       objectArr.push(startNode);
     }
 
