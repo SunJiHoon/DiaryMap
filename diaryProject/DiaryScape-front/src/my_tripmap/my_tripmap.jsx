@@ -111,7 +111,7 @@ const MyTripmap = () => {
             mapId: review.mapId,
             startX: review.mapX,
             startY: review.mapY,
-            date: review.date,
+            date: review.visitDate,
         }))
         dispatch(selectStartnode({
             reviewtitle: review.reviewtitle,
