@@ -20,7 +20,6 @@ class saveManager {
             await objectManager.initNode();
         }
         else if (isFirst.data == "modified") {
-            // dayManager.clearNodes();//이거 있으면 안 됨. 왜?
             // await this.loadMyNodes();//load 가능해지면 주석 풀기
             await objectManager.initNode();
         }
@@ -37,7 +36,6 @@ class saveManager {
             }
         }
         jsonArr = JSON.stringify(jsonArr);
-        console.log(jsonArr);
         client.post("/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
     }
 
@@ -46,16 +44,28 @@ class saveManager {
         console.log(res.data);
         //cur_day랑 max_day 변경해주기
         dayManager.setNodes(res.data);
-        // nodes 받아와서 draw days
+        const size = res.data.length;
+        for (let i = 0; i < size; i++) {
+            objectManager.drawDay(res.data[i].nodes, i);
+        }
     }
 
-    saveReviews(){
+    saveReviews() {
+        var dayReviews = [];
         const reviews = dayManager.getReviews();
-        console.log(reviews);
-        client.post("/api/dayReviews/save?mapId=" + tripData.mapId, { reviews }, {withCredentials: true});
+        const size = reviews.length;
+        for (let i = 0; i < size; i++) {
+            var temp = new Object();
+            temp.visitDate = dayManager.getDate(i);
+            temp.dayReview = reviews[i];
+            dayReviews.push(temp);
+        }
+        dayReviews = JSON.stringify(dayReviews);
+        console.log(dayReviews);
+        client.post("/api/dayReviews/save?mapId=" + tripData.mapId, { dayReviews }, { withCredentials: true });
     }
 
-    loadReviews(){
+    loadReviews() {
         const reviews = client.get("api/dayReviews/look?mapId=" + tripData.mapId);
         console.log(reviews);
         dayManager.setReviews(reviews);

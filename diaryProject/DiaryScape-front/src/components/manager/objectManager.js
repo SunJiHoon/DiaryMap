@@ -47,7 +47,7 @@ class objectManager {
     // player.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
     // camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
-    startNode.userData.visitDate = "2023-10-31"//tripData.startDate
+    startNode.userData.visitDate = tripData.date
     dayManager.plusDayNode(null, startNode);
     await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
@@ -76,9 +76,7 @@ class objectManager {
   }
 
   async drawDay(nodeArr, dayIdx) {
-    const res = await client.get("/api/obj/one/onlyMapJsonGroupByDate?mapId=" + tripData.mapId);
-    if (res.data.length < dayIdx) { console.log("day 없음"); return; }
-    nodeArr = res.data[dayIdx];
+    console.log(nodeArr); console.log(dayIdx);
     const size = nodeArr.length;
     const dayColor = dayManager.getDayColor(dayIdx);
 
@@ -99,6 +97,12 @@ class objectManager {
         dayColor);
       objectArr.push(line); objectArr.push(nextNode);
     }
+  }
+
+  async createNode(nodeInfo){//기훈 파트에도 먼가 변화를 줘야하는 듯
+    var node = await new Node(nodeInfo);
+    scene.add(node);
+    return node;
   }
 
   drawLine(startNode, endNode, lineColor) {

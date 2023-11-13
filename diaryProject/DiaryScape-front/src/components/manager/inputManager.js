@@ -91,7 +91,8 @@ class inputManager {
         saveManager.saveReviews();
       }
       else if(event.key == 'g'){
-        dayManager.getDate();
+        const nodes = dayManager.getNodes();
+        console.log(nodes);
       }
     }
     if (event.key == 't') {
@@ -171,7 +172,7 @@ export const selectOption = (selectOptionDataState) => {
   objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY));
   objectManager.invisibleOptions(select_option);
 
-  select_option.userData.visitDate = "2023-11-01";//cur_date;
+  select_option.userData.visitDate = dayManager.getDate(cur_day-1);//cur_date;
   dayManager.plusDayNode(line, select_option);
 
   saveManager.saveMyNodes();

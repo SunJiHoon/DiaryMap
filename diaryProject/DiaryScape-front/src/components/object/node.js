@@ -21,7 +21,7 @@ class node {
     const objGeometry = new THREE.SphereGeometry(2);
     const objMaterial = new THREE.MeshBasicMaterial({ color: "gray" });
     const obj = new THREE.Mesh(objGeometry, objMaterial);
-    obj.scale.set(0.8,0.8,0.8);
+    obj.scale.set(4,4,4);
 
     const gltfLoader = new GLTFLoader();
     const ranNum = randInt(0, foods.length - 1);
