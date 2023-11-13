@@ -85,7 +85,13 @@ class inputManager {
   handleKeyDown(event) {
     if (cur_state == InputState.IDLE) {
       if(event.key == 'l'){
-        saveManager.loadMyNodes();
+        saveManager.loadReviews();
+      }
+      else if(event.key == 's'){
+        saveManager.saveReviews();
+      }
+      else if(event.key == 'g'){
+        dayManager.getDate();
       }
     }
     if (event.key == 't') {

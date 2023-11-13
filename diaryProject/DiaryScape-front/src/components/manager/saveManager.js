@@ -51,7 +51,14 @@ class saveManager {
 
     saveReviews(){
         const reviews = dayManager.getReviews();
-        client.post()
+        console.log(reviews);
+        client.post("/api/dayReviews/save?mapId=" + tripData.mapId, { reviews }, {withCredentials: true});
+    }
+
+    loadReviews(){
+        const reviews = client.get("api/dayReviews/look?mapId=" + tripData.mapId);
+        console.log(reviews);
+        dayManager.setReviews(reviews);
     }
 }
 

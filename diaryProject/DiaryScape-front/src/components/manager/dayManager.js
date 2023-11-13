@@ -30,11 +30,13 @@ class DayManager {
         this.setDayModuleList = _setDayModuleList
     }
 
-    updateFromFrontData(_dayModuleList, _dayCheckedList, _currentDay, _nextDayMenuId) {
+    updateFromFrontData(_dayModuleList, _dayCheckedList, _currentDay, _nextDayMenuId, _tripData) {
         this.dayModuleList = _dayModuleList;
         this.dayCheckedList = _dayCheckedList;
         this.currentDay = _currentDay;
         this.maxDay = _nextDayMenuId;
+        this.tripData = _tripData;
+        console.log(_tripData);
     }
 
     dataPropagationTest() {
@@ -45,6 +47,7 @@ class DayManager {
     }
 
     printStateData() {
+        console.log(this.tripData);
         // console.log(this.dayModuleList)
         // console.log(this.dayCheckedList)
         // console.log(this.currentDay)
@@ -118,6 +121,10 @@ class DayManager {
         return reviews;
     }
 
+    setReviews(_reviews){
+        reviews = _reviews;
+    }
+
     updateDayReview(idx, review){
         reviews[idx] = review;
     }
@@ -127,7 +134,9 @@ class DayManager {
     }
 
     getDate(){
-        
+        console.log(this.tripData.date);
+        const date = new Date(this.tripData.date);
+        console.log(date);
     }
 
     getMaxDay() {

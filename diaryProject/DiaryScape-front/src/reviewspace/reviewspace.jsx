@@ -9,7 +9,6 @@ import { Box, Button, IconButton, Checkbox, Select } from '@chakra-ui/react'
 import { useSelector } from "react-redux";
 import { IoChevronDown, IoRemove } from "react-icons/io5"
 import { useNavigate } from "react-router-dom";
-// import Map from "../components/object/map";
 import { createContext, useContext } from "react";
 import mapboxgl from "mapbox-gl";
 import MapboxLanguage from "@mapbox/mapbox-gl-language";
@@ -51,13 +50,13 @@ const ReviewSpace = () => {
 
     dayManager.setStateSetter(setDayModuleList)
 
-    dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId)
+    dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
+    console.log(tripData);
 
 
     useEffect(() => {
-        dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId)
-        dayManager.printStateData()
-    }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId])
+        dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
+        dayManager.printStateData()    }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData])
 
     useEffect(() => {
         dayManager.plusDay()
@@ -406,7 +405,7 @@ const ReviewSpace = () => {
                 >
                     <Select value={currentDay} onChange={(e) => {
                         setCurrentDay(e.target.value)
-                        // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
+                        // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
                         // dayManager.printStateData()
                     }}>
                         {dayModuleList.map((dayModule) => (
@@ -445,7 +444,7 @@ const ReviewSpace = () => {
                                         }
                                     })
                                     setDayCheckedList(nextDayCheckedList)
-                                    // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
+                                    // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
                                     // dayManager.printStateData()
                                 }}></Checkbox>
                             </Box>
@@ -470,7 +469,7 @@ const ReviewSpace = () => {
                                             }
                                         })
                                         setDayMenuOpenList(nextDayMenuOpenList)
-                                        // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
+                                        // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
                                         // dayManager.printStateData()
                                     }}
                                 />
