@@ -18,4 +18,6 @@ public class NodeDTO_for_update {
     private String relativeY;
     private String addr1;
     private String visitDate;
+    private String nodeReview;
 }
+

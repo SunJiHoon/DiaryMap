@@ -52,6 +52,8 @@ public class Obj3dController {
         tempStartNode.setMapx(paraMap.get("mapx"));
         tempStartNode.setMapy(paraMap.get("mapy"));
         tempStartNode.setVisitDate(paraMap.get("date"));
+        tempStartNode.setNodeReview(paraMap.get("nodeReview"));
+
 
 
         obj3d1.setStartNode(tempStartNode);
@@ -292,6 +294,76 @@ public class Obj3dController {
                 destinationNodeDTO.setRelativeY(sourceNodeDTO.getRelativeY());
                 destinationNodeDTO.setAddr1(sourceNodeDTO.getAddr1());
                 destinationNodeDTO.setVisitDate(sourceNodeDTO.getVisitDate());
+                destinationNodeDTO.setNodeReview(paraMap.get("nodeReview"));
+                // 다른 필드 복사
+                NodeDTOs_for_update[i] = destinationNodeDTO;
+            }
+
+            actualObj3d.setJsonArr(NodeDTOs_for_update);
+            log.info(NodeDTOs_for_update.toString());
+            actualObj3d.setModifiedTime(formattedTime);
+            log.info("저장수행");
+            obj3dRepository.save(actualObj3d);
+            //log.info(String.valueOf(actualObj3d));
+            log.info("저장완료");
+        } else {
+            log.info("mapId불일치. 저장실패");
+
+        }
+        //저장된 내용 반환하기
+        return "...";
+    }
+
+    ///
+
+    @PostMapping(value = "/obj/update/usingJson")
+    public String updateOneMapUsingJson(
+            @RequestParam Map<String, String> paraMap,
+            //@RequestBody Obj3d paramObj3d
+            @RequestBody Map<String, List<trashDTO>> jsonData
+            //url+?키=value&키=value //John%20Doe
+            //@CookieValue(value = "memberId", required = false) String cookie
+    ) throws JsonProcessingException {
+        Obj3d actualObj3d;
+        Optional<Obj3d> beingUpdateObj3d = obj3dRepository.findById(paraMap.get("mapId"));
+        if (beingUpdateObj3d.isPresent()) {
+            LocalDateTime currentTime = LocalDateTime.now();
+            // 시간 형식 지정 (예: "yyyy-MM-dd HH:mm:ss")
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            // 형식에 맞게 출력
+            String formattedTime = currentTime.format(formatter);
+            log.info("객체 수정 시점: " + formattedTime);
+
+            actualObj3d = beingUpdateObj3d.get();
+
+            // 이 메서드에서 jsonData를 사용할 수 있습니다.
+            List<trashDTO> jsonArr = jsonData.get("jsonArr");
+
+            trashDTO[] trashDTO_for_NodeDTOs_for_update = new trashDTO[jsonArr.size()];
+            for(int i = 0;i<jsonArr.size();i++){
+                trashDTO_for_NodeDTOs_for_update[i] = jsonArr.get(i);
+            }
+
+            // JSON 데이터를 처리하는 로직을 작성합니다.
+            NodeDTO_for_update[] NodeDTOs_for_update = new NodeDTO_for_update[trashDTO_for_NodeDTOs_for_update.length];
+
+            // trashDTO_for_NodeDTOs_for_update 배열을 NodeDTO_for_update 배열로 변환 및 복사
+            for (int i = 0; i < trashDTO_for_NodeDTOs_for_update.length; i++) {
+                trashDTO sourceNodeDTO = trashDTO_for_NodeDTOs_for_update[i];
+
+                NodeDTO_for_update destinationNodeDTO = new NodeDTO_for_update();
+
+                destinationNodeDTO.setContentid(sourceNodeDTO.getContentID());
+                destinationNodeDTO.setContentTypeId(sourceNodeDTO.getContentType());
+                destinationNodeDTO.setTitle(sourceNodeDTO.getTitle());
+                destinationNodeDTO.setTel(sourceNodeDTO.getTel());
+                destinationNodeDTO.setMapx(sourceNodeDTO.getMapX());
+                destinationNodeDTO.setMapy(sourceNodeDTO.getMapY());
+                destinationNodeDTO.setRelativeX(sourceNodeDTO.getRelativeX());
+                destinationNodeDTO.setRelativeY(sourceNodeDTO.getRelativeY());
+                destinationNodeDTO.setAddr1(sourceNodeDTO.getAddr1());
+                destinationNodeDTO.setVisitDate(sourceNodeDTO.getVisitDate());
+                destinationNodeDTO.setNodeReview(paraMap.get("nodeReview"));
                 // 다른 필드 복사
                 NodeDTOs_for_update[i] = destinationNodeDTO;
             }
@@ -361,6 +433,8 @@ class trashDTO{
     private String relativeY;
     private String addr1;
     private String visitDate;
+    private String nodeReview;
+
 }
 @Data
 @RequiredArgsConstructor
