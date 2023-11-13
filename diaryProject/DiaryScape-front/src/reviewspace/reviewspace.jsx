@@ -5,7 +5,7 @@ import SaveManager from "../components/manager/saveManager";
 import DayManager from "../components/manager/dayManager";
 import { useRef, useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
-import { Box, Button, IconButton, Checkbox, Select } from '@chakra-ui/react'
+import { Box, Button, IconButton, Checkbox, Select, Input } from '@chakra-ui/react'
 import { useSelector } from "react-redux";
 import { IoChevronDown, IoRemove } from "react-icons/io5"
 import { useNavigate } from "react-router-dom";
@@ -393,7 +393,7 @@ const ReviewSpace = () => {
             }}>
                 <Box
                     mt={4}
-                    p={4}
+                    p={3}
                     mr={4}
                     w="240px"
                     minH="30px"
@@ -404,15 +404,21 @@ const ReviewSpace = () => {
                     textAlign="left"
                     boxShadow="2xl"
                 >
-                    <Select value={currentDay} onChange={(e) => {
-                        setCurrentDay(e.target.value)
-                        // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
-                        // dayManager.printStateData()
-                    }}>
-                        {dayModuleList.map((dayModule) => (
-                            <option key={"option" + dayModule.id} value={dayModule.id} > Day {dayModule.id}</option>
-                        ))}
-                    </Select>
+                    <Box
+                        display="flex"
+                        alignItems="center"
+                    >
+                        <Box w="160px" fontWeight="semibold">편집할 Day</Box>
+                        <Select value={currentDay} onChange={(e) => {
+                            setCurrentDay(e.target.value)
+                            // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
+                            // dayManager.printStateData()
+                        }}>
+                            {dayModuleList.map((dayModule) => (
+                                <option key={"option" + dayModule.id} value={dayModule.id} > Day {dayModule.id}</option>
+                            ))}
+                        </Select>
+                    </Box>
                 </Box>
                 <Box
                     mt={4}
@@ -487,8 +493,12 @@ const ReviewSpace = () => {
                                 {dayModule.data.map((node, i) => {
                                     const _key = "day "+dayModule.id + ": node " + i
                                     console.log(_key)
-                                    return(<p key={_key}>{i+1}. {node}</p>)
+                                    return(<Box fontWeight="semibold" key={_key}>{i+1}. {node}</Box>)
                                 })}
+                                <Box mt={4}>
+                                    <Box fontWeight="semibold">리뷰</Box>
+                                    <Input mt={2} boxShadow="2xl"/>
+                                </Box>
                             </Box>
                         </Box>
                     ))}
