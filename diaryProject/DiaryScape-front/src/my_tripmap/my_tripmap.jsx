@@ -188,6 +188,8 @@ const MyTripmap = () => {
         else {
             client.get('/api/obj/list').then((res) => {
                 setReviewData(res.data)
+                console.log("date test")
+                console.log(res.data)
             })
         }
     }, [])

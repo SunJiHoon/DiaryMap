@@ -56,7 +56,8 @@ const ReviewSpace = () => {
 
     useEffect(() => {
         dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
-        dayManager.printStateData()    }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData])
+        dayManager.printStateData()
+    }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData])
 
     useEffect(() => {
         dayManager.plusDay()

@@ -57,17 +57,18 @@ class DayManager {
     updateDayNodesToFront(){
         const nextDayModuleList = this.dayModuleList.map((dayModule, i) => {
             if(dayModule.id == this.currentDay) {
-                var temp = [];
+                let temp = [];
                 for(let index = 0;index<nodes[this.currentDay-1].length/2;index++){
                     temp.push(nodes[this.currentDay-1][index * 2 + 1].userData.title);
                 }
-                dayModule.data = temp;
-                return dayModule
+                //dayModule.data = temp;
+                return {id: dayModule.id, data: temp}
             }
             else {
                 return dayModule
             }
         })
+        this.setDayModuleList(nextDayModuleList)
     }
 
     plusDay(){
