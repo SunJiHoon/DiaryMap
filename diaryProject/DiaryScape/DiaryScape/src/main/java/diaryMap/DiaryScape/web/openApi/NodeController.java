@@ -65,7 +65,7 @@ public class NodeController {
 
         // item 배열을 순회하면서 데이터 추출
         List<NodeDTO> nodeDTOList = new ArrayList<>();
-        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 12, 2));//관광지
+        nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 12, 30));//관광지
 
         //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
         //nodeDTOList.addAll(giveMetourDestination(searchMapX, searchMapY, paraMap.get("mapId"), 15, 2));//축제공연행사
@@ -79,13 +79,13 @@ public class NodeController {
 
 
         //nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 12, 2));//관광지
-        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
-        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 15, 2));//축제공연행사
-        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 25, 2));//여행코스
-        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 28, 2));//레포츠
-        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 32, 2));//숙박
-        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 38, 2));//쇼핑
-        nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 39, 2));//음식점
+        //nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 14, 2));//문화시설
+        //nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 15, 2));//축제공연행사
+        //nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 25, 2));//여행코스
+        //nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 28, 2));//레포츠
+        //nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 32, 2));//숙박
+        //nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 38, 2));//쇼핑
+        //nodeDTOList.addAll(giveMetourDestination_dummy(searchMapX, searchMapY, paraMap.get("mapId"), 39, 2));//음식점
 
 
 
@@ -136,7 +136,7 @@ public class NodeController {
                             metroarr.get(i).getCode(), "50",
                             metroarr.get(i).getLine() + " " + metroarr.get(i).getName(), "noetel",
                             metroarr.get(i).getLng(), metroarr.get(i).getLat(),
-                            calRelativeX(startX, metroarr.get(i).getLng()), calRelativeX(startY, metroarr.get(i).getLat()),
+                            calRelativeX(startX, metroarr.get(i).getLng()), calRelativeY(startY, metroarr.get(i).getLat()),
                     metroarr.get(i).getLine() + " " + metroarr.get(i).getName())
             );
         }
@@ -147,10 +147,10 @@ public class NodeController {
         ///openApi/node?mapX=126.981611&mapY=37.568477&radius=100000&contentTypeId=관광지
         URL url = new URL(makeApiQuery(numOfSearch,1,
                 Double.parseDouble(searchMapX), Double.parseDouble(searchMapY),
-                10000, contentTypeId));
+                1000, contentTypeId));
         log.info(makeApiQuery(numOfSearch,1,
                 Double.parseDouble(searchMapX), Double.parseDouble(searchMapY),
-                10000, contentTypeId));
+                1000, contentTypeId));
         String line;
         StringBuilder sb = new StringBuilder();
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -210,7 +210,7 @@ public class NodeController {
             String mapx = item.getString("mapx");
             String mapy = item.getString("mapy");
             String relativeX = calRelativeX(startX, mapx);
-            String relativeY = calRelativeX(startY, mapy);//calRelativeX를 Y에 재활용.
+            String relativeY = calRelativeY(startY, mapy);//calRelativeX를 Y에 재활용.
             String addr1 = item.getString("addr1");
             nodeDTOList.add(
                     new NodeDTO(
@@ -247,7 +247,7 @@ public class NodeController {
             String mapx = Double.toString(Double.parseDouble(searchMapX) + (Math.random()-0.5)*2 *0.1);
             String mapy = Double.toString(Double.parseDouble(searchMapY) + (Math.random()-0.5)*2 *0.1);
             String relativeX = calRelativeX(startX, mapx);
-            String relativeY = calRelativeX(startY, mapy);//calRelativeX를 Y에 재활용.
+            String relativeY = calRelativeY(startY, mapy);//calRelativeX를 Y에 재활용.
             String addr1 = "dummy_addr";
             nodeDTOList.add(
                     new NodeDTO(
@@ -263,8 +263,14 @@ public class NodeController {
 
     public static String calRelativeX(String startX, String currX){
         double relativeVal = Double.parseDouble(currX) - Double.parseDouble(startX);
-        double mul = 100; //위도상 0.063(5.6km거리)는 500을 곱하여 30을 반환하기로 했다.
-        return Double.toString((Double)(relativeVal * mul) * 5);
+        double mul = 100000; //위도상 0.063(5.6km거리)는 500을 곱하여 30을 반환하기로 했다.
+        return Double.toString((Double)(relativeVal * mul));
+    }
+
+    public static String calRelativeY(String startY, String currY){
+        double relativeVal = (Double.parseDouble(currY) - Double.parseDouble(startY));
+        double mul = -100000; //위도상 0.063(5.6km거리)는 500을 곱하여 30을 반환하기로 했다.
+        return Double.toString((Double)(relativeVal * mul));
     }
 
 

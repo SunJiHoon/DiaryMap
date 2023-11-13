@@ -60,8 +60,6 @@ public class kakaoKeywordController {
             queryUserKeyword = URLEncoder.encode(paraMap.get("userKeyword"), "UTF-8");
             mapY = URLEncoder.encode(paraMap.get("mapX"), "UTF-8");
             mapX =URLEncoder.encode(paraMap.get("mapY"), "UTF-8");
-
-
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
