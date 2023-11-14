@@ -362,7 +362,7 @@ const ReviewSpace = () => {
                 setSearchResultData(res.data)
                 console.log(res.data)
                 
-                inputManager.plusSearchNode(res.data)
+                // inputManager.plusSearchNode(res.data)
             })
     })
 
@@ -411,7 +411,9 @@ const ReviewSpace = () => {
                         <Button onClick={() => {
                             console.log("선택된 노드")
                             console.log(selectedData)
-                            inputManager.plusSearchNode(selectedData)
+                            if (inputManger) {
+                                inputManager.plusSearchNode(selectedData)
+                            }
                         }}>
                             노드 추가
                         </Button>
