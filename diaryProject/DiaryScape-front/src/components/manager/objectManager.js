@@ -51,7 +51,7 @@ class objectManager {
     scene.add(startNode);
     startNode.userData.visitDate = tripData.date
     dayManager.plusDayNode(null, startNode);
-    await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
+    // await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
 
   async loadOptions(selectPos) {
