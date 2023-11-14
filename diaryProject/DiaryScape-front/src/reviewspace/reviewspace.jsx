@@ -33,6 +33,8 @@ import axios from "axios";
 
 export const CanvasContext = createContext()
 
+let nextReviewId = 2
+
 const ReviewSpace = () => {
     const [canvasState, setCanvasState] = useState(null)
 
@@ -45,6 +47,7 @@ const ReviewSpace = () => {
     const addNodeFunctionRef = useRef(null)
     const plusSearchNodeRef = useRef(null)
     const loadSearchOptionsRef = useRef(null)
+    const updateReviewsRef = useRef(null)
 
     // const setStateDataRef = useRef(null)
     // const printStateDataRef = useRef(null)
@@ -55,7 +58,8 @@ const ReviewSpace = () => {
 
     const [debugMenuOpen, setDebugMenuOpen] = useState(false)
 
-    const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: ["day information"], review:"리뷰 예제" }])
+    const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: ["day information"] }])
+    const [reviews, setReviews] = useState(["review"])
     
     const [dayMenuOpenList, setDayMenuOpenList] = useState([false])
     const [dayCheckedList, setDayCheckedList] = useState([true])
@@ -76,6 +80,7 @@ const ReviewSpace = () => {
     const mapContainer = useRef(null)
 
     let objectManager, saveManager, inputManager, dayManager = new DayManager();
+    updateReviewsRef.current = dayManager.updateReviews
 
     dayManager.setStateSetter(setDayModuleList)
 
@@ -99,6 +104,9 @@ const ReviewSpace = () => {
         })
     }, [dayCheckedList])
 
+    useEffect(() => {
+        updateReviews(reviews)
+    }, [reviews])
     useEffect(() => {
         // dayManager.dataPropagationTest()
         if (map.current) return;
@@ -344,6 +352,12 @@ const ReviewSpace = () => {
     const loadSearchOptions = (nodeInfoList) => {
         if (loadSearchOptionsRef.current) {
             loadSearchOptionsRef.current(nodeInfoList)
+        }
+    }
+
+    const updateReviews = (reviews) => {
+        if (updateReviewsRef.current) {
+            updateReviewsRef.current(reviews)
         }
     }
     
@@ -667,19 +681,19 @@ const ReviewSpace = () => {
                                                     {node.visitDate}<br />
                                                     <Button onClick={() => {
                                                         onNodeInfoClose()
-                                                        const nextDayModuleList = dayModuleList
-                                                        nextDayModuleList.map(_dayModule => {
-                                                            if(_dayModule.id == dayModule.id) {
-                                                                const nextData = dayModule.data.filter((_node, _i) => !i == _i)
-                                                                const nextDayModule = _dayModule
-                                                                nextDayModule.data = nextData
-                                                                return nextDayModule
-                                                            }
-                                                            else {
-                                                                return _dayModule
-                                                            }
-                                                        })
-                                                        setDayModuleList(nextDayModuleList)
+                                                        // const nextDayModuleList = dayModuleList
+                                                        // nextDayModuleList.map(_dayModule => {
+                                                        //     if(_dayModule.id == dayModule.id) {
+                                                        //         const nextData = dayModule.data.filter((_node, _i) => !i == _i)
+                                                        //         const nextDayModule = _dayModule
+                                                        //         nextDayModule.data = nextData
+                                                        //         return nextDayModule
+                                                        //     }
+                                                        //     else {
+                                                        //         return _dayModule
+                                                        //     }
+                                                        // })
+                                                        // setDayModuleList(nextDayModuleList)
                                                     }}>
                                                         노드 제거
                                                     </Button>
@@ -696,7 +710,18 @@ const ReviewSpace = () => {
 
                                 <Box mt={4}>
                                     <Box fontWeight="semibold">리뷰</Box>
-                                    <Textarea mt={2} boxShadow="2xl"/>
+                                    <Textarea mt={2} value={reviews[dayModule.id-1]} boxShadow="2xl" onChange={(e) => {
+                                        const nextReviews = reviews.map((review, i) => {
+                                            if(i == dayModule.id-1) {
+                                                return e.target.value
+                                            }
+                                            else {
+                                                return review
+                                            }
+                                        })
+                                        setReviews(nextReviews)
+                                        console.log(nextReviews)
+                                    }} />
                                 </Box>
                             </Box>
                         </Box>
@@ -707,7 +732,13 @@ const ReviewSpace = () => {
                             setDayModuleList(
                                 [
                                     ...dayModuleList,
-                                    { id: nextDayMenuId, data: ["(replace with current node)"], }
+                                    { id: nextDayMenuId, data: ["(replace with current node)"]}
+                                ]
+                            )
+                            setReviews(
+                                [
+                                    ...reviews,
+                                    "example"
                                 ]
                             )
                             setDayMenuOpenList(
@@ -729,6 +760,10 @@ const ReviewSpace = () => {
                         }}>
                         Day 추가
                     </Button>
+
+                    <Button onClick={() =>{
+                        dayMana
+                    }}
                 </Box>
             </div >
             <div

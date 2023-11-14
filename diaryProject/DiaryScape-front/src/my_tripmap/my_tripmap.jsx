@@ -30,10 +30,14 @@ const MyTripmap = () => {
 
     const username = useSelector((state) => state.user.name)
 
+    let newDate = new Date()
+    let date = newDate.getDate()
+    let month = newDate.getMonth() + 1
+    let year = newDate.getFullYear()
 
     const [reviewData, setReviewData] = useState([])
     const [newReviewValue, setNewReviewValue] = useState([])
-    const [newReviewDateValue, setNewReviewDateValue] = useState([])
+    const [newReviewDateValue, setNewReviewDateValue] = useState(`${year}-${month}-${date}`)
     const [searchValue, setSearchValue] = useState('')
     const [searchResultData, setSearchResultData] = useState([])
     const [startNodeSelected, setStartNodeSelected] = useState(false)
