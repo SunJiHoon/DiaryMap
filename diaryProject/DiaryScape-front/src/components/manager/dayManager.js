@@ -126,6 +126,10 @@ class DayManager {
         this.updateDayNodesToFront();
     }
 
+    getCurNode(){
+        return nodes[this.currentDay - 1][nodes[this.currentDay].length - 1];
+    }
+
     getReviews(){
         return reviews;
     }
