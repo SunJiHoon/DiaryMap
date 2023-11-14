@@ -138,6 +138,11 @@ class inputManager {
     }
   }
 
+  plusSearchNode(nodeInfo){
+    var node = objectManager.createNode(nodeInfo);
+    selectOption({character, node});
+  }
+
   // selectOption = () => {
   //   console.log(select_option);
   //   const cur_node = character.userData.myNodes[character.userData.myNodes.length - 1];
@@ -182,11 +187,6 @@ export const selectOption = (selectOptionDataState) => {
   );
 
   move(targetPos);
-}
-
-plusSearchNode(nodeInfo){
-  var node = objectManager.createNode(nodeInfo);
-  selectOption({character, node});
 }
 
 function move(targetPos) {
