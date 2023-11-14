@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -408,6 +409,15 @@ public class Obj3dController {
         }
         //저장된 내용 반환하기
         return "mapId를 다시 확인해주세요";
+    }
+
+    @PostMapping("/obj/delete")// obj/create?mapName=척척박사//postMapping도 가능하다.
+    public String createNewObj(
+            @RequestParam Map<String, String> paraMap
+    ) {
+        String id = paraMap.get("mapId"); 
+        obj3dRepository.deleteById(id);
+        return "삭제 수행";
     }
 
 
