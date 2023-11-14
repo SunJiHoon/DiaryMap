@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,10 +26,12 @@ import java.util.Optional;
 @RequestMapping("/api")
 @Slf4j
 public class keywordController {
-    private String makeApiKeywordQuery(String userKeyword, String userContentType){
+    private final Environment env;
 
+    private String makeApiKeywordQuery(String userKeyword, String userContentType){
+        String apiKey = env.getProperty("KorService1-key");
         return "https://apis.data.go.kr/B551011/KorService1/searchKeyword1" +
-                "?serviceKey=2q1TgcBZMiSU3%2BDH9RAZej4JCO3rNDHHtjvAoeuAv6wxrDGIOw1BiBdaeYsDKBIUnMDMTvLcE0XKSYaqphQMzQ%3D%3D" +
+                "?serviceKey=" + apiKey +
                 "&numOfRows=10" +
                 "&pageNo=1&" +
                 "MobileOS=ETC" +

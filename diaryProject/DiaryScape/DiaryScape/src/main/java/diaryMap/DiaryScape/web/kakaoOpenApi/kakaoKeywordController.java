@@ -8,9 +8,13 @@ import diaryMap.DiaryScape.web.openApi.NodeController;
 import diaryMap.DiaryScape.web.openApi.KeywordDTO;
 import diaryMap.DiaryScape.web.openApi.NodeDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+//import org.hibernate.cfg.Environment;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +36,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 @Slf4j
+@PropertySource("classpath:application-API-KEY.properties")
 public class kakaoKeywordController {
+    private final Environment env;
     private final Obj3dRepository obj3dRepository;
     //https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
     private String makeKakaoApiKeywordQuery_onlyKeywordFirst(String userKeyword){
@@ -63,7 +69,8 @@ public class kakaoKeywordController {
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json; charset=UTF-8");
         // KakaoAK를 포함한 Authorization 헤더 설정
-        String apiKey = "8dd0528ce1ab35538b4682375da7b5e9"; // KakaoAK 키를 입력하세요
+        String apiKey = env.getProperty("kakao-admin-key");
+        //log.info(apiKey);
         conn.setRequestProperty("Authorization", "KakaoAK " + apiKey);
 
         // API 응답메시지를 불러와서 문자열로 저장
@@ -166,7 +173,7 @@ public class kakaoKeywordController {
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json; charset=UTF-8");
         // KakaoAK를 포함한 Authorization 헤더 설정
-        String apiKey = "8dd0528ce1ab35538b4682375da7b5e9"; // KakaoAK 키를 입력하세요
+        String apiKey = env.getProperty("kakao-admin-key");
         conn.setRequestProperty("Authorization", "KakaoAK " + apiKey);
 
         // API 응답메시지를 불러와서 문자열로 저장
@@ -293,7 +300,7 @@ public class kakaoKeywordController {
         conn.setRequestProperty("Content-type", "application/json; charset=UTF-8");
         // KakaoAK를 포함한 Authorization 헤더 설정
         // API_KEY 가져오기
-        String apiKey = "8dd0528ce1ab35538b4682375da7b5e9"; // KakaoAK 키를 입력하세요
+        String apiKey = env.getProperty("kakao-admin-key");
         conn.setRequestProperty("Authorization", "KakaoAK " + apiKey);
 
         // API 응답메시지를 불러와서 문자열로 저장
