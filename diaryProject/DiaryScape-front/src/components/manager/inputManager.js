@@ -127,7 +127,8 @@ class inputManager {
           const index = nodes.length - 1;
           const cur_node = nodes[index];
           select_option = intersectObjects[i].object;
-          setSelectOptionData({ character, select_option })
+          var options = objectManager.getCurOptions();
+          setSelectOptionData({ options , select_option });
           if (cur_node == select_option) {
             break;
           }
@@ -140,8 +141,8 @@ class inputManager {
 
   async plusSearchNode(nodeInfo){
     var node = await objectManager.createNode(nodeInfo);
-    console.log(node)
-    selectOption({character, select_option: node});
+    var options = objectManager.getSearchOptions();
+    selectOption({options, select_option: node});
   }
 
   // selectOption = () => {
@@ -166,17 +167,15 @@ class inputManager {
 }
 
 export const selectOption = (selectOptionDataState) => {
-  const { character, select_option } = selectOptionDataState;
+  const { options, select_option } = selectOptionDataState;
   const cur_day = dayManager.getCurDay();
   const nodes = dayManager.getNodes()[cur_day-1];
   const index = nodes.length - 1;
   const cur_node = nodes[index];
 
-  console.log(cur_node)
-  console.log(select_option)
   const line = objectManager.drawLine(cur_node.position, select_option.position, dayManager.getDayColor(cur_day - 1));
-  objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY));
-  objectManager.invisibleOptions(objectManager.getCurOptions(), select_option);
+  objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapx, 1, select_option.userData.mapy));
+  objectManager.invisibleOptions(options, select_option);
 
   select_option.userData.visitDate = dayManager.getDate(cur_day-1);//cur_date;
   dayManager.plusDayNode(line, select_option);
