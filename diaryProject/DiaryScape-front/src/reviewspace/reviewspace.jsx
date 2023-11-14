@@ -47,6 +47,7 @@ const ReviewSpace = () => {
     const addNodeFunctionRef = useRef(null)
     const plusSearchNodeRef = useRef(null)
     const loadSearchOptionsRef = useRef(null)
+    const updateReviewsRef = useRef(null)
 
     // const setStateDataRef = useRef(null)
     // const printStateDataRef = useRef(null)
@@ -79,6 +80,7 @@ const ReviewSpace = () => {
     const mapContainer = useRef(null)
 
     let objectManager, saveManager, inputManager, dayManager = new DayManager();
+    updateReviewsRef.current = dayManager.updateReviews
 
     dayManager.setStateSetter(setDayModuleList)
 
@@ -102,6 +104,9 @@ const ReviewSpace = () => {
         })
     }, [dayCheckedList])
 
+    useEffect(() => {
+        updateReviews(reviews)
+    }, [reviews])
     useEffect(() => {
         // dayManager.dataPropagationTest()
         if (map.current) return;
@@ -347,6 +352,12 @@ const ReviewSpace = () => {
     const loadSearchOptions = (nodeInfoList) => {
         if (loadSearchOptionsRef.current) {
             loadSearchOptionsRef.current(nodeInfoList)
+        }
+    }
+
+    const updateReviews = (reviews) => {
+        if (updateReviewsRef.current) {
+            updateReviewsRef.current(reviews)
         }
     }
     
@@ -749,6 +760,10 @@ const ReviewSpace = () => {
                         }}>
                         Day 추가
                     </Button>
+
+                    <Button onClick={() =>{
+                        dayMana
+                    }}
                 </Box>
             </div >
             <div
