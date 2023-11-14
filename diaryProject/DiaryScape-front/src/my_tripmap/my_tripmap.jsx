@@ -44,8 +44,6 @@ const MyTripmap = () => {
     useEffect(() => {
         client.get('/api/obj/list').then((res) => {
             setReviewData(res.data)
-            console.log("date test")
-            console.log(res.data)
         })
     }, [])
 
@@ -234,16 +232,26 @@ const MyTripmap = () => {
                 <Box display="flex" justifyContent="center" mb={10}>
                     <Box w="100%" maxW="500px" display="flex" flexDirection="column">
                         <Box fontSize="1.8em" mb={4}>여행 리스트</Box>
-                        {reviewData.map((review) => (
-                            <Button h="70px" key={review.mapId} mb={6} onClick={(e) => onReviewClicked(review)} colorScheme="teal" variant="outline">
+                        {reviewData.map((review) => (<Box key={review.mapId} display="flex" mb={6}>
+                            <Button w="100%" h="70px" mr={2} onClick={(e) => onReviewClicked(review)} colorScheme="teal" variant="outline">
                                 <Box display="flex" flexDirection="column">
                                     <Box fontSize="1.6em" mb={1}>{review.reviewtitle}</Box>
-                                    <Box>
+                                    {/* <Box>
                                         mapId: {review.mapId} / 시작 좌표: ({review.mapX}, {review.mapY})
-                                    </Box>
+                                    </Box> */}
                                 </Box>
                             </Button>
-                        ))}
+                            <Button onClick={() => {
+                                client.post("api/obj/delete?mapId="+review.mapId).then((res) => {
+                                    console.log("삭제됨")
+                                })
+                                client.get('/api/obj/list').then((res) => {
+                                    setReviewData(res.data)
+                                })
+                            }}>
+                                삭제
+                            </Button>
+                        </Box>))}
                         {reviewData.length == 0 && <p>새 여행을 작성해주세요!</p>}
                     </Box>
                 </Box>
