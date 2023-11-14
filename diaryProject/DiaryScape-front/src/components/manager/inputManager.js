@@ -124,8 +124,6 @@ class inputManager {
         if (intersectObjects[i].object.userData?.tag == "node") {
           const cur_day = dayManager.getCurDay();
           const nodes = dayManager.getNodes(cur_day - 1);
-          console.log(cur_day-1);
-          console.log(nodes);
           const index = nodes.length - 1;
           const cur_node = nodes[index];
           select_option = intersectObjects[i].object;
@@ -186,6 +184,10 @@ export const selectOption = (selectOptionDataState) => {
   move(targetPos);
 }
 
+plusSearchNode(nodeInfo){
+  var node = objectManager.createNode(nodeInfo);
+  selectOption({character, node});
+}
 
 function move(targetPos) {
   cur_state = InputState.MOVE;

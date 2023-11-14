@@ -1,4 +1,3 @@
-import Node from '../object/node'
 let instance = null;
 
 let objectManager;
@@ -71,17 +70,13 @@ class DayManager {
     }
 
 
-
     async plusDay(){
         var temp = [];
         if(this.currentDay > 1){//전 날의 마지막 노드를 추가한 날의 첫 노드로 넣어줌
             temp.push(null);
             var node = nodes[this.currentDay - 2][nodes[this.currentDay - 2].length - 1];
-            // node = JSON.stringify(node);
-            // node = JSON.parse(node);//이걸 하든
             var nodeObj = await objectManager.createNode(node);//이걸 하든 둘 중에 하나는 해야함
             nodeObj.userData.visitData = this.getDate(this.currentDay-1);
-            node.userData.visitDate = this.getDate(this.currentDay-1);
             temp.push(node);
         }
         nodes.push(temp);
@@ -89,6 +84,9 @@ class DayManager {
     }
     
     visibleDay(dayIdx) {
+        if(dayIdx >= this.maxDay - 2){
+            return;
+        }
         const size = nodes[dayIdx].length;
         for (let i = 0; i < size; i++) {
             if (nodes[dayIdx][i] != null) {

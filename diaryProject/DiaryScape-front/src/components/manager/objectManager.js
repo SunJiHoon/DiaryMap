@@ -60,6 +60,7 @@ class objectManager {
       cur_options.push(tempNode);
       scene.add(tempNode);
     }
+    console.log("end load options");
   }
 
   invisibleOptions(select_option) {
