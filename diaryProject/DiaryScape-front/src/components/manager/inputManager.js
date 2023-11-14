@@ -180,6 +180,7 @@ export const selectOption = (selectOptionDataState) => {
   objectManager.invisibleOptions(options, select_option);
 
   select_option.userData.visitDate = dayManager.getDate(cur_day-1);//cur_date;
+  objectManager.changeNodeColor(select_option, dayManager.getDayColor(cur_day - 1));
   dayManager.plusDayNode(line, select_option);
 
   saveManager.saveMyNodes();
