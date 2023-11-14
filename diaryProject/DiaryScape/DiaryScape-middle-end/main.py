@@ -1,12 +1,24 @@
 from flask import Flask, request, jsonify, Response, json
-
 import openai
+import os
+import json
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+secret_file = os.path.join(BASE_DIR, 'DiaryScape-middle-end/secret.json')
+
+with open(secret_file) as f:
+    secrets = json.loads(f.read())
+
+def get_secret(setting, secrets=secrets):
+    return secrets[setting]
+
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
 # OpenAI API 키 설정
-api_key = "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"
+api_key = get_secret("api_key")
 openai.api_key = api_key
 
 # 대화 데이터 설정
