@@ -364,12 +364,13 @@ const ReviewSpace = () => {
         // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
 
         setSearchResultDataLoading(true)
+
         if(!dayManager) return
 
-        client.get("api/kakaoOpenApi/onlyKeywordAndCoord/list?mapId=" + tripData.mapId
-        + "&userKeyword=" + searchValue +
-        "&mapX="+ dayManager.getCurNode().userData.mapX,
-        "&mapY=" + dayManager.getCurNode().userData.mapY,
+        client.get("api/kakaoOpenApi/keywordAndCoord/list?mapId=" + tripData.mapId
+        + "&userKeyword=" + searchValue
+        + "&mapX="+ dayManager.getCurNode().userData.mapX
+        + "&mapY=" + dayManager.getCurNode().userData.mapY,
          { cancelToken: source.token })
             .then((res) => {
                 setSearchResultDataLoading(false)
@@ -425,7 +426,7 @@ const ReviewSpace = () => {
                         <Button onClick={() => {
                             console.log("선택된 노드")
                             console.log(selectedData)
-                            onPlusSearchNodeClick(selectedData)
+                            if(selectedData) onPlusSearchNodeClick(selectedData)
                         }}>
                             노드 추가
                         </Button>
