@@ -19,7 +19,7 @@ class node {
 
   async loadObj(infos) {
     const objGeometry = new THREE.SphereGeometry(2);
-    const objMaterial = new THREE.MeshBasicMaterial({ color: "gray" });
+    const objMaterial = new THREE.MeshBasicMaterial({ color: "magenta" });
     const obj = new THREE.Mesh(objGeometry, objMaterial);
     obj.scale.set(4,4,4);
 

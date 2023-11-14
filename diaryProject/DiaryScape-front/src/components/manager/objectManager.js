@@ -62,9 +62,10 @@ class objectManager {
       cur_options.push(tempNode);
     }
     console.log("end load options");
+    console.log(scene.children);
   }
 
-  async loadSearchOptions(nodeInfos){
+  loadSearchOptions = async (nodeInfos) => {
     this.invisibleOptions(search_options, null);
     const size = nodeInfos.length;
     for(let i =0;i<size;i++){

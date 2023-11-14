@@ -340,6 +340,7 @@ const ReviewSpace = () => {
             plusSearchNodeRef.current(selectedNode);
         }
     }
+
     const loadSearchOptions = (nodeInfoList) => {
         if (loadSearchOptionsRef.current) {
             loadSearchOptionsRef.current(nodeInfoList)
@@ -356,13 +357,8 @@ const ReviewSpace = () => {
     let source
     const onNodeSearch = ((e) => {
 
-        if (source) {
-            source.cancel()
-        }
 
-        source = axios.CancelToken.source()
-
-
+        
         // setSearchValue(e.target.value)
         setNodeSearchSelected(false)
         // console.log(e.target.value)
@@ -375,6 +371,12 @@ const ReviewSpace = () => {
         setSearchResultDataLoading(true)
 
         if(!dayManager) return
+
+        if (source) {
+            source.cancel()
+        }
+
+        source = axios.CancelToken.source()
 
         client.get("api/kakaoOpenApi/keywordAndCoord/list?mapId=" + tripData.mapId
         + "&userKeyword=" + searchValue
@@ -749,7 +751,7 @@ const ReviewSpace = () => {
                     boxShadow="2xl"
                     textAlign="left"
                     p={4}
-                    transition="all .3s ease-in-out .05s"
+                    transition="all .6s ease-in-out .05s"
                 >
                     <Box fontWeight="bold">노드 정보</Box>
                     {selectOptionData.select_option && <Box>
