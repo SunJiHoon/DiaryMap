@@ -75,9 +75,11 @@ class DayManager {
         if(this.currentDay > 1){//전 날의 마지막 노드를 추가한 날의 첫 노드로 넣어줌
             temp.push(null);
             var node = nodes[this.currentDay - 2][nodes[this.currentDay - 2].length - 1];
-            var nodeObj = await objectManager.createNode(node);//이걸 하든 둘 중에 하나는 해야함
+            console.log(node);
+            var nodeObj = await objectManager.createNode(node.userData);//이걸 하든 둘 중에 하나는 해야함
             nodeObj.userData.visitData = this.getDate(this.currentDay-1);
-            temp.push(node);
+            console.log(nodeObj);
+            temp.push(nodeObj);
         }
         nodes.push(temp);
         temp = [];

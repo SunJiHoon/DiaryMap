@@ -44,14 +44,13 @@ class objectManager {
   }
 
   async initNode() {
-    console.log(startNodeData)
     const startNode = await new Node(startNodeData);
     // player.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
     // camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
     scene.add(startNode);
     startNode.userData.visitDate = tripData.date
     dayManager.plusDayNode(null, startNode);
-    // await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
+    await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
 
   async loadOptions(selectPos) {
@@ -132,6 +131,10 @@ class objectManager {
 
   getCurOptions(){
     return cur_options;
+  }
+
+  getSearchOptions(){
+    return search_options;
   }
 }
 
