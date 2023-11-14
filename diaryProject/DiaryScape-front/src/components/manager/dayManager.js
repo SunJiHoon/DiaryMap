@@ -127,7 +127,7 @@ class DayManager {
     }
 
     getCurNode(){
-        return nodes[this.currentDay - 1][nodes[this.currentDay].length - 1];
+        return nodes[this.currentDay - 1][nodes[this.currentDay - 1].length - 1];
     }
 
     getReviews(){

@@ -78,7 +78,7 @@ const ReviewSpace = () => {
     dayManager.setStateSetter(setDayModuleList)
 
     dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
-    console.log(tripData);
+    // console.log(tripData);
 
 
     useEffect(() => {
@@ -341,8 +341,8 @@ const ReviewSpace = () => {
     const onNodeSearchSelect = (nodeData) => {
         setNodeSearchSelected(true)
         setSelectedData(nodeData)
-        console.log("노드 검색 : 노드 선택됨")
-        console.log(nodeData)
+        // console.log("노드 검색 : 노드 선택됨")
+        // console.log(nodeData)
     }
 
     let source
@@ -359,22 +359,23 @@ const ReviewSpace = () => {
         // console.log(e.target.value)
 
         const searchValueReplaced = searchValue.replace(/ /g, "%20")
-        console.log("search: " + searchValueReplaced)
+        // console.log("search: " + searchValueReplaced)
 
         // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
 
         setSearchResultDataLoading(true)
+
         if(!dayManager) return
 
-        client.get("api/kakaoOpenApi/onlyKeywordAndCoord/list?mapId=" + tripData.mapId
-        + "&userKeyword=" + searchValue +
-        "&mapX="+ dayManager.getCurNode().userData.mapX,
-        "&mapY=" + dayManager.getCurNode().userData.mapY,
+        client.get("api/kakaoOpenApi/keywordAndCoord/list?mapId=" + tripData.mapId
+        + "&userKeyword=" + searchValue
+        + "&mapX="+ dayManager.getCurNode().userData.mapX
+        + "&mapY=" + dayManager.getCurNode().userData.mapY,
          { cancelToken: source.token })
             .then((res) => {
                 setSearchResultDataLoading(false)
                 setSearchResultData(res.data)
-                console.log(res.data)
+                // console.log(res.data)
                 
                 if(objectManager) objectManager.loadSearchOptions(res.data)
             })
@@ -423,9 +424,9 @@ const ReviewSpace = () => {
                             노드 검색
                         </Button>
                         <Button onClick={() => {
-                            console.log("선택된 노드")
-                            console.log(selectedData)
-                            onPlusSearchNodeClick(selectedData)
+                            // console.log("선택된 노드")
+                            // console.log(selectedData)
+                            if(selectedData) onPlusSearchNodeClick(selectedData)
                         }}>
                             노드 추가
                         </Button>
@@ -624,8 +625,8 @@ const ReviewSpace = () => {
                             >
                                 {dayModule.data.map((node, i) => {
                                     const _key = "day "+dayModule.id + ": node " + i
-                                    console.log(_key)
-                                    console.log(node)
+                                    // console.log(_key)
+                                    // console.log(node)
                                     return(<Box key={_key}>
                                         <Box
                                             h={8}
