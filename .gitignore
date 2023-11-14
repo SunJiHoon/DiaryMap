@@ -1,2 +1,5 @@
 .DS_Store
 .idea
+.env
+/diaryProject/DiaryScape/DiaryScape/.env
+/diaryProject/DiaryScape/DiaryScape/src/main/resources/application-API-KEY.properties
