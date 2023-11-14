@@ -44,6 +44,8 @@ const ReviewSpace = () => {
     const newMapFunctionRef = useRef(null)
     const addNodeFunctionRef = useRef(null)
     const plusSearchNodeRef = useRef(null)
+    const loadSearchOptionsRef = useRef(null)
+
     // const setStateDataRef = useRef(null)
     // const printStateDataRef = useRef(null)
     const [nodeMenuOn, setNodeMenuOn] = useState(false)
@@ -187,6 +189,7 @@ const ReviewSpace = () => {
                 objectManager = new ObjectManager(this.scene, this.camera, tripData, startnodeData);
                 objectManager.newMap("spongebob");
                 newMapFunctionRef.current = objectManager.newMap;
+                loadSearchOptionsRef.current = objectManager.loadSearchOptions
                 saveManager = new SaveManager(tripData);
                 saveManager.checkIsFirst().then(() => {
                     inputManager = new InputManager(this.camera, map, setMglCameraPosition, this.scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
@@ -337,6 +340,11 @@ const ReviewSpace = () => {
             plusSearchNodeRef.current(selectedNode);
         }
     }
+    const loadSearchOptions = (nodeInfoList) => {
+        if (loadSearchOptionsRef.current) {
+            loadSearchOptionsRef.current(nodeInfoList)
+        }
+    }
     
     const onNodeSearchSelect = (nodeData) => {
         setNodeSearchSelected(true)
@@ -353,6 +361,7 @@ const ReviewSpace = () => {
         }
 
         source = axios.CancelToken.source()
+
 
         // setSearchValue(e.target.value)
         setNodeSearchSelected(false)
@@ -377,7 +386,7 @@ const ReviewSpace = () => {
                 setSearchResultData(res.data)
                 // console.log(res.data)
                 
-                if(objectManager) objectManager.loadSearchOptions(res.data)
+                loadSearchOptions(res.data)
             })
     })
 
@@ -412,7 +421,10 @@ const ReviewSpace = () => {
                             reset
                         </Button>
                     </Box>
-                    <Box mt={4}>
+                    <Box
+                        maxW="100%"
+                        mt={4}
+                    >
                         <Input
                             type="text"
                             placeholder="노드 이름"
@@ -426,7 +438,7 @@ const ReviewSpace = () => {
                         <Button onClick={() => {
                             // console.log("선택된 노드")
                             // console.log(selectedData)
-                            if(selectedData) onPlusSearchNodeClick(selectedData)
+                            if(nodeSearchSelected) onPlusSearchNodeClick(selectedData)
                         }}>
                             노드 추가
                         </Button>
