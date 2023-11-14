@@ -23,23 +23,12 @@ import axios from "axios"
 
 const MyTripmap = () => {
 
-    const [isTest, setIsTest] = useState(false)
     const navigate = useNavigate()
-    // true: 테스트 맵 데이터 사용
-    // false: "api/my_tripmap"에 Get 요청 후 맵 데이터 가져옴.
 
 
     const dispatch = useDispatch()
 
-    // const testLoginData = {
-    //     name:"Tester",
-    //     loginId: "tester_id"
-    // }
-
-    //dispatch(loginUser(testLoginData))
-
     const username = useSelector((state) => state.user.name)
-
 
 
     const [reviewData, setReviewData] = useState([])
@@ -52,6 +41,14 @@ const MyTripmap = () => {
     const [searchResultDataLoading, setSearchResultDataLoading] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    useEffect(() => {
+        client.get('/api/obj/list').then((res) => {
+            setReviewData(res.data)
+            console.log("date test")
+            console.log(res.data)
+        })
+    }, [])
+    
     const onNewReviewChange = useCallback((e) => {
         setNewReviewValue(e.target.value)
     }, [])
@@ -84,19 +81,6 @@ const MyTripmap = () => {
                 setSearchResultDataLoading(false)
                 setSearchResultData(res.data)
             })
-
-        // setSearchResultData([
-        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
-        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
-        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
-        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
-        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
-        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
-        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
-        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
-        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
-        //     {contentid:"1", title:"title", addr1:"address", mapx:"a", mapy:"b"},
-        // ])
     })
 
     const onStartNodeSelect = (nodeData) => {
@@ -167,32 +151,7 @@ const MyTripmap = () => {
         onClose()
     })
 
-    useEffect(() => {
-        if (isTest) {
-            setReviewData([
-                {
-                    title: "부산 리뷰",
-                    mapId: 1,
-                    startX: 1,
-                    startY: 1,
-                },
-                {
-                    title: "제주도 리뷰",
-                    mapId: 2,
-                    startX: -2,
-                    startY: -2,
-                }
-            ])
-            console.log(reviewData)
-        }
-        else {
-            client.get('/api/obj/list').then((res) => {
-                setReviewData(res.data)
-                console.log("date test")
-                console.log(res.data)
-            })
-        }
-    }, [])
+   
 
     return (
         <Box p={6}>

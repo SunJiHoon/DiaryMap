@@ -114,8 +114,8 @@ class inputManager {
       let direction = pointer.clone().applyMatrix4(camera.projectionMatrix.clone().invert());
       direction.divideScalar(direction.w);
       raycaster.set(mglCameraPositionTransformed, direction.sub(mglCameraPositionTransformed).normalize());
-      var arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 8, 0xff0000);
-      scene.add(arrow);
+      // var arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 8, 0xff0000);
+      // scene.add(arrow);
       // console.log(mglCameraPosition)
       const intersectObjects = raycaster.intersectObjects(scene.children);
 

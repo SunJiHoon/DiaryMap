@@ -5,13 +5,31 @@ import SaveManager from "../components/manager/saveManager";
 import DayManager from "../components/manager/dayManager";
 import { useRef, useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
-import { Box, Button, IconButton, Checkbox, Select, Input } from '@chakra-ui/react'
+import {
+    Box,
+    Button,
+    IconButton,
+    Checkbox,
+    Select,
+    Textarea,
+    Input,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure
+} from '@chakra-ui/react'
 import { useSelector } from "react-redux";
 import { IoChevronDown, IoRemove } from "react-icons/io5"
 import { useNavigate } from "react-router-dom";
 import { createContext, useContext } from "react";
 import mapboxgl from "mapbox-gl";
 import MapboxLanguage from "@mapbox/mapbox-gl-language";
+import client from "../utility/client";
+import axios from "axios";
 
 export const CanvasContext = createContext()
 
@@ -41,6 +59,13 @@ const ReviewSpace = () => {
     const [nextDayMenuId, setNextDayMenuId] = useState(2)
     const [currentDay, setCurrentDay] = useState(1)
     const [onPlusDay, setOnPlusDay] = useState(1)
+
+    const [searchValue, setSearchValue] = useState('')
+    const [searchResultData, setSearchResultData] = useState([])
+    const [nodeSearchSelected, setNodeSearchSelected] = useState(false)
+    const [selectedData, setSelectedData] = useState({})
+    const [searchResultDataLoading, setSearchResultDataLoading] = useState(false)
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiMHJ5dW5nIiwiYSI6ImNsb2k5NXg2NjFjYW4ybHJ3MHQ0c3U2c3QifQ.Xq5bPxVFzNOa3wjmYJVU4A';
     const map = useRef(null)
@@ -292,21 +317,50 @@ const ReviewSpace = () => {
         })
     }, [])
 
-    // if (setStateDataRef.current) {
-    //     setStateDataRef.current(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId)
-    // }
-
-    function onResetButtonClick() {
+    const onResetButtonClick = () => {
         if (newMapFunctionRef.current) {
             newMapFunctionRef.current("spongebob");
         }
     }
 
-    function onAddNodeButtonClick() {
+    const onAddNodeButtonClick = () => {
         if (addNodeFunctionRef.current) {
             addNodeFunctionRef.current(selectOptionData);
         }
     }
+    
+    const onNodeSearchSelect = (nodeData) => {
+        setNodeSearchSelected(true)
+        setSelectedData(nodeData)
+        console.log("노드 검색 : 노드 선택됨")
+        console.log(nodeData)
+    }
+
+    let source
+    const onNodeSearch = ((e) => {
+
+        if (source) {
+            source.cancel()
+        }
+
+        source = axios.CancelToken.source()
+
+        // setSearchValue(e.target.value)
+        setNodeSearchSelected(false)
+        // console.log(e.target.value)
+
+        const searchValueReplaced = searchValue.replace(/ /g, "%20")
+        console.log("search: " + searchValueReplaced)
+
+        // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
+
+        setSearchResultDataLoading(true)
+        client.get("/api/openApi/start/list?userKeyword=" + searchValue, { cancelToken: source.token })
+            .then((res) => {
+                setSearchResultDataLoading(false)
+                setSearchResultData(res.data)
+            })
+    })
 
     return (<>
         <CanvasContext.Provider value={[canvasState, setCanvasState]}>
@@ -339,6 +393,71 @@ const ReviewSpace = () => {
                             reset
                         </Button>
                     </Box>
+                    <Box mt={4}>
+                        <Button onClick={onOpen} colorScheme="blue">
+                            노드 검색
+                        </Button>
+                    </Box>
+
+                    <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>노드 검색</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <Box display="flex" justifyContent="center">
+                                <Box display="flex" flexDirection="column" justifyContent="center" w="100%" maxW="500px" mt={2} mb={6}>
+                                    <Box display="flex" mb={2}>
+                                        <Input
+                                            type="text"
+                                            placeholder="노드 이름"
+                                            value={searchValue}
+                                            onChange={(e) => { setSearchValue(e.target.value) }}
+                                            mr={2}
+                                        />
+                                        <Button onClick={onNodeSearch} colorScheme="teal" variant="outline">
+                                            검색
+                                        </Button>
+                                    </Box>
+                                    {/* <Button colorScheme="teal">여행 생성</Button> */}
+                                </Box>
+                            </Box>
+
+                            <Box display="flex" justifyContent="center" mb={2}>
+                                <Box w="100%" maxW="500px" display="flex" flexDirection="column">
+                                    <Box fontSize="1.4em" mb={2}>노드 선택</Box>
+                                    {/* {nodeSearchSelected && <Box>{selectedData.contentid}</Box>} */}
+                                    {searchValue.length == 0 && <Box>노드 이름을 입력해주세요!</Box>}
+                                    <Box h={260} overflowY="scroll">
+                                        {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
+                                        {!searchResultDataLoading && searchResultData.map((result) => (
+                                            <Button
+                                                border="0px"
+                                                borderBottom="1px"
+                                                borderColor="gray.300"
+                                                borderRadius="0px"
+                                                bgColor={nodeSearchSelected && selectedData.contentid == result.contentid ? "blue.600" : "white"}
+                                                color={nodeSearchSelected && selectedData.contentid == result.contentid ? "white" : "black"}
+                                                _hover={{}}
+                                                h="40px"
+                                                key={result.contentid}
+                                                onClick={(e) => onNodeSearchSelect(result)}
+                                            >
+                                                {/* {result.contentid} */}
+                                                {result.title},&nbsp;
+                                                {result.addr1},&nbsp;
+                                                x: {result.mapx}, y: {result.mapy}
+                                            </Button>
+                                        ))}
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button onClick={onClose} colorScheme="teal">닫기</Button>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
 
                     <Box
                         borderTop="1px"
@@ -394,7 +513,7 @@ const ReviewSpace = () => {
                 <Box
                     mt={4}
                     p={3}
-                    mr={4}
+                    mr="260px"
                     w="240px"
                     minH="30px"
                     bgColor="#ffffff"
@@ -420,6 +539,18 @@ const ReviewSpace = () => {
                         </Select>
                     </Box>
                 </Box>
+            </div>
+
+            <div style={{
+                position: "fixed",
+                top: "0",
+                right: "0",
+                zIndex: "2",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "flex-start",
+                marginRight: "1.6em",
+            }}>
                 <Box
                     mt={4}
                     p={4}
@@ -497,7 +628,7 @@ const ReviewSpace = () => {
                                 })}
                                 <Box mt={4}>
                                     <Box fontWeight="semibold">리뷰</Box>
-                                    <Input mt={2} boxShadow="2xl"/>
+                                    <Textarea mt={2} boxShadow="2xl"/>
                                 </Box>
                             </Box>
                         </Box>
@@ -508,7 +639,7 @@ const ReviewSpace = () => {
                             setDayModuleList(
                                 [
                                     ...dayModuleList,
-                                    { id: nextDayMenuId, data: ["day information"], }
+                                    { id: nextDayMenuId, data: ["(replace with current node)"], }
                                 ]
                             )
                             setDayMenuOpenList(
@@ -532,14 +663,13 @@ const ReviewSpace = () => {
                     </Button>
                 </Box>
             </div >
-            <div ref={mapContainer} style={{ height: "100vh" }} />
             <div
                 style={{
                     position: "fixed",
                     top: nodeMenuPosition.y,
                     left: nodeMenuPosition.x,
                     zIndex: nodeMenuOn ? 4 : -2,
-                    transition: "z-index .1s linear .4s"
+                    transition: "z-index .1s linear"
                 }}
             >
                 <Box
@@ -547,6 +677,8 @@ const ReviewSpace = () => {
                     bgColor="white"
                     borderRadius="2px"
                     w="200px"
+                    maxH={nodeMenuOn ? "100vh" : "0vh"  }
+                    overflowY="hidden"
                     opacity={nodeMenuOn ? "1" : "0"}
                     boxShadow="2xl"
                     textAlign="left"
@@ -558,9 +690,9 @@ const ReviewSpace = () => {
                         {selectOptionData.select_option.userData.title}<br />
                         {selectOptionData.select_option.userData.tel}<br />
                         위치: {selectOptionData.select_option.userData.address} <br />
-
                     </Box>
                     }
+
                     <Button
                         onClick={onAddNodeButtonClick}
                         colorScheme="teal"
@@ -570,6 +702,9 @@ const ReviewSpace = () => {
                     </Button>
                 </Box>
             </div>
+
+            <div ref={mapContainer} style={{ height: "100vh" }} />
+            
         </CanvasContext.Provider>
     </>)
 }
