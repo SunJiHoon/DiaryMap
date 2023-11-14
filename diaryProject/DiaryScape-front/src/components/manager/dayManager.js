@@ -18,7 +18,7 @@ class DayManager {
         instance = this
     }
 
-    clearNodes(){
+    clearNodes() {
         nodes = [];
     }
 
@@ -52,15 +52,15 @@ class DayManager {
         // console.log(this.maxDay)
     }
 
-    updateDayNodesToFront(){
+    updateDayNodesToFront() {
         const nextDayModuleList = this.dayModuleList.map((dayModule, i) => {
-            if(dayModule.id == this.currentDay) {
+            if (dayModule.id == this.currentDay) {
                 let temp = [];
-                for(let index = 0;index<nodes[this.currentDay-1].length/2;index++){
-                    temp.push(nodes[this.currentDay-1][index * 2 + 1].userData);
+                for (let index = 0; index < nodes[this.currentDay - 1].length / 2; index++) {
+                    temp.push(nodes[this.currentDay - 1][index * 2 + 1].userData);
                 }
                 //dayModule.data = temp;
-                return {id: dayModule.id, data: temp}
+                return { id: dayModule.id, data: temp }
             }
             else {
                 return dayModule
@@ -70,14 +70,14 @@ class DayManager {
     }
 
 
-    async plusDay(){
+    async plusDay() {
         var temp = [];
-        if(this.currentDay > 1){//전 날의 마지막 노드를 추가한 날의 첫 노드로 넣어줌
+        if (this.currentDay > 1) {//전 날의 마지막 노드를 추가한 날의 첫 노드로 넣어줌
             temp.push(null);
             var node = nodes[this.currentDay - 2][nodes[this.currentDay - 2].length - 1];
             console.log(node);
             var nodeObj = await objectManager.createNode(this.getNodeInfos(node.userData));//이걸 하든 둘 중에 하나는 해야함
-            nodeObj.userData.visitDate = this.getDate(this.currentDay-1);
+            nodeObj.userData.visitDate = this.getDate(this.currentDay - 1);
             console.log(nodeObj);
             temp.push(nodeObj);
         }
@@ -87,9 +87,9 @@ class DayManager {
         temp.push(this.currentDay + "일 째");
         reviews.push(temp);
     }
-    
+
     visibleDay(dayIdx) {
-        if(dayIdx >= this.maxDay - 2){//이것땜에 마지막 날 거 visible 안 됨
+        if (dayIdx >= this.maxDay - 2) {//이것땜에 마지막 날 거 visible 안 됨
             return;
         }
         const size = nodes[dayIdx].length;
@@ -113,7 +113,7 @@ class DayManager {
         nodes = _nodes;
     }
 
-    getNodes(){
+    getNodes() {
         return nodes;
     }
 
@@ -128,37 +128,40 @@ class DayManager {
         this.updateDayNodesToFront();
     }
 
-    getCurNode(){
+    getCurNode() {
         return nodes[this.currentDay - 1][nodes[this.currentDay - 1].length - 1];
     }
 
-    getReviews(){
+    getReviews() {
         return reviews;
     }
 
-    setReviews(_reviews){
+    setReviews(_reviews) {
         reviews = _reviews;
     }
 
-    updateDayReview(idx, review){
-        reviews[idx][1] = review;
+    updateReviews(_reviews) {
+        const size = _reviews.length;
+        for (let i = 0; i < size; i++) {
+            reviews[i][1] = _reviews[i];
+        }
     }
 
     getCurDay() {
         return this.currentDay;
     }
 
-    getDate(index){
+    getDate(index) {
         const date = new Date(this.tripData.date);
         date.setDate(date.getDate() + index);
-        return date.toISOString().substring(0,10);
+        return date.toISOString().substring(0, 10);
     }
 
     getMaxDay() {
         return this.maxDay;
     }
 
-    getDayColor(Idx){
+    getDayColor(Idx) {
         return this.colorList[Idx % 4];
     }
 
@@ -178,7 +181,7 @@ class DayManager {
         obj.visitDate = nodeInfo.visitDate;
         console.log(obj);
         return obj;
-      }
+    }
 }
 
 export default DayManager;

@@ -21,7 +21,7 @@ class saveManager {
         }
         else if (isFirst.data == "modified") {
             // await this.loadMyNodes();//load 가능해지면 주석 풀기
-            await objectManager.initLoadNode();
+            // await objectManager.initLoadNode();
             await objectManager.initNode();
         }
     }
@@ -62,7 +62,6 @@ class saveManager {
             temp.dayReview = reviews[i][1];
             dayReviews.push(temp);
         }
-        //dayReviews = JSON.stringify(dayReviews);
         console.log(dayReviews);
         client.post("/api/dayReviews/save?mapId=" + tripData.mapId, { dayReviews }, { withCredentials: true });
     }
