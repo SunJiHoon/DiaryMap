@@ -43,6 +43,7 @@ const ReviewSpace = () => {
 
     const newMapFunctionRef = useRef(null)
     const addNodeFunctionRef = useRef(null)
+    const plusSearchNodeRef = useRef(null)
     // const setStateDataRef = useRef(null)
     // const printStateDataRef = useRef(null)
     const [nodeMenuOn, setNodeMenuOn] = useState(false)
@@ -190,6 +191,7 @@ const ReviewSpace = () => {
                 saveManager.checkIsFirst().then(() => {
                     inputManager = new InputManager(this.camera, map, setMglCameraPosition, this.scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
                     addNodeFunctionRef.current = selectOption
+                    plusSearchNodeRef.current = inputManager.plusSearchNode
                 });
                 this.renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -329,6 +331,12 @@ const ReviewSpace = () => {
             addNodeFunctionRef.current(selectOptionData);
         }
     }
+
+    const onPlusSearchNodeClick = (selectedNode) => {
+        if (plusSearchNodeRef.current) {
+            plusSearchNodeRef.current(selectedNode);
+        }
+    }
     
     const onNodeSearchSelect = (nodeData) => {
         setNodeSearchSelected(true)
@@ -356,7 +364,7 @@ const ReviewSpace = () => {
         // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
 
         setSearchResultDataLoading(true)
-        client.get("api/kakaoOpenApi/onlyKeywordFirst/list?userKeyword=" + searchValue, { cancelToken: source.token })
+        client.get("api/kakaoOpenApi/onlyKeyword/list?mapId=" + tripData.mapId + "&userKeyword=" + searchValue, { cancelToken: source.token })
             .then((res) => {
                 setSearchResultDataLoading(false)
                 setSearchResultData(res.data)
@@ -411,9 +419,7 @@ const ReviewSpace = () => {
                         <Button onClick={() => {
                             console.log("선택된 노드")
                             console.log(selectedData)
-                            if (inputManger) {
-                                inputManager.plusSearchNode(selectedData)
-                            }
+                            onPlusSearchNodeClick(selectedData)
                         }}>
                             노드 추가
                         </Button>

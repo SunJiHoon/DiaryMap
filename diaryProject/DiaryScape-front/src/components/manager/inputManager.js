@@ -138,9 +138,10 @@ class inputManager {
     }
   }
 
-  plusSearchNode(nodeInfo){
-    var node = objectManager.createNode(nodeInfo);
-    selectOption({character, node});
+  async plusSearchNode(nodeInfo){
+    var node = await objectManager.createNode(nodeInfo);
+    console.log(node)
+    selectOption({character, select_option: node});
   }
 
   // selectOption = () => {
@@ -171,6 +172,8 @@ export const selectOption = (selectOptionDataState) => {
   const index = nodes.length - 1;
   const cur_node = nodes[index];
 
+  console.log(cur_node)
+  console.log(select_option)
   const line = objectManager.drawLine(cur_node.position, select_option.position, dayManager.getDayColor(cur_day - 1));
   objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY));
   objectManager.invisibleOptions(select_option);

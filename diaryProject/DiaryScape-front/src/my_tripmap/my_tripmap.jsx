@@ -48,7 +48,7 @@ const MyTripmap = () => {
             console.log(res.data)
         })
     }, [])
-    
+
     const onNewReviewChange = useCallback((e) => {
         setNewReviewValue(e.target.value)
     }, [])
@@ -76,7 +76,7 @@ const MyTripmap = () => {
         // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
 
         setSearchResultDataLoading(true)
-        client.get("/api/openApi/start/list?userKeyword=" + searchValue, { cancelToken: source.token })
+        client.get("api/kakaoOpenApi/onlyKeywordFirst/list?userKeyword=" + searchValue, { cancelToken: source.token })
             .then((res) => {
                 setSearchResultDataLoading(false)
                 setSearchResultData(res.data)
@@ -218,7 +218,7 @@ const MyTripmap = () => {
                                                 {/* {result.contentid} */}
                                                 {result.title},&nbsp;
                                                 {result.addr1},&nbsp;
-                                                x: {result.mapx}, y: {result.mapy}
+                                                {/* x: {result.mapx}, y: {result.mapy} */}
                                             </Button>
                                         ))}
                                     </Box>
