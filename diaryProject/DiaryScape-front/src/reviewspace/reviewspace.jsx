@@ -52,7 +52,7 @@ const ReviewSpace = () => {
 
     const [debugMenuOpen, setDebugMenuOpen] = useState(false)
 
-    const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: ["day information"] }])
+    const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: ["day information"], review:"리뷰 예제" }])
     
     const [dayMenuOpenList, setDayMenuOpenList] = useState([false])
     const [dayCheckedList, setDayCheckedList] = useState([true])
@@ -65,7 +65,8 @@ const ReviewSpace = () => {
     const [nodeSearchSelected, setNodeSearchSelected] = useState(false)
     const [selectedData, setSelectedData] = useState({})
     const [searchResultDataLoading, setSearchResultDataLoading] = useState(false)
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen: isNodeSearchOpen, onOpen: onNodeSearchOpen, onClose: onNodeSearchClose } = useDisclosure()
+    const { isOpen: isNodeInfoOpen, onOpen: onNodeInfoOpen, onClose: onNodeInfoClose } = useDisclosure()
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiMHJ5dW5nIiwiYSI6ImNsb2k5NXg2NjFjYW4ybHJ3MHQ0c3U2c3QifQ.Xq5bPxVFzNOa3wjmYJVU4A';
     const map = useRef(null)
@@ -355,10 +356,13 @@ const ReviewSpace = () => {
         // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
 
         setSearchResultDataLoading(true)
-        client.get("/api/openApi/start/list?userKeyword=" + searchValue, { cancelToken: source.token })
+        client.get("api/kakaoOpenApi/onlyKeywordFirst/list?userKeyword=" + searchValue, { cancelToken: source.token })
             .then((res) => {
                 setSearchResultDataLoading(false)
                 setSearchResultData(res.data)
+                console.log(res.data)
+                
+                inputManager.plusSearchNode(res.data)
             })
     })
 
@@ -394,36 +398,24 @@ const ReviewSpace = () => {
                         </Button>
                     </Box>
                     <Box mt={4}>
-                        <Button onClick={onOpen} colorScheme="blue">
+                        <Input
+                            type="text"
+                            placeholder="노드 이름"
+                            value={searchValue}
+                            onChange={(e) => { setSearchValue(e.target.value) }}
+                            mr={2}
+                        />
+                        <Button onClick={onNodeSearch} colorScheme="blue">
                             노드 검색
                         </Button>
-                    </Box>
-
-                    <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader>노드 검색</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody>
-                            <Box display="flex" justifyContent="center">
-                                <Box display="flex" flexDirection="column" justifyContent="center" w="100%" maxW="500px" mt={2} mb={6}>
-                                    <Box display="flex" mb={2}>
-                                        <Input
-                                            type="text"
-                                            placeholder="노드 이름"
-                                            value={searchValue}
-                                            onChange={(e) => { setSearchValue(e.target.value) }}
-                                            mr={2}
-                                        />
-                                        <Button onClick={onNodeSearch} colorScheme="teal" variant="outline">
-                                            검색
-                                        </Button>
-                                    </Box>
-                                    {/* <Button colorScheme="teal">여행 생성</Button> */}
-                                </Box>
-                            </Box>
-
-                            <Box display="flex" justifyContent="center" mb={2}>
+                        <Button onClick={() => {
+                            console.log("선택된 노드")
+                            console.log(selectedData)
+                            inputManager.plusSearchNode(selectedData)
+                        }}>
+                            노드 추가
+                        </Button>
+                        <Box display="flex" justifyContent="center" mb={2}>
                                 <Box w="100%" maxW="500px" display="flex" flexDirection="column">
                                     <Box fontSize="1.4em" mb={2}>노드 선택</Box>
                                     {/* {nodeSearchSelected && <Box>{selectedData.contentid}</Box>} */}
@@ -452,12 +444,7 @@ const ReviewSpace = () => {
                                     </Box>
                                 </Box>
                             </Box>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button onClick={onClose} colorScheme="teal">닫기</Button>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
+                    </Box>
 
                     <Box
                         borderTop="1px"
@@ -624,8 +611,60 @@ const ReviewSpace = () => {
                                 {dayModule.data.map((node, i) => {
                                     const _key = "day "+dayModule.id + ": node " + i
                                     console.log(_key)
-                                    return(<Box fontWeight="semibold" key={_key}>{i+1}. {node}</Box>)
+                                    console.log(node)
+                                    return(<Box key={_key}>
+                                        <Box
+                                            h={8}
+                                            lineHeight={8}
+                                            fontWeight="semibold"
+                                            onClick={onNodeInfoOpen}
+                                            _hover={{
+                                                bgColor:"#00ff0033",
+                                                transition:"all .3s"
+                                            }}
+                                        >
+                                            {i+1}. {node.title}
+                                        </Box>
+                                        <Modal isOpen={isNodeInfoOpen} onClose={onNodeInfoClose}>
+                                            <ModalOverlay />
+                                            <ModalContent>
+                                                <ModalHeader>
+                                                    Day {dayModule.id} - {i+1}번째 노드
+                                                </ModalHeader>
+                                                <ModalCloseButton />
+                                                <ModalBody>
+                                                    {node.title}<br />
+                                                    {node.addr1}<br />
+                                                    {node.visitDate}<br />
+                                                    <Button onClick={() => {
+                                                        onNodeInfoClose()
+                                                        const nextDayModuleList = dayModuleList
+                                                        nextDayModuleList.map(_dayModule => {
+                                                            if(_dayModule.id == dayModule.id) {
+                                                                const nextData = dayModule.data.filter((_node, _i) => !i == _i)
+                                                                const nextDayModule = _dayModule
+                                                                nextDayModule.data = nextData
+                                                                return nextDayModule
+                                                            }
+                                                            else {
+                                                                return _dayModule
+                                                            }
+                                                        })
+                                                        setDayModuleList(nextDayModuleList)
+                                                    }}>
+                                                        노드 제거
+                                                    </Button>
+                                                </ModalBody>
+                                                <ModalFooter>
+                                                    <Button onClick={onNodeInfoClose} colorScheme="teal">닫기</Button>
+                                                </ModalFooter>
+                                            </ModalContent>
+                                        </Modal>
+                                    </Box>)
                                 })}
+
+                                
+
                                 <Box mt={4}>
                                     <Box fontWeight="semibold">리뷰</Box>
                                     <Textarea mt={2} boxShadow="2xl"/>
