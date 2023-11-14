@@ -292,6 +292,7 @@ public class kakaoKeywordController {
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json; charset=UTF-8");
         // KakaoAK를 포함한 Authorization 헤더 설정
+        // API_KEY 가져오기
         String apiKey = "8dd0528ce1ab35538b4682375da7b5e9"; // KakaoAK 키를 입력하세요
         conn.setRequestProperty("Authorization", "KakaoAK " + apiKey);
 
