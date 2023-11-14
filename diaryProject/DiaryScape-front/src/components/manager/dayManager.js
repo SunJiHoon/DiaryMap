@@ -141,7 +141,7 @@ class DayManager {
     }
 
     updateReviews(_reviews) {
-        console.log(_reviews)
+        console.log("updateReviews 함수 안에서:", _reviews)
         const size = _reviews.length;
         for (let i = 0; i < size; i++) {
             reviews[i][1] = _reviews[i];

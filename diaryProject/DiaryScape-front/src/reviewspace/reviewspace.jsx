@@ -104,8 +104,15 @@ const ReviewSpace = () => {
         })
     }, [dayCheckedList])
 
+
+    const updateReviews = () => {
+        if (updateReviewsRef.current) {
+            updateReviewsRef.current(reviews)
+        }
+    }
+
     useEffect(() => {
-        updateReviews(reviews)
+        updateReviews()
     }, [reviews])
     
     useEffect(() => {
@@ -353,12 +360,6 @@ const ReviewSpace = () => {
     const loadSearchOptions = (nodeInfoList) => {
         if (loadSearchOptionsRef.current) {
             loadSearchOptionsRef.current(nodeInfoList)
-        }
-    }
-
-    const updateReviews = (reviews) => {
-        if (updateReviewsRef.current) {
-            updateReviewsRef.current(reviews)
         }
     }
     
