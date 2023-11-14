@@ -364,13 +364,19 @@ const ReviewSpace = () => {
         // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
 
         setSearchResultDataLoading(true)
-        client.get("api/kakaoOpenApi/onlyKeyword/list?mapId=" + tripData.mapId + "&userKeyword=" + searchValue, { cancelToken: source.token })
+        if(!dayManager) return
+
+        client.get("api/kakaoOpenApi/onlyKeywordAndCoord/list?mapId=" + tripData.mapId
+        + "&userKeyword=" + searchValue +
+        "&mapX="+ dayManager.getCurNode().userData.mapX,
+        "&mapY=" + dayManager.getCurNode().userData.mapY,
+         { cancelToken: source.token })
             .then((res) => {
                 setSearchResultDataLoading(false)
                 setSearchResultData(res.data)
                 console.log(res.data)
                 
-                // inputManager.plusSearchNode(res.data)
+                if(objectManager) objectManager.loadSearchOptions(res.data)
             })
     })
 
