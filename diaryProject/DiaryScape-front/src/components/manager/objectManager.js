@@ -63,10 +63,19 @@ class objectManager {
     console.log("end load options");
   }
 
+  async loadSearchOptions(nodeInfos){
+    const size = nodeInfos.length;
+    for(let i =0;i<size;i++){
+      
+    }
+  }
+
   invisibleOptions(select_option) {
     for (let i = 0; i < cur_options.length; i++) {
       if (cur_options[i] != select_option) {
-        scene.remove(cur_options[i]);
+        if(cur_options[i] != null){
+          scene.remove(cur_options[i]);
+        }
       }
     }
     cur_options = [];

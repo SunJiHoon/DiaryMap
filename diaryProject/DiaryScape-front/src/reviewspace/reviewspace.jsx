@@ -68,7 +68,7 @@ const ReviewSpace = () => {
     const { isOpen: isNodeSearchOpen, onOpen: onNodeSearchOpen, onClose: onNodeSearchClose } = useDisclosure()
     const { isOpen: isNodeInfoOpen, onOpen: onNodeInfoOpen, onClose: onNodeInfoClose } = useDisclosure()
 
-    mapboxgl.accessToken = 'pk.eyJ1IjoiMHJ5dW5nIiwiYSI6ImNsb2k5NXg2NjFjYW4ybHJ3MHQ0c3U2c3QifQ.Xq5bPxVFzNOa3wjmYJVU4A';
+    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
     const map = useRef(null)
     const mapContainer = useRef(null)
 
