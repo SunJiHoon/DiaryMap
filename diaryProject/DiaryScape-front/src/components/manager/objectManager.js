@@ -53,6 +53,10 @@ class objectManager {
     await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
 
+  async initLoadNode(){
+    const lastNode = dayManager.getCurNode();
+  }
+
   async loadOptions(selectPos) {
     const res = await client.get("/api/openApi/node?mapId=" + tripData.mapId + "&mapX=" + selectPos.x + "&mapY=" + selectPos.z);
     for (let i = 0; i < res.data.length; i++) {
@@ -89,7 +93,6 @@ class objectManager {
   }
 
   async drawDay(nodeArr, dayIdx) {
-    console.log(nodeArr); console.log(dayIdx);
     const size = nodeArr.length;
     const dayColor = dayManager.getDayColor(dayIdx);
 
@@ -104,6 +107,7 @@ class objectManager {
 
     for (var i = 0; i < size - 1; i++) {
       const nextNode = await new Node(nodeArr[i + 1]);
+      this.changeNodeColor(nextNode, dayManager.getDayColor(dayIdx));
       scene.add(nextNode);
       const line = this.drawLine(new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY),
         new THREE.Vector3(nodeArr[i + 1].relativeX, 0, nodeArr[i + 1].relativeY),
@@ -116,6 +120,11 @@ class objectManager {
     var node = await new Node(nodeInfo);
     scene.add(node);
     return node;
+  }
+
+  changeNodeColor(node, color){
+    console.log(node.material);
+    node.material.color = new THREE.Color(color);
   }
 
   drawLine(startNode, endNode, lineColor) {
