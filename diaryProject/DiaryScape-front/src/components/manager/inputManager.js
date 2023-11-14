@@ -128,6 +128,7 @@ class inputManager {
           const cur_node = nodes[index];
           select_option = intersectObjects[i].object;
           var options = objectManager.getCurOptions();
+          options.concat(objectManager.getSearchOptions());
           setSelectOptionData({ options , select_option });
           if (cur_node == select_option) {
             break;
@@ -141,7 +142,8 @@ class inputManager {
 
   async plusSearchNode(nodeInfo){
     var node = await objectManager.createNode(nodeInfo);
-    var options = objectManager.getSearchOptions();
+    var options = objectManager.getCurOptions();
+    options.concat(objectManager.getSearchOptions());
     selectOption({options, select_option: node});
   }
 
