@@ -265,15 +265,17 @@ public class NodeController {
         return nodeDTOList;
     }
 
+    //relativeX가 좌우
     public static String calRelativeX(String startX, String currX){
         double relativeVal = Double.parseDouble(currX) - Double.parseDouble(startX);
-        double mul = 100000; //위도상 0.063(5.6km거리)는 500을 곱하여 30을 반환하기로 했다.
+        double mul = 88524; //위도상 0.063(5.6km거리)는 500을 곱하여 30을 반환하기로 했다.
         return Double.toString((Double)(relativeVal * mul));
     }
 
+    //relativeY가 상하
     public static String calRelativeY(String startY, String currY){
         double relativeVal = (Double.parseDouble(currY) - Double.parseDouble(startY));
-        double mul = -100000; //위도상 0.063(5.6km거리)는 500을 곱하여 30을 반환하기로 했다.
+        double mul = -110000; //위도상 0.063(5.6km거리)는 500을 곱하여 30을 반환하기로 했다.
         return Double.toString((Double)(relativeVal * mul));
     }
 

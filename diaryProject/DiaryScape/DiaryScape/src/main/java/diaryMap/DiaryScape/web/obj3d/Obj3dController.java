@@ -415,7 +415,7 @@ public class Obj3dController {
     public String createNewObj(
             @RequestParam Map<String, String> paraMap
     ) {
-        String id = paraMap.get("mapId"); 
+        String id = paraMap.get("mapId");
         obj3dRepository.deleteById(id);
         return "삭제 수행";
     }
