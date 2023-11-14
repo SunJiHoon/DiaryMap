@@ -21,7 +21,7 @@ class node {
     const objGeometry = new THREE.SphereGeometry(2);
     const objMaterial = new THREE.MeshBasicMaterial({ color: "magenta" });
     const obj = new THREE.Mesh(objGeometry, objMaterial);
-    obj.scale.set(4,4,4);
+    obj.scale.set(4, 4, 4);
 
     const gltfLoader = new GLTFLoader();
     const ranNum = randInt(0, foods.length - 1);
@@ -35,8 +35,8 @@ class node {
       contentType: infos.contentTypeId,
       title: infos.title,
       tel: infos.tel,
-      mapx: infos.mapx,
-      mapy: infos.mapy,
+      mapX: infos.mapx,
+      mapY: infos.mapy,
       relativeX: Number(infos.relativeX),
       relativeY: Number(infos.relativeY),
       addr1: infos.addr1,

@@ -76,7 +76,7 @@ class DayManager {
             temp.push(null);
             var node = nodes[this.currentDay - 2][nodes[this.currentDay - 2].length - 1];
             console.log(node);
-            var nodeObj = await objectManager.createNode(node.userData);//이걸 하든 둘 중에 하나는 해야함
+            var nodeObj = await objectManager.createNode(this.getNodeInfos(node.userData));//이걸 하든 둘 중에 하나는 해야함
             nodeObj.userData.visitData = this.getDate(this.currentDay-1);
             console.log(nodeObj);
             temp.push(nodeObj);
@@ -161,6 +161,23 @@ class DayManager {
     getDayColor(Idx){
         return this.colorList[Idx % 4];
     }
+
+    getNodeInfos(nodeInfo) {
+        const obj = new Object();
+        obj.tag = "node";
+        obj.contentID = nodeInfo.contentid;
+        obj.contentType = nodeInfo.contentTypeId;
+        obj.title = nodeInfo.title;
+        obj.tel = nodeInfo.tel;
+        obj.mapx = nodeInfo.mapX;
+        obj.mapy = nodeInfo.mapY;
+        obj.relativeX = Number(nodeInfo.relativeX);
+        obj.relativeY = Number(nodeInfo.relativeY);
+        obj.addr1 = nodeInfo.addr1;
+        obj.visitDate = nodeInfo.visitDate;
+        console.log(obj);
+        return obj;
+      }
 }
 
 export default DayManager;
