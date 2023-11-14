@@ -8,4 +8,5 @@ import java.util.List;
 
 @Repository
 public interface Obj3dRepository extends MongoRepository<Obj3d, String> {
+    void deleteById(String id);
 }
