@@ -107,6 +107,7 @@ const ReviewSpace = () => {
     useEffect(() => {
         updateReviews(reviews)
     }, [reviews])
+    
     useEffect(() => {
         // dayManager.dataPropagationTest()
         if (map.current) return;
@@ -735,12 +736,6 @@ const ReviewSpace = () => {
                                     { id: nextDayMenuId, data: ["(replace with current node)"]}
                                 ]
                             )
-                            setReviews(
-                                [
-                                    ...reviews,
-                                    "example"
-                                ]
-                            )
                             setDayMenuOpenList(
                                 [
                                     ...dayMenuOpenList,
@@ -757,13 +752,15 @@ const ReviewSpace = () => {
                             setOnPlusDay(nextDayMenuId)
                             // dayManager.plusDay() // 이렇게 하면 plusDay 내에서 이전 currentDay 값 참조하게 됨
                             setNextDayMenuId(nextDayMenuId + 1)
+                            setReviews(
+                                [
+                                    ...reviews,
+                                    "example"
+                                ]
+                            )
                         }}>
                         Day 추가
                     </Button>
-
-                    <Button onClick={() =>{
-                        dayMana
-                    }}
                 </Box>
             </div >
             <div
