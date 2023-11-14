@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,10 +34,13 @@ import diaryMap.DiaryScape.web.openApi.metroModule.metroInfo.*;
 public class NodeController {
 
     private final Obj3dRepository obj3dRepository;
+    private final Environment env;
 
     private String makeApiQuery(int numOfRows, int pageNo, double mapX, double mapY, int radius, int contentTypeId){
+        String apiKey = env.getProperty("KorService1-key");
+
         return "https://apis.data.go.kr/B551011/KorService1/locationBasedList1" +
-                "?serviceKey=2q1TgcBZMiSU3%2BDH9RAZej4JCO3rNDHHtjvAoeuAv6wxrDGIOw1BiBdaeYsDKBIUnMDMTvLcE0XKSYaqphQMzQ%3D%3D" +
+                "?serviceKey=" + apiKey +
                 "&numOfRows=" + Integer.toString(numOfRows) +
                 "&pageNo=" + Integer.toString(pageNo) +
                 "&MobileOS=ETC" +
