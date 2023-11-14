@@ -56,19 +56,19 @@ class saveManager {
         const size = reviews.length;
         for (let i = 0; i < size; i++) {
             var temp = new Object();
-            temp.visitDate = dayManager.getDate(i);
-            temp.dayReview = reviews[i];
+            temp.visitDate = reviews[i][0];
+            temp.dayReview = reviews[i][1];
             dayReviews.push(temp);
         }
-        dayReviews = JSON.stringify(dayReviews);
+        //dayReviews = JSON.stringify(dayReviews);
         console.log(dayReviews);
         client.post("/api/dayReviews/save?mapId=" + tripData.mapId, { dayReviews }, { withCredentials: true });
     }
 
-    loadReviews() {
-        const reviews = client.get("api/dayReviews/look?mapId=" + tripData.mapId);
-        console.log(reviews);
-        dayManager.setReviews(reviews);
+    async loadReviews() {
+        const reviews = await client.get("api/dayReviews/look?mapId=" + tripData.mapId);
+        console.log(reviews.data);
+        dayManager.setReviews(reviews.data);
     }
 }
 

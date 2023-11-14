@@ -176,7 +176,7 @@ export const selectOption = (selectOptionDataState) => {
   console.log(select_option)
   const line = objectManager.drawLine(cur_node.position, select_option.position, dayManager.getDayColor(cur_day - 1));
   objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY));
-  objectManager.invisibleOptions(select_option);
+  objectManager.invisibleOptions(objectManager.getCurOptions(), select_option);
 
   select_option.userData.visitDate = dayManager.getDate(cur_day-1);//cur_date;
   dayManager.plusDayNode(line, select_option);

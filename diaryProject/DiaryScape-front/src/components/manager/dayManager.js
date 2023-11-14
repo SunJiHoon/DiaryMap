@@ -80,7 +80,10 @@ class DayManager {
             temp.push(node);
         }
         nodes.push(temp);
-        reviews.push(this.currentDay + "일째");
+        temp = [];
+        temp.push(this.getDate(this.currentDay - 1));
+        temp.push(this.currentDay + "일 째");
+        reviews.push(temp);
     }
     
     visibleDay(dayIdx) {
@@ -132,7 +135,7 @@ class DayManager {
     }
 
     updateDayReview(idx, review){
-        reviews[idx] = review;
+        reviews[idx][1] = review;
     }
 
     getCurDay() {

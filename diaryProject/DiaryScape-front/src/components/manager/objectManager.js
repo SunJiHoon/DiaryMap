@@ -6,6 +6,7 @@ import client from "../../utility/client.jsx";
 import DayManager from "./dayManager.js";
 
 let cur_options = [];
+let search_options = [];
 
 var scene;
 var player;
@@ -58,27 +59,28 @@ class objectManager {
       var tempNode = await new Node(res.data[i]);
       scene.add(tempNode);
       cur_options.push(tempNode);
-      scene.add(tempNode);
     }
     console.log("end load options");
   }
 
   async loadSearchOptions(nodeInfos){
+    this.invisibleOptions(search_options, null);
     const size = nodeInfos.length;
     for(let i =0;i<size;i++){
-      
+      var tempNode = await new Node(nodeInfos[i]);
+      scene.add(tempNode);
+      search_options.push(tempNode);
     }
+    console.log("end load search options");
   }
 
-  invisibleOptions(select_option) {
-    for (let i = 0; i < cur_options.length; i++) {
-      if (cur_options[i] != select_option) {
-        if(cur_options[i] != null){
-          scene.remove(cur_options[i]);
-        }
+  invisibleOptions(options, select_option) {
+    for (let i = 0; i < options.length; i++) {
+      if (options[i] != select_option) {
+        scene.remove(options[i]);
       }
     }
-    cur_options = [];
+    options = [];
   }
 
   removeObject(object) {
@@ -124,6 +126,10 @@ class objectManager {
     const line = new THREE.Line(lineGeometry, lineMaterial);
     scene.add(line);
     return line;
+  }
+
+  getCurOptions(){
+    return cur_options;
   }
 }
 
