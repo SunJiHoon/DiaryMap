@@ -458,9 +458,9 @@ const ReviewSpace = () => {
                     p={4}
                     w="240px"
                     bgColor="#ffffff"
-                    borderWidth={1}
+                    // borderWidth={1}
                     borderRadius={4}
-                    borderColor="gray.300"
+                    // borderColor="gray.300"
                     display="flex"
                     flexDirection="column"
                     alignItems="flex-start"
@@ -590,9 +590,9 @@ const ReviewSpace = () => {
                     w="240px"
                     minH="30px"
                     bgColor="#ffffff"
-                    border={1}
+                    // border={1}
                     borderRadius={4}
-                    borderColor="gray"
+                    // borderColor="gray"
                     textAlign="left"
                     boxShadow="2xl"
                 >
@@ -632,9 +632,9 @@ const ReviewSpace = () => {
                     maxH="92vh"
                     overflowY="scroll"
                     bgColor="#ffffff"
-                    border={1}
+                    // border={1}
                     borderRadius={4}
-                    borderColor="gray"
+                    // borderColor="gray"
                     textAlign="left"
                     boxShadow="2xl"
                 >
@@ -817,25 +817,25 @@ const ReviewSpace = () => {
             </div >
             <div
                 style={{
+                    visibility: nodeMenuOn ? "visible" : "hidden",
                     position: "fixed",
                     top: nodeMenuPosition.y,
                     left: nodeMenuPosition.x,
                     zIndex: nodeMenuOn ? 4 : -2,
-                    transition: "z-index .1s linear"
+                    maxH: nodeMenuOn ? "100vh" : "0vh",
+                    opacity: nodeMenuOn ? "1" : "0",
+                    transition: "visibility .3s linear .3s, z-index .3s linear .3s, opacity .3s linear .3s, maxH .3s linear .3s"
                 }}
             >
                 <Box
-                    visibility={nodeMenuOn ? "visible" : "hidden"}
                     bgColor="white"
                     borderRadius="2px"
                     w="200px"
-                    maxH={nodeMenuOn ? "100vh" : "0vh"  }
                     overflowY="hidden"
-                    opacity={nodeMenuOn ? "1" : "0"}
                     boxShadow="2xl"
                     textAlign="left"
                     p={4}
-                    transition="all .6s ease-in-out .05s"
+                    // transition="all .4s ease-in-out .3s"
                 >
                     <Box fontWeight="bold">노드 정보</Box>
                     {selectOptionData.select_option && <Box>
