@@ -75,10 +75,8 @@ class DayManager {
         if (this.currentDay > 1) {//전 날의 마지막 노드를 추가한 날의 첫 노드로 넣어줌
             temp.push(null);
             var node = nodes[this.currentDay - 2][nodes[this.currentDay - 2].length - 1];
-            console.log(node);
             var nodeObj = await objectManager.createNode(this.getNodeInfos(node.userData));//이걸 하든 둘 중에 하나는 해야함
             nodeObj.userData.visitDate = this.getDate(this.currentDay - 1);
-            console.log(nodeObj);
             temp.push(nodeObj);
         }
         nodes.push(temp);
@@ -124,12 +122,35 @@ class DayManager {
     }
 
     removeDayNode(dayIdx, index) {//구현하기
-        objectManager.removeObject();
+        if(nodes[dayIdx].length == 2){
+            return;//노드가 하나만 들어있다면 삭제 못 하게
+        }
+        if(index = 1){//첫 노드라면 뒷 라인만 삭제
+            objectManager.removeObject(nodes[1]);
+            objectManager.removeObject(nodes[2]);
+            nodes.splice(1,2);
+        }
+        else if(index == nodes[dayIdx].length / 2){
+            objectManager.removeObject(index * 2 - 1);
+            objectManager.removeObject(index * 2 - 2);
+            nodes.splice(index * 2 - 2, 2);
+        }
+        else{
+            objectManager.removeObject(nodes[index * 2 - 2]);
+            objectManager.removeObject(nodes[index * 2 - 1]);
+            objectManager.removeObject(nodes[index * 2]);
+            nodes[index * 2 - 2] = objectManager.drawLine(
+                nodes[index * 2 - 3].position, nodes[index * 2 + 1].position,
+                this.getDayColor(dayIdx)
+            );
+            nodes.splice(index * 2 - 1,2);
+        }        
+
         this.updateDayNodesToFront();
     }
 
     getCurNode() {
-        console.log("nodes" + nodes)
+        //length 0일 때 예외 처리?
         return nodes[this.currentDay - 1][nodes[this.currentDay - 1].length - 1];
     }
 
@@ -168,7 +189,6 @@ class DayManager {
     }
 
     getNodeInfos(nodeInfo) {
-        console.log(nodeInfo);
         const obj = new Object();
         obj.tag = "node";
         obj.contentid = nodeInfo.contentID;
@@ -181,7 +201,6 @@ class DayManager {
         obj.relativeY = Number(nodeInfo.relativeY);
         obj.addr1 = nodeInfo.addr1;
         obj.visitDate = nodeInfo.visitDate;
-        console.log(obj);
         return obj;
     }
 }

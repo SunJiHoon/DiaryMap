@@ -79,6 +79,7 @@ class saveManager {
         console.log(res);
         console.log(res.data);
         console.log("sendGPT끝");
+        return res.data.answer;
     }
 }
 

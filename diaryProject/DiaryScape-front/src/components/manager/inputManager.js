@@ -95,7 +95,7 @@ class inputManager {
         console.log(nodes);
       }
       else if(event.key == 'a'){
-        saveManager.sendGPT();
+        saveManager.generateDiary();
       }
     }
     if (event.key == 't') {

@@ -65,7 +65,7 @@ public class gptController {
         ////
         log.info("쿼리쏘기");
         String apiUrl = "http://localhost:5000/chat";
-        String basicPrompt = "내가 말하는 모든 문장을 소재로 여행을 일기처럼 써줘 ";
+        String basicPrompt = "내가 말하는 모든 문장을 소재로 여행을 일기처럼 써줘. 100자 안으로 써쭤.";
         //String prompt = "Translate the following English text to French: 'Hello, how are you?'";
         try {
             URL url = new URL(apiUrl);
