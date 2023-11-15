@@ -34,6 +34,8 @@ import axios from "axios";
 export const CanvasContext = createContext()
 
 let nextReviewId = 2
+let getCurNode
+let passReviewsToDayManager
 
 const ReviewSpace = () => {
     const [canvasState, setCanvasState] = useState(null)
@@ -81,6 +83,8 @@ const ReviewSpace = () => {
 
     let objectManager, saveManager, inputManager, dayManager = new DayManager();
     updateReviewsRef.current = dayManager.updateReviews
+    getCurNode = dayManager.getCurNode
+    passReviewsToDayManager = dayManager.setReviews
 
     dayManager.setStateSetter(setDayModuleList)
 
@@ -93,8 +97,10 @@ const ReviewSpace = () => {
         dayManager.printStateData()
     }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData])
 
+    const plusDayInitial = useRef(false)
     useEffect(() => {
-        if(onPlusDay <= 1) {
+        if(!plusDayInitial.current) {
+            plusDayInitial.current = true
             console.log("initial")
             return;
         }
@@ -105,6 +111,7 @@ const ReviewSpace = () => {
                     "example"
                 ]
             )
+            
         })
     }, [onPlusDay])
 
@@ -122,12 +129,16 @@ const ReviewSpace = () => {
         }
     }
 
+    const updateReviewsInitial = useRef(false)
+
     useEffect(() => {
         
-        if(onPlusDay==1) {
+        if(!updateReviewsInitial.current) {
             console.log("initial")
+            updateReviewsInitial.current = true
             return;
         }
+
         updateReviews()
     }, [reviews])
     

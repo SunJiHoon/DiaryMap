@@ -146,8 +146,8 @@ class DayManager {
         console.log("inner updateReviews:", reviews)
         const size =  _reviews.length;
         for (let i = 0; i < size; i++) {
-            console.log("review[i][1]", reviews[i][1])
-            // reviews[i][1] = _reviews[i];
+            // console.log("review[i][1]", reviews[i][1])
+            reviews[i][1] = _reviews[i];
         }
     }
 
