@@ -46,10 +46,10 @@ class DayManager {
     }
 
     printStateData() {
-        // console.log(this.dayModuleList)
-        // console.log(this.dayCheckedList)
-        // console.log(this.currentDay)
-        // console.log(this.maxDay)
+        console.log(this.dayModuleList)
+        console.log(this.dayCheckedList)
+        console.log(this.currentDay)
+        console.log(this.maxDay)
     }
 
     updateDayNodesToFront() {

@@ -43,14 +43,16 @@ class saveManager {
 
     async loadMyNodes() {
         const res = await client.get("/api/obj/one/onlyMapJsonGroupByDate?mapId=" + tripData.mapId);
-        console.log(res.data);
         //cur_day랑 max_day 변경해주기
         dayManager.setNodes(res.data);
         const size = res.data.length;
         for (let i = 0; i < size; i++) {
             objectManager.drawDay(res.data[i].nodes, i);
         }
-        //dayManager.updateDayNodesToFront();
+        const reviews = await client.get("api/dayReviews/look?mapId=" + tripData.mapId);
+        dayManager.setReviews(reviews);
+        dayManager.updateDayNodesToFront();
+        dayManager.printStateData();
     }
 
     saveReviews() {
