@@ -192,13 +192,11 @@ export const selectOption = (selectOptionDataState) => {
     select_option.position.z
   );
 
-  move(targetPos);
+  //move(targetPos);
 }
 
 function move(targetPos) {
-  /*
   cur_state = InputState.MOVE;
-  console.log(targetPos);
   console.log(character);
   let angle = new THREE.Vector2(0, 1).angleTo(
     new THREE.Vector2(
@@ -230,7 +228,6 @@ function move(targetPos) {
     y: angle,
     duration: 0.3,
   });
-  */
 }
 
 export default inputManager;

@@ -699,6 +699,7 @@ const ReviewSpace = () => {
                                 overflowX="auto"
                                 transition="all 0.3s ease-in-out"
                             >
+                                {console.log(dayModule)}
                                 {dayModule.data.map((node, i) => {
                                     const _key = "day "+dayModule.id + ": node " + i
                                     // console.log(_key)

@@ -51,7 +51,7 @@ class saveManager {
         }
         const reviews = await client.get("api/dayReviews/look?mapId=" + tripData.mapId);
         dayManager.setReviews(reviews);
-        dayManager.updateDayNodesToFront();
+        dayManager.updateDayInfosToFront(res.data);
         dayManager.printStateData();
     }
 
