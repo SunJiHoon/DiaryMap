@@ -121,7 +121,7 @@ class DayManager {
         this.updateDayNodesToFront();
     }
 
-    removeDayNode(dayIdx, index) {//구현하기
+    removeDayNode = (dayIdx, index) => {//구현하기
         if(nodes[dayIdx - 1].length == 2){
             return;//노드가 하나만 들어있다면 삭제 못 하게
         }

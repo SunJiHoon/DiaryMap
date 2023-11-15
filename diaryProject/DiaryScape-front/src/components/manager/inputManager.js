@@ -196,6 +196,7 @@ export const selectOption = (selectOptionDataState) => {
 }
 
 function move(targetPos) {
+  /*
   cur_state = InputState.MOVE;
   console.log(targetPos);
   console.log(character);
@@ -229,6 +230,7 @@ function move(targetPos) {
     y: angle,
     duration: 0.3,
   });
+  */
 }
 
 export default inputManager;

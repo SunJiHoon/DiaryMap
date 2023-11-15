@@ -52,6 +52,7 @@ const ReviewSpace = () => {
     const passReviewsToDayManagerRef = useRef(null)
     const saveReviewsInSaveManager = useRef(null)
     const generateDiaryRef = useRef(null)
+    const removeDayNodeRef = useRef(null)
 
     // const setStateDataRef = useRef(null)
     // const printStateDataRef = useRef(null)
@@ -78,7 +79,9 @@ const ReviewSpace = () => {
     const [selectedData, setSelectedData] = useState({})
     const [searchResultDataLoading, setSearchResultDataLoading] = useState(false)
     const { isOpen: isNodeSearchOpen, onOpen: onNodeSearchOpen, onClose: onNodeSearchClose } = useDisclosure()
+
     const { isOpen: isNodeInfoOpen, onOpen: onNodeInfoOpen, onClose: onNodeInfoClose } = useDisclosure()
+    const [ nodeInfoData, setNodeInfoData ] = useState({})
 
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
     const map = useRef(null)
@@ -88,6 +91,7 @@ const ReviewSpace = () => {
     updateReviewsRef.current = dayManager.updateReviews
     getCurNodeRef.current = dayManager.getCurNode
     passReviewsToDayManagerRef.current = dayManager.setReviews
+    removeDayNodeRef.current = dayManager.removeDayNode
 
     dayManager.setStateSetter(setDayModuleList)
 
@@ -703,7 +707,10 @@ const ReviewSpace = () => {
                                             h={8}
                                             lineHeight={8}
                                             fontWeight="semibold"
-                                            onClick={onNodeInfoOpen}
+                                            onClick={() => {
+                                                setNodeInfoData({day: dayModule.id, idx: i, node})
+                                                onNodeInfoOpen()}
+                                            }
                                             _hover={{
                                                 bgColor:"#00ff0033",
                                                 transition:"all .3s"
@@ -711,44 +718,10 @@ const ReviewSpace = () => {
                                         >
                                             {i+1}. {node.title}
                                         </Box>
-                                        <Modal isOpen={isNodeInfoOpen} onClose={onNodeInfoClose}>
-                                            <ModalOverlay />
-                                            <ModalContent>
-                                                <ModalHeader>
-                                                    Day {dayModule.id} - {i+1}번째 노드
-                                                </ModalHeader>
-                                                <ModalCloseButton />
-                                                <ModalBody>
-                                                    {node.title}<br />
-                                                    {node.addr1}<br />
-                                                    {node.visitDate}<br />
-                                                    <Button onClick={() => {
-                                                        onNodeInfoClose()
-                                                        // const nextDayModuleList = dayModuleList
-                                                        // nextDayModuleList.map(_dayModule => {
-                                                        //     if(_dayModule.id == dayModule.id) {
-                                                        //         const nextData = dayModule.data.filter((_node, _i) => !i == _i)
-                                                        //         const nextDayModule = _dayModule
-                                                        //         nextDayModule.data = nextData
-                                                        //         return nextDayModule
-                                                        //     }
-                                                        //     else {
-                                                        //         return _dayModule
-                                                        //     }
-                                                        // })
-                                                        // setDayModuleList(nextDayModuleList)
-                                                    }}>
-                                                        노드 제거
-                                                    </Button>
-                                                </ModalBody>
-                                                <ModalFooter>
-                                                    <Button onClick={onNodeInfoClose} colorScheme="teal">닫기</Button>
-                                                </ModalFooter>
-                                            </ModalContent>
-                                        </Modal>
+                                        
                                     </Box>)
                                 })}
-
+                                
                                 
 
                                 <Box mt={4}>
@@ -769,6 +742,29 @@ const ReviewSpace = () => {
                             </Box>
                         </Box>
                     ))}
+                    { nodeInfoData && nodeInfoData.node && <Modal isOpen={isNodeInfoOpen} onClose={onNodeInfoClose}>
+                        <ModalOverlay />
+                        <ModalContent>
+                            <ModalHeader>
+                                Day {nodeInfoData.day} - {nodeInfoData.idx+1}번째 노드
+                            </ModalHeader>
+                            <ModalCloseButton />
+                            <ModalBody>
+                                {nodeInfoData.node.title}<br />
+                                {nodeInfoData.node.addr1}<br />
+                                {nodeInfoData.node.visitDate}<br />
+                                <Button onClick={() => {
+                                    onNodeInfoClose()
+                                    if(removeDayNodeRef.current) removeDayNodeRef.current(nodeInfoData.day, nodeInfoData.idx+1)
+                                }}>
+                                    노드 제거
+                                </Button>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button onClick={onNodeInfoClose} colorScheme="teal">닫기</Button>
+                            </ModalFooter>
+                        </ModalContent>
+                    </Modal>}
                     <Button
                         colorScheme="blue"
                         onClick={(e) => {
@@ -840,8 +836,8 @@ const ReviewSpace = () => {
                     <Box fontWeight="bold">노드 정보</Box>
                     {selectOptionData.select_option && <Box>
                         {selectOptionData.select_option.userData.title}<br />
+                        {selectOptionData.select_option.userData.addr1}<br />
                         {selectOptionData.select_option.userData.tel}<br />
-                        위치: {selectOptionData.select_option.userData.address} <br />
                     </Box>
                     }
 
