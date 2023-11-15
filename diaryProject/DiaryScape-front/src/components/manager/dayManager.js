@@ -46,10 +46,31 @@ class DayManager {
     }
 
     printStateData() {
-        console.log(this.dayModuleList)
-        console.log(this.dayCheckedList)
-        console.log(this.currentDay)
-        console.log(this.maxDay)
+        //console.log(this.dayModuleList)
+        //console.log(this.dayCheckedList)
+        //console.log(this.currentDay)
+        //console.log(this.maxDay)
+    }
+
+    updateDayInfosToFront(nodes) {
+        //var obj = [{id:1, data:[node1, node2, node3]},{},{}];
+        const size = nodes.length;
+        var obj = [];
+
+        for (let i = 0; i < size; i++) {
+            var temp = {};
+            temp.id = i + 1;
+            var temp2 = [];
+            for (let j = 0; j < nodes[i].nodes.length; j++) {
+                temp2.push(nodes[i].nodes[j]);
+            }
+            temp.data = temp2
+            console.log("temp")
+            console.log(temp)
+            obj.push(temp);
+        }
+        console.log(obj);
+        this.setDayModuleList(obj);
     }
 
     updateDayNodesToFront() {
@@ -124,17 +145,17 @@ class DayManager {
     removeDayNode = (dayIdx, index) => {//구현하기
         console.log("remove 실행");
         console.log(nodes[dayIdx - 1].length);
-        if(nodes[dayIdx - 1].length == 2){
+        if (nodes[dayIdx - 1].length == 2) {
             console.log("1개라서 패스");
             return;//노드가 하나만 들어있다면 삭제 못 하게
         }
-        if(index == 1){//첫 노드라면 뒷 라인만 삭제
+        if (index == 1) {//첫 노드라면 뒷 라인만 삭제
             objectManager.removeObject(nodes[dayIdx - 1][1]);
             objectManager.removeObject(nodes[dayIdx - 1][2]);
-            nodes[dayIdx - 1].splice(1,2);
+            nodes[dayIdx - 1].splice(1, 2);
             console.log("첫 노드 삭제");
         }
-        else if(index == nodes[dayIdx - 1].length / 2){
+        else if (index == nodes[dayIdx - 1].length / 2) {
             console.log(nodes[dayIdx - 1]);
             console.log(nodes[dayIdx - 1][index * 2 - 1]);
             console.log(nodes[dayIdx - 1][index * 2 - 2]);
@@ -143,7 +164,7 @@ class DayManager {
             nodes[dayIdx - 1].splice(index * 2 - 2, 2);
             console.log("마지막 노드 삭제");
         }
-        else{
+        else {
             objectManager.removeObject(nodes[dayIdx - 1][index * 2 - 2]);
             objectManager.removeObject(nodes[dayIdx - 1][index * 2 - 1]);
             objectManager.removeObject(nodes[dayIdx - 1][index * 2]);
@@ -151,7 +172,7 @@ class DayManager {
                 nodes[dayIdx - 1][index * 2 - 3].position, nodes[dayIdx - 1][index * 2 + 1].position,
                 this.getDayColor(dayIdx - 1)
             );
-            nodes[dayIdx - 1].splice(index * 2 - 1,2);
+            nodes[dayIdx - 1].splice(index * 2 - 1, 2);
             console.log("노드 삭제");
         }
 
