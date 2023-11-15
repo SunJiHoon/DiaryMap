@@ -86,6 +86,7 @@ class DayManager {
         temp.push(this.getDate(this.currentDay - 1));
         temp.push(this.currentDay + "일 째");
         reviews.push(temp);
+        console.log("inner plusDay: " + reviews)
     }
 
     visibleDay(dayIdx) {
@@ -118,6 +119,7 @@ class DayManager {
     }
 
     plusDayNode(line, node) {
+        console.log(nodes)
         nodes[this.currentDay - 1].push(line);
         nodes[this.currentDay - 1].push(node);
         this.updateDayNodesToFront();
@@ -141,10 +143,11 @@ class DayManager {
     }
 
     updateReviews(_reviews) {
-        console.log("updateReviews 함수 안에서:", _reviews)
-        const size = _reviews.length;
+        console.log("inner updateReviews:", reviews)
+        const size =  _reviews.length;
         for (let i = 0; i < size; i++) {
-            reviews[i][1] = _reviews[i];
+            console.log("review[i][1]", reviews[i][1])
+            // reviews[i][1] = _reviews[i];
         }
     }
 

@@ -22,6 +22,7 @@ class saveManager {
         else if (isFirst.data == "modified") {
             // await this.loadMyNodes();//load 가능해지면 주석 풀기
             // await objectManager.initLoadNode();
+            dayManager.plusDay();
             await objectManager.initNode();
         }
     }

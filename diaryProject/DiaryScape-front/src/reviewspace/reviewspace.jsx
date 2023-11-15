@@ -94,7 +94,18 @@ const ReviewSpace = () => {
     }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData])
 
     useEffect(() => {
-        dayManager.plusDay()
+        if(onPlusDay <= 1) {
+            console.log("initial")
+            return;
+        }
+        dayManager.plusDay().then(() => {
+            setReviews(
+                [
+                    ...reviews,
+                    "example"
+                ]
+            )
+        })
     }, [onPlusDay])
 
     useEffect(() => {
@@ -112,6 +123,11 @@ const ReviewSpace = () => {
     }
 
     useEffect(() => {
+        
+        if(onPlusDay==1) {
+            console.log("initial")
+            return;
+        }
         updateReviews()
     }, [reviews])
     
@@ -730,7 +746,7 @@ const ReviewSpace = () => {
                     ))}
                     <Button
                         colorScheme="blue"
-                        onClick={async (e) => {
+                        onClick={(e) => {
                             setDayModuleList(
                                 [
                                     ...dayModuleList,
@@ -753,12 +769,6 @@ const ReviewSpace = () => {
                             setOnPlusDay(nextDayMenuId)
                             // dayManager.plusDay() // 이렇게 하면 plusDay 내에서 이전 currentDay 값 참조하게 됨
                             setNextDayMenuId(nextDayMenuId + 1)
-                            setReviews(
-                                [
-                                    ...reviews,
-                                    "example"
-                                ]
-                            )
                         }}>
                         Day 추가
                     </Button>
