@@ -93,7 +93,7 @@ const ReviewSpace = () => {
     passReviewsToDayManagerRef.current = dayManager.setReviews
     removeDayNodeRef.current = dayManager.removeDayNode
 
-    dayManager.setStateSetter(setDayModuleList, setNextDayMenuId)
+    dayManager.setStateSetter(setDayModuleList, setNextDayMenuId, setCurrentDay, setDayMenuOpenList)
 
     dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
     // console.log(tripData);
