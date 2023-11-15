@@ -34,8 +34,6 @@ import axios from "axios";
 export const CanvasContext = createContext()
 
 let nextReviewId = 2
-let getCurNode
-let passReviewsToDayManager
 
 const ReviewSpace = () => {
     const [canvasState, setCanvasState] = useState(null)
@@ -50,6 +48,9 @@ const ReviewSpace = () => {
     const plusSearchNodeRef = useRef(null)
     const loadSearchOptionsRef = useRef(null)
     const updateReviewsRef = useRef(null)
+    const getCurNodeRef = useRef(null)
+    const passReviewsToDayManagerRef = useRef(null)
+    const saveReviewsInSaveManager = useRef(null)
 
     // const setStateDataRef = useRef(null)
     // const printStateDataRef = useRef(null)
@@ -58,6 +59,7 @@ const ReviewSpace = () => {
 
     const [selectOptionData, setSelectOptionData] = useState({})
 
+    const [leftBarOpen, setLeftBarOpen] = useState(true)
     const [debugMenuOpen, setDebugMenuOpen] = useState(false)
 
     const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: ["day information"] }])
@@ -83,8 +85,8 @@ const ReviewSpace = () => {
 
     let objectManager, saveManager, inputManager, dayManager = new DayManager();
     updateReviewsRef.current = dayManager.updateReviews
-    getCurNode = dayManager.getCurNode
-    passReviewsToDayManager = dayManager.setReviews
+    getCurNodeRef.current = dayManager.getCurNode
+    passReviewsToDayManagerRef.current = dayManager.setReviews
 
     dayManager.setStateSetter(setDayModuleList)
 
@@ -111,7 +113,7 @@ const ReviewSpace = () => {
                     "example"
                 ]
             )
-            
+            if(getCurNodeRef.current) console.log(getCurNodeRef.current())
         })
     }, [onPlusDay])
 
@@ -234,6 +236,7 @@ const ReviewSpace = () => {
                 newMapFunctionRef.current = objectManager.newMap;
                 loadSearchOptionsRef.current = objectManager.loadSearchOptions
                 saveManager = new SaveManager(tripData);
+                saveReviewsInSaveManager.current = saveManager.saveReviews
                 saveManager.checkIsFirst().then(() => {
                     inputManager = new InputManager(this.camera, map, setMglCameraPosition, this.scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
                     addNodeFunctionRef.current = selectOption
@@ -441,8 +444,9 @@ const ReviewSpace = () => {
             <div style={{
                 position: "fixed",
                 top: "0",
-                left: "0",
+                left: leftBarOpen ? "0" : "-200px",
                 zIndex: "2",
+                transition: "left 0.3s"
             }}>
                 <Box
                     mt={4}
@@ -458,8 +462,13 @@ const ReviewSpace = () => {
                     marginLeft="1.6em"
                     boxShadow="2xl"
                 >
-                    <Box>
+                    <Box
+                        w="100%"
+                        display="flex"
+                        justifyContent="space-between"
+                    >
                         <Button colorScheme="gray" onClick={() => navigate("/")}>홈 화면으로</Button>
+                        <Button colorScheme="gray" onClick={() => setLeftBarOpen(!leftBarOpen)}>메뉴 토글</Button>
                     </Box>
                     <Box mt={4}>
                         <Button onClick={onResetButtonClick} colorScheme="blue">
@@ -782,6 +791,13 @@ const ReviewSpace = () => {
                             setNextDayMenuId(nextDayMenuId + 1)
                         }}>
                         Day 추가
+                    </Button>
+                    <Button onClick={() => {
+                        if(saveReviewsInSaveManager.current) {
+                            saveReviewsInSaveManager.current()
+                        }
+                    }}>
+                        리뷰 저장
                     </Button>
                 </Box>
             </div >

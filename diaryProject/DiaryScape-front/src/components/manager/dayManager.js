@@ -131,6 +131,7 @@ class DayManager {
     }
 
     getCurNode() {
+        console.log("nodes" + nodes)
         return nodes[this.currentDay - 1][nodes[this.currentDay - 1].length - 1];
     }
 
