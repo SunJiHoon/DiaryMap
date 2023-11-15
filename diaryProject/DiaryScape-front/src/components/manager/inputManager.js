@@ -168,7 +168,7 @@ class inputManager {
 }
 
 export const selectOption = (selectOptionDataState) => {
-  const { options, select_option } = selectOptionDataState;
+  const { character, options, select_option } = selectOptionDataState;
   const cur_day = dayManager.getCurDay();
   const nodes = dayManager.getNodes()[cur_day-1];
   const index = nodes.length - 1;
@@ -193,6 +193,7 @@ export const selectOption = (selectOptionDataState) => {
   );
 
   //move(targetPos);
+  console.log(character);
 }
 
 function move(targetPos) {
