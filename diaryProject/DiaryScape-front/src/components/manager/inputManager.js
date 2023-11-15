@@ -94,6 +94,9 @@ class inputManager {
         const nodes = dayManager.getNodes();
         console.log(nodes);
       }
+      else if(event.key == 'a'){
+        saveManager.sendGPT();
+      }
     }
     if (event.key == 't') {
       dayManager.printStateData()
@@ -127,9 +130,13 @@ class inputManager {
           const index = nodes.length - 1;
           const cur_node = nodes[index];
           select_option = intersectObjects[i].object;
-          var options = objectManager.getCurOptions();
-          options.concat(objectManager.getSearchOptions());
-          setSelectOptionData({ options , select_option });
+          var load_options = objectManager.getLoadOptions();
+          console.log("options.length", load_options.length);
+          var search_options = objectManager.getSearchOptions();
+          console.log("search_options.length", search_options.length);
+          const concat_options = load_options.concat(search_options);
+          console.log("concat_options.length", concat_options.length);
+          setSelectOptionData({ options: concat_options , select_option });
           if (cur_node == select_option) {
             break;
           }
@@ -142,7 +149,7 @@ class inputManager {
 
   async plusSearchNode(nodeInfo){
     var node = await objectManager.createNode(nodeInfo);
-    var options = objectManager.getCurOptions();
+    var options = objectManager.getLoadOptions();
     options.concat(objectManager.getSearchOptions());
     selectOption({options, select_option: node});
   }
@@ -176,8 +183,10 @@ export const selectOption = (selectOptionDataState) => {
   const cur_node = nodes[index];
 
   const line = objectManager.drawLine(cur_node.position, select_option.position, dayManager.getDayColor(cur_day - 1));
-  // objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY));
+  objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY));
   objectManager.invisibleOptions(options, select_option);
+  objectManager.clearLoadOptions();
+  objectManager.clearSearchOptions();
 
   select_option.userData.visitDate = dayManager.getDate(cur_day-1);//cur_date;
   objectManager.changeNodeColor(select_option, dayManager.getDayColor(cur_day - 1));

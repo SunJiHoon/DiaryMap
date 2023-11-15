@@ -5,7 +5,7 @@ import Node from "../object/node.js";
 import client from "../../utility/client.jsx";
 import DayManager from "./dayManager.js";
 
-let cur_options = [];
+let load_options = [];
 let search_options = [];
 
 var scene;
@@ -50,7 +50,7 @@ class objectManager {
     scene.add(startNode);
     startNode.userData.visitDate = tripData.date
     dayManager.plusDayNode(null, startNode);
-    // await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
+    await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
 
   async initLoadNode(){
@@ -62,14 +62,14 @@ class objectManager {
     for (let i = 0; i < res.data.length; i++) {
       var tempNode = await new Node(res.data[i]);
       scene.add(tempNode);
-      cur_options.push(tempNode);
+      load_options.push(tempNode);
     }
     console.log("end load options");
-    console.log(scene.children);
   }
 
   loadSearchOptions = async (nodeInfos) => {
     this.invisibleOptions(search_options, null);
+    this.clearSearchOptions();
     const size = nodeInfos.length;
     for(let i =0;i<size;i++){
       var tempNode = await new Node(nodeInfos[i]);
@@ -80,12 +80,14 @@ class objectManager {
   }
 
   invisibleOptions(options, select_option) {
+    console.log(options);
     for (let i = 0; i < options.length; i++) {
       if (options[i] != select_option) {
         scene.remove(options[i]);
       }
     }
     options = [];
+    console.log(options);
   }
 
   removeObject(object) {
@@ -123,7 +125,6 @@ class objectManager {
   }
 
   changeNodeColor(node, color){
-    console.log(node.material);
     node.material.color = new THREE.Color(color);
   }
 
@@ -138,12 +139,20 @@ class objectManager {
     return line;
   }
 
-  getCurOptions(){
-    return cur_options;
+  getLoadOptions(){
+    return load_options;
+  }
+
+  clearLoadOptions(){
+    load_options = [];
   }
 
   getSearchOptions(){
     return search_options;
+  }
+
+  clearSearchOptions(){
+    search_options = [];
   }
 }
 

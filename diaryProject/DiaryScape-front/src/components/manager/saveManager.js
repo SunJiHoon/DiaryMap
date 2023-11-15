@@ -20,8 +20,8 @@ class saveManager {
             await objectManager.initNode();
         }
         else if (isFirst.data == "modified") {
-            // await this.loadMyNodes();//load 가능해지면 주석 풀기
-            // await objectManager.initLoadNode();
+            //await this.loadMyNodes();//load 가능해지면 주석 풀기
+            //await objectManager.initLoadNode();
             dayManager.plusDay();
             await objectManager.initNode();
         }
@@ -71,6 +71,14 @@ class saveManager {
         const reviews = await client.get("api/dayReviews/look?mapId=" + tripData.mapId);
         console.log(reviews.data);
         dayManager.setReviews(reviews.data);
+    }
+
+    async sendGPT(){
+        console.log("sendGPT");
+        const res = await client.get("api/chatgptApi/sumedDiary?mapId=" + tripData.mapId);
+        console.log(res);
+        console.log(res.data);
+        console.log("sendGPT끝");
     }
 }
 
