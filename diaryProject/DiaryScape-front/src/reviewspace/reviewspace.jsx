@@ -51,6 +51,7 @@ const ReviewSpace = () => {
     const getCurNodeRef = useRef(null)
     const passReviewsToDayManagerRef = useRef(null)
     const saveReviewsInSaveManager = useRef(null)
+    const generateDiaryRef = useRef(null)
 
     // const setStateDataRef = useRef(null)
     // const printStateDataRef = useRef(null)
@@ -235,8 +236,12 @@ const ReviewSpace = () => {
                 objectManager.newMap("spongebob");
                 newMapFunctionRef.current = objectManager.newMap;
                 loadSearchOptionsRef.current = objectManager.loadSearchOptions
+                
                 saveManager = new SaveManager(tripData);
                 saveReviewsInSaveManager.current = saveManager.saveReviews
+                generateDiaryRef.current = saveManager.generateDiary
+
+                
                 saveManager.checkIsFirst().then(() => {
                     inputManager = new InputManager(this.camera, map, setMglCameraPosition, this.scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
                     addNodeFunctionRef.current = selectOption
@@ -798,6 +803,15 @@ const ReviewSpace = () => {
                         }
                     }}>
                         리뷰 저장
+                    </Button>
+                    <Button onClick={() => {
+                        if(generateDiaryRef.current) {
+                            generateDiaryRef.current().then((res) => {
+                                console.log("일기 생성 결과:" + res)
+                            })
+                        }
+                    }}>
+                        일기 생성
                     </Button>
                 </Box>
             </div >

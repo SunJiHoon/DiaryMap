@@ -73,7 +73,7 @@ class saveManager {
         dayManager.setReviews(reviews.data);
     }
 
-    async sendGPT(){
+    async generateDiary(){
         console.log("sendGPT");
         const res = await client.get("api/chatgptApi/sumedDiary?mapId=" + tripData.mapId);
         console.log(res);
