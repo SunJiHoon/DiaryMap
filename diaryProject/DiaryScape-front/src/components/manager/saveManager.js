@@ -20,10 +20,10 @@ class saveManager {
             await objectManager.initNode();
         }
         else if (isFirst.data == "modified") {
-            //await this.loadMyNodes();//load 가능해지면 주석 풀기
+            await this.loadMyNodes();//load 가능해지면 주석 풀기
             //await objectManager.initLoadNode();
-            dayManager.plusDay();
-            await objectManager.initNode();
+            //dayManager.plusDay();
+            //await objectManager.initNode();
         }
     }
 
@@ -50,6 +50,7 @@ class saveManager {
         for (let i = 0; i < size; i++) {
             objectManager.drawDay(res.data[i].nodes, i);
         }
+        //dayManager.updateDayNodesToFront();
     }
 
     saveReviews() {

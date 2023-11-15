@@ -89,6 +89,7 @@ class objectManager {
   }
 
   removeObject(object) {
+    console.log(object);
     scene.remove(object);
   }
 

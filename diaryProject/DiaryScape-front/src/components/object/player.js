@@ -13,7 +13,6 @@ class player {
       _character = characterGltf.scene.children[0];
       _character.name = "player";
       _character.scale.set(0.1, 0.1, 0.1);
-      console.log(_character);
       //this.setAnim(characterGltf);
     });
 
