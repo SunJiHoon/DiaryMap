@@ -13,8 +13,11 @@ class DayManager {
         this.dayModuleList = null;
         this.setDayModuleList = null;
         this.dayCheckedList = null;
+        this.setDayCheckedList = null;
         this.currentDay = null;
+        this.setCurrentDay = null;
         this.maxDay = null;
+        this.setNextDayMenuId = null;
         instance = this
     }
 
@@ -26,8 +29,9 @@ class DayManager {
         objectManager = _objectManager;
     }
 
-    setStateSetter(_setDayModuleList) {
+    setStateSetter(_setDayModuleList, _setNextDayMenuId) {
         this.setDayModuleList = _setDayModuleList
+        this.setNextDayMenuId = _setNextDayMenuId
     }
 
     updateFromFrontData(_dayModuleList, _dayCheckedList, _currentDay, _nextDayMenuId, _tripData) {
@@ -85,6 +89,7 @@ class DayManager {
             }
         })
         this.setDayModuleList(nextDayModuleList)
+        this.setNextDayMenuId(nodes.length + 1)
     }
 
 

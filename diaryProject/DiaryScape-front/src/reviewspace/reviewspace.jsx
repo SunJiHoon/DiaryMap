@@ -93,7 +93,7 @@ const ReviewSpace = () => {
     passReviewsToDayManagerRef.current = dayManager.setReviews
     removeDayNodeRef.current = dayManager.removeDayNode
 
-    dayManager.setStateSetter(setDayModuleList)
+    dayManager.setStateSetter(setDayModuleList, setNextDayMenuId)
 
     dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
     // console.log(tripData);
@@ -102,6 +102,7 @@ const ReviewSpace = () => {
     useEffect(() => {
         dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
         dayManager.printStateData()
+        console.log(dayModuleList)
     }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData])
 
     const plusDayInitial = useRef(false)
@@ -766,6 +767,8 @@ const ReviewSpace = () => {
                     <Button
                         colorScheme="blue"
                         onClick={(e) => {
+                            
+                            // if(getCurNodeRef.current)
                             setDayModuleList(
                                 [
                                     ...dayModuleList,
