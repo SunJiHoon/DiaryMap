@@ -84,11 +84,14 @@ class inputManager {
 
   handleKeyDown(event) {
     if (cur_state == InputState.IDLE) {
-      if(event.key == 'l'){
+      if (event.key == 'l') {
         saveManager.loadReviews();
       }
-      else if(event.key == 'p'){
+      else if (event.key == 'p') {
         //character.playWalkAnim();
+      }
+      else if (event.key == 'q') {
+        console.log(scene);
       }
     }
     if (event.key == 't') {
@@ -128,7 +131,7 @@ class inputManager {
           console.log("search_options.length", search_options.length);
           const concat_options = load_options.concat(search_options);
           console.log("concat_options.length", concat_options.length);
-          setSelectOptionData({ options: concat_options , select_option });
+          setSelectOptionData({ character, options: concat_options, select_option });
           if (cur_node == select_option) {
             break;
           }
@@ -139,11 +142,12 @@ class inputManager {
     }
   }
 
-  async plusSearchNode(nodeInfo){
+  async plusSearchNode(nodeInfo) {
     var node = await objectManager.createNode(nodeInfo);
-    var options = objectManager.getLoadOptions();
-    options.concat(objectManager.getSearchOptions());
-    selectOption({options, select_option: node});
+    objectManager.changeNodeColor(node, dayManager.getDayColor(dayManager.getCurDay() - 1));
+    var load_options = objectManager.getLoadOptions();
+    var options = load_options.concat(objectManager.getSearchOptions());
+    selectOption({ character, options, select_option: node });
   }
 
   // selectOption = () => {
@@ -170,7 +174,7 @@ class inputManager {
 export const selectOption = (selectOptionDataState) => {
   const { character, options, select_option } = selectOptionDataState;
   const cur_day = dayManager.getCurDay();
-  const nodes = dayManager.getNodes()[cur_day-1];
+  const nodes = dayManager.getNodes()[cur_day - 1];
   const index = nodes.length - 1;
   const cur_node = nodes[index];
 
@@ -180,7 +184,7 @@ export const selectOption = (selectOptionDataState) => {
   objectManager.clearLoadOptions();
   objectManager.clearSearchOptions();
 
-  select_option.userData.visitDate = dayManager.getDate(cur_day-1);//cur_date;
+  select_option.userData.visitDate = dayManager.getDate(cur_day - 1);//cur_date;
   objectManager.changeNodeColor(select_option, dayManager.getDayColor(cur_day - 1));
   dayManager.plusDayNode(line, select_option);
 
@@ -192,23 +196,22 @@ export const selectOption = (selectOptionDataState) => {
     select_option.position.z
   );
 
-  //move(targetPos);
-  console.log(character);
+  move(character, targetPos);
 }
 
-function move(targetPos) {
+function move(_character, targetPos) {
   cur_state = InputState.MOVE;
-  console.log(character);
+  console.log(_character);
   let angle = new THREE.Vector2(0, 1).angleTo(
     new THREE.Vector2(
-      targetPos.x - character.position.x,
-      targetPos.z - character.position.z
+      targetPos.x - _character.position.x,
+      targetPos.z - _character.position.z
     )
   );
-  if (targetPos.x < character.position.x) {
+  if (targetPos.x < _character.position.x) {
     angle = Math.PI * 2 - angle;
   }
-  gsap.to(character.position, {
+  gsap.to(_character.position, {
     x: targetPos.x,
     z: targetPos.z,
     duration: 1,
@@ -225,7 +228,7 @@ function move(targetPos) {
   //     cur_state = InputState.IDLE;
   //     setMglCameraPosition(mglCameraPosition.x + targetPos.x / 10000000, mglCameraPosition.y + targetPos.z / 10000000, mglCameraPosition.z)
   //   });
-  gsap.to(character.rotation, {
+  gsap.to(_character.rotation, {
     y: angle,
     duration: 0.3,
   });

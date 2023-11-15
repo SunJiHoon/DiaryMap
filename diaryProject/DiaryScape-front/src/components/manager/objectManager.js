@@ -1,9 +1,10 @@
 import * as THREE from "three";
-// import Map from "../object/map.js";
 import Player from "../object/player.js";
 import Node from "../object/node.js";
 import client from "../../utility/client.jsx";
 import DayManager from "./dayManager.js";
+import { gsap } from "gsap";
+
 
 let load_options = [];
 let search_options = [];
@@ -44,24 +45,20 @@ class objectManager {
   }
 
   async initNode() {
-    const startNode = await new Node(startNodeData);
-    // player.position.set(startNode.userData.relativeX, 0, startNode.userData.relativeY);
-    // camera.position.add(new THREE.Vector3(startNode.userData.relativeX, 0, startNode.userData.relativeY));
-    scene.add(startNode);
+    var startNode = await this.createNode(startNodeData);
     startNode.userData.visitDate = tripData.date
     dayManager.plusDayNode(null, startNode);
     //await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
 
-  async initLoadNode(){
+  async initLoadNode() {
     const lastNode = dayManager.getCurNode();
   }
 
   async loadOptions(selectPos) {
     const res = await client.get("/api/openApi/node?mapId=" + tripData.mapId + "&mapX=" + selectPos.x + "&mapY=" + selectPos.z);
     for (let i = 0; i < res.data.length; i++) {
-      var tempNode = await new Node(res.data[i]);
-      scene.add(tempNode);
+      var tempNode = await this.createNode(res.data[i]);
       load_options.push(tempNode);
     }
     console.log("end load options");
@@ -70,10 +67,10 @@ class objectManager {
   loadSearchOptions = async (nodeInfos) => {
     this.invisibleOptions(search_options, null);
     this.clearSearchOptions();
+    console.log(search_options.length);
     const size = nodeInfos.length;
-    for(let i =0;i<size;i++){
-      var tempNode = await new Node(nodeInfos[i]);
-      scene.add(tempNode);
+    for (let i = 0; i < size; i++) {
+      var tempNode = await this.createNode(nodeInfos[i]);
       search_options.push(tempNode);
     }
     console.log("end load search options");
@@ -100,16 +97,15 @@ class objectManager {
     var objectArr = [];
 
     if (size > 0) {
-      const startNode = await new Node(nodeArr[0]);
-      scene.add(startNode);
+      var startNode = await this.createNode(nodeArr[0]);
+      this.changeNodeColor(startNode, dayManager.getDayColor(dayIdx));
       objectArr.push(null);
       objectArr.push(startNode);
     }
 
     for (var i = 0; i < size - 1; i++) {
-      const nextNode = await new Node(nodeArr[i + 1]);
+      var nextNode = await this.createNode(nodeArr[i + 1]);
       this.changeNodeColor(nextNode, dayManager.getDayColor(dayIdx));
-      scene.add(nextNode);
       const line = this.drawLine(new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY),
         new THREE.Vector3(nodeArr[i + 1].relativeX, 0, nodeArr[i + 1].relativeY),
         dayColor);
@@ -118,20 +114,26 @@ class objectManager {
     return objectArr;
   }
 
-  async createNode(nodeInfo){//기훈 파트에도 먼가 변화를 줘야하는 듯
+  async createNode(nodeInfo) {
     var node = await new Node(nodeInfo);
     scene.add(node);
+    gsap.to(node.position, {
+      y: 0,
+      duration: 2,
+    })
     return node;
   }
 
-  changeNodeColor(node, color){
+  changeNodeColor(node, color) {
     node.material.color = new THREE.Color(color);
   }
 
   drawLine(startNode, endNode, lineColor) {
     const points = [];
-    points.push(startNode);
-    points.push(endNode);
+    const start = new THREE.Vector3(startNode.x, 0, startNode.z);
+    const end = new THREE.Vector3(endNode.x, 0, endNode.z);
+    points.push(start);
+    points.push(end);
     const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
     const lineMaterial = new THREE.LineBasicMaterial({ color: lineColor });
     const line = new THREE.Line(lineGeometry, lineMaterial);
@@ -139,19 +141,19 @@ class objectManager {
     return line;
   }
 
-  getLoadOptions(){
+  getLoadOptions() {
     return load_options;
   }
 
-  clearLoadOptions(){
+  clearLoadOptions() {
     load_options = [];
   }
 
-  getSearchOptions(){
+  getSearchOptions() {
     return search_options;
   }
 
-  clearSearchOptions(){
+  clearSearchOptions() {
     search_options = [];
   }
 }

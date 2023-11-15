@@ -18,6 +18,8 @@ class saveManager {
             dayManager.clearNodes();
             dayManager.plusDay();
             await objectManager.initNode();
+            this.saveMyNodes();
+            this.saveReviews();
         }
         else if (isFirst.data == "modified") {
             await this.loadMyNodes();//load 가능해지면 주석 풀기
@@ -49,11 +51,9 @@ class saveManager {
         var temp = [];
         for (let i = 0; i < size; i++) {
             var nodes = await objectManager.drawDay(res.data[i].nodes, i);
-            console.log(nodes);
             temp.push(nodes);
         }
         dayManager.setNodes(temp);
-        console.log(temp);
         const reviews = await client.get("api/dayReviews/look?mapId=" + tripData.mapId);
         dayManager.setReviews(reviews);
         dayManager.updateDayInfosToFront(res.data);

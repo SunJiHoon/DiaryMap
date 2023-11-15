@@ -1,5 +1,6 @@
 import * as THREE from "three"
 import { gsap } from "gsap";
+import { randInt } from "three/src/math/MathUtils";
 
 const Category = {
   NONE: "none",
@@ -14,7 +15,7 @@ class node {
     return this.loadObj(infos);
   }
 
-  async loadObj(infos) {
+  loadObj(infos) {
     const objGeometry = new THREE.SphereGeometry(2);
     const objMaterial = new THREE.MeshBasicMaterial({ color: "magenta" });
     const obj = new THREE.Mesh(objGeometry, objMaterial);
@@ -33,34 +34,17 @@ class node {
       addr1: infos.addr1,
       visitDate: infos.visitDate
     };
-
-    obj.position.set(obj.userData.relativeX, 0, obj.userData.relativeY);
-
+    
+    var ranY = randInt(15.0,20.0);
+    obj.position.set(obj.userData.relativeX, ranY, obj.userData.relativeY);
     return obj;
   }
 
-  playInitAnim(){
-    gsap.to(character.position, {
-      x: targetPos.x,
-      z: targetPos.z,
+  playInitAnim(obj){
+    gsap.to(obj.position, {
+      y: 0,
       duration: 1,
     })
-      .then(() => {
-        cur_state = InputState.IDLE
-      });
-    //   .to(camera.position, {
-    //     x: cameraOrigin.x + targetPos.x,
-    //     z: cameraOrigin.z + targetPos.z,
-    //     duration: 1,
-    //   })
-    //   .then(() => {
-    //     cur_state = InputState.IDLE;
-    //     setMglCameraPosition(mglCameraPosition.x + targetPos.x / 10000000, mglCameraPosition.y + targetPos.z / 10000000, mglCameraPosition.z)
-    //   });
-    gsap.to(character.rotation, {
-      y: angle,
-      duration: 0.3,
-    });
   }
 }
 
