@@ -18,6 +18,7 @@ class DayManager {
         this.setCurrentDay = null;
         this.maxDay = null;
         this.setNextDayMenuId = null;
+        this.setDayMenuOpenList = null;
         instance = this
     }
 
@@ -29,9 +30,11 @@ class DayManager {
         objectManager = _objectManager;
     }
 
-    setStateSetter(_setDayModuleList, _setNextDayMenuId) {
+    setStateSetter(_setDayModuleList, _setNextDayMenuId, _setCurrentDay, _setDayMenuOpenList) {
         this.setDayModuleList = _setDayModuleList
         this.setNextDayMenuId = _setNextDayMenuId
+        this.setCurrentDay = _setCurrentDay
+        this.setDayMenuOpenList = _setDayMenuOpenList
     }
 
     updateFromFrontData(_dayModuleList, _dayCheckedList, _currentDay, _nextDayMenuId, _tripData) {
@@ -72,6 +75,14 @@ class DayManager {
             obj.push(temp);
         }
         this.setDayModuleList(obj);
+        this.setNextDayMenuId(nodes.length + 1)
+        this.setCurrentDay(nodes.length)
+        const dayMenuOpenList = []
+        for(let i = 0 ; i<nodes.length; i++) {
+            dayMenuOpenList.push(false)
+        }
+        this.setDayMenuOpenList(dayMenuOpenList)
+        console.log(dayMenuOpenList)
     }
 
     updateDayNodesToFront() {
@@ -89,7 +100,6 @@ class DayManager {
             }
         })
         this.setDayModuleList(nextDayModuleList)
-        this.setNextDayMenuId(nodes.length + 1)
     }
 
 
@@ -194,6 +204,9 @@ class DayManager {
 
     getCurNode = () => {
         //length 0일 때 예외 처리?
+        console.log("getcurnode")
+        console.log(nodes[0])
+        console.log(this.currentDay)
         return nodes[this.currentDay - 1][nodes[this.currentDay - 1].length - 1];
     }
 
