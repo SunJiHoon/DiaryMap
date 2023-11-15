@@ -131,7 +131,8 @@ class DayManager {
     }
 
     setNodes(_nodes) {//saveManager에서 load할 때 넣어주기
-        nodes = [];
+        nodes = _nodes;
+        /*nodes = [];
         const size = _nodes.length;
         for(let i =0;i<size;i++){
             var temp = [];
@@ -141,7 +142,7 @@ class DayManager {
             }
             nodes.push(temp);
         }
-        console.log(nodes);
+        console.log(nodes);*/
     }
 
     getNodes() {

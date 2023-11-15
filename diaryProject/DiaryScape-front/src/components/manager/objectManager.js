@@ -115,6 +115,7 @@ class objectManager {
         dayColor);
       objectArr.push(line); objectArr.push(nextNode);
     }
+    return objectArr;
   }
 
   async createNode(nodeInfo){//기훈 파트에도 먼가 변화를 줘야하는 듯

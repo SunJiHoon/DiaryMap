@@ -46,9 +46,14 @@ class saveManager {
         //cur_day랑 max_day 변경해주기
         dayManager.setNodes(res.data);
         const size = res.data.length;
+        var temp = [];
         for (let i = 0; i < size; i++) {
-            objectManager.drawDay(res.data[i].nodes, i);
+            var nodes = await objectManager.drawDay(res.data[i].nodes, i);
+            console.log(nodes);
+            temp.push(nodes);
         }
+        dayManager.setNodes(temp);
+        console.log(temp);
         const reviews = await client.get("api/dayReviews/look?mapId=" + tripData.mapId);
         dayManager.setReviews(reviews);
         dayManager.updateDayInfosToFront(res.data);
