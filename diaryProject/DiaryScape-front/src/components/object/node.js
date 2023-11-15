@@ -1,8 +1,5 @@
 import * as THREE from "three"
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { randInt } from "three/src/math/MathUtils";
-
-const foods = [["chinese", 7, 7, 7], ["japanese", 0.5, 0.5, 0.5], ["korean", 35, 35, 35], ["western", 1, 1, 1]];
+import { gsap } from "gsap";
 
 const Category = {
   NONE: "none",
@@ -23,12 +20,6 @@ class node {
     const obj = new THREE.Mesh(objGeometry, objMaterial);
     obj.scale.set(4, 4, 4);
 
-    const gltfLoader = new GLTFLoader();
-    const ranNum = randInt(0, foods.length - 1);
-    const eventIdx = foods[ranNum];
-    const temp = await gltfLoader.loadAsync("/assets/foods/" + eventIdx[0] + "/scene.gltf");
-    const eventObj = temp.scene;
-
     obj.userData = {
       tag: "node",
       contentID: infos.contentid,
@@ -43,16 +34,33 @@ class node {
       visitDate: infos.visitDate
     };
 
-    // if(obj.userData.contentType == 50){
-    //   tag = "subway";
-    // }
-
-    eventObj.scale.set(eventIdx[1], eventIdx[2], eventIdx[3]);
     obj.position.set(obj.userData.relativeX, 0, obj.userData.relativeY);
-    eventObj.position.set(obj.userData.relativeX, 2, obj.userData.relativeY);
-    obj.children.push(eventObj);
 
     return obj;
+  }
+
+  playInitAnim(){
+    gsap.to(character.position, {
+      x: targetPos.x,
+      z: targetPos.z,
+      duration: 1,
+    })
+      .then(() => {
+        cur_state = InputState.IDLE
+      });
+    //   .to(camera.position, {
+    //     x: cameraOrigin.x + targetPos.x,
+    //     z: cameraOrigin.z + targetPos.z,
+    //     duration: 1,
+    //   })
+    //   .then(() => {
+    //     cur_state = InputState.IDLE;
+    //     setMglCameraPosition(mglCameraPosition.x + targetPos.x / 10000000, mglCameraPosition.y + targetPos.z / 10000000, mglCameraPosition.z)
+    //   });
+    gsap.to(character.rotation, {
+      y: angle,
+      duration: 0.3,
+    });
   }
 }
 

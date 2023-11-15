@@ -37,7 +37,6 @@ class saveManager {
                 jsonArr.push(temp_nodes[i].userData);
             }
         }
-        console.log(jsonArr);
         jsonArr = JSON.stringify(jsonArr);
         client.post("/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
     }

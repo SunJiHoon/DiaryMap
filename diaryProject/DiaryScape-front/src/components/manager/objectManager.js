@@ -50,7 +50,7 @@ class objectManager {
     scene.add(startNode);
     startNode.userData.visitDate = tripData.date
     dayManager.plusDayNode(null, startNode);
-    await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
+    //await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
 
   async initLoadNode(){
@@ -80,14 +80,12 @@ class objectManager {
   }
 
   invisibleOptions(options, select_option) {
-    console.log(options);
     for (let i = 0; i < options.length; i++) {
       if (options[i] != select_option) {
         scene.remove(options[i]);
       }
     }
     options = [];
-    console.log(options);
   }
 
   removeObject(object) {

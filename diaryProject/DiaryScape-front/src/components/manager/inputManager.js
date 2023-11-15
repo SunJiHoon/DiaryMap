@@ -87,15 +87,8 @@ class inputManager {
       if(event.key == 'l'){
         saveManager.loadReviews();
       }
-      else if(event.key == 's'){
-        saveManager.saveReviews();
-      }
-      else if(event.key == 'g'){
-        const nodes = dayManager.getNodes();
-        console.log(nodes);
-      }
-      else if(event.key == 'a'){
-        saveManager.generateDiary();
+      else if(event.key == 'p'){
+        //character.playWalkAnim();
       }
     }
     if (event.key == 't') {
@@ -104,7 +97,6 @@ class inputManager {
   }
   async handleMouseDown(event) {
     setNodeMenuOn(false)
-    console.log(nodeMenuOn)
     select_option = null;
     if (cur_state == InputState.IDLE) {
       const pointer = new THREE.Vector4();
@@ -183,7 +175,7 @@ export const selectOption = (selectOptionDataState) => {
   const cur_node = nodes[index];
 
   const line = objectManager.drawLine(cur_node.position, select_option.position, dayManager.getDayColor(cur_day - 1));
-  objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY));
+  //objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY));
   objectManager.invisibleOptions(options, select_option);
   objectManager.clearLoadOptions();
   objectManager.clearSearchOptions();
@@ -205,6 +197,8 @@ export const selectOption = (selectOptionDataState) => {
 
 function move(targetPos) {
   cur_state = InputState.MOVE;
+  console.log(targetPos);
+  console.log(character);
   let angle = new THREE.Vector2(0, 1).angleTo(
     new THREE.Vector2(
       targetPos.x - character.position.x,
@@ -222,7 +216,6 @@ function move(targetPos) {
     .then(() => {
       cur_state = InputState.IDLE
     });
-  // gsap
   //   .to(camera.position, {
   //     x: cameraOrigin.x + targetPos.x,
   //     z: cameraOrigin.z + targetPos.z,
