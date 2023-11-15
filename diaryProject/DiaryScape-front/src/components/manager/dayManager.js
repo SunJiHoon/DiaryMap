@@ -65,11 +65,8 @@ class DayManager {
                 temp2.push(nodes[i].nodes[j]);
             }
             temp.data = temp2
-            console.log("temp")
-            console.log(temp)
             obj.push(temp);
         }
-        console.log(obj);
         this.setDayModuleList(obj);
     }
 
@@ -129,7 +126,17 @@ class DayManager {
     }
 
     setNodes(_nodes) {//saveManager에서 load할 때 넣어주기
-        nodes = _nodes;
+        nodes = [];
+        const size = _nodes.length;
+        for(let i =0;i<size;i++){
+            var temp = [];
+            const size2 = _nodes[i].nodes.length;
+            for(let j =0;j <size2;j++){
+                temp.push(_nodes[i].nodes[j]);
+            }
+            nodes.push(temp);
+        }
+        console.log(nodes);
     }
 
     getNodes() {
