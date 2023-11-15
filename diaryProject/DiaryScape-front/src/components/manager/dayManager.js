@@ -122,7 +122,7 @@ class DayManager {
     }
 
     removeDayNode(dayIdx, index) {//구현하기
-        if(nodes[dayIdx].length == 2){
+        if(nodes[dayIdx - 1].length == 2){
             return;//노드가 하나만 들어있다면 삭제 못 하게
         }
         if(index = 1){//첫 노드라면 뒷 라인만 삭제
@@ -130,7 +130,7 @@ class DayManager {
             objectManager.removeObject(nodes[2]);
             nodes.splice(1,2);
         }
-        else if(index == nodes[dayIdx].length / 2){
+        else if(index == nodes[dayIdx - 1].length / 2){
             objectManager.removeObject(index * 2 - 1);
             objectManager.removeObject(index * 2 - 2);
             nodes.splice(index * 2 - 2, 2);
@@ -141,7 +141,7 @@ class DayManager {
             objectManager.removeObject(nodes[index * 2]);
             nodes[index * 2 - 2] = objectManager.drawLine(
                 nodes[index * 2 - 3].position, nodes[index * 2 + 1].position,
-                this.getDayColor(dayIdx)
+                this.getDayColor(dayIdx - 1)
             );
             nodes.splice(index * 2 - 1,2);
         }        
