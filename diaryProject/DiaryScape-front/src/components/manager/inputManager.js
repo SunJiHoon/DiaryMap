@@ -50,6 +50,7 @@ class inputManager {
     //setNodeMenuOn(true)
     //console.log("menu on")
     character = scene.getObjectByName("player");
+    console.log(character);
 
     this.inputManage();
   }
@@ -96,6 +97,9 @@ class inputManager {
     }
     if (event.key == 't') {
       dayManager.printStateData()
+    }
+    if(event.key == 'a'){
+      demotestVar = !demotestVar;
     }
   }
   async handleMouseDown(event) {
@@ -171,6 +175,8 @@ class inputManager {
   // }
 }
 
+let demotestVar = false;//demo test 용 변수.
+
 export const selectOption = (selectOptionDataState) => {
   const { character, options, select_option } = selectOptionDataState;
   const cur_day = dayManager.getCurDay();
@@ -179,7 +185,9 @@ export const selectOption = (selectOptionDataState) => {
   const cur_node = nodes[index];
 
   const line = objectManager.drawLine(cur_node.position, select_option.position, dayManager.getDayColor(cur_day - 1));
-  //objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY));
+  if (demotestVar) {
+    objectManager.loadOptions(new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY));
+  }
   objectManager.invisibleOptions(options, select_option);
   objectManager.clearLoadOptions();
   objectManager.clearSearchOptions();

@@ -247,7 +247,7 @@ const ReviewSpace = () => {
                 // camera.lookAt(0, 0, 0);
 
                 objectManager = new ObjectManager(this.scene, this.camera, tripData, startnodeData);
-                objectManager.newMap("spongebob");
+                objectManager.newMap().then(() => {
                 newMapFunctionRef.current = objectManager.newMap;
                 loadSearchOptionsRef.current = objectManager.loadSearchOptions
                 onObjManagerNodeSearchSelectRef.current = objectManager.onNodeSearchSelect
@@ -263,6 +263,7 @@ const ReviewSpace = () => {
                     addNodeFunctionRef.current = selectOption
                     plusSearchNodeRef.current = inputManager.plusSearchNode
                 });
+            })
                 this.renderer.setSize(window.innerWidth, window.innerHeight);
 
                 // let _cameraPosition = map.getFreeCameraOptions().position;

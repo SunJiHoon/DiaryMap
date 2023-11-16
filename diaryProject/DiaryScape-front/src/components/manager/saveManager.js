@@ -23,13 +23,18 @@ class saveManager {
         const isFirst = await client.get("/api/obj/isFirst?mapId=" + tripData.mapId);
         if (isFirst.data == "first") {
             dayManager.clearNodes();
+            dayManager.clearReviews();
             dayManager.plusDay();
             await objectManager.initNode();
             this.saveMyNodes();
             this.saveReviews();
         }
         else if (isFirst.data == "modified") {
-            await this.loadMyNodes();//load 가능해지면 주석 풀기
+            dayManager.clearNodes();
+            dayManager.clearReviews();
+            await this.loadMyNodes();
+            this.saveMyNodes();
+            this.saveReviews();
             //await objectManager.initLoadNode();
             //dayManager.plusDay();
             //await objectManager.initNode();
@@ -67,14 +72,9 @@ class saveManager {
         dayManager.printStateData();
     }
 
-    saveTotalReview(){
-        //const review = tripData.totalReview;
-        const review = "";
-        client.post("/api/totalReview/save?mapId=" + tripData.mapId, { review }, {withCredentials: true });
-    }
+    async loadTotalReview(){
+        
 
-    loadTotalReview(){
-        const totalReview = client.get("/api/totalReview/look?mapId=" + tripData.mapId);
     }
 
     saveReviews() {
@@ -93,16 +93,16 @@ class saveManager {
 
     async loadReviews() {
         const reviews = await client.get("api/dayReviews/look?mapId=" + tripData.mapId);
-        console.log(reviews.data);
-        dayManager.setReviews(reviews.data);
+        const totalReview = await client.get("/api/totalReview/look?mapId=" + tripData.mapId);
+        dayManager.setReviews(reviews.data, totalReview.data);
     }
 
     async generateDiary(){
         console.log("sendGPT");
         const res = await client.get("api/chatgptApi/sumedDiary?mapId=" + tripData.mapId);
-        console.log(res);
-        console.log(res.data);
+        var review = res.data.answer;
         console.log("sendGPT끝");
+        await client.post("/api/totalReview/save?mapId=" + tripData.mapId, { review }, {withCredentials: true });
         return res.data.answer;
     }
 }

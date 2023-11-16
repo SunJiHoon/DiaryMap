@@ -31,6 +31,10 @@ class DayManager {
         nodes = [];
     }
 
+    clearReviews() {
+        reviews = [];
+    }
+
     setObjectManager(_objectManager) {
         objectManager = _objectManager;
     }
@@ -128,7 +132,7 @@ class DayManager {
         nodes.push(temp);
         temp = [];
         temp.push(this.getDate(this.currentDay - 1));
-        temp.push(this.currentDay + "일 째");
+        temp.push("");
         reviews.push(temp);
         saveManager.saveMyNodes();
         saveManager.saveReviews();
@@ -219,6 +223,7 @@ class DayManager {
     setReviews(_reviews) {
         reviews = [];
         const size = _reviews.length;
+
         let frontReviews = []
         for(let i = 0; i < size; i++){
             var temp = [];
@@ -232,8 +237,6 @@ class DayManager {
     }
 
     updateReviews(_reviews) {
-        console.log("update reviews");
-        console.log(reviews)
         const size = _reviews.length;
         for (let i = 0; i < size; i++) {
             reviews[i][1] = _reviews[i];
