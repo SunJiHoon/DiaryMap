@@ -160,10 +160,10 @@ const MyTripmap = () => {
             <Heading as="h2" size="xl" mb={6}>
                 <Box display="inline" color="blue">{username}</Box>의 여행 리스트
             </Heading>
-            <Button colorScheme="teal" variant="outline" mb={6} onClick={() => dispatch(clearUser())}>로그아웃</Button>
+            
+            <Button w="60%" maxW={500} mb={4} onClick={() => dispatch(clearUser())}>로그아웃</Button>
+            
             <Box>
-
-                <Button w="60%" maxW={500} colorScheme="teal" onClick={onOpen} mb={10}>새 여행 작성</Button>
 
                 <Modal isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />
@@ -201,11 +201,14 @@ const MyTripmap = () => {
                                 <Box w="100%" maxW="500px" display="flex" flexDirection="column">
                                     <Box fontSize="1.4em" mb={2}>시작 장소 선택</Box>
                                     {/* {startNodeSelected && <Box>{selectedData.contentid}</Box>} */}
-                                    {searchValue.length == 0 && <Box>장소 이름을 입력해주세요!</Box>}
+                                    {/* {searchValue.length == 0 && <Box>장소 이름을 입력해주세요!</Box>} */}
                                     <Box h={260} overflowY="scroll">
                                         {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
                                         {!searchResultDataLoading && searchResultData.map((result) => (
                                             <Button
+                                                key={result.contentid}
+                                                w="100%"
+                                                h="52px"
                                                 border="0px"
                                                 borderBottom="1px"
                                                 borderColor="gray.300"
@@ -213,13 +216,13 @@ const MyTripmap = () => {
                                                 bgColor={startNodeSelected && selectedData.contentid == result.contentid ? "blue.600" : "white"}
                                                 color={startNodeSelected && selectedData.contentid == result.contentid ? "white" : "black"}
                                                 _hover={{}}
-                                                h="40px"
-                                                key={result.contentid}
                                                 onClick={(e) => onStartNodeSelect(result)}
                                             >
                                                 {/* {result.contentid} */}
-                                                {result.title},&nbsp;
-                                                {result.addr1},&nbsp;
+                                                <Box display="flex" flexDirection="column">
+                                                    <Box fontWeight="semibold" mr={2}>{result.title}</Box>
+                                                    <Box fontWeight="medium">{result.addr1}</Box>
+                                                </Box>
                                                 {/* x: {result.mapx}, y: {result.mapy} */}
                                             </Button>
                                         ))}
@@ -236,25 +239,43 @@ const MyTripmap = () => {
                 <Box display="flex" justifyContent="center" mb={10}>
                     <Box w="100%" maxW="500px" display="flex" flexDirection="column">
                         <Box fontSize="1.8em" mb={4}>여행 리스트</Box>
+                        <Button colorScheme="teal" onClick={onOpen} mb={10}>새 여행 작성</Button>
+                        {console.log(reviewData)}
                         {reviewData.map((review) => (<Box key={review.mapId} display="flex" mb={6}>
-                            <Button w="100%" h="70px" mr={2} onClick={(e) => onReviewClicked(review)} colorScheme="teal" variant="outline">
-                                <Box display="flex" flexDirection="column">
+                            <Box
+                                display="flex"
+                                w="100%"
+                                justifyContent="space-between"
+                                p={2}
+                                border="1px"
+                                borderColor="gray.600"
+                            >
+                                <Box w="100%" display="flex" flexDirection="column">
                                     <Box fontSize="1.6em" mb={1}>{review.reviewtitle}</Box>
+                                    <Box fontSize="1.2em" mb={1}>{review.visitDate}</Box>
                                     {/* <Box>
                                         mapId: {review.mapId} / 시작 좌표: ({review.mapX}, {review.mapY})
                                     </Box> */}
                                 </Box>
-                            </Button>
-                            <Button onClick={() => {
-                                client.post("api/obj/delete?mapId="+review.mapId).then((res) => {
-                                    console.log("삭제됨")
-                                })
-                                client.get('/api/obj/list').then((res) => {
-                                    setReviewData(res.data)
-                                })
-                            }}>
-                                삭제
-                            </Button>
+                                <Box w="20%" display="flex" flexDirection="column">
+                                    <Button
+                                        mb={1}
+                                        colorScheme="teal"
+                                        onClick={(e) => onReviewClicked(review)}>
+                                        방문
+                                    </Button>
+                                    <Button onClick={() => {
+                                        client.post("api/obj/delete?mapId="+review.mapId).then((res) => {
+                                            console.log("삭제됨")
+                                            client.get('/api/obj/list').then((res) => {
+                                                setReviewData(res.data)
+                                            })
+                                        })
+                                    }}>
+                                        삭제
+                                    </Button>
+                                </Box>
+                            </Box>
                         </Box>))}
                         {reviewData.length == 0 && <p>새 여행을 작성해주세요!</p>}
                     </Box>

@@ -93,7 +93,7 @@ const ReviewSpace = () => {
     passReviewsToDayManagerRef.current = dayManager.setReviews
     removeDayNodeRef.current = dayManager.removeDayNode
 
-    dayManager.setStateSetter(setDayModuleList, setNextDayMenuId, setCurrentDay, setDayMenuOpenList)
+    dayManager.setStateSetter(setDayModuleList, setNextDayMenuId, setCurrentDay, setDayMenuOpenList, setDayCheckedList)
 
     dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
     // console.log(tripData);
@@ -480,26 +480,27 @@ const ReviewSpace = () => {
                         <Button colorScheme="gray" onClick={() => navigate("/")}>홈 화면으로</Button>
                         <Button colorScheme="gray" onClick={() => setLeftBarOpen(!leftBarOpen)}>메뉴 토글</Button>
                     </Box>
-                    <Box mt={4}>
+                    {/* <Box mt={4}>
                         <Button onClick={onResetButtonClick} colorScheme="blue">
                             reset
                         </Button>
-                    </Box>
+                    </Box> */}
                     <Box
                         maxW="100%"
                         mt={4}
                     >
                         <Input
+                            w="100%"
                             type="text"
                             placeholder="노드 이름"
                             value={searchValue}
                             onChange={(e) => { setSearchValue(e.target.value) }}
-                            mr={2}
+                            mb={2} 
                         />
-                        <Button onClick={onNodeSearch} colorScheme="blue">
+                        <Button w="100%" mb={2} onClick={onNodeSearch} colorScheme="teal">
                             노드 검색
                         </Button>
-                        <Button onClick={() => {
+                        <Button w="100%" mb={2} onClick={() => {
                             // console.log("선택된 노드")
                             // console.log(selectedData)
                             if(nodeSearchSelected) onPlusSearchNodeClick(selectedData)
@@ -510,11 +511,12 @@ const ReviewSpace = () => {
                                 <Box w="100%" maxW="500px" display="flex" flexDirection="column">
                                     <Box fontSize="1.4em" mb={2}>노드 선택</Box>
                                     {/* {nodeSearchSelected && <Box>{selectedData.contentid}</Box>} */}
-                                    {searchValue.length == 0 && <Box>노드 이름을 입력해주세요!</Box>}
+                                    {/* {searchValue.length == 0 && <Box>노드 이름을 입력해주세요!</Box>} */}
                                     <Box h={260} overflowY="scroll">
                                         {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
                                         {!searchResultDataLoading && searchResultData.map((result) => (
                                             <Button
+                                                key={result.contentid}
                                                 border="0px"
                                                 borderBottom="1px"
                                                 borderColor="gray.300"
@@ -523,13 +525,12 @@ const ReviewSpace = () => {
                                                 color={nodeSearchSelected && selectedData.contentid == result.contentid ? "white" : "black"}
                                                 _hover={{}}
                                                 h="40px"
-                                                key={result.contentid}
                                                 onClick={(e) => onNodeSearchSelect(result)}
                                             >
                                                 {/* {result.contentid} */}
-                                                {result.title},&nbsp;
-                                                {result.addr1},&nbsp;
-                                                x: {result.mapx}, y: {result.mapy}
+                                                <Box fontWeight="semibold" mr={2}>{result.title}</Box>
+                                                <Box fontWeight="medium">{result.addr1}</Box>
+                                                {/* x: {result.mapx}, y: {result.mapy} */}
                                             </Button>
                                         ))}
                                     </Box>
@@ -537,7 +538,7 @@ const ReviewSpace = () => {
                             </Box>
                     </Box>
 
-                    <Box
+                    {/* <Box
                         borderTop="1px"
                         borderBottom="1px"
                         borderColor="gray.300"
@@ -575,7 +576,7 @@ const ReviewSpace = () => {
                             <p>tripData.startX : {tripData.startX}</p>
                             <p>tripData.startY : {tripData.startY}</p>
                         </Box>
-                    </Box>
+                    </Box> */}
                 </Box>
             </div>
             {/* <div style={{
@@ -643,10 +644,48 @@ const ReviewSpace = () => {
                     textAlign="left"
                     boxShadow="2xl"
                 >
+                    <Button
+                        w="100%"
+                        mb={2}
+                        colorScheme="teal"
+                        onClick={(e) => {
+                            let curNode
+                            if(getCurNodeRef.current) {
+                                curNode = getCurNodeRef.current()
+                                console.log(curNode)
+                            }
+                            setDayModuleList(
+                                [
+                                    ...dayModuleList,
+                                    { id: nextDayMenuId, data: [curNode.userData]}
+                                ]
+                            )
+                            setDayMenuOpenList(
+                                [
+                                    ...dayMenuOpenList,
+                                    true
+                                ]
+                            )
+                            setDayCheckedList(
+                                [
+                                    ...dayCheckedList,
+                                    true
+                                ]
+                            )
+                            setCurrentDay(nextDayMenuId)        
+                            setOnPlusDay(nextDayMenuId)
+                            // dayManager.plusDay() // 이렇게 하면 plusDay 내에서 이전 currentDay 값 참조하게 됨
+                            setNextDayMenuId(nextDayMenuId + 1)
+                        }}
+                    >
+                        Day 추가
+                    </Button>
                     <Box
+                        mb={2}
                         display="flex"
                         alignItems="center"
                     >
+                        
                         <Box w="160px" fontWeight="semibold">편집할 Day</Box>
                         <Select value={currentDay} onChange={(e) => {
                             setCurrentDay(e.target.value)
@@ -720,6 +759,7 @@ const ReviewSpace = () => {
                                         h={8}
                                         lineHeight={8}
                                         fontWeight="semibold"
+                                        overflow="hidden"
                                         onClick={() => {
                                             setNodeInfoData({day: currentDay, idx: i, node})
                                             onNodeInfoOpen()}
@@ -778,44 +818,20 @@ const ReviewSpace = () => {
                             </ModalFooter>
                         </ModalContent>
                     </Modal>}
+                    
                     <Button
-                        colorScheme="blue"
-                        onClick={(e) => {
-                            
-                            // if(getCurNodeRef.current)
-                            setDayModuleList(
-                                [
-                                    ...dayModuleList,
-                                    { id: nextDayMenuId, data: ["(replace with current node)"]}
-                                ]
-                            )
-                            setDayMenuOpenList(
-                                [
-                                    ...dayMenuOpenList,
-                                    true
-                                ]
-                            )
-                            setDayCheckedList(
-                                [
-                                    ...dayCheckedList,
-                                    true
-                                ]
-                            )
-                            setCurrentDay(nextDayMenuId)        
-                            setOnPlusDay(nextDayMenuId)
-                            // dayManager.plusDay() // 이렇게 하면 plusDay 내에서 이전 currentDay 값 참조하게 됨
-                            setNextDayMenuId(nextDayMenuId + 1)
-                        }}>
-                        Day 추가
-                    </Button>
-                    <Button onClick={() => {
+                        w="100%"
+                        mb={2}
+                        onClick={() => {
                         if(saveReviewsInSaveManager.current) {
                             saveReviewsInSaveManager.current()
                         }
                     }}>
                         리뷰 저장
                     </Button>
-                    <Button onClick={() => {
+                    <Button
+                        w="100%"
+                        onClick={() => {
                         if(generateDiaryRef.current) {
                             generateDiaryRef.current().then((res) => {
                                 console.log("일기 생성 결과:" + res)

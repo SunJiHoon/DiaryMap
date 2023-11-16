@@ -12,13 +12,12 @@ class DayManager {
 
         this.dayModuleList = null;
         this.setDayModuleList = null;
-        this.dayCheckedList = null;
-        this.setDayCheckedList = null;
         this.currentDay = null;
         this.setCurrentDay = null;
         this.maxDay = null;
         this.setNextDayMenuId = null;
         this.setDayMenuOpenList = null;
+        this.setDayCheckedList = null;
         instance = this
     }
 
@@ -30,11 +29,12 @@ class DayManager {
         objectManager = _objectManager;
     }
 
-    setStateSetter(_setDayModuleList, _setNextDayMenuId, _setCurrentDay, _setDayMenuOpenList) {
+    setStateSetter(_setDayModuleList, _setNextDayMenuId, _setCurrentDay, _setDayMenuOpenList, _setDayCheckedList) {
         this.setDayModuleList = _setDayModuleList
         this.setNextDayMenuId = _setNextDayMenuId
         this.setCurrentDay = _setCurrentDay
         this.setDayMenuOpenList = _setDayMenuOpenList
+        this.setDayCheckedList = _setDayCheckedList
     }
 
     updateFromFrontData(_dayModuleList, _dayCheckedList, _currentDay, _nextDayMenuId, _tripData) {
@@ -82,6 +82,11 @@ class DayManager {
             dayMenuOpenList.push(true)
         }
         this.setDayMenuOpenList(dayMenuOpenList)
+        const dayCheckedList = []
+        for(let i = 0 ; i<nodes.length; i++) {
+            dayCheckedList.push(true)
+        }
+        this.setDayCheckedList(dayCheckedList)
     }
 
     updateDayNodesToFront() {
