@@ -58,10 +58,10 @@ class DayManager {
     }
 
     printStateData() {
-        console.log(this.dayModuleList)
-        console.log(this.dayCheckedList)
-        console.log(this.currentDay)
-        console.log(this.maxDay)
+        // console.log(this.dayModuleList)
+        // console.log(this.dayCheckedList)
+        // console.log(this.currentDay)
+        // console.log(this.maxDay)
     }
 
     updateDayInfosToFront(nodes) {
@@ -212,7 +212,12 @@ class DayManager {
     }
 
     setReviews(_reviews) {
-        reviews = _reviews;
+        const size = _reviews.length;
+        for(let i = 0; i < size; i++){
+            reviews.push(_reviews[i].dayReview);
+        }
+        
+        this.updateFrontReviews(reviews);
     }
 
     updateReviews(_reviews) {
