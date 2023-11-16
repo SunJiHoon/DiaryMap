@@ -49,9 +49,10 @@ class objectManager {
 
   async initNode() {
     var startNode = await this.createNode(startNodeData);
+    this.changeNodeColor(startNode, dayManager.getDayColor(dayManager.getCurDay - 1));
     startNode.userData.visitDate = tripData.date
     dayManager.plusDayNode(null, startNode);
-    await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
+    // await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
 
   async initLoadNode() {
@@ -89,16 +90,13 @@ class objectManager {
   }
 
   onNodeSearchSelect = (index) => {
-    console.log("inner objectManager.onNodeSearchSelect")
-    console.log(index)
     if(selectSearchNode != null){
       this.changeNodeColor(selectSearchNode, 'magenta');
     }
-    selectSearchNode = search_options[index];
-    console.log(selectSearchNode);
-    console.log(index);
-    console.log(search_options);
-    this.changeNodeColor(selectSearchNode, 'cyan');
+    if(search_options.length > 0){
+      selectSearchNode = search_options[index];
+      this.changeNodeColor(selectSearchNode, 'cyan');
+    }
   }
 
   removeObject(object) {
@@ -155,6 +153,10 @@ class objectManager {
     const line = new THREE.Line(lineGeometry, lineMaterial);
     scene.add(line);
     return line;
+  }
+
+  setPlayerPos(position){
+    player.position.set(position.x, 1, position.z);
   }
 
   getLoadOptions() {
