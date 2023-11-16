@@ -87,7 +87,7 @@ class saveManager {
     async loadReviews() {
         const reviews = await client.get("api/dayReviews/look?mapId=" + tripData.mapId);
         const totalReview = await client.get("/api/totalReview/look?mapId=" + tripData.mapId);
-        dayManager.setReviews(reviews.data, totalReview.data);
+        dayManager.setReviews(reviews.data, totalReview.data.review);
     }
 
     async generateDiary(){
