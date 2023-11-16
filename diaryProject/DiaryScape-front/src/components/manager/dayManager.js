@@ -127,6 +127,8 @@ class DayManager {
         temp.push(this.getDate(this.currentDay - 1));
         temp.push(this.currentDay + "일 째");
         reviews.push(temp);
+        saveManager.saveMyNodes();
+        saveManager.saveReviews();
     }
 
     visibleDay(dayIdx) {
@@ -212,12 +214,18 @@ class DayManager {
     }
 
     setReviews(_reviews) {
+        reviews = [];
         const size = _reviews.length;
+        let frontReviews = []
         for(let i = 0; i < size; i++){
-            reviews.push(_reviews[i].dayReview);
+            var temp = [];
+            temp.push(this.getDate(i));
+            temp.push(_reviews[i].dayReview);
+            reviews.push(temp);
+            frontReviews.push(_reviews[i].dayReview);
         }
         
-        this.updateFrontReviews(reviews);
+        this.updateFrontReviews(frontReviews);
     }
 
     updateReviews(_reviews) {

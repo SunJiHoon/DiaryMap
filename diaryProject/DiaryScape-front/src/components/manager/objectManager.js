@@ -9,6 +9,8 @@ import { gsap } from "gsap";
 let load_options = [];
 let search_options = [];
 
+let selectSearchNode;
+
 var scene;
 var player;
 var tripData;
@@ -86,9 +88,17 @@ class objectManager {
     options = [];
   }
 
-  onNodeSearchSelect = (nodeInfo) => {
+  onNodeSearchSelect = (index) => {
     console.log("inner objectManager.onNodeSearchSelect")
-    console.log(nodeInfo)
+    console.log(index)
+    if(selectSearchNode != null){
+      this.changeNodeColor(selectSearchNode, 'magenta');
+    }
+    selectSearchNode = search_options[index];
+    console.log(selectSearchNode);
+    console.log(index);
+    console.log(search_options);
+    this.changeNodeColor(selectSearchNode, 'cyan');
   }
 
   removeObject(object) {
