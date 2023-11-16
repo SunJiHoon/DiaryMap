@@ -23,7 +23,7 @@ import {
     useDisclosure
 } from '@chakra-ui/react'
 import { useSelector } from "react-redux";
-import { IoChevronDown, IoRemove } from "react-icons/io5"
+import { IoChevronDown, IoChevronForward , IoRemove } from "react-icons/io5"
 import { useNavigate } from "react-router-dom";
 import { createContext, useContext } from "react";
 import mapboxgl from "mapbox-gl";
@@ -454,10 +454,14 @@ const ReviewSpace = () => {
             <div style={{
                 position: "fixed",
                 top: "0",
-                left: leftBarOpen ? "0" : "-200px",
+                left: leftBarOpen ? "0" : "-260px",
                 zIndex: "2",
                 transition: "left 0.3s"
             }}>
+                <Box
+                    display="flex"
+                    alignItems="center"
+                >
                 <Box
                     mt={4}
                     p={4}
@@ -477,8 +481,7 @@ const ReviewSpace = () => {
                         display="flex"
                         justifyContent="space-between"
                     >
-                        <Button colorScheme="gray" onClick={() => navigate("/")}>홈 화면으로</Button>
-                        <Button colorScheme="gray" onClick={() => setLeftBarOpen(!leftBarOpen)}>메뉴 토글</Button>
+                        <Button w="100%" colorScheme="gray" onClick={() => navigate("/")}>홈 화면으로</Button>
                     </Box>
                     {/* <Box mt={4}>
                         <Button onClick={onResetButtonClick} colorScheme="blue">
@@ -577,6 +580,13 @@ const ReviewSpace = () => {
                             <p>tripData.startY : {tripData.startY}</p>
                         </Box>
                     </Box> */}
+                </Box>
+                        <IconButton
+                            h="60px"
+                            colorScheme="teal"
+                            onClick={() => setLeftBarOpen(!leftBarOpen)}
+                            icon={<IoChevronForward />}
+                        />
                 </Box>
             </div>
             {/* <div style={{
