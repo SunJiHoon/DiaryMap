@@ -23,13 +23,14 @@ import {
     useDisclosure
 } from '@chakra-ui/react'
 import { useSelector } from "react-redux";
-import { IoChevronDown, IoChevronForward , IoSearch, IoAdd, IoRemove, IoPencil, IoBook, IoChevronBack } from "react-icons/io5"
+import { IoChevronDown, IoChevronForward , IoSearch, IoAdd, IoRemove, IoPencil, IoBook, IoChevronBack, IoHome} from "react-icons/io5"
 import { useNavigate } from "react-router-dom";
 import { createContext, useContext } from "react";
 import mapboxgl from "mapbox-gl";
 import MapboxLanguage from "@mapbox/mapbox-gl-language";
 import client from "../utility/client";
 import axios from "axios";
+import '../styles/custom.css'
 
 export const CanvasContext = createContext()
 
@@ -489,18 +490,12 @@ const ReviewSpace = () => {
                     marginLeft="1.6em"
                     boxShadow="2xl"
                 >
-                    <Box
+                    <IconButton
+                        icon={<IoHome />}
                         w="100%"
-                        display="flex"
-                        justifyContent="space-between"
-                    >
-                        <Button w="100%" colorScheme="gray" onClick={() => navigate("/")}>홈 화면으로</Button>
-                    </Box>
-                    {/* <Box mt={4}>
-                        <Button onClick={onResetButtonClick} colorScheme="blue">
-                            reset
-                        </Button>
-                    </Box> */}
+                        colorScheme="gray"
+                        onClick={() => navigate("/")}
+                    />
                     <Box
                         maxW="100%"
                         mt={4}
@@ -536,7 +531,7 @@ const ReviewSpace = () => {
                                 {/* <Box fontSize="1.4em" mb={2}>노드 선택</Box> */}
                                 {/* {nodeSearchSelected && <Box>{selectedData.contentid}</Box>} */}
                                 {/* {searchValue.length == 0 && <Box>노드 이름을 입력해주세요!</Box>} */}
-                                <Box h={260} overflowY="scroll">
+                                <Box h={260} overflowY="scroll" className="custom-scrollbar">
                                     {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
                                     {!searchResultDataLoading && searchResultData.map((result, idx) => (
                                         <Button
@@ -579,46 +574,6 @@ const ReviewSpace = () => {
                         />
                 </Box>
             </div>
-            {/* <div style={{
-                position: "fixed",
-                top: "0",
-                right: "0",
-                zIndex: "2",
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "flex-start",
-                marginRight: "1.6em",
-            }}>
-                <Box
-                    mt={4}
-                    p={3}
-                    mr="260px"
-                    w="240px"
-                    minH="30px"
-                    bgColor="#ffffff"
-                    // border={1}
-                    borderRadius={4}
-                    // borderColor="gray"
-                    textAlign="left"
-                    boxShadow="2xl"
-                >
-                    <Box
-                        display="flex"
-                        alignItems="center"
-                    >
-                        <Box w="160px" fontWeight="semibold">편집할 Day</Box>
-                        <Select value={currentDay} onChange={(e) => {
-                            setCurrentDay(e.target.value)
-                            // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
-                            // dayManager.printStateData()
-                        }}>
-                            {dayModuleList.map((dayModule) => (
-                                <option key={"option" + dayModule.id} value={dayModule.id} > Day {dayModule.id}</option>
-                            ))}
-                        </Select>
-                    </Box>
-                </Box>
-            </div> */}
 
             <div style={{
                 position: "fixed",
@@ -637,13 +592,14 @@ const ReviewSpace = () => {
                 >
                     <IconButton
                         h="60px"
-                        mb={4}
+                        mb={6}
                         colorScheme="teal"
                         onClick={() => setRightBarOpen(!rightBarOpen)}
                         icon={rightBarOpen ? <IoChevronForward /> : <IoChevronBack />}
                     />
                     <IconButton
-                        colorScheme="blue"
+                        mb={2}
+                        colorScheme="pink"
                         onClick={() => setRightBarPage(0)}
                         icon={<IoPencil />}
                     />
@@ -666,6 +622,7 @@ const ReviewSpace = () => {
                     // borderColor="gray"
                     textAlign="left"
                     boxShadow="2xl"
+                    className="custom-scrollbar"
                 >
                     { rightBarPage == 0 &&<>
                     <Box
@@ -724,7 +681,7 @@ const ReviewSpace = () => {
                             }}
                         />
                     </Box>
-                    <Box mb={6} pt={2} pb={4} borderTop="1px" borderBottom="1px" borderColor="gray.300">
+                    <Box mb={6} pt={2} pb={4}>
                         <Box
                             display="flex"
                             justifyContent="space-between"

@@ -14,13 +14,14 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    useDisclosure
+    useDisclosure,
+    IconButton
 } from '@chakra-ui/react'
 import { useState, useEffect, useCallback, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import client from "../utility/client"
 import axios from "axios"
-import { IoAdd } from "react-icons/io5";
+import { IoAdd, IoArrowForwardOutline, IoTrashOutline } from "react-icons/io5";
 import '../styles/animation.css'
 
 const MyTripmap = () => {
@@ -158,7 +159,7 @@ const MyTripmap = () => {
    
 
     return (
-        <Box p={6}>
+        <Box mt={4} p={6}>
             <Heading as="h2" size="xl" mb={6}>
                 <Box display="inline" color="blue">{username}</Box>의 여행 리스트
             </Heading>
@@ -242,7 +243,7 @@ const MyTripmap = () => {
                     <Box w="100%" maxW="500px" display="flex" flexDirection="column">
                         {/* <Box fontSize="1.8em" mb={4}>여행 리스트</Box> */}
                         <Button
-                            h={20}
+                            h={16}
                             colorScheme="teal"
                             fontSize="2xl"
                             onClick={onOpen}
@@ -256,7 +257,7 @@ const MyTripmap = () => {
                                 key={review.mapId}
                                 display="flex"
                                 mb={6}
-                                animation={`1s linear ${1 * (i+1)}s initial-down`}
+                                // animation={`1s linear ${1 * (i+1)}s initial-down`}
                             >
                                 <Box
                                     display="flex"
@@ -274,23 +275,23 @@ const MyTripmap = () => {
                                             mapId: {review.mapId} / 시작 좌표: ({review.mapX}, {review.mapY})
                                         </Box> */}
                                     </Box>
-                                    <Box w="20%" display="flex" flexDirection="column">
-                                        <Button
+                                    <Box w="52px" mr={2} display="flex" flexDirection="column">
+                                        <IconButton
+                                            icon={<IoArrowForwardOutline />}
                                             mb={1}
                                             colorScheme="teal"
-                                            onClick={(e) => onReviewClicked(review)}>
-                                            방문
-                                        </Button>
-                                        <Button onClick={() => {
-                                            client.post("api/obj/delete?mapId="+review.mapId).then((res) => {
-                                                console.log("삭제됨")
-                                                client.get('/api/obj/list').then((res) => {
-                                                    setReviewData(res.data)
-                                                })
+                                            onClick={(e) => onReviewClicked(review)}
+                                        />
+                                        <IconButton
+                                            icon={<IoTrashOutline />}
+                                            onClick={() => {
+                                                client.post("api/obj/delete?mapId="+review.mapId).then((res) => {
+                                                    console.log("삭제됨")
+                                                    client.get('/api/obj/list').then((res) => {
+                                                        setReviewData(res.data)
+                                                    })
                                             })
-                                        }}>
-                                            삭제
-                                        </Button>
+                                        }} />
                                     </Box>
                                 </Box>
                             </Box>))}
