@@ -32,10 +32,11 @@ class node {
       relativeX: Number(infos.relativeX),
       relativeY: Number(infos.relativeY),
       addr1: infos.addr1,
-      visitDate: infos.visitDate
+      visitDate: infos.visitDate,
+      nodeReview: infos.nodeReview,
     };
     
-    var ranY = randInt(15.0,20.0);
+    var ranY = randInt(35.0,40.0);
     obj.position.set(obj.userData.relativeX, ranY, obj.userData.relativeY);
     return obj;
   }

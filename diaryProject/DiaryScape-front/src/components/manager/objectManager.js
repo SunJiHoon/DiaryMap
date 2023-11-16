@@ -16,6 +16,7 @@ var startNodeData;
 const dayManager = new DayManager();
 
 class objectManager {
+
   constructor(_scene, _camera, _tripData, _startNodeData) {
     scene = _scene;
     tripData = _tripData;
@@ -48,7 +49,7 @@ class objectManager {
     var startNode = await this.createNode(startNodeData);
     startNode.userData.visitDate = tripData.date
     dayManager.plusDayNode(null, startNode);
-    //await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
+    await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
 
   async initLoadNode() {

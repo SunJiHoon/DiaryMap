@@ -249,6 +249,7 @@ const ReviewSpace = () => {
                 onObjManagerNodeSearchSelectRef.current = objectManager.onNodeSearchSelect
 
                 saveManager = new SaveManager(tripData);
+                saveManager.setObjectManager(objectManager);
                 saveReviewsInSaveManager.current = saveManager.saveReviews
                 generateDiaryRef.current = saveManager.generateDiary
 
