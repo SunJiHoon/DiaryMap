@@ -2,14 +2,21 @@ import client from "../../utility/client.jsx";
 import ObjectManager from "./objectManager.js";
 import DayManager from './dayManager.js'
 
-const objectManager = new ObjectManager();
-const dayManager = new DayManager();
+var objectManager;// = new ObjectManager();
+var dayManager;// = new DayManager();
 
 var tripData;
 
 class saveManager {
     constructor(_tripData) {
         tripData = _tripData;
+        if(dayManager == null){
+            dayManager = new DayManager();
+        }
+    }
+
+    setObjectManager(_objectManager){
+        objectManager = _objectManager;
     }
 
     async checkIsFirst() {
@@ -58,6 +65,16 @@ class saveManager {
         dayManager.setReviews(reviews);
         dayManager.updateDayInfosToFront(res.data);
         dayManager.printStateData();
+    }
+
+    saveTotalReview(){
+        //const review = tripData.totalReview;
+        const review = "";
+        client.post("/api/totalReview/save?mapId=" + tripData.mapId, { review }, {withCredentials: true });
+    }
+
+    loadTotalReview(){
+        const totalReview = client.get("/api/totalReview/look?mapId=" + tripData.mapId);
     }
 
     saveReviews() {

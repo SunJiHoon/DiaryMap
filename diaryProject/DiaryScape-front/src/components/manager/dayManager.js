@@ -1,6 +1,8 @@
+import SaveManager from "./saveManager";
+
 let instance = null;
 
-let objectManager;
+let objectManager, saveManager;
 
 var nodes = [];
 var reviews = [];
@@ -19,6 +21,8 @@ class DayManager {
         this.setDayMenuOpenList = null;
         this.setDayCheckedList = null;
         instance = this
+
+        saveManager = new SaveManager(this.tripData);
     }
 
     clearNodes() {
@@ -113,6 +117,7 @@ class DayManager {
             temp.push(null);
             var node = nodes[this.currentDay - 2][nodes[this.currentDay - 2].length - 1];
             var nodeObj = await objectManager.createNode(this.getNodeInfos(node.userData));//이걸 하든 둘 중에 하나는 해야함
+            objectManager.changeNodeColor(nodeObj, this.colorList[(this.currentDay - 1) % 4]);
             nodeObj.userData.visitDate = this.getDate(this.currentDay - 1);
             temp.push(nodeObj);
         }
@@ -190,6 +195,7 @@ class DayManager {
         }
 
         this.updateDayNodesToFront();
+        saveManager.saveMyNodes();
     }
 
     getCurNode = () => {
