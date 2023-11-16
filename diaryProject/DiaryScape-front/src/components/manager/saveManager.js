@@ -33,6 +33,7 @@ class saveManager {
             dayManager.clearNodes();
             dayManager.clearReviews();
             await this.loadMyNodes();
+            await this.loadReviews();
             this.saveMyNodes();
             this.saveReviews();
             //await objectManager.initLoadNode();
@@ -66,15 +67,7 @@ class saveManager {
             temp.push(nodes);
         }
         dayManager.setNodes(temp);
-        const reviews = await client.get("api/dayReviews/look?mapId=" + tripData.mapId);
-        dayManager.setReviews(reviews.data);
         dayManager.updateDayInfosToFront(res.data);
-        dayManager.printStateData();
-    }
-
-    async loadTotalReview(){
-        
-
     }
 
     saveReviews() {
