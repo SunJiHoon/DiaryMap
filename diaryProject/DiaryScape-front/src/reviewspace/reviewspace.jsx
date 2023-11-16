@@ -53,6 +53,7 @@ const ReviewSpace = () => {
     const saveReviewsInSaveManager = useRef(null)
     const generateDiaryRef = useRef(null)
     const removeDayNodeRef = useRef(null)
+    const onObjManagerNodeSearchSelectRef = useRef(null)
 
     // const setStateDataRef = useRef(null)
     // const printStateDataRef = useRef(null)
@@ -119,7 +120,6 @@ const ReviewSpace = () => {
                     "example"
                 ]
             )
-            if(getCurNodeRef.current) console.log(getCurNodeRef.current())
         })
     }, [onPlusDay])
 
@@ -241,7 +241,8 @@ const ReviewSpace = () => {
                 objectManager.newMap("spongebob");
                 newMapFunctionRef.current = objectManager.newMap;
                 loadSearchOptionsRef.current = objectManager.loadSearchOptions
-                
+                onObjManagerNodeSearchSelectRef.current = objectManager.onNodeSearchSelect
+
                 saveManager = new SaveManager(tripData);
                 saveReviewsInSaveManager.current = saveManager.saveReviews
                 generateDiaryRef.current = saveManager.generateDiary
@@ -406,6 +407,9 @@ const ReviewSpace = () => {
     const onNodeSearchSelect = (nodeData) => {
         setNodeSearchSelected(true)
         setSelectedData(nodeData)
+        if(onObjManagerNodeSearchSelectRef.current) {
+            onObjManagerNodeSearchSelectRef.current(nodeData)
+        }
         // console.log("노드 검색 : 노드 선택됨")
         // console.log(nodeData)
     }
@@ -664,10 +668,10 @@ const ReviewSpace = () => {
                                 curNode = getCurNodeRef.current()
                                 console.log(curNode)
                             }
-                            setDayModuleList(
+                            setDayCheckedList(
                                 [
-                                    ...dayModuleList,
-                                    { id: nextDayMenuId, data: [curNode.userData]}
+                                    ...dayCheckedList,
+                                    true
                                 ]
                             )
                             setDayMenuOpenList(
@@ -676,10 +680,10 @@ const ReviewSpace = () => {
                                     true
                                 ]
                             )
-                            setDayCheckedList(
+                            setDayModuleList(
                                 [
-                                    ...dayCheckedList,
-                                    true
+                                    ...dayModuleList,
+                                    { id: nextDayMenuId, data: [curNode.userData]}
                                 ]
                             )
                             setCurrentDay(nextDayMenuId)        

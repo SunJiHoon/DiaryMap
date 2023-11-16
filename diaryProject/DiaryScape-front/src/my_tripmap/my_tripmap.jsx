@@ -20,6 +20,7 @@ import { useState, useEffect, useCallback, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import client from "../utility/client"
 import axios from "axios"
+import { IoAdd } from "react-icons/io5";
 
 const MyTripmap = () => {
 
@@ -161,7 +162,7 @@ const MyTripmap = () => {
                 <Box display="inline" color="blue">{username}</Box>의 여행 리스트
             </Heading>
             
-            <Button w="60%" maxW={500} mb={4} onClick={() => dispatch(clearUser())}>로그아웃</Button>
+            <Button w="60%" maxW={500} mb={6} onClick={() => dispatch(clearUser())}>로그아웃</Button>
             
             <Box>
 
@@ -238,8 +239,16 @@ const MyTripmap = () => {
 
                 <Box display="flex" justifyContent="center" mb={10}>
                     <Box w="100%" maxW="500px" display="flex" flexDirection="column">
-                        <Box fontSize="1.8em" mb={4}>여행 리스트</Box>
-                        <Button colorScheme="teal" onClick={onOpen} mb={10}>새 여행 작성</Button>
+                        {/* <Box fontSize="1.8em" mb={4}>여행 리스트</Box> */}
+                        <Button
+                            h={20}
+                            colorScheme="teal"
+                            fontSize="2xl"
+                            onClick={onOpen}
+                            mb={6}
+                        >
+                            <IoAdd />&nbsp;새 여행 작성
+                        </Button>
                         {console.log(reviewData)}
                         {reviewData.map((review) => (<Box key={review.mapId} display="flex" mb={6}>
                             <Box
@@ -247,8 +256,9 @@ const MyTripmap = () => {
                                 w="100%"
                                 justifyContent="space-between"
                                 p={2}
-                                border="1px"
-                                borderColor="gray.600"
+                                border="2px"
+                                borderRadius={4}
+                                borderColor="gray.300"
                             >
                                 <Box w="100%" display="flex" flexDirection="column">
                                     <Box fontSize="1.6em" mb={1}>{review.reviewtitle}</Box>

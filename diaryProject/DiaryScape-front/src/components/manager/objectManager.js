@@ -85,6 +85,11 @@ class objectManager {
     options = [];
   }
 
+  onNodeSearchSelect = (nodeInfo) => {
+    console.log("inner objectManager.onNodeSearchSelect")
+    console.log(nodeInfo)
+  }
+
   removeObject(object) {
     console.log(object);
     scene.remove(object);
