@@ -53,14 +53,14 @@ const LoginBox = () => {
         <form onSubmit={handleLogin}>
           <Input
             type="text"
-            placeholder="ID"
+            placeholder="아이디"
             value={loginId}
             onChange={(e) => setId(e.target.value)}
             boxShadow="md"
           />
           <Input
             type="password"
-            placeholder="Password"
+            placeholder="비밀번호"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             mt={2}

@@ -18,7 +18,7 @@ const Home = () => {
           <Heading
             color="teal"
           >
-            DiaryMap
+            Tong Tong<br />TripMap
           </Heading>
         </Box>
         <Box p={6} m={6} maxW={400} border="1px" borderColor="gray.200">

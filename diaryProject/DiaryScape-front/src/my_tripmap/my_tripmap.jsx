@@ -177,7 +177,7 @@ const MyTripmap = () => {
                                 }
                             }}>
                                 <Box display="flex" justifyContent="center">
-                                    <Box display="flex" flexDirection="column" justifyContent="center" w="100%" maxW="500px" mt={2} mb={6}>
+                                    <Box display="flex" flexDirection="column" justifyContent="center" w="100%" maxW="500px" mb={6}>
                                         <Input type="text" placeholder="새 여행 이름" value={newReviewValue} onChange={onNewReviewChange} mb={2} />
                                         <Input type="date" value={newReviewDateValue} onChange={onNewReviewDateChange} mb={2} />
                                         <Box display="flex" mb={2}>
