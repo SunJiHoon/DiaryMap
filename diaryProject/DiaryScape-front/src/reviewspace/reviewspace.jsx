@@ -537,7 +537,7 @@ const ReviewSpace = () => {
                                                 color={nodeSearchSelected && selectedData.contentid == result.contentid ? "white" : "black"}
                                                 _hover={{}}
                                                 h="40px"
-                                                onClick={(e) => onNodeSearchSelect(result, i)}
+                                                onClick={(e) => onNodeSearchSelect(result, idx)}
                                             >
                                                 {/* {result.contentid} */}
                                                 <Box fontWeight="semibold" mr={2}>{result.title}</Box>
