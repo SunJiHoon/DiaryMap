@@ -23,7 +23,7 @@ import {
     useDisclosure
 } from '@chakra-ui/react'
 import { useSelector } from "react-redux";
-import { IoChevronDown, IoChevronForward , IoRemove } from "react-icons/io5"
+import { IoChevronDown, IoChevronForward , IoSearch, IoAdd, IoRemove, IoPencil, IoBook, IoChevronBack } from "react-icons/io5"
 import { useNavigate } from "react-router-dom";
 import { createContext, useContext } from "react";
 import mapboxgl from "mapbox-gl";
@@ -65,10 +65,11 @@ const ReviewSpace = () => {
 
     const [leftBarOpen, setLeftBarOpen] = useState(true)
     const [rightBarOpen, setRightBarOpen] = useState(true)
+    const [rightBarPage, setRightBarPage] = useState(0)
     const [debugMenuOpen, setDebugMenuOpen] = useState(false)
 
     const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: ["day information"] }])
-    const [reviews, setReviews] = useState(["review"])
+    const [reviews, setReviews] = useState([""])
     
     const [dayMenuOpenList, setDayMenuOpenList] = useState([false])
     const [reviewMenuOpen, setReviewMenuOpen] = useState(true)
@@ -82,6 +83,7 @@ const ReviewSpace = () => {
     const [nodeSearchSelected, setNodeSearchSelected] = useState(false)
     const [selectedData, setSelectedData] = useState({})
     const [searchResultDataLoading, setSearchResultDataLoading] = useState(false)
+    const [totalReview, setTotalReview] = useState("일기를 생성해주세요!")
     const { isOpen: isNodeSearchOpen, onOpen: onNodeSearchOpen, onClose: onNodeSearchClose } = useDisclosure()
 
     const { isOpen: isNodeInfoOpen, onOpen: onNodeInfoOpen, onClose: onNodeInfoClose } = useDisclosure()
@@ -121,7 +123,7 @@ const ReviewSpace = () => {
             setReviews(
                 [
                     ...reviews,
-                    "example"
+                    ""
                 ]
             )
             // dayReady.current = true
@@ -470,7 +472,7 @@ const ReviewSpace = () => {
             }}>
                 <Box
                     display="flex"
-                    alignItems="center"
+                    alignItems="flex-start"
                 >
                 <Box
                     mt={4}
@@ -502,100 +504,77 @@ const ReviewSpace = () => {
                         maxW="100%"
                         mt={4}
                     >
-                        <Input
-                            w="100%"
-                            type="text"
-                            placeholder="노드 이름"
-                            value={searchValue}
-                            onChange={(e) => { setSearchValue(e.target.value) }}
-                            mb={2} 
-                        />
-                        <Button w="100%" mb={2} onClick={onNodeSearch} colorScheme="teal">
-                            노드 검색
-                        </Button>
-                        <Button w="100%" mb={2} onClick={() => {
-                            // console.log("선택된 노드")
-                            // console.log(selectedData)
-                            if(nodeSearchSelected) onPlusSearchNodeClick(selectedData)
-                        }}>
-                            노드 추가
-                        </Button>
-                        <Box display="flex" justifyContent="center" mb={2}>
-                                <Box w="100%" maxW="500px" display="flex" flexDirection="column">
-                                    <Box fontSize="1.4em" mb={2}>노드 선택</Box>
-                                    {/* {nodeSearchSelected && <Box>{selectedData.contentid}</Box>} */}
-                                    {/* {searchValue.length == 0 && <Box>노드 이름을 입력해주세요!</Box>} */}
-                                    <Box h={260} overflowY="scroll">
-                                        {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
-                                        {!searchResultDataLoading && searchResultData.map((result, idx) => (
-                                            <Button
-                                                key={result.contentid}
-                                                border="0px"
-                                                borderBottom="1px"
-                                                borderColor="gray.300"
-                                                borderRadius="0px"
-                                                bgColor={nodeSearchSelected && selectedData.contentid == result.contentid ? "blue.600" : "white"}
-                                                color={nodeSearchSelected && selectedData.contentid == result.contentid ? "white" : "black"}
-                                                _hover={{}}
-                                                h="40px"
-                                                onClick={(e) => onNodeSearchSelect(result, idx)}
-                                            >
-                                                {/* {result.contentid} */}
-                                                <Box fontWeight="semibold" mr={2}>{result.title}</Box>
-                                                <Box fontWeight="medium">{result.addr1}</Box>
-                                                {/* x: {result.mapx}, y: {result.mapy} */}
-                                            </Button>
-                                        ))}
-                                    </Box>
-                                </Box>
-                            </Box>
-                    </Box>
-
-                    {/* <Box
-                        borderTop="1px"
-                        borderBottom="1px"
-                        borderColor="gray.300"
-                        // boxShadow="md"
-                        mt={6}
-                        p={2}
-                        w="100%"
-                    >
                         <Box
                             display="flex"
-                            alignItems="center"
-                            justifyContent="space-between"
+                            mb={2}
                         >
-                            <Box fontWeight="semibold">디버그 출력</Box>
-                            <IconButton
-                                variant="ghost"
-                                colorScheme="blackAlpha"
-                                size="sm"
-                                icon={debugMenuOpen ? <IoRemove /> : <IoChevronDown />}
-                                onClick={() => setDebugMenuOpen(!debugMenuOpen)}
+                            <Input
+                                w="100%"
+                                type="text"
+                                placeholder="노드 이름"
+                                value={searchValue}
+                                onChange={(e) => { setSearchValue(e.target.value) }}
+                                mr={1}
                             />
+                            <IconButton
+                                icon={<IoSearch />}
+                                colorScheme="teal"
+                                onClick={onNodeSearch}
+                            >
+                                노드 검색
+                            </IconButton>
                         </Box>
                         <Box
-                            textAlign="left"
-                            visibility={debugMenuOpen ? "visible" : "hidden"}
-                            opacity={debugMenuOpen ? "1" : "0"}
-                            maxH={debugMenuOpen ? "100vh" : "0vh"}
-                            mt={debugMenuOpen ? 2 : 0}
-                            overflowX="auto"
-                            transition="all 0.6s ease-in-out"
+                            w="100%"
+                            textAlign="end"
+                            mb={2}
                         >
-                            <p>tripData.title : {tripData.title}</p>
-                            <p>tripData.date : {tripData.date}</p>
-                            <p>tripData.mapId : {tripData.mapId}</p>
-                            <p>tripData.startX : {tripData.startX}</p>
-                            <p>tripData.startY : {tripData.startY}</p>
                         </Box>
-                    </Box> */}
+                        <Box display="flex" justifyContent="center" mb={4}>
+                            <Box w="100%" maxW="500px" display="flex" flexDirection="column">
+                                {/* <Box fontSize="1.4em" mb={2}>노드 선택</Box> */}
+                                {/* {nodeSearchSelected && <Box>{selectedData.contentid}</Box>} */}
+                                {/* {searchValue.length == 0 && <Box>노드 이름을 입력해주세요!</Box>} */}
+                                <Box h={260} overflowY="scroll">
+                                    {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
+                                    {!searchResultDataLoading && searchResultData.map((result, idx) => (
+                                        <Button
+                                            key={result.contentid}
+                                            border="0px"
+                                            borderBottom="1px"
+                                            borderColor="gray.300"
+                                            borderRadius="0px"
+                                            bgColor={nodeSearchSelected && selectedData.contentid == result.contentid ? "blue.600" : "white"}
+                                            color={nodeSearchSelected && selectedData.contentid == result.contentid ? "white" : "black"}
+                                            _hover={{}}
+                                            h="40px"
+                                            onClick={(e) => onNodeSearchSelect(result, idx)}
+                                        >
+                                            {/* {result.contentid} */}
+                                            <Box fontWeight="semibold" mr={2}>{result.title}</Box>
+                                            <Box fontWeight="medium">{result.addr1}</Box>
+                                            {/* x: {result.mapx}, y: {result.mapy} */}
+                                        </Button>
+                                    ))}
+                                </Box>
+                            </Box>
+                        </Box>
+                        <IconButton
+                            w="100%"
+                            icon={<IoAdd />}
+                            colorScheme="teal"
+                            onClick={() => {
+                                if(nodeSearchSelected) onPlusSearchNodeClick(selectedData)
+                            }}
+                        />
+                    </Box>
                 </Box>
                         <IconButton
                             h="60px"
+                            mt={8}
                             colorScheme="teal"
                             onClick={() => setLeftBarOpen(!leftBarOpen)}
-                            icon={<IoChevronForward />}
+                            icon={leftBarOpen ?  <IoChevronBack /> : <IoChevronForward />}
                         />
                 </Box>
             </div>
@@ -646,17 +625,31 @@ const ReviewSpace = () => {
                 right: rightBarOpen ? "0px" : "-260px",
                 zIndex: "2",
                 display: "flex",
-                alignItems: "center",
+                alignItems: "flex-start",
                 marginRight: "1.6em",
                 transition: "right 0.3s"
             }}>
-                <Box>
-                        <IconButton
-                            h="60px"
-                            colorScheme="teal"
-                            onClick={() => setRightBarOpen(!rightBarOpen)}
-                            icon={<IoChevronForward />}
-                        />
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    mt={8}
+                >
+                    <IconButton
+                        h="60px"
+                        colorScheme="teal"
+                        onClick={() => setRightBarOpen(!rightBarOpen)}
+                        icon={<IoChevronForward />}
+                    />
+                    <IconButton
+                        colorScheme="blue"
+                        onClick={() => setRightBarPage(0)}
+                        icon={<IoPencil />}
+                    />
+                    <IconButton
+                        colorScheme="blue"
+                        onClick={() => setRightBarPage(1)}
+                        icon={<IoBook />}
+                    />
                 </Box>
                 <Box
                     mt={4}
@@ -672,60 +665,64 @@ const ReviewSpace = () => {
                     textAlign="left"
                     boxShadow="2xl"
                 >
-                    <Button
-                        w="100%"
-                        mb={2}
-                        colorScheme="teal"
-                        onClick={(e) => {
-                            let curNode
-                            if(getCurNodeRef.current) {
-                                curNode = getCurNodeRef.current()
-                                console.log(curNode)
-                            }
-                            setDayCheckedList(
-                                [
-                                    ...dayCheckedList,
-                                    true
-                                ]
-                            )
-                            setDayMenuOpenList(
-                                [
-                                    ...dayMenuOpenList,
-                                    true
-                                ]
-                            )
-                            setDayModuleList(
-                                [
-                                    ...dayModuleList,
-                                    { id: nextDayMenuId, data: [curNode.userData]}
-                                ]
-                            )
-                            setCurrentDay(nextDayMenuId)        
-                            setOnPlusDay(nextDayMenuId)
-                            // dayManager.plusDay() // 이렇게 하면 plusDay 내에서 이전 currentDay 값 참조하게 됨
-                            setNextDayMenuId(nextDayMenuId + 1)
-                        }}
-                    >
-                        Day 추가
-                    </Button>
+                    { rightBarPage == 0 &&<>
                     <Box
-                        mb={2}
                         display="flex"
-                        alignItems="center"
+                        mb={4}
                     >
-                        
-                        <Box w="160px" fontWeight="semibold">편집할 Day</Box>
-                        <Select value={currentDay} onChange={(e) => {
-                            setCurrentDay(e.target.value)
-                            // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
-                            // dayManager.printStateData()
-                        }}>
-                            {dayModuleList.map((dayModule) => (
-                                <option key={"option" + dayModule.id} value={dayModule.id} > Day {dayModule.id}</option>
-                            ))}
-                        </Select>
+                        <Box
+                            w="100%"
+                            mr={2}
+                            display="flex"
+                            alignItems="center"
+                        >
+                            
+                            {/* <Box w="160px" fontWeight="semibold">편집할 Day</Box> */}
+                            <Select value={currentDay} onChange={(e) => {
+                                setCurrentDay(e.target.value)
+                                // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
+                                // dayManager.printStateData()
+                            }}>
+                                {dayModuleList.map((dayModule) => (
+                                    <option key={"option" + dayModule.id} value={dayModule.id} > Day {dayModule.id}</option>
+                                ))}
+                            </Select>
+                        </Box>
+                        <IconButton
+                            icon={<IoAdd />}
+                            colorScheme="teal"
+                            onClick={(e) => {
+                                let curNode
+                                if(getCurNodeRef.current) {
+                                    curNode = getCurNodeRef.current()
+                                    console.log(curNode)
+                                }
+                                setDayCheckedList(
+                                    [
+                                        ...dayCheckedList,
+                                        true
+                                    ]
+                                )
+                                setDayMenuOpenList(
+                                    [
+                                        ...dayMenuOpenList,
+                                        true
+                                    ]
+                                )
+                                setDayModuleList(
+                                    [
+                                        ...dayModuleList,
+                                        { id: nextDayMenuId, data: [curNode.userData]}
+                                    ]
+                                )
+                                setCurrentDay(nextDayMenuId)        
+                                setOnPlusDay(nextDayMenuId)
+                                // dayManager.plusDay() // 이렇게 하면 plusDay 내에서 이전 currentDay 값 참조하게 됨
+                                setNextDayMenuId(nextDayMenuId + 1)
+                            }}
+                        />
                     </Box>
-                    <Box mb={6} pt={2} pb={2} borderTop="1px" borderBottom="1px" borderColor="gray.300">
+                    <Box mb={6} pt={2} pb={4} borderTop="1px" borderBottom="1px" borderColor="gray.300">
                         <Box
                             display="flex"
                             justifyContent="space-between"
@@ -830,7 +827,7 @@ const ReviewSpace = () => {
                                 overflowX="auto"
                                 transition="all 0.3s ease-in-out"
                             >
-                                <Textarea mt={2} h="200px" value={reviews[currentDay-1]} boxShadow="md" onChange={(e) => {
+                                <Textarea placeholder="리뷰를 작성해주세요!" mt={2} h="200px" value={reviews[currentDay-1]} boxShadow="md" onChange={(e) => {
                                     const nextReviews = reviews.map((review, i) => {
                                         if(i == currentDay-1) {
                                             return e.target.value
@@ -880,17 +877,34 @@ const ReviewSpace = () => {
                     }}>
                         리뷰 저장
                     </Button>
-                    <Button
-                        w="100%"
-                        onClick={() => {
-                        if(generateDiaryRef.current) {
-                            generateDiaryRef.current().then((res) => {
-                                console.log("일기 생성 결과:" + res)
-                            })
-                        }
-                    }}>
-                        일기 생성
-                    </Button>
+                    </>}
+                    {rightBarPage == 1 &&<>
+                        <Button
+                            w="100%"
+                            mb={4}
+                            colorScheme="teal"
+                            onClick={() => {
+                            if(generateDiaryRef.current) {
+                                generateDiaryRef.current().then((res) => {
+                                    console.log(res)
+                                    setTotalReview(res)
+                                })
+                            }
+                        }}>
+                            일기 생성
+                        </Button>
+                        <Box fontSize="xl" fontWeight="semibold" mb={2}>일기</Box>
+                        <Box
+                            w="100%"
+                            border="2px"
+                            borderRadius={4}
+                            borderColor="gray.400"
+                            minH="200px"
+                            p={2}
+                        >
+                            {totalReview}
+                        </Box>
+                    </>}
                 </Box>
             </div >
             <div
