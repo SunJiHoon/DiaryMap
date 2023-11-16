@@ -6,6 +6,7 @@ let objectManager, saveManager;
 
 var nodes = [];
 var reviews = [];
+var totalReview = "";
 
 class DayManager {
     constructor() {
@@ -33,6 +34,7 @@ class DayManager {
 
     clearReviews() {
         reviews = [];
+        totalReview = "";
     }
 
     setObjectManager(_objectManager) {
@@ -220,7 +222,7 @@ class DayManager {
         return reviews;
     }
 
-    setReviews(_reviews) {
+    setReviews(_reviews, _totalReviews) {
         reviews = [];
         const size = _reviews.length;
 
@@ -232,7 +234,10 @@ class DayManager {
             reviews.push(temp);
             frontReviews.push(_reviews[i].dayReview);
         }
+
+        totalReview = _totalReviews;
         
+        this.updateFrontTotalReview(totalReview);
         this.updateFrontReviews(frontReviews);
     }
 
