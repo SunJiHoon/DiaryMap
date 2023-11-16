@@ -29,12 +29,13 @@ class DayManager {
         objectManager = _objectManager;
     }
 
-    setStateSetter(_setDayModuleList, _setNextDayMenuId, _setCurrentDay, _setDayMenuOpenList, _setDayCheckedList) {
+    setStateSetter(_setDayModuleList, _setNextDayMenuId, _setCurrentDay, _setDayMenuOpenList, _setDayCheckedList, _setReviews) {
         this.setDayModuleList = _setDayModuleList
         this.setNextDayMenuId = _setNextDayMenuId
         this.setCurrentDay = _setCurrentDay
         this.setDayMenuOpenList = _setDayMenuOpenList
         this.setDayCheckedList = _setDayCheckedList
+        this.setReviews = _setReviews
     }
 
     updateFromFrontData(_dayModuleList, _dayCheckedList, _currentDay, _nextDayMenuId, _tripData) {
@@ -128,7 +129,7 @@ class DayManager {
             return;
         }
         console.log("visible nodes", nodes[dayIdx]);
-        const size = nodes[dayIdx].length;
+        const size = nodes[dayIdx].length;  
         for (let i = 0; i < size; i++) {
             if (nodes[dayIdx][i] != null) {
                 nodes[dayIdx][i].visible = true;
