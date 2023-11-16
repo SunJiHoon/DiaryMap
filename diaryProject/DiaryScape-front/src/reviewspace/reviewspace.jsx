@@ -54,6 +54,7 @@ const ReviewSpace = () => {
     const generateDiaryRef = useRef(null)
     const removeDayNodeRef = useRef(null)
     const onObjManagerNodeSearchSelectRef = useRef(null)
+    const dayReady = useRef(false)
 
     // const setStateDataRef = useRef(null)
     // const printStateDataRef = useRef(null)
@@ -113,6 +114,7 @@ const ReviewSpace = () => {
             console.log("initial")
             return;
         }
+        dayReady.current = false
         dayManager.plusDay().then(() => {
             setReviews(
                 [
@@ -120,14 +122,17 @@ const ReviewSpace = () => {
                     "example"
                 ]
             )
+            dayReady.current = true
         })
     }, [onPlusDay])
 
     useEffect(() => {
-        dayCheckedList.map((dayChecked, i) => {
-            if(dayChecked) dayManager.visibleDay(i)
-            else dayManager.invisibleDay(i)
-        })
+        if(dayReady.current) {
+            dayCheckedList.map((dayChecked, i) => {
+                if(dayChecked) dayManager.visibleDay(i)
+                else dayManager.invisibleDay(i)
+            })
+        }
     }, [dayCheckedList])
 
 
@@ -404,14 +409,12 @@ const ReviewSpace = () => {
         }
     }
     
-    const onNodeSearchSelect = (nodeData) => {
+    const onNodeSearchSelect = (nodeData, i) => {
         setNodeSearchSelected(true)
         setSelectedData(nodeData)
         if(onObjManagerNodeSearchSelectRef.current) {
-            onObjManagerNodeSearchSelectRef.current(nodeData)
+            onObjManagerNodeSearchSelectRef.current(i)
         }
-        // console.log("노드 검색 : 노드 선택됨")
-        // console.log(nodeData)
     }
 
     let source
@@ -521,7 +524,7 @@ const ReviewSpace = () => {
                                     {/* {searchValue.length == 0 && <Box>노드 이름을 입력해주세요!</Box>} */}
                                     <Box h={260} overflowY="scroll">
                                         {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
-                                        {!searchResultDataLoading && searchResultData.map((result) => (
+                                        {!searchResultDataLoading && searchResultData.map((result, idx) => (
                                             <Button
                                                 key={result.contentid}
                                                 border="0px"
@@ -532,7 +535,7 @@ const ReviewSpace = () => {
                                                 color={nodeSearchSelected && selectedData.contentid == result.contentid ? "white" : "black"}
                                                 _hover={{}}
                                                 h="40px"
-                                                onClick={(e) => onNodeSearchSelect(result)}
+                                                onClick={(e) => onNodeSearchSelect(idx, result)}
                                             >
                                                 {/* {result.contentid} */}
                                                 <Box fontWeight="semibold" mr={2}>{result.title}</Box>
