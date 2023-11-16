@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom"
 import client from "../utility/client"
 import axios from "axios"
 import { IoAdd } from "react-icons/io5";
+import '../styles/animation.css'
 
 const MyTripmap = () => {
 
@@ -250,43 +251,49 @@ const MyTripmap = () => {
                             <IoAdd />&nbsp;새 여행 작성
                         </Button>
                         {console.log(reviewData)}
-                        {reviewData.map((review) => (<Box key={review.mapId} display="flex" mb={6}>
-                            <Box
+                        {reviewData.map((review, i) => (
+                            <Box    
+                                key={review.mapId}
                                 display="flex"
-                                w="100%"
-                                justifyContent="space-between"
-                                p={2}
-                                border="2px"
-                                borderRadius={4}
-                                borderColor="gray.300"
+                                mb={6}
+                                animation={`1s linear ${1 * (i+1)}s initial-down`}
                             >
-                                <Box w="100%" display="flex" flexDirection="column">
-                                    <Box fontWeight="semibold" fontSize="1.6em" mb={1}>{review.reviewtitle}</Box>
-                                    <Box fontSize="1.2em" mb={1}>{review.visitDate}</Box>
-                                    {/* <Box>
-                                        mapId: {review.mapId} / 시작 좌표: ({review.mapX}, {review.mapY})
-                                    </Box> */}
-                                </Box>
-                                <Box w="20%" display="flex" flexDirection="column">
-                                    <Button
-                                        mb={1}
-                                        colorScheme="teal"
-                                        onClick={(e) => onReviewClicked(review)}>
-                                        방문
-                                    </Button>
-                                    <Button onClick={() => {
-                                        client.post("api/obj/delete?mapId="+review.mapId).then((res) => {
-                                            console.log("삭제됨")
-                                            client.get('/api/obj/list').then((res) => {
-                                                setReviewData(res.data)
+                                <Box
+                                    display="flex"
+                                    w="100%"
+                                    justifyContent="space-between"
+                                    p={2}
+                                    border="2px"
+                                    borderRadius={4}
+                                    borderColor="gray.300"
+                                >
+                                    <Box w="100%" display="flex" flexDirection="column">
+                                        <Box fontWeight="semibold" fontSize="1.6em" mb={1}>{review.reviewtitle}</Box>
+                                        <Box fontSize="1.2em" mb={1}>{review.visitDate}</Box>
+                                        {/* <Box>
+                                            mapId: {review.mapId} / 시작 좌표: ({review.mapX}, {review.mapY})
+                                        </Box> */}
+                                    </Box>
+                                    <Box w="20%" display="flex" flexDirection="column">
+                                        <Button
+                                            mb={1}
+                                            colorScheme="teal"
+                                            onClick={(e) => onReviewClicked(review)}>
+                                            방문
+                                        </Button>
+                                        <Button onClick={() => {
+                                            client.post("api/obj/delete?mapId="+review.mapId).then((res) => {
+                                                console.log("삭제됨")
+                                                client.get('/api/obj/list').then((res) => {
+                                                    setReviewData(res.data)
+                                                })
                                             })
-                                        })
-                                    }}>
-                                        삭제
-                                    </Button>
+                                        }}>
+                                            삭제
+                                        </Button>
+                                    </Box>
                                 </Box>
-                            </Box>
-                        </Box>))}
+                            </Box>))}
                         {reviewData.length == 0 && <p>새 여행을 작성해주세요!</p>}
                     </Box>
                 </Box>

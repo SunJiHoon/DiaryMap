@@ -105,7 +105,7 @@ const ReviewSpace = () => {
     useEffect(() => {
         dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
         dayManager.printStateData()
-        console.log(dayModuleList)
+        console.log(dayModuleList) 
     }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData])
 
     const plusDayInitial = useRef(false)
@@ -115,7 +115,7 @@ const ReviewSpace = () => {
             console.log("initial")
             return;
         }
-        dayReady.current = false
+        // dayReady.current = false
         dayManager.plusDay().then(() => {
             setReviews(
                 [
@@ -123,17 +123,17 @@ const ReviewSpace = () => {
                     "example"
                 ]
             )
-            dayReady.current = true
+            // dayReady.current = true
         })
     }, [onPlusDay])
 
     useEffect(() => {
-        if(dayReady.current) {
+        // if(dayReady.current) {
             dayCheckedList.map((dayChecked, i) => {
                 if(dayChecked) dayManager.visibleDay(i)
                 else dayManager.invisibleDay(i)
             })
-        }
+        // }
     }, [dayCheckedList])
 
 

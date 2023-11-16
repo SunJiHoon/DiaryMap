@@ -1,0 +1,17 @@
+@keyframes scale-reduce {
+    from {
+        transform: scale(1.5, 1.5);
+    }
+    to {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes initial-down {
+    from {
+        transform: translateY(100px);
+    }
+    to {
+        transform: translateY(0px);
+    }
+}
