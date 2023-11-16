@@ -578,7 +578,7 @@ const ReviewSpace = () => {
                     </Box>
                 </Box>
             </div>
-            <div style={{
+            {/* <div style={{
                 position: "fixed",
                 top: "0",
                 right: "0",
@@ -617,7 +617,7 @@ const ReviewSpace = () => {
                         </Select>
                     </Box>
                 </Box>
-            </div>
+            </div> */}
 
             <div style={{
                 position: "fixed",
@@ -643,104 +643,118 @@ const ReviewSpace = () => {
                     textAlign="left"
                     boxShadow="2xl"
                 >
-                    {dayModuleList.map((dayModule) => (
-                        <Box key={dayModule.id} mb={6} pt={2} pb={2} borderTop="1px" borderBottom="1px" borderColor="gray.300">
-                            <Box
-                                display="flex"
-                                justifyContent="space-between"
-                                mb={2}
-                            >
-                                <Box fontSize="2xl">Day {dayModule.id}</Box>
-                                <Checkbox defaultChecked isChecked={dayCheckedList[dayModule.id - 1]} onChange={(e) => {
-                                    const nextDayCheckedList = dayCheckedList.map((dayChecked, i) => {
-                                        if (i + 1 == dayModule.id) {
-                                            return !dayChecked
-                                        } else {
-                                            return dayChecked
+                    <Box
+                        display="flex"
+                        alignItems="center"
+                    >
+                        <Box w="160px" fontWeight="semibold">편집할 Day</Box>
+                        <Select value={currentDay} onChange={(e) => {
+                            setCurrentDay(e.target.value)
+                            // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
+                            // dayManager.printStateData()
+                        }}>
+                            {dayModuleList.map((dayModule) => (
+                                <option key={"option" + dayModule.id} value={dayModule.id} > Day {dayModule.id}</option>
+                            ))}
+                        </Select>
+                    </Box>
+                    <Box mb={6} pt={2} pb={2} borderTop="1px" borderBottom="1px" borderColor="gray.300">
+                        <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            mb={2}
+                        >
+                            <Box fontSize="2xl">Day {currentDay}</Box>
+                            <Checkbox defaultChecked isChecked={dayCheckedList[currentDay - 1]} onChange={(e) => {
+                                const nextDayCheckedList = dayCheckedList.map((dayChecked, i) => {
+                                    if (i + 1 == currentDay) {
+                                        return !dayChecked
+                                    } else {
+                                        return dayChecked
+                                    }
+                                })
+                                setDayCheckedList(nextDayCheckedList)
+                                // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
+                                // dayManager.printStateData()
+                            }}></Checkbox>
+                        </Box>
+                        <Box
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="space-between"
+                        >
+                            <Box fontWeight="semibold">Day 정보</Box>
+                            <IconButton
+                                variant="ghost"
+                                colorScheme="blackAlpha"
+                                size="sm"
+                                icon={dayMenuOpenList[currentDay - 1] ? <IoRemove /> : <IoChevronDown />}
+                                onClick={(e) => {
+                                    const nextDayMenuOpenList = dayMenuOpenList.map((menuOpen, i) => {
+                                        if (i + 1 == currentDay) {
+                                            return !menuOpen
+                                        }
+                                        else {
+                                            return menuOpen
                                         }
                                     })
-                                    setDayCheckedList(nextDayCheckedList)
+                                    setDayMenuOpenList(nextDayMenuOpenList)
                                     // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
                                     // dayManager.printStateData()
-                                }}></Checkbox>
-                            </Box>
-                            <Box
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="space-between"
-                            >
-                                <Box fontWeight="semibold">Day 정보</Box>
-                                <IconButton
-                                    variant="ghost"
-                                    colorScheme="blackAlpha"
-                                    size="sm"
-                                    icon={dayMenuOpenList[dayModule.id - 1] ? <IoRemove /> : <IoChevronDown />}
-                                    onClick={(e) => {
-                                        const nextDayMenuOpenList = dayMenuOpenList.map((menuOpen, i) => {
-                                            if (i + 1 == dayModule.id) {
-                                                return !menuOpen
-                                            }
-                                            else {
-                                                return menuOpen
-                                            }
-                                        })
-                                        setDayMenuOpenList(nextDayMenuOpenList)
-                                        // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
-                                        // dayManager.printStateData()
-                                    }}
-                                />
-                            </Box>
-                            <Box
-                                textAlign="left"
-                                visibility={dayMenuOpenList[dayModule.id - 1] ? "visible" : "hidden"}
-                                opacity={dayMenuOpenList[dayModule.id - 1] ? "1" : "0"}
-                                maxH={dayMenuOpenList[dayModule.id - 1] ? "100vh" : "0vh"}
-                                mt={dayMenuOpenList[dayModule.id - 1] ? 1 : 0}
-                                overflowX="auto"
-                                transition="all 0.3s ease-in-out"
-                            >
-                                {dayModule.data.map((node, i) => {
-                                    const _key = "day "+dayModule.id + ": node " + i
-                                    return(<Box key={_key}>
-                                        <Box
-                                            h={8}
-                                            lineHeight={8}
-                                            fontWeight="semibold"
-                                            onClick={() => {
-                                                setNodeInfoData({day: dayModule.id, idx: i, node})
-                                                onNodeInfoOpen()}
-                                            }
-                                            _hover={{
-                                                bgColor:"#00ff0033",
-                                                transition:"all .3s"
-                                            }}
-                                        >
-                                            {i+1}. {node.title}
-                                        </Box>
-                                        
-                                    </Box>)
-                                })}
-                                
-                                
+                                }}
+                            />
+                        </Box>
+                        <Box
+                            textAlign="left"
+                            visibility={dayMenuOpenList[currentDay - 1] ? "visible" : "hidden"}
+                            opacity={dayMenuOpenList[currentDay - 1] ? "1" : "0"}
+                            maxH={dayMenuOpenList[currentDay - 1] ? "100vh" : "0vh"}
+                            mt={dayMenuOpenList[currentDay - 1] ? 1 : 0}
+                            overflowX="auto"
+                            transition="all 0.3s ease-in-out"
+                        >
+                            {dayModuleList[currentDay-1].data.map((node, i) => {
+                                const _key = "day "+currentDay + ": node " + i
+                                return(<Box key={_key}>
+                                    <Box
+                                        h={8}
+                                        lineHeight={8}
+                                        fontWeight="semibold"
+                                        onClick={() => {
+                                            setNodeInfoData({day: currentDay, idx: i, node})
+                                            onNodeInfoOpen()}
+                                        }
+                                        _hover={{
+                                            bgColor:"#00ff0033",
+                                            transition:"all .3s"
+                                        }}
+                                    >
+                                        {i+1}. {node.title}
+                                    </Box>
+                                    
+                                </Box>)
+                            })}
+                            
+                            
 
-                                <Box mt={4}>
-                                    <Box fontWeight="semibold">리뷰</Box>
-                                    <Textarea mt={2} value={reviews[dayModule.id-1]} boxShadow="2xl" onChange={(e) => {
-                                        const nextReviews = reviews.map((review, i) => {
-                                            if(i == dayModule.id-1) {
-                                                return e.target.value
-                                            }
-                                            else {
-                                                return review
-                                            }
-                                        })
-                                        setReviews(nextReviews)
-                                        console.log(nextReviews)
-                                    }} />
-                                </Box>
+                            <Box mt={4}>
+                                <Box fontWeight="semibold">리뷰</Box>
+                                <Textarea mt={2} value={reviews[currentDay-1]} boxShadow="2xl" onChange={(e) => {
+                                    const nextReviews = reviews.map((review, i) => {
+                                        if(i == currentDay-1) {
+                                            return e.target.value
+                                        }
+                                        else {
+                                            return review
+                                        }
+                                    })
+                                    setReviews(nextReviews)
+                                    console.log(nextReviews)
+                                }} />
                             </Box>
                         </Box>
-                    ))}
+                    </Box>
+
                     { nodeInfoData && nodeInfoData.node && <Modal isOpen={isNodeInfoOpen} onClose={onNodeInfoClose}>
                         <ModalOverlay />
                         <ModalContent>
@@ -778,7 +792,7 @@ const ReviewSpace = () => {
                             setDayMenuOpenList(
                                 [
                                     ...dayMenuOpenList,
-                                    false
+                                    true
                                 ]
                             )
                             setDayCheckedList(

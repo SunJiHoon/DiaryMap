@@ -79,7 +79,7 @@ class DayManager {
         this.setCurrentDay(nodes.length)
         const dayMenuOpenList = []
         for(let i = 0 ; i<nodes.length; i++) {
-            dayMenuOpenList.push(false)
+            dayMenuOpenList.push(true)
         }
         this.setDayMenuOpenList(dayMenuOpenList)
     }
