@@ -222,6 +222,7 @@ class DayManager {
 
     updateReviews(_reviews) {
         console.log("update reviews");
+        console.log(reviews)
         const size = _reviews.length;
         for (let i = 0; i < size; i++) {
             reviews[i][1] = _reviews[i];

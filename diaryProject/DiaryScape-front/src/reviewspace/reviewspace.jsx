@@ -64,6 +64,7 @@ const ReviewSpace = () => {
     const [selectOptionData, setSelectOptionData] = useState({})
 
     const [leftBarOpen, setLeftBarOpen] = useState(true)
+    const [rightBarOpen, setRightBarOpen] = useState(true)
     const [debugMenuOpen, setDebugMenuOpen] = useState(false)
 
     const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: ["day information"] }])
@@ -536,7 +537,7 @@ const ReviewSpace = () => {
                                                 color={nodeSearchSelected && selectedData.contentid == result.contentid ? "white" : "black"}
                                                 _hover={{}}
                                                 h="40px"
-                                                onClick={(e) => onNodeSearchSelect(idx, result)}
+                                                onClick={(e) => onNodeSearchSelect(result, i)}
                                             >
                                                 {/* {result.contentid} */}
                                                 <Box fontWeight="semibold" mr={2}>{result.title}</Box>
@@ -641,13 +642,21 @@ const ReviewSpace = () => {
             <div style={{
                 position: "fixed",
                 top: "0",
-                right: "0",
+                right: rightBarOpen ? "0px" : "-260px",
                 zIndex: "2",
                 display: "flex",
-                flexDirection: "row",
-                alignItems: "flex-start",
+                alignItems: "center",
                 marginRight: "1.6em",
+                transition: "right 0.3s"
             }}>
+                <Box>
+                        <IconButton
+                            h="60px"
+                            colorScheme="teal"
+                            onClick={() => setRightBarOpen(!rightBarOpen)}
+                            icon={<IoChevronForward />}
+                        />
+                </Box>
                 <Box
                     mt={4}
                     p={4}
@@ -797,7 +806,7 @@ const ReviewSpace = () => {
 
                             <Box mt={4}>
                                 <Box fontWeight="semibold">리뷰</Box>
-                                <Textarea mt={2} value={reviews[currentDay-1]} boxShadow="2xl" onChange={(e) => {
+                                <Textarea mt={2} h="200px" value={reviews[currentDay-1]} boxShadow="2xl" onChange={(e) => {
                                     const nextReviews = reviews.map((review, i) => {
                                         if(i == currentDay-1) {
                                             return e.target.value
