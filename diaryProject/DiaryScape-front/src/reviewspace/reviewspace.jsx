@@ -99,7 +99,7 @@ const ReviewSpace = () => {
     passReviewsToDayManagerRef.current = dayManager.setReviews
     removeDayNodeRef.current = dayManager.removeDayNode
 
-    dayManager.setStateSetter(setDayModuleList, setNextDayMenuId, setCurrentDay, setDayMenuOpenList, setDayCheckedList, setReviews)
+    dayManager.setStateSetter(setDayModuleList, setNextDayMenuId, setCurrentDay, setDayMenuOpenList, setDayCheckedList, setReviews, setTotalReview)
 
     dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
     // console.log(tripData);
@@ -636,9 +636,10 @@ const ReviewSpace = () => {
                 >
                     <IconButton
                         h="60px"
+                        mb={4}
                         colorScheme="teal"
                         onClick={() => setRightBarOpen(!rightBarOpen)}
-                        icon={<IoChevronForward />}
+                        icon={rightBarOpen ? <IoChevronForward /> : <IoChevronBack />}
                     />
                     <IconButton
                         colorScheme="blue"
@@ -743,62 +744,69 @@ const ReviewSpace = () => {
                             }}></Checkbox>
                         </Box>
                         <Box
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="space-between"
+                            border="2px"
+                            borderRadius={4}
+                            borderColor="gray.300"
+                            p={2}
                         >
-                            <Box fontWeight="semibold">Day 정보</Box>
-                            <IconButton
-                                variant="ghost"
-                                colorScheme="blackAlpha"
-                                size="sm"
-                                icon={dayMenuOpenList[currentDay - 1] ? <IoRemove /> : <IoChevronDown />}
-                                onClick={(e) => {
-                                    const nextDayMenuOpenList = dayMenuOpenList.map((menuOpen, i) => {
-                                        if (i + 1 == currentDay) {
-                                            return !menuOpen
-                                        }
-                                        else {
-                                            return menuOpen
-                                        }
-                                    })
-                                    setDayMenuOpenList(nextDayMenuOpenList)
-                                    // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
-                                    // dayManager.printStateData()
-                                }}
-                            />
-                        </Box>
-                        <Box
-                            textAlign="left"
-                            visibility={dayMenuOpenList[currentDay - 1] ? "visible" : "hidden"}
-                            opacity={dayMenuOpenList[currentDay - 1] ? "1" : "0"}
-                            maxH={dayMenuOpenList[currentDay - 1] ? "100vh" : "0vh"}
-                            mt={dayMenuOpenList[currentDay - 1] ? 1 : 0}
-                            overflowX="auto"
-                            transition="all 0.3s ease-in-out"
-                        >
-                            {dayModuleList[currentDay-1].data.map((node, i) => {
-                                const _key = "day "+currentDay + ": node " + i
-                                return(<Box key={_key}>
-                                    <Box
-                                        h={8}
-                                        lineHeight={8}
-                                        fontWeight="semibold"
-                                        overflow="hidden"
-                                        onClick={() => {
-                                            setNodeInfoData({day: currentDay, idx: i, node})
-                                            onNodeInfoOpen()}
-                                        }
-                                        _hover={{
-                                            bgColor:"#00ff0033",
-                                            transition:"all .3s"
-                                        }}
-                                    >
-                                        {i+1}. {node.title}
-                                    </Box>
-                                    
-                                </Box>)
-                            })}
+                            <Box
+                                display="flex"
+                                alignItems="center"
+                                justifyContent="space-between"
+                            >
+                                <Box fontWeight="semibold">Day 정보</Box>
+                                <IconButton
+                                    variant="ghost"
+                                    colorScheme="blackAlpha"
+                                    size="sm"
+                                    icon={dayMenuOpenList[currentDay - 1] ? <IoRemove /> : <IoChevronDown />}
+                                    onClick={(e) => {
+                                        const nextDayMenuOpenList = dayMenuOpenList.map((menuOpen, i) => {
+                                            if (i + 1 == currentDay) {
+                                                return !menuOpen
+                                            }
+                                            else {
+                                                return menuOpen
+                                            }
+                                        })
+                                        setDayMenuOpenList(nextDayMenuOpenList)
+                                        // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
+                                        // dayManager.printStateData()
+                                    }}
+                                />
+                            </Box>
+                            <Box
+                                textAlign="left"
+                                visibility={dayMenuOpenList[currentDay - 1] ? "visible" : "hidden"}
+                                opacity={dayMenuOpenList[currentDay - 1] ? "1" : "0"}
+                                maxH={dayMenuOpenList[currentDay - 1] ? "100vh" : "0vh"}
+                                mt={dayMenuOpenList[currentDay - 1] ? 1 : 0}
+                                overflowX="auto"
+                                transition="all 0.3s ease-in-out"
+                            >
+                                {dayModuleList[currentDay-1].data.map((node, i) => {
+                                    const _key = "day "+currentDay + ": node " + i
+                                    return(<Box key={_key}>
+                                        <Box
+                                            h={8}
+                                            lineHeight={8}
+                                            fontWeight="semibold"
+                                            overflow="hidden"
+                                            onClick={() => {
+                                                setNodeInfoData({day: currentDay, idx: i, node})
+                                                onNodeInfoOpen()}
+                                            }
+                                            _hover={{
+                                                bgColor:"#00ff0033",
+                                                transition:"all .3s"
+                                            }}
+                                        >
+                                            {i+1}. {node.title}
+                                        </Box>
+                                        
+                                    </Box>)
+                                })}
+                            </Box>
                         </Box>
                         <Box mt={4}>
                             <Box
@@ -827,7 +835,7 @@ const ReviewSpace = () => {
                                 overflowX="auto"
                                 transition="all 0.3s ease-in-out"
                             >
-                                <Textarea placeholder="리뷰를 작성해주세요!" mt={2} h="200px" value={reviews[currentDay-1]} boxShadow="md" onChange={(e) => {
+                                <Textarea placeholder="리뷰를 작성해주세요!" border="2px" borderColor="gray.400" mt={2} h="200px" value={reviews[currentDay-1]} boxShadow="md" onChange={(e) => {
                                     const nextReviews = reviews.map((review, i) => {
                                         if(i == currentDay-1) {
                                             return e.target.value
@@ -869,6 +877,7 @@ const ReviewSpace = () => {
                     
                     <Button
                         w="100%"
+                        colorScheme="teal"
                         mb={2}
                         onClick={() => {
                         if(saveReviewsInSaveManager.current) {

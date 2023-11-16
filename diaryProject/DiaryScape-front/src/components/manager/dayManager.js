@@ -33,13 +33,14 @@ class DayManager {
         objectManager = _objectManager;
     }
 
-    setStateSetter(_setDayModuleList, _setNextDayMenuId, _setCurrentDay, _setDayMenuOpenList, _setDayCheckedList, _updateFrontReviews) {
+    setStateSetter(_setDayModuleList, _setNextDayMenuId, _setCurrentDay, _setDayMenuOpenList, _setDayCheckedList, _updateFrontReviews, _setTotalReview) {
         this.setDayModuleList = _setDayModuleList
         this.setNextDayMenuId = _setNextDayMenuId
         this.setCurrentDay = _setCurrentDay
         this.setDayMenuOpenList = _setDayMenuOpenList
         this.setDayCheckedList = _setDayCheckedList
         this.updateFrontReviews = _updateFrontReviews
+        this.updateFrontTotalReview = _setTotalReview
     }
 
     updateFromFrontData(_dayModuleList, _dayCheckedList, _currentDay, _nextDayMenuId, _tripData) {
