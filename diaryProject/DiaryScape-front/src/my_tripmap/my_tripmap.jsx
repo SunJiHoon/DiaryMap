@@ -162,7 +162,7 @@ const MyTripmap = () => {
                 <Box display="inline" color="blue">{username}</Box>의 여행 리스트
             </Heading>
             
-            <Button w="60%" maxW={500} mb={6} onClick={() => dispatch(clearUser())}>로그아웃</Button>
+            <Button w="100%" maxW="500px" mb={6} onClick={() => dispatch(clearUser())}>로그아웃</Button>
             
             <Box>
 
@@ -261,7 +261,7 @@ const MyTripmap = () => {
                                 borderColor="gray.300"
                             >
                                 <Box w="100%" display="flex" flexDirection="column">
-                                    <Box fontSize="1.6em" mb={1}>{review.reviewtitle}</Box>
+                                    <Box fontWeight="semibold" fontSize="1.6em" mb={1}>{review.reviewtitle}</Box>
                                     <Box fontSize="1.2em" mb={1}>{review.visitDate}</Box>
                                     {/* <Box>
                                         mapId: {review.mapId} / 시작 좌표: ({review.mapX}, {review.mapY})
