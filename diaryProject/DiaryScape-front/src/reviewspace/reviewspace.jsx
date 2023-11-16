@@ -71,6 +71,7 @@ const ReviewSpace = () => {
     const [reviews, setReviews] = useState(["review"])
     
     const [dayMenuOpenList, setDayMenuOpenList] = useState([false])
+    const [reviewMenuOpen, setReviewMenuOpen] = useState(true)
     const [dayCheckedList, setDayCheckedList] = useState([true])
     const [nextDayMenuId, setNextDayMenuId] = useState(2)
     const [currentDay, setCurrentDay] = useState(1)
@@ -801,12 +802,35 @@ const ReviewSpace = () => {
                                     
                                 </Box>)
                             })}
-                            
-                            
-
-                            <Box mt={4}>
+                        </Box>
+                        <Box mt={4}>
+                            <Box
+                                display="flex"
+                                alignItems="center"
+                                justifyContent="space-between"
+                            >
                                 <Box fontWeight="semibold">리뷰</Box>
-                                <Textarea mt={2} h="200px" value={reviews[currentDay-1]} boxShadow="2xl" onChange={(e) => {
+                                <IconButton
+                                    variant="ghost"
+                                    colorScheme="blackAlpha"
+                                    size="sm"
+                                    icon={reviewMenuOpen ? <IoRemove /> : <IoChevronDown />}
+                                    onClick={(e) => {
+                                        setReviewMenuOpen(!reviewMenuOpen)
+                                    }}
+                                />
+                            </Box>
+                            
+                            <Box
+                                textAlign="left"
+                                visibility={reviewMenuOpen ? "visible" : "hidden"}
+                                opacity={reviewMenuOpen ? "1" : "0"}
+                                maxH={reviewMenuOpen ? "100vh" : "0vh"}
+                                mt={reviewMenuOpen ? 1 : 0}
+                                overflowX="auto"
+                                transition="all 0.3s ease-in-out"
+                            >
+                                <Textarea mt={2} h="200px" value={reviews[currentDay-1]} boxShadow="md" onChange={(e) => {
                                     const nextReviews = reviews.map((review, i) => {
                                         if(i == currentDay-1) {
                                             return e.target.value
