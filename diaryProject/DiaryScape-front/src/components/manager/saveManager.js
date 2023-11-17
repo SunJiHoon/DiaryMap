@@ -42,7 +42,7 @@ class saveManager {
         }
     }
 
-    async saveMyNodes() {
+    saveMyNodes() {
         console.log("saveMyNodes");
         let jsonArr = [];
         const max_day = dayManager.getMaxDay() - 1;
@@ -92,7 +92,7 @@ class saveManager {
         dayManager.setReviews(reviews.data, totalReview.data.review);
     }
 
-    async generateDiary(){
+    generateDiary = async () => {
         console.log("sendGPT");
         await this.saveMyNodes();
         await this.saveReviews();
