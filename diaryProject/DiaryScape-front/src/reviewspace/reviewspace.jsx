@@ -70,7 +70,7 @@ const ReviewSpace = () => {
     const [debugMenuOpen, setDebugMenuOpen] = useState(false)
 
     const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: ["day information"] }])
-    const [reviews, setReviews] = useState([""])
+    const [reviews, setReviews] = useState(["리뷰를 작성해주세요..."])
     
     const [dayMenuOpenList, setDayMenuOpenList] = useState([false])
     const [reviewMenuOpen, setReviewMenuOpen] = useState(true)
@@ -124,7 +124,7 @@ const ReviewSpace = () => {
             setReviews(
                 [
                     ...reviews,
-                    ""
+                    "리뷰를 작성해주세요..."
                 ]
             )
             // dayReady.current = true
@@ -531,7 +531,14 @@ const ReviewSpace = () => {
                                 {/* <Box fontSize="1.4em" mb={2}>노드 선택</Box> */}
                                 {/* {nodeSearchSelected && <Box>{selectedData.contentid}</Box>} */}
                                 {/* {searchValue.length == 0 && <Box>노드 이름을 입력해주세요!</Box>} */}
-                                <Box h={260} overflowY="scroll" className="custom-scrollbar">
+                                <Box
+                                    h={260}
+                                    border="2px"
+                                    borderRadius={4}
+                                    borderColor="gray.400"
+                                    overflowY="scroll"
+                                    className="custom-scrollbar"
+                                >
                                     {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
                                     {!searchResultDataLoading && searchResultData.map((result, idx) => (
                                         <Button
@@ -817,10 +824,12 @@ const ReviewSpace = () => {
                             </ModalHeader>
                             <ModalCloseButton />
                             <ModalBody>
-                                {nodeInfoData.node.title}<br />
-                                {nodeInfoData.node.addr1}<br />
-                                {nodeInfoData.node.visitDate}<br />
-                                <Button onClick={() => {
+                                <Box fontSize="3xl" fontWeight="semibold">{nodeInfoData.node.title}</Box>
+                                {console.log(nodeInfoData.node)}
+                                <Box mb={6} fontSize="xl">{nodeInfoData.node.addr1}</Box>
+                                <Box mb={6} fontSize="xl">전화번호 : {nodeInfoData.node.tel}</Box>
+                                <Box mb={10} fontSize="xl">방문일 : {nodeInfoData.node.visitDate}</Box>
+                                <Button colorScheme="red" onClick={() => {
                                     onNodeInfoClose()
                                     if(removeDayNodeRef.current) removeDayNodeRef.current(nodeInfoData.day, nodeInfoData.idx+1)
                                 }}>

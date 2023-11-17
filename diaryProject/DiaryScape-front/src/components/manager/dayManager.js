@@ -134,7 +134,7 @@ class DayManager {
         nodes.push(temp);
         temp = [];
         temp.push(this.getDate(this.currentDay - 1));
-        temp.push("");
+        temp.push("리뷰를 작성해주세요...");
         reviews.push(temp);
         saveManager.saveMyNodes();
         saveManager.saveReviews();

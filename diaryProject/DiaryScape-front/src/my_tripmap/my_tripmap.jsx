@@ -21,8 +21,9 @@ import { useState, useEffect, useCallback, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import client from "../utility/client"
 import axios from "axios"
-import { IoAdd, IoArrowForwardOutline, IoTrashOutline } from "react-icons/io5";
+import { IoAdd, IoArrowForwardOutline, IoTrashOutline, IoSearch } from "react-icons/io5";
 import '../styles/animation.css'
+import '../styles/custom.css'
 
 const MyTripmap = () => {
 
@@ -191,9 +192,7 @@ const MyTripmap = () => {
                                                 onChange={(e) => { setSearchValue(e.target.value) }}
                                                 mr={2}
                                             />
-                                            <Button onClick={onSearch} colorScheme="teal" variant="outline">
-                                                검색
-                                            </Button>
+                                            <IconButton icon={<IoSearch />} onClick={onSearch} colorScheme="teal" />
                                         </Box>
                                         <Button type="submit" colorScheme="teal">여행 생성</Button>
                                     </Box>
@@ -205,7 +204,7 @@ const MyTripmap = () => {
                                     <Box fontSize="1.4em" mb={2}>시작 장소 선택</Box>
                                     {/* {startNodeSelected && <Box>{selectedData.contentid}</Box>} */}
                                     {/* {searchValue.length == 0 && <Box>장소 이름을 입력해주세요!</Box>} */}
-                                    <Box h={260} overflowY="scroll">
+                                    <Box h={260} overflowY="scroll" className="custom-scrollbar">
                                         {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
                                         {!searchResultDataLoading && searchResultData.map((result) => (
                                             <Button
@@ -290,8 +289,9 @@ const MyTripmap = () => {
                                                     client.get('/api/obj/list').then((res) => {
                                                         setReviewData(res.data)
                                                     })
-                                            })
-                                        }} />
+                                                })
+                                            }}
+                                        />
                                     </Box>
                                 </Box>
                             </Box>))}
