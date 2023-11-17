@@ -94,8 +94,6 @@ class saveManager {
 
     generateDiary = async () => {
         console.log("sendGPT");
-        await this.saveMyNodes();
-        await this.saveReviews();
         const res = await client.get("api/chatgptApi/sumedDiary?mapId=" + tripData.mapId);
         var review = res.data.answer;
         console.log("sendGPT끝");
