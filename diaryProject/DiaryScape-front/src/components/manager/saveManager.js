@@ -43,6 +43,7 @@ class saveManager {
     }
 
     saveMyNodes() {
+        console.log("saveMyNodes");
         let jsonArr = [];
         const max_day = dayManager.getMaxDay() - 1;
         for (let j = 0; j < max_day; j++) {
@@ -71,6 +72,7 @@ class saveManager {
     }
 
     saveReviews() {
+        console.log("saveReviews");
         var dayReviews = [];
         const reviews = dayManager.getReviews();
         const size = reviews.length;
