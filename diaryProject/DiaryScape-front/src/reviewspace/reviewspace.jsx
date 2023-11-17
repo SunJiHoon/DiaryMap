@@ -255,6 +255,7 @@ const ReviewSpace = () => {
 
                 saveManager = new SaveManager(tripData);
                 saveManager.setObjectManager(objectManager);
+                dayManager.setSaveManager(saveManager);
                 saveReviewsInSaveManager.current = saveManager.saveReviews
                 generateDiaryRef.current = saveManager.generateDiary
 

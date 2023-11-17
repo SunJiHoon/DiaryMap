@@ -23,9 +23,8 @@ class DayManager {
         this.setDayCheckedList = null;
         this.updateFrontReviews = null;
         this.updateFrontTotalReview = null;
+        
         instance = this
-
-        saveManager = new SaveManager(this.tripData);
     }
 
     clearNodes() {
@@ -39,6 +38,10 @@ class DayManager {
 
     setObjectManager(_objectManager) {
         objectManager = _objectManager;
+    }
+
+    setSaveManager(_saveManager){
+        saveManager = _saveManager;
     }
 
     setStateSetter(_setDayModuleList, _setNextDayMenuId, _setCurrentDay, _setDayMenuOpenList, _setDayCheckedList, _updateFrontReviews, _updateFrontTotalReview) {
@@ -137,15 +140,14 @@ class DayManager {
         tempReview.push("리뷰를 작성해주세요...");
         reviews.push(tempReview);
         console.log(reviews);
-        saveManager.saveMyNodes();
-        saveManager.saveReviews();
+        const resNode = await saveManager.saveMyNodes();
+        // const resReview = await saveManager.saveReviews();
     }
 
     visibleDay(dayIdx) {
         if (dayIdx >= this.maxDay - 2) {//이것땜에 마지막 날 거 visible 안 됨
             return;
         }
-        console.log("visible nodes", nodes[dayIdx]);
         const size = nodes[dayIdx].length;  
         for (let i = 0; i < size; i++) {
             if (nodes[dayIdx][i] != null) {
@@ -156,7 +158,6 @@ class DayManager {
 
     invisibleDay(dayIdx) {
         const size = nodes[dayIdx].length;
-        console.log("invisible nodes", nodes[dayIdx]);
         for (let i = 0; i < size; i++) {
             if (nodes[dayIdx][i] != null) {
                 nodes[dayIdx][i].visible = false;
@@ -189,9 +190,6 @@ class DayManager {
             nodes[dayIdx - 1].splice(1, 2);
         }
         else if (index == nodes[dayIdx - 1].length / 2) {
-            console.log(nodes[dayIdx - 1]);
-            console.log(nodes[dayIdx - 1][index * 2 - 1]);
-            console.log(nodes[dayIdx - 1][index * 2 - 2]);
             objectManager.removeObject(nodes[dayIdx - 1][index * 2 - 1]);
             objectManager.removeObject(nodes[dayIdx - 1][index * 2 - 2]);
             nodes[dayIdx - 1].splice(index * 2 - 2, 2);
@@ -213,9 +211,6 @@ class DayManager {
 
     getCurNode = () => {
         //length 0일 때 예외 처리?
-        console.log("getcurnode")
-        console.log(nodes[0])
-        console.log(this.currentDay)
         return nodes[this.currentDay - 1][nodes[this.currentDay - 1].length - 1];
     }
 

@@ -2,8 +2,8 @@ import client from "../../utility/client.jsx";
 import ObjectManager from "./objectManager.js";
 import DayManager from './dayManager.js'
 
-var objectManager;// = new ObjectManager();
-var dayManager;// = new DayManager();
+var objectManager;
+var dayManager;
 
 var tripData;
 
@@ -42,17 +42,18 @@ class saveManager {
         }
     }
 
-    saveMyNodes() {
+    async saveMyNodes() {
         console.log("saveMyNodes");
         let jsonArr = [];
         const max_day = dayManager.getMaxDay() - 1;
         for (let j = 0; j < max_day; j++) {
-            var temp_nodes = dayManager.getNodes()[j];
+            var temp_nodes = dayManager.getNodes()[j];  
             const size = temp_nodes.length;
             for (let i = 1; i < size; i += 2) {
                 jsonArr.push(temp_nodes[i].userData);
             }
         }
+        console.log(jsonArr);
         jsonArr = JSON.stringify(jsonArr);
         client.post("/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
     }
@@ -71,8 +72,7 @@ class saveManager {
         dayManager.updateDayInfosToFront(res.data);
     }
 
-    saveReviews() {
-        console.log("saveReviews");
+    async saveReviews() {
         var dayReviews = [];
         const reviews = dayManager.getReviews();
         const size = reviews.length;
@@ -94,6 +94,8 @@ class saveManager {
 
     async generateDiary(){
         console.log("sendGPT");
+        await this.saveMyNodes();
+        await this.saveReviews();
         const res = await client.get("api/chatgptApi/sumedDiary?mapId=" + tripData.mapId);
         var review = res.data.answer;
         console.log("sendGPT끝");
