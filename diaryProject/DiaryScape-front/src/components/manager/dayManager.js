@@ -180,9 +180,30 @@ class DayManager {
     }
 
     changeDayNodeIndex(index, isUp){
-        if(index - 1 > nodes[this.currentDay - 1]){
+        const length = nodes[this.currentDay - 1].length;
+
+        if(index < 1 || index > length){//index does not exist
+            console.log("없는 노드");
+            return;
+        }
+        if((index == 1 && isUp) || (index == length && !isUp)){//첫 노드를 위로나 마지막 노드를 밑으로 보내려고 할 때
+            console.log("이동 불가");
+            return;
+        }
+        else if(index == 2 && isUp){//첫 노드로 이동할 때
 
         }
+        else if(index == length - 1 && !isUp){//마지막 노드로 이동할 때
+
+        }
+        else if(isUp){//중간 노드가 위로 올라갈 때
+            nodes[index - 1]
+        }
+        else if(!isUp){//중간 노드가 아래로 내려갈 때
+
+        }
+
+        saveManager.saveMyNodes();
     }
 
     removeDayNode = (dayIdx, index) => {//구현하기
