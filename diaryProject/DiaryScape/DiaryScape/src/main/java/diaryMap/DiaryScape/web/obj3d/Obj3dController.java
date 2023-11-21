@@ -389,7 +389,7 @@ public class Obj3dController {
     @PostMapping(value = "/obj/updateNodeAndDayReviews/usingJson")
     public String updateOneMapAndReviewUsingJson(
             @RequestParam Map<String, String> paraMap,
-            @RequestBody RequestData requestData
+            @RequestBody RequestDatas requestDatas
             //,@RequestBody diaryMap.DiaryScape.web.review.jsonArr_Value paramjsonArr_Value
     ) {
         //private ArrayList<dayReview> dayReviews;
@@ -398,7 +398,7 @@ public class Obj3dController {
 
         if (beingUpdateObj3d.isPresent()) {
             actualObj3d = beingUpdateObj3d.get();
-            ArrayList<dayReview> dayReviewsToBeSaved = requestData.getDayReviews();
+            ArrayList<dayReview> dayReviewsToBeSaved = requestDatas.getRequestData().getDayReviews();
             log.info("입력으로 주어진 저장될 리뷰는 다음과 같습니다.");
             for (int i=0;i<dayReviewsToBeSaved.size();i++){
                 log.info("날짜 : " + dayReviewsToBeSaved.get(i).getVisitDate());
@@ -423,7 +423,7 @@ public class Obj3dController {
             actualObj3d = beingUpdateObj3d.get();
 
             // 이 메서드에서 jsonData를 사용할 수 있습니다.
-            List<trashDTO> jsonArr = requestData.getJsonArr();
+            List<trashDTO> jsonArr = requestDatas.getRequestData().getJsonArr();
 
             trashDTO[] trashDTO_for_NodeDTOs_for_update = new trashDTO[jsonArr.size()];
             for(int i = 0;i<jsonArr.size();i++){
@@ -545,6 +545,8 @@ class jsonArr_Value_dayReviews{
     private ArrayList<dayReview> dayReviews;
 }
 
+
+
 // 여러 개의 JSON 객체를 담을 수 있는 래퍼 클래스
 @Data
 @RequiredArgsConstructor
@@ -554,4 +556,10 @@ class RequestData {
     private ArrayList<dayReview> dayReviews;
 
     // jsonData와 paramjsonArr_Value의 Getter와 Setter 메서드
+}
+
+@Data
+@RequiredArgsConstructor
+class RequestDatas {
+    private RequestData requestData;
 }
