@@ -26,7 +26,7 @@ class objectManager {
     dayManager.setObjectManager(this);
   }
 
-  newMap = async (characterName) => {
+  newMap = async () => {
     scene.clear();
 
     // camera.position.set(originCameraPos.x, originCameraPos.y, originCameraPos.z);
@@ -42,14 +42,14 @@ class objectManager {
     // scene.add(map);
 
     const playerLoader = new Player();
-    player = await playerLoader.loadGltf(characterName);
+    player = await playerLoader.loadGltf();
     player.name = "player";
     scene.add(player);
   }
 
   async initNode() {
     var startNode = await this.createNode(startNodeData);
-    this.changeNodeColor(startNode, dayManager.getDayColor(dayManager.getCurDay - 1));
+    this.changeNodeColor(startNode, dayManager.getDayColor(0));
     startNode.userData.visitDate = tripData.date
     dayManager.plusDayNode(null, startNode);
     // await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));

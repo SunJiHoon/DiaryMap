@@ -1,6 +1,7 @@
 import client from "../../utility/client.jsx";
 import ObjectManager from "./objectManager.js";
 import DayManager from './dayManager.js'
+import { Object3D } from "three";
 
 var objectManager;
 var dayManager;
@@ -53,9 +54,22 @@ class saveManager {
                 jsonArr.push(temp_nodes[i].userData);
             }
         }
-        console.log(jsonArr);
-        jsonArr = JSON.stringify(jsonArr);
-        client.post("/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
+        // client.post("/api/obj/update?mapId=" + tripData.mapId, { jsonArr }, { withCredentials: true });
+
+        var dayReviews = [];
+        const reviews = dayManager.getReviews();
+        const size = reviews.length;
+        for (let i = 0; i < size; i++) {
+            var temp = new Object();
+            temp.visitDate = reviews[i][0];
+            temp.dayReview = reviews[i][1];
+            dayReviews.push(temp);
+        }
+        
+        var requestData = new Object;
+        requestData.jsonArr = jsonArr;
+        requestData.dayReviews = dayReviews;
+        client.post("/api/obj/updateNodeAndDayReviews/usingJson?mapId=" + tripData.mapId, { requestData }, { withCredentials: true });
     }
 
     async loadMyNodes() {
