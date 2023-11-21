@@ -197,10 +197,9 @@ class DayManager {
 
         }
         else if(isUp){//중간 노드가 위로 올라갈 때
-            nodes[2 * index - 1]
             var temp = nodes[2 * index - 1];
             nodes[2 * index - 1] = nodes[2 * index - 3];
-            nodes[2 * index - 1] = temp;
+            nodes[2 * index - 3] = temp;
 
             for(let i = 0; i < 3; i++){
                 objectManager.removeObject(nodes[2 * index - 2 * i]);
@@ -208,7 +207,14 @@ class DayManager {
             }
         }
         else if(!isUp){//중간 노드가 아래로 내려갈 때
-            
+            var temp = nodes[2 * index + 1];
+            nodes[2 * index + 1] = nodes[2 * index - 1];
+            nodes[2 * index - 1] = temp;
+
+            for(let i = 0; i < 3; i++){
+                objectManager.removeObject(nodes[2 * index * i]);
+                nodes[2 * index + 2] = objectManager.drawLine(nodes[2 * index + 3 - 2 * i].position, nodes[2 * index + 1 - 2 * i], this.colorList[this.currentDay -1 % 4]);
+            }
         }
 
         saveManager.saveMyNodes();
