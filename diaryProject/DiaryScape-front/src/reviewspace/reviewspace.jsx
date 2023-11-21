@@ -754,20 +754,31 @@ const ReviewSpace = () => {
                                     const _key = "day "+currentDay + ": node " + i
                                     return(<Box key={_key}>
                                         <Box
-                                            h={8}
+                                            display="flex"
+                                            h={10}
                                             lineHeight={8}
-                                            fontWeight="semibold"
-                                            overflow="hidden"
-                                            onClick={() => {
-                                                setNodeInfoData({day: currentDay, idx: i, node})
-                                                onNodeInfoOpen()}
-                                            }
-                                            _hover={{
-                                                bgColor:"#00ff0033",
-                                                transition:"all .3s"
-                                            }}
                                         >
+                                            <Box
+                                                display="flex"
+                                                flexDirection="column"
+                                            >
+                                                <Button w="10px" onClick={dayManager.changeDayNodeIndex(i+1, true)}>u</Button>
+                                                <Button w="10px" onClick={dayManager.changeDayNodeIndex(i+1, false)}>d</Button>
+                                            </Box>
+                                            <Box
+                                                fontWeight="semibold"
+                                                overflow="hidden"
+                                                onClick={() => {
+                                                    setNodeInfoData({day: currentDay, idx: i, node})
+                                                    onNodeInfoOpen()}
+                                                }
+                                                _hover={{
+                                                    bgColor:"#00ff0033",
+                                                    transition:"all .3s"
+                                                }}
+                                            >
                                             {i+1}. {node.title}
+                                            </Box>
                                         </Box>
                                         
                                     </Box>)
