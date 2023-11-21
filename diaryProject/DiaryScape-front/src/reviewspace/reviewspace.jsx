@@ -37,6 +37,10 @@ export const CanvasContext = createContext()
 let nextReviewId = 2
 
 const ReviewSpace = () => {
+
+    let isReadonly = false
+    // let isPublic = true
+
     const [canvasState, setCanvasState] = useState(null)
 
     const navigate = useNavigate()
@@ -497,7 +501,7 @@ const ReviewSpace = () => {
                         colorScheme="gray"
                         onClick={() => navigate("/")}
                     />
-                    <Box
+                    {!isReadonly && <Box
                         maxW="100%"
                         mt={4}
                     >
@@ -571,7 +575,7 @@ const ReviewSpace = () => {
                                 if(nodeSearchSelected) onPlusSearchNodeClick(selectedData)
                             }}
                         />
-                    </Box>
+                    </Box>}
                 </Box>
                         <IconButton
                             h="60px"
@@ -655,7 +659,8 @@ const ReviewSpace = () => {
                                 ))}
                             </Select>
                         </Box>
-                        <IconButton
+
+                        {!isReadonly && <IconButton
                             icon={<IoAdd />}
                             colorScheme="teal"
                             onClick={(e) => {
@@ -687,7 +692,7 @@ const ReviewSpace = () => {
                                 // dayManager.plusDay() // 이렇게 하면 plusDay 내에서 이전 currentDay 값 참조하게 됨
                                 setNextDayMenuId(nextDayMenuId + 1)
                             }}
-                        />
+                        />}
                     </Box>
                     <Box mb={6} pt={2} pb={4}>
                         <Box
@@ -758,13 +763,13 @@ const ReviewSpace = () => {
                                             h={10}
                                             lineHeight={8}
                                         >
-                                            <Box
+                                            {!isReadonly && <Box
                                                 display="flex"
                                                 flexDirection="column"
                                             >
                                                 <Button w="10px" onClick={dayManager.changeDayNodeIndex(i+1, true)}>u</Button>
                                                 <Button w="10px" onClick={dayManager.changeDayNodeIndex(i+1, false)}>d</Button>
-                                            </Box>
+                                            </Box>}
                                             <Box
                                                 fontWeight="semibold"
                                                 overflow="hidden"
@@ -854,7 +859,7 @@ const ReviewSpace = () => {
                         </ModalContent>
                     </Modal>}
                     
-                    <Button
+                    {!isReadonly && <Button
                         w="100%"
                         colorScheme="teal"
                         mb={2}
@@ -864,34 +869,45 @@ const ReviewSpace = () => {
                         }
                     }}>
                         리뷰 저장
-                    </Button>
+                    </Button>}
                     </>}
                     {rightBarPage == 1 &&<>
-                        <Button
-                            w="100%"
-                            mb={4}
-                            colorScheme="teal"
-                            onClick={() => {
-                            if(generateDiaryRef.current) {
-                                generateDiaryRef.current().then((res) => {
-                                    console.log(res)
-                                    setTotalReview(res)
-                                })
-                            }
-                        }}>
-                            일기 생성
-                        </Button>
+                        {!isReadonly && <Box>
+                            <Button
+                                w="100%"
+                                mb={2}
+                                colorScheme="teal"
+                                onClick={() => {
+                                if(generateDiaryRef.current) {
+                                    generateDiaryRef.current().then((res) => {
+                                        console.log(res)
+                                        setTotalReview(res)
+                                    })
+                                }
+                            }}>
+                                일기 생성
+                            </Button>
+                            <Button
+                                w="100%"
+                                mb={4}
+                                colorScheme="teal"
+                                onClick={() => {}}
+                            >
+                                일기 저장
+                            </Button>
+                            </Box>
+                        }
                         <Box fontSize="xl" fontWeight="semibold" mb={2}>일기</Box>
-                        <Box
+                        <Textarea
                             w="100%"
                             border="2px"
                             borderRadius={4}
                             borderColor="gray.400"
                             minH="200px"
                             p={2}
-                        >
-                            {totalReview}
-                        </Box>
+                            value={totalReview}
+                            onChange={(e) => setTotalReview(e.target.value)}
+                        />
                     </>}
                 </Box>
             </div >
