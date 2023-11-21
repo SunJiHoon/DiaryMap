@@ -60,6 +60,7 @@ const ReviewSpace = () => {
     const removeDayNodeRef = useRef(null)
     const onObjManagerNodeSearchSelectRef = useRef(null)
     const dayReady = useRef(false)
+    const changeDayNodeIndexRef = useRef(null)
 
     // const setStateDataRef = useRef(null)
     // const printStateDataRef = useRef(null)
@@ -103,6 +104,7 @@ const ReviewSpace = () => {
     getCurNodeRef.current = dayManager.getCurNode
     passReviewsToDayManagerRef.current = dayManager.setReviews
     removeDayNodeRef.current = dayManager.removeDayNode
+    changeDayNodeIndexRef.current = dayManager.changeDayNodeIndex
 
     dayManager.setStateSetter(setDayModuleList, setNextDayMenuId, setCurrentDay, setDayMenuOpenList, setDayCheckedList, setReviews, setTotalReview)
 
@@ -759,7 +761,7 @@ const ReviewSpace = () => {
                                     const _key = "day "+currentDay + ": node " + i
                                     return(<Box key={_key}>
                                         <Box
-                                            display="flex"
+                                            display="flex" 
                                             h={10}
                                             lineHeight={8}
                                         >
@@ -767,8 +769,8 @@ const ReviewSpace = () => {
                                                 display="flex"
                                                 flexDirection="column"
                                             >
-                                                <Button w="10px" onClick={dayManager.changeDayNodeIndex(i+1, true)}>u</Button>
-                                                <Button w="10px" onClick={dayManager.changeDayNodeIndex(i+1, false)}>d</Button>
+                                                <Button w="10px" onClick={() => {if(changeDayNodeIndexRef.current) changeDayNodeIndexRef.current(i+1, true)}}>u</Button>
+                                                <Button w="10px" onClick={() => {if(changeDayNodeIndexRef.current) changeDayNodeIndexRef.current(i+1, false)}}>d</Button>
                                             </Box>}
                                             <Box
                                                 fontWeight="semibold"

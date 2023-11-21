@@ -180,6 +180,7 @@ class DayManager {
     }
 
     changeDayNodeIndex(index, isUp){
+        console.log(nodes);
         const length = nodes[this.currentDay - 1].length;
 
         if(index < 1 || index > length){//index does not exist
