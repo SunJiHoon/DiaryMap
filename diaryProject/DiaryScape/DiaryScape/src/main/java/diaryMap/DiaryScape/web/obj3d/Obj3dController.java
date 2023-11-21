@@ -114,6 +114,9 @@ public class Obj3dController {
 
         if (loginMember.isPresent()) {
             Member actualMember = loginMember.get();
+            if (actualMember.getObj3dArrayList() == null){
+                return "[]";
+            }
             for (int i = 0; i < actualMember.getObj3dArrayList().size(); i++) {
                 titleDataDtos.add(
                         new titleData_DTO(
@@ -129,8 +132,10 @@ public class Obj3dController {
                                 actualMember.getObj3dArrayList().get(i).getStartNode().getRelativeY(),
                                 actualMember.getObj3dArrayList().get(i).getStartNode().getAddr1(),
                                 actualMember.getObj3dArrayList().get(i).getStartNode().getVisitDate()
-                        ));
+                        )
+                );
             }
+
             log.info("로그인된 id에 해당하는 map 리스트 추출 완료.");
 
         } else {
@@ -144,7 +149,6 @@ public class Obj3dController {
         } catch (JsonProcessingException e) {
             mapDatasJson = "[]";
         }
-
         return mapDatasJson;
     }
 
