@@ -179,6 +179,12 @@ class DayManager {
         this.updateDayNodesToFront();
     }
 
+    changeDayNodeIndex(index, isUp){
+        if(index - 1 > nodes[this.currentDay - 1]){
+
+        }
+    }
+
     removeDayNode = (dayIdx, index) => {//구현하기
         console.log(nodes[dayIdx - 1].length);
         if (nodes[dayIdx - 1].length == 2) {
