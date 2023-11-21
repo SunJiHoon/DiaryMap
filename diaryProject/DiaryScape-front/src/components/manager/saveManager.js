@@ -1,6 +1,7 @@
 import client from "../../utility/client.jsx";
 import ObjectManager from "./objectManager.js";
 import DayManager from './dayManager.js'
+import { Object3D } from "three";
 
 var objectManager;
 var dayManager;
@@ -65,7 +66,9 @@ class saveManager {
             dayReviews.push(temp);
         }
         
-        var requestData = [dayReviews, jsonArr];
+        var requestData = new Object;
+        requestData.jsonArr = jsonArr;
+        requestData.dayReviews = dayReviews;
         client.post("/api/obj/updateNodeAndDayReviews/usingJson?mapId=" + tripData.mapId, { requestData }, { withCredentials: true });
     }
 
