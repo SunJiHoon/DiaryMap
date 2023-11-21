@@ -6,6 +6,7 @@ import diaryMap.DiaryScape.domain.member.Member;
 import diaryMap.DiaryScape.domain.member.MemberMongoRepository;
 import diaryMap.DiaryScape.domain.obj3d.Obj3d;
 import diaryMap.DiaryScape.domain.obj3d.Obj3dRepository;
+import diaryMap.DiaryScape.domain.obj3d.dayReview;
 import diaryMap.DiaryScape.source.StringSource;
 import diaryMap.DiaryScape.web.openApi.NodeDTO;
 import lombok.Data;
@@ -385,6 +386,91 @@ public class Obj3dController {
     }
 
 
+    @PostMapping(value = "/obj/updateNodeAndDayReviews/usingJson")
+    public String updateOneMapAndReviewUsingJson(
+            @RequestParam Map<String, String> paraMap,
+            @RequestBody RequestData requestData
+            //,@RequestBody diaryMap.DiaryScape.web.review.jsonArr_Value paramjsonArr_Value
+    ) {
+        //private ArrayList<dayReview> dayReviews;
+        Obj3d actualObj3d;
+        Optional<Obj3d> beingUpdateObj3d = obj3dRepository.findById(paraMap.get("mapId"));
+
+        if (beingUpdateObj3d.isPresent()) {
+            actualObj3d = beingUpdateObj3d.get();
+            ArrayList<dayReview> dayReviewsToBeSaved = requestData.getDayReviews();
+            log.info("입력으로 주어진 저장될 리뷰는 다음과 같습니다.");
+            for (int i=0;i<dayReviewsToBeSaved.size();i++){
+                log.info("날짜 : " + dayReviewsToBeSaved.get(i).getVisitDate());
+                log.info("일일 리뷰 : " + dayReviewsToBeSaved.get(i).getDayReview());
+            }
+            actualObj3d.setDayReviews(dayReviewsToBeSaved);
+            obj3dRepository.save(actualObj3d);
+            //log.info(String.valueOf(actualObj3d));
+            log.info("리뷰들 저장완료");
+        } else {
+            log.info("mapId불일치. 리뷰들 저장실패");
+        }
+
+        if (beingUpdateObj3d.isPresent()) {
+            LocalDateTime currentTime = LocalDateTime.now();
+            // 시간 형식 지정 (예: "yyyy-MM-dd HH:mm:ss")
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            // 형식에 맞게 출력
+            String formattedTime = currentTime.format(formatter);
+            log.info("객체 수정 시점: " + formattedTime);
+
+            actualObj3d = beingUpdateObj3d.get();
+
+            // 이 메서드에서 jsonData를 사용할 수 있습니다.
+            List<trashDTO> jsonArr = requestData.getJsonArr();
+
+            trashDTO[] trashDTO_for_NodeDTOs_for_update = new trashDTO[jsonArr.size()];
+            for(int i = 0;i<jsonArr.size();i++){
+                trashDTO_for_NodeDTOs_for_update[i] = jsonArr.get(i);
+            }
+
+            // JSON 데이터를 처리하는 로직을 작성합니다.
+            NodeDTO_for_update[] NodeDTOs_for_update = new NodeDTO_for_update[trashDTO_for_NodeDTOs_for_update.length];
+            //입력으로 주어진 저장될 노드들은 다음과 같습니다.
+            // trashDTO_for_NodeDTOs_for_update 배열을 NodeDTO_for_update 배열로 변환 및 복사
+            for (int i = 0; i < trashDTO_for_NodeDTOs_for_update.length; i++) {
+                log.info("노드리뷰 : " + trashDTO_for_NodeDTOs_for_update[i].getNodeReview());
+                trashDTO sourceNodeDTO = trashDTO_for_NodeDTOs_for_update[i];
+
+                NodeDTO_for_update destinationNodeDTO = new NodeDTO_for_update();
+
+                destinationNodeDTO.setContentid(sourceNodeDTO.getContentID());
+                destinationNodeDTO.setContentTypeId(sourceNodeDTO.getContentType());
+                destinationNodeDTO.setTitle(sourceNodeDTO.getTitle());
+                destinationNodeDTO.setTel(sourceNodeDTO.getTel());
+                destinationNodeDTO.setMapx(sourceNodeDTO.getMapX());
+                destinationNodeDTO.setMapy(sourceNodeDTO.getMapY());
+                destinationNodeDTO.setRelativeX(sourceNodeDTO.getRelativeX());
+                destinationNodeDTO.setRelativeY(sourceNodeDTO.getRelativeY());
+                destinationNodeDTO.setAddr1(sourceNodeDTO.getAddr1());
+                destinationNodeDTO.setVisitDate(sourceNodeDTO.getVisitDate());
+                destinationNodeDTO.setNodeReview(sourceNodeDTO.getNodeReview());
+                // 다른 필드 복사
+                NodeDTOs_for_update[i] = destinationNodeDTO;
+            }
+
+            actualObj3d.setJsonArr(NodeDTOs_for_update);
+            log.info(NodeDTOs_for_update.toString());
+            actualObj3d.setModifiedTime(formattedTime);
+            log.info("저장수행");
+            obj3dRepository.save(actualObj3d);
+            //log.info(String.valueOf(actualObj3d));
+            log.info("노드들 저장완료");
+            return "성공";
+        } else {
+            log.info("mapId불일치. 노드들 저장실패");
+            return "실패";
+        }
+    }
+
+
+
 
     @GetMapping(value = "/obj/isFirst")
     public String checkFirstOrNot(
@@ -451,4 +537,21 @@ class trashDTO{
 class mapJsonGroupByDateDTO{
     private String visitDate;
     private List<NodeDTO_for_update> nodes;
+}
+
+@Data
+@RequiredArgsConstructor
+class jsonArr_Value_dayReviews{
+    private ArrayList<dayReview> dayReviews;
+}
+
+// 여러 개의 JSON 객체를 담을 수 있는 래퍼 클래스
+@Data
+@RequiredArgsConstructor
+class RequestData {
+    //private Map<String, List<trashDTO>> dayReviewss;
+    private ArrayList<trashDTO> jsonArr;
+    private ArrayList<dayReview> dayReviews;
+
+    // jsonData와 paramjsonArr_Value의 Getter와 Setter 메서드
 }
