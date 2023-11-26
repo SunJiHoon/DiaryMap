@@ -1,10 +1,9 @@
-import * as THREE from "three";
-import Player from "../object/player.js";
-import Node from "../object/node.js";
-import client from "../../utility/client.jsx";
-import DayManager from "./dayManager.js";
-import { gsap } from "gsap";
-
+import * as THREE from 'three';
+import Player from '../object/player.js';
+import Node from '../object/node.js';
+import client from '../../utility/client.jsx';
+import DayManager from './dayManager.js';
+import { gsap } from 'gsap';
 
 let load_options = [];
 let search_options = [];
@@ -18,7 +17,6 @@ var startNodeData;
 const dayManager = new DayManager();
 
 class objectManager {
-
   constructor(_scene, _camera, _tripData, _startNodeData) {
     scene = _scene;
     tripData = _tripData;
@@ -43,14 +41,14 @@ class objectManager {
 
     const playerLoader = new Player();
     player = await playerLoader.loadGltf();
-    player.name = "player";
+    player.name = 'player';
     scene.add(player);
-  }
+  };
 
   async initNode() {
     var startNode = await this.createNode(startNodeData);
     this.changeNodeColor(startNode, dayManager.getDayColor(0));
-    startNode.userData.visitDate = tripData.date
+    startNode.userData.visitDate = tripData.date;
     dayManager.plusDayNode(null, startNode);
     // await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
@@ -60,12 +58,14 @@ class objectManager {
   }
 
   async loadOptions(selectPos) {
-    const res = await client.get("/api/openApi/node?mapId=" + tripData.mapId + "&mapX=" + selectPos.x + "&mapY=" + selectPos.z);
+    const res = await client.get(
+      '/api/openApi/node?mapId=' + tripData.mapId + '&mapX=' + selectPos.x + '&mapY=' + selectPos.z
+    );
     for (let i = 0; i < res.data.length; i++) {
       var tempNode = await this.createNode(res.data[i]);
       load_options.push(tempNode);
     }
-    console.log("end load options");
+    console.log('end load options');
   }
 
   loadSearchOptions = async (nodeInfos) => {
@@ -77,8 +77,8 @@ class objectManager {
       var tempNode = await this.createNode(nodeInfos[i]);
       search_options.push(tempNode);
     }
-    console.log("end load search options");
-  }
+    console.log('end load search options');
+  };
 
   invisibleOptions(options, select_option) {
     for (let i = 0; i < options.length; i++) {
@@ -90,14 +90,14 @@ class objectManager {
   }
 
   onNodeSearchSelect = (index) => {
-    if(selectSearchNode != null){
+    if (selectSearchNode != null) {
       this.changeNodeColor(selectSearchNode, 'magenta');
     }
-    if(search_options.length > 0){
+    if (search_options.length > 0) {
       selectSearchNode = search_options[index];
       this.changeNodeColor(selectSearchNode, 'cyan');
     }
-  }
+  };
 
   removeObject(object) {
     console.log(object);
@@ -120,10 +120,13 @@ class objectManager {
     for (var i = 0; i < size - 1; i++) {
       var nextNode = await this.createNode(nodeArr[i + 1]);
       this.changeNodeColor(nextNode, dayManager.getDayColor(dayIdx));
-      const line = this.drawLine(new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY),
+      const line = this.drawLine(
+        new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY),
         new THREE.Vector3(nodeArr[i + 1].relativeX, 0, nodeArr[i + 1].relativeY),
-        dayColor);
-      objectArr.push(line); objectArr.push(nextNode);
+        dayColor
+      );
+      objectArr.push(line);
+      objectArr.push(nextNode);
     }
     return objectArr;
   }
@@ -134,7 +137,7 @@ class objectManager {
     gsap.to(node.position, {
       y: 0,
       duration: 2,
-    })
+    });
     return node;
   }
 
@@ -155,7 +158,7 @@ class objectManager {
     return line;
   }
 
-  setPlayerPos(position){
+  setPlayerPos(position) {
     player.position.set(position.x, 1, position.z);
   }
 

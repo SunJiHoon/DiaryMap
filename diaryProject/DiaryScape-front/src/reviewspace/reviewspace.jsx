@@ -1,962 +1,1031 @@
-import * as THREE from "three";
-import InputManager, { selectOption } from "../components/manager/inputManager";
-import ObjectManager from "../components/manager/objectManager";
-import SaveManager from "../components/manager/saveManager";
-import DayManager from "../components/manager/dayManager";
-import { useRef, useEffect, useState } from "react";
-import { Link } from 'react-router-dom'
+import * as THREE from 'three';
+import InputManager, { selectOption } from '../components/manager/inputManager';
+import ObjectManager from '../components/manager/objectManager';
+import SaveManager from '../components/manager/saveManager';
+import DayManager from '../components/manager/dayManager';
+import { useRef, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
-    Box,
-    Button,
-    IconButton,
-    Checkbox,
-    Select,
-    Textarea,
-    Input,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    useDisclosure
-} from '@chakra-ui/react'
-import { useSelector } from "react-redux";
-import { IoChevronDown, IoChevronForward , IoSearch, IoAdd, IoRemove, IoPencil, IoBook, IoChevronBack, IoHome} from "react-icons/io5"
-import { useNavigate } from "react-router-dom";
-import { createContext, useContext } from "react";
-import mapboxgl from "mapbox-gl";
-import MapboxLanguage from "@mapbox/mapbox-gl-language";
-import client from "../utility/client";
-import axios from "axios";
-import '../styles/custom.css'
+  Box,
+  Button,
+  IconButton,
+  Checkbox,
+  Select,
+  Textarea,
+  Input,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
+import {
+  IoChevronDown,
+  IoChevronForward,
+  IoSearch,
+  IoAdd,
+  IoRemove,
+  IoPencil,
+  IoBook,
+  IoChevronBack,
+  IoHome,
+} from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
+import { createContext, useContext } from 'react';
+import mapboxgl from 'mapbox-gl';
+import MapboxLanguage from '@mapbox/mapbox-gl-language';
+import client from '../utility/client';
+import axios from 'axios';
+import '../styles/custom.css';
 
-export const CanvasContext = createContext()
+export const CanvasContext = createContext();
 
-let nextReviewId = 2
+let nextReviewId = 2;
 
 const ReviewSpace = () => {
+  let isReadonly = false;
+  // let isPublic = true
 
-    let isReadonly = false
-    // let isPublic = true
+  const [canvasState, setCanvasState] = useState(null);
 
-    const [canvasState, setCanvasState] = useState(null)
+  const navigate = useNavigate();
+  const canvasRef = useRef(null);
+  const tripData = useSelector((state) => state.trip);
+  const startnodeData = useSelector((state) => state.startnode);
 
-    const navigate = useNavigate()
-    const canvasRef = useRef(null)
-    const tripData = useSelector((state) => state.trip)
-    const startnodeData = useSelector((state) => state.startnode)
+  const newMapFunctionRef = useRef(null);
+  const addNodeFunctionRef = useRef(null);
+  const plusSearchNodeRef = useRef(null);
+  const loadSearchOptionsRef = useRef(null);
+  const updateReviewsRef = useRef(null);
+  const getCurNodeRef = useRef(null);
+  const passReviewsToDayManagerRef = useRef(null);
+  const saveReviewsInSaveManager = useRef(null);
+  const generateDiaryRef = useRef(null);
+  const removeDayNodeRef = useRef(null);
+  const onObjManagerNodeSearchSelectRef = useRef(null);
+  const dayReady = useRef(false);
+  const changeDayNodeIndexRef = useRef(null);
 
-    const newMapFunctionRef = useRef(null)
-    const addNodeFunctionRef = useRef(null)
-    const plusSearchNodeRef = useRef(null)
-    const loadSearchOptionsRef = useRef(null)
-    const updateReviewsRef = useRef(null)
-    const getCurNodeRef = useRef(null)
-    const passReviewsToDayManagerRef = useRef(null)
-    const saveReviewsInSaveManager = useRef(null)
-    const generateDiaryRef = useRef(null)
-    const removeDayNodeRef = useRef(null)
-    const onObjManagerNodeSearchSelectRef = useRef(null)
-    const dayReady = useRef(false)
-    const changeDayNodeIndexRef = useRef(null)
+  // const setStateDataRef = useRef(null)
+  // const printStateDataRef = useRef(null)
+  const [nodeMenuOn, setNodeMenuOn] = useState(false);
+  const [nodeMenuPosition, setNodeMenuPosition] = useState({ x: 0, y: 0 });
 
-    // const setStateDataRef = useRef(null)
-    // const printStateDataRef = useRef(null)
-    const [nodeMenuOn, setNodeMenuOn] = useState(false)
-    const [nodeMenuPosition, setNodeMenuPosition] = useState({ x: 0, y: 0, })
+  const [selectOptionData, setSelectOptionData] = useState({});
 
-    const [selectOptionData, setSelectOptionData] = useState({})
+  const [leftBarOpen, setLeftBarOpen] = useState(true);
+  const [rightBarOpen, setRightBarOpen] = useState(true);
+  const [rightBarPage, setRightBarPage] = useState(0);
+  const [debugMenuOpen, setDebugMenuOpen] = useState(false);
 
-    const [leftBarOpen, setLeftBarOpen] = useState(true)
-    const [rightBarOpen, setRightBarOpen] = useState(true)
-    const [rightBarPage, setRightBarPage] = useState(0)
-    const [debugMenuOpen, setDebugMenuOpen] = useState(false)
+  const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: ['day information'] }]);
+  const [reviews, setReviews] = useState(['리뷰를 작성해주세요...']);
 
-    const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: ["day information"] }])
-    const [reviews, setReviews] = useState(["리뷰를 작성해주세요..."])
-    
-    const [dayMenuOpenList, setDayMenuOpenList] = useState([false])
-    const [reviewMenuOpen, setReviewMenuOpen] = useState(true)
-    const [dayCheckedList, setDayCheckedList] = useState([true])
-    const [nextDayMenuId, setNextDayMenuId] = useState(2)
-    const [currentDay, setCurrentDay] = useState(1)
-    const [onPlusDay, setOnPlusDay] = useState(1)
+  const [dayMenuOpenList, setDayMenuOpenList] = useState([false]);
+  const [reviewMenuOpen, setReviewMenuOpen] = useState(true);
+  const [dayCheckedList, setDayCheckedList] = useState([true]);
+  const [nextDayMenuId, setNextDayMenuId] = useState(2);
+  const [currentDay, setCurrentDay] = useState(1);
+  const [onPlusDay, setOnPlusDay] = useState(1);
 
-    const [searchValue, setSearchValue] = useState('')
-    const [searchResultData, setSearchResultData] = useState([])
-    const [nodeSearchSelected, setNodeSearchSelected] = useState(false)
-    const [selectedData, setSelectedData] = useState({})
-    const [searchResultDataLoading, setSearchResultDataLoading] = useState(false)
-    const [totalReview, setTotalReview] = useState("일기를 생성해주세요!")
-    const { isOpen: isNodeSearchOpen, onOpen: onNodeSearchOpen, onClose: onNodeSearchClose } = useDisclosure()
+  const [searchValue, setSearchValue] = useState('');
+  const [searchResultData, setSearchResultData] = useState([]);
+  const [nodeSearchSelected, setNodeSearchSelected] = useState(false);
+  const [selectedData, setSelectedData] = useState({});
+  const [searchResultDataLoading, setSearchResultDataLoading] = useState(false);
+  const [totalReview, setTotalReview] = useState('일기를 생성해주세요!');
+  const {
+    isOpen: isNodeSearchOpen,
+    onOpen: onNodeSearchOpen,
+    onClose: onNodeSearchClose,
+  } = useDisclosure();
 
-    const { isOpen: isNodeInfoOpen, onOpen: onNodeInfoOpen, onClose: onNodeInfoClose } = useDisclosure()
-    const [ nodeInfoData, setNodeInfoData ] = useState({})
+  const {
+    isOpen: isNodeInfoOpen,
+    onOpen: onNodeInfoOpen,
+    onClose: onNodeInfoClose,
+  } = useDisclosure();
+  const [nodeInfoData, setNodeInfoData] = useState({});
 
-    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
-    const map = useRef(null)
-    const mapContainer = useRef(null)
+  mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
+  const map = useRef(null);
+  const mapContainer = useRef(null);
 
-    let objectManager, saveManager, inputManager, dayManager = new DayManager();
-    updateReviewsRef.current = dayManager.updateReviews
-    getCurNodeRef.current = dayManager.getCurNode
-    passReviewsToDayManagerRef.current = dayManager.setReviews
-    removeDayNodeRef.current = dayManager.removeDayNode
-    changeDayNodeIndexRef.current = dayManager.changeDayNodeIndex
+  let objectManager,
+    saveManager,
+    inputManager,
+    dayManager = new DayManager();
+  updateReviewsRef.current = dayManager.updateReviews;
+  getCurNodeRef.current = dayManager.getCurNode;
+  passReviewsToDayManagerRef.current = dayManager.setReviews;
+  removeDayNodeRef.current = dayManager.removeDayNode;
+  changeDayNodeIndexRef.current = dayManager.changeDayNodeIndex;
 
-    dayManager.setStateSetter(setDayModuleList, setNextDayMenuId, setCurrentDay, setDayMenuOpenList, setDayCheckedList, setReviews, setTotalReview)
+  dayManager.setStateSetter(
+    setDayModuleList,
+    setNextDayMenuId,
+    setCurrentDay,
+    setDayMenuOpenList,
+    setDayCheckedList,
+    setReviews,
+    setTotalReview
+  );
 
-    dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
-    // console.log(tripData);
+  dayManager.updateFromFrontData(
+    dayModuleList,
+    dayCheckedList,
+    currentDay,
+    nextDayMenuId,
+    tripData
+  );
+  // console.log(tripData);
 
+  useEffect(() => {
+    dayManager.updateFromFrontData(
+      dayModuleList,
+      dayCheckedList,
+      currentDay,
+      nextDayMenuId,
+      tripData
+    );
+    dayManager.printStateData();
+    console.log(dayModuleList);
+  }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData]);
 
-    useEffect(() => {
-        dayManager.updateFromFrontData(dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
-        dayManager.printStateData()
-        console.log(dayModuleList) 
-    }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData])
+  const plusDayInitial = useRef(false);
+  useEffect(() => {
+    if (!plusDayInitial.current) {
+      plusDayInitial.current = true;
+      console.log('initial');
+      return;
+    }
+    // dayReady.current = false
+    dayManager.plusDay().then(() => {
+      setReviews([...reviews, '리뷰를 작성해주세요...']);
+      // dayReady.current = true
+    });
+  }, [onPlusDay]);
 
-    const plusDayInitial = useRef(false)
-    useEffect(() => {
-        if(!plusDayInitial.current) {
-            plusDayInitial.current = true
-            console.log("initial")
-            return;
-        }
-        // dayReady.current = false
-        dayManager.plusDay().then(() => {
-            setReviews(
-                [
-                    ...reviews,
-                    "리뷰를 작성해주세요..."
-                ]
-            )
-            // dayReady.current = true
-        })
-    }, [onPlusDay])
+  useEffect(() => {
+    // if(dayReady.current) {
+    dayCheckedList.map((dayChecked, i) => {
+      if (dayChecked) dayManager.visibleDay(i);
+      else dayManager.invisibleDay(i);
+    });
+    // }
+  }, [dayCheckedList]);
 
-    useEffect(() => {
-        // if(dayReady.current) {
-            dayCheckedList.map((dayChecked, i) => {
-                if(dayChecked) dayManager.visibleDay(i)
-                else dayManager.invisibleDay(i)
-            })
-        // }
-    }, [dayCheckedList])
+  const updateReviews = () => {
+    if (updateReviewsRef.current) {
+      updateReviewsRef.current(reviews);
+    }
+  };
 
+  const updateReviewsInitial = useRef(false);
 
-    const updateReviews = () => {
-        if (updateReviewsRef.current) {
-            updateReviewsRef.current(reviews)
-        }
+  useEffect(() => {
+    if (!updateReviewsInitial.current) {
+      console.log('initial');
+      updateReviewsInitial.current = true;
+      return;
     }
 
-    const updateReviewsInitial = useRef(false)
+    updateReviews();
+  }, [reviews]);
 
-    useEffect(() => {
-        
-        if(!updateReviewsInitial.current) {
-            console.log("initial")
-            updateReviewsInitial.current = true
-            return;
-        }
+  useEffect(() => {
+    // dayManager.dataPropagationTest()
+    if (map.current) return;
+    map.current = new mapboxgl.Map({
+      style: 'mapbox://styles/mapbox/light-v11',
+      center: [tripData.startX, tripData.startY],
+      zoom: 19.5,
+      pitch: 45,
+      bearing: -17.6,
+      container: mapContainer.current,
+      antialias: true,
+    });
+    // map.current.dragRotate.disable()
+    // map.current.touchZoomRotate.disableRotation()
+    map.current.addControl(
+      new MapboxLanguage({
+        defaultLanguage: 'ko',
+      })
+    );
 
-        updateReviews()
-    }, [reviews])
-    
-    useEffect(() => {
-        // dayManager.dataPropagationTest()
-        if (map.current) return;
-        map.current = new mapboxgl.Map({
-            style: 'mapbox://styles/mapbox/light-v11',
-            center: [tripData.startX, tripData.startY],
-            zoom: 19.5,
-            pitch: 45,
-            bearing: -17.6,
-            container: mapContainer.current,
-            antialias: true
+    // let mglCameraPosition = new mapboxgl.MercatorCoordinate(0, 0, 0)
+
+    // let req
+
+    // function handleResize() {
+    //     camera.aspect = window.innerWidth / window.innerHeight;
+    //     camera.updateProjectionMatrix();
+
+    //     renderer.setSize(window.innerWidth, window.innerHeight);
+    //     renderer.render(scene, camera);
+    // }
+
+    const setMglCameraPosition = (x, y, z) => {
+      const mglcamera = map.current.getFreeCameraOptions();
+      mglcamera.position.x = x;
+      mglcamera.position.y = y;
+      mglcamera.position.z = z;
+      map.current.setFreeCameraOptions(mglcamera);
+    };
+
+    // const anim = () => {
+    //     renderer.render(scene, camera);
+
+    //     req = requestAnimationFrame(anim);
+    // }
+
+    const modelOrigin = [tripData.startX, tripData.startY];
+    const modelAltitude = 0;
+    const modelRotate = [Math.PI / 2, 0, 0];
+
+    const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
+      modelOrigin,
+      modelAltitude
+    );
+
+    const modelTransform = {
+      translateX: modelAsMercatorCoordinate.x,
+      translateY: modelAsMercatorCoordinate.y,
+      translateZ: modelAsMercatorCoordinate.z,
+      rotateX: modelRotate[0],
+      rotateY: modelRotate[1],
+      rotateZ: modelRotate[2],
+      scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits(),
+    };
+
+    let mapCustomLayer;
+
+    const customLayer = {
+      id: '3d-model',
+      type: 'custom',
+      renderingMode: '3d',
+      onAdd: function (map, gl) {
+        // async function init() {
+        this.scene = new THREE.Scene();
+
+        this.renderer = new THREE.WebGLRenderer({
+          canvas: map.getCanvas(),
+          context: gl,
+          antialias: true,
+          // alpha: true,
         });
-        // map.current.dragRotate.disable()
-        // map.current.touchZoomRotate.disableRotation()
-        map.current.addControl(new MapboxLanguage({
-            defaultLanguage: 'ko'
-        }));
+        // this.renderer.setClearColor(0x80ffff, 1);
 
+        this.camera = new THREE.Camera();
+        // camera.rotation.y = Math.PI / 4;
+        // camera.position.set(-35, 45, 45);
+        // camera.lookAt(0, 0, 0);
 
-        // let mglCameraPosition = new mapboxgl.MercatorCoordinate(0, 0, 0)
+        objectManager = new ObjectManager(this.scene, this.camera, tripData, startnodeData);
+        objectManager.newMap().then(() => {
+          newMapFunctionRef.current = objectManager.newMap;
+          loadSearchOptionsRef.current = objectManager.loadSearchOptions;
+          onObjManagerNodeSearchSelectRef.current = objectManager.onNodeSearchSelect;
 
-        // let req
+          saveManager = new SaveManager(tripData);
+          saveManager.setObjectManager(objectManager);
+          dayManager.setSaveManager(saveManager);
+          saveReviewsInSaveManager.current = saveManager.saveReviews;
+          generateDiaryRef.current = saveManager.generateDiary;
 
-        // function handleResize() {
-        //     camera.aspect = window.innerWidth / window.innerHeight;
-        //     camera.updateProjectionMatrix();
+          saveManager.checkIsFirst().then(() => {
+            inputManager = new InputManager(
+              this.camera,
+              map,
+              setMglCameraPosition,
+              this.scene,
+              nodeMenuOn,
+              setNodeMenuOn,
+              setNodeMenuPosition,
+              selectOptionData,
+              setSelectOptionData
+            );
+            addNodeFunctionRef.current = selectOption;
+            plusSearchNodeRef.current = inputManager.plusSearchNode;
+          });
+        });
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
 
-        //     renderer.setSize(window.innerWidth, window.innerHeight);
-        //     renderer.render(scene, camera);
+        // let _cameraPosition = map.getFreeCameraOptions().position;
+        // cameraPosition.set(_cameraPosition.x, _cameraPosition.y, _cameraPosition.z)
+        // if (inputManager) inputManager.setCameraPosition(cameraPosition)
         // }
-
-        const setMglCameraPosition = (x, y, z) => {
-            const mglcamera = map.current.getFreeCameraOptions()
-            mglcamera.position.x = x
-            mglcamera.position.y = y
-            mglcamera.position.z = z
-            map.current.setFreeCameraOptions(mglcamera)
-        }
-
-        // const anim = () => {
-        //     renderer.render(scene, camera);
-
-        //     req = requestAnimationFrame(anim);
-        // }
-
-        const modelOrigin = [tripData.startX, tripData.startY];
-        const modelAltitude = 0;
-        const modelRotate = [Math.PI / 2, 0, 0];
-
-        const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
-            modelOrigin,
-            modelAltitude
+        // init()
+        this.renderer.autoClear = false;
+        this.map = map;
+      },
+      render: function (gl, matrix) {
+        const rotationX = new THREE.Matrix4().makeRotationAxis(
+          new THREE.Vector3(1, 0, 0),
+          modelTransform.rotateX
+        );
+        const rotationY = new THREE.Matrix4().makeRotationAxis(
+          new THREE.Vector3(0, 1, 0),
+          modelTransform.rotateY
+        );
+        const rotationZ = new THREE.Matrix4().makeRotationAxis(
+          new THREE.Vector3(0, 0, 1),
+          modelTransform.rotateZ
         );
 
-        const modelTransform = {
-            translateX: modelAsMercatorCoordinate.x,
-            translateY: modelAsMercatorCoordinate.y,
-            translateZ: modelAsMercatorCoordinate.z,
-            rotateX: modelRotate[0],
-            rotateY: modelRotate[1],
-            rotateZ: modelRotate[2],
-            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits()
-        };
+        const m = new THREE.Matrix4().fromArray(matrix);
+        const l = new THREE.Matrix4()
+          .makeTranslation(
+            modelTransform.translateX,
+            modelTransform.translateY,
+            modelTransform.translateZ
+          )
+          .scale(
+            new THREE.Vector3(modelTransform.scale, -modelTransform.scale, modelTransform.scale)
+          )
+          .multiply(rotationX)
+          .multiply(rotationY)
+          .multiply(rotationZ);
 
-        let mapCustomLayer
+        this.camera.projectionMatrix = m.multiply(l);
+        this.renderer.resetState();
+        this.renderer.render(this.scene, this.camera);
 
-        const customLayer = {
-            id: '3d-model',
-            type: 'custom',
-            renderingMode: '3d',
-            onAdd: function (map, gl) {
-                // async function init() {
-                this.scene = new THREE.Scene();
+        // let _cameraPosition = map.current.getFreeCameraOptions().position;
+        // MglCameraPosition.set(_cameraPosition.x, _cameraPosition.y, _cameraPosition.z)
+        const freeCamera = this.map.getFreeCameraOptions();
+        let newMglCameraPosition = new THREE.Vector4(
+          freeCamera.position.x,
+          freeCamera.position.y,
+          freeCamera.position.z,
+          1
+        );
+        if (inputManager)
+          inputManager.setMglCameraPosition(
+            new mapboxgl.MercatorCoordinate(
+              newMglCameraPosition.x,
+              newMglCameraPosition.y,
+              newMglCameraPosition.z
+            )
+          );
+        // console.log(camera.position)
+        // console.log(newMglCameraPosition)
+        newMglCameraPosition.applyMatrix4(l.invert());
+        if (inputManager)
+          inputManager.setMglCameraPositionTransformed(
+            new mapboxgl.MercatorCoordinate(
+              newMglCameraPosition.x,
+              newMglCameraPosition.y,
+              newMglCameraPosition.z
+            )
+          );
+        this.map.triggerRepaint();
+        // window.addEventListener("resize", handleResize);
 
-                this.renderer = new THREE.WebGLRenderer({
-                    canvas: map.getCanvas(),
-                    context: gl,
-                    antialias: true,
-                    // alpha: true,
-                });
-                // this.renderer.setClearColor(0x80ffff, 1);
+        // anim();
+      },
+    };
 
-                this.camera = new THREE.Camera()
-                // camera.rotation.y = Math.PI / 4;
-                // camera.position.set(-35, 45, 45);
-                // camera.lookAt(0, 0, 0);
+    map.current.on('style.load', () => {
+      // Insert the layer beneath any symbol layer.
+      const layers = map.current.getStyle().layers;
+      const labelLayerId = layers.find(
+        (layer) => layer.type === 'symbol' && layer.layout['text-field']
+      ).id;
 
-                objectManager = new ObjectManager(this.scene, this.camera, tripData, startnodeData);
-                objectManager.newMap().then(() => {
-                newMapFunctionRef.current = objectManager.newMap;
-                loadSearchOptionsRef.current = objectManager.loadSearchOptions
-                onObjManagerNodeSearchSelectRef.current = objectManager.onNodeSearchSelect
+      // The 'building' layer in the Mapbox Streets
+      // vector tileset contains building height data
+      // from OpenStreetMap.
+      map.current.addLayer(
+        {
+          id: 'add-3d-buildings',
+          source: 'composite',
+          'source-layer': 'building',
+          filter: ['==', 'extrude', 'true'],
+          type: 'fill-extrusion',
+          minzoom: 15,
+          paint: {
+            'fill-extrusion-color': '#aaa',
 
-                saveManager = new SaveManager(tripData);
-                saveManager.setObjectManager(objectManager);
-                dayManager.setSaveManager(saveManager);
-                saveReviewsInSaveManager.current = saveManager.saveReviews
-                generateDiaryRef.current = saveManager.generateDiary
+            // Use an 'interpolate' expression to
+            // add a smooth transition effect to
+            // the buildings as the user zooms in.
+            'fill-extrusion-height': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              15,
+              0,
+              15.05,
+              ['get', 'height'],
+            ],
+            'fill-extrusion-base': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              15,
+              0,
+              15.05,
+              ['get', 'min_height'],
+            ],
+            'fill-extrusion-opacity': 0.6,
+          },
+        },
+        labelLayerId
+      );
+    });
+    map.current.on('load', () => {
+      map.current.addLayer(customLayer);
+    });
 
-                
-                saveManager.checkIsFirst().then(() => {
-                    inputManager = new InputManager(this.camera, map, setMglCameraPosition, this.scene, nodeMenuOn, setNodeMenuOn, setNodeMenuPosition, selectOptionData, setSelectOptionData)
-                    addNodeFunctionRef.current = selectOption
-                    plusSearchNodeRef.current = inputManager.plusSearchNode
-                });
-            })
-                this.renderer.setSize(window.innerWidth, window.innerHeight);
+    // dayManager = new DayManager()
+    // setStateDataRef.current = dayManager.setStateData
 
-                // let _cameraPosition = map.getFreeCameraOptions().position;
-                // cameraPosition.set(_cameraPosition.x, _cameraPosition.y, _cameraPosition.z)
-                // if (inputManager) inputManager.setCameraPosition(cameraPosition)
-                // }
-                // init()
-                this.renderer.autoClear = false
-                this.map = map
-            },
-            render: function (gl, matrix) {
-                const rotationX = new THREE.Matrix4().makeRotationAxis(
-                    new THREE.Vector3(1, 0, 0),
-                    modelTransform.rotateX
-                );
-                const rotationY = new THREE.Matrix4().makeRotationAxis(
-                    new THREE.Vector3(0, 1, 0),
-                    modelTransform.rotateY
-                );
-                const rotationZ = new THREE.Matrix4().makeRotationAxis(
-                    new THREE.Vector3(0, 0, 1),
-                    modelTransform.rotateZ
-                );
+    return () => {
+      // cancelAnimationFrame(req)
+      // window.removeEventListener("resize", handleResize)
+      inputManager?.cleanup();
+      map.current.remove();
+    };
+  }, []);
 
-                const m = new THREE.Matrix4().fromArray(matrix);
-                const l = new THREE.Matrix4()
-                    .makeTranslation(
-                        modelTransform.translateX,
-                        modelTransform.translateY,
-                        modelTransform.translateZ
-                    )
-                    .scale(
-                        new THREE.Vector3(
-                            modelTransform.scale,
-                            -modelTransform.scale,
-                            modelTransform.scale
-                        )
-                    )
-                    .multiply(rotationX)
-                    .multiply(rotationY)
-                    .multiply(rotationZ);
+  const onResetButtonClick = () => {
+    if (newMapFunctionRef.current) {
+      newMapFunctionRef.current('spongebob');
+    }
+  };
 
-                this.camera.projectionMatrix = m.multiply(l);
-                this.renderer.resetState();
-                this.renderer.render(this.scene, this.camera);
+  const onAddNodeButtonClick = () => {
+    if (addNodeFunctionRef.current) {
+      addNodeFunctionRef.current(selectOptionData);
+    }
+  };
 
-                // let _cameraPosition = map.current.getFreeCameraOptions().position;
-                // MglCameraPosition.set(_cameraPosition.x, _cameraPosition.y, _cameraPosition.z)
-                const freeCamera = this.map.getFreeCameraOptions();
-                let newMglCameraPosition = new THREE.Vector4(freeCamera.position.x, freeCamera.position.y, freeCamera.position.z, 1);
-                if (inputManager) inputManager.setMglCameraPosition(new mapboxgl.MercatorCoordinate(newMglCameraPosition.x, newMglCameraPosition.y, newMglCameraPosition.z))
-                // console.log(camera.position)
-                // console.log(newMglCameraPosition)
-                newMglCameraPosition.applyMatrix4(l.invert());
-                if (inputManager) inputManager.setMglCameraPositionTransformed(new mapboxgl.MercatorCoordinate(newMglCameraPosition.x, newMglCameraPosition.y, newMglCameraPosition.z))
-                this.map.triggerRepaint()
-                // window.addEventListener("resize", handleResize);
+  const onPlusSearchNodeClick = (selectedNode) => {
+    if (plusSearchNodeRef.current) {
+      plusSearchNodeRef.current(selectedNode);
+    }
+  };
 
-                // anim();
-            },
-        }
+  const loadSearchOptions = (nodeInfoList) => {
+    if (loadSearchOptionsRef.current) {
+      loadSearchOptionsRef.current(nodeInfoList);
+    }
+  };
 
-        map.current.on('style.load', () => {
-            // Insert the layer beneath any symbol layer.
-            const layers = map.current.getStyle().layers;
-            const labelLayerId = layers.find(
-                (layer) => layer.type === 'symbol' && layer.layout['text-field']
-            ).id;
+  const onNodeSearchSelect = (nodeData, i) => {
+    setNodeSearchSelected(true);
+    setSelectedData(nodeData);
+    if (onObjManagerNodeSearchSelectRef.current) {
+      onObjManagerNodeSearchSelectRef.current(i);
+    }
+  };
 
-            // The 'building' layer in the Mapbox Streets
-            // vector tileset contains building height data
-            // from OpenStreetMap.
-            map.current.addLayer(
-                {
-                    'id': 'add-3d-buildings',
-                    'source': 'composite',
-                    'source-layer': 'building',
-                    'filter': ['==', 'extrude', 'true'],
-                    'type': 'fill-extrusion',
-                    'minzoom': 15,
-                    'paint': {
-                        'fill-extrusion-color': '#aaa',
+  let source;
+  const onNodeSearch = (e) => {
+    // setSearchValue(e.target.value)
+    setNodeSearchSelected(false);
+    // console.log(e.target.value)
 
-                        // Use an 'interpolate' expression to
-                        // add a smooth transition effect to
-                        // the buildings as the user zooms in.
-                        'fill-extrusion-height': [
-                            'interpolate',
-                            ['linear'],
-                            ['zoom'],
-                            15,
-                            0,
-                            15.05,
-                            ['get', 'height']
-                        ],
-                        'fill-extrusion-base': [
-                            'interpolate',
-                            ['linear'],
-                            ['zoom'],
-                            15,
-                            0,
-                            15.05,
-                            ['get', 'min_height']
-                        ],
-                        'fill-extrusion-opacity': 0.6
-                    }
-                },
-                labelLayerId
-            );
-        })
-        map.current.on('load', () => {
-            map.current.addLayer(customLayer)
-        })
+    const searchValueReplaced = searchValue.replace(/ /g, '%20');
+    // console.log("search: " + searchValueReplaced)
 
-        // dayManager = new DayManager()
-        // setStateDataRef.current = dayManager.setStateData
+    // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
 
+    setSearchResultDataLoading(true);
 
+    if (!dayManager) return;
 
-        return (() => {
-            // cancelAnimationFrame(req)
-            // window.removeEventListener("resize", handleResize)
-            inputManager?.cleanup()
-            map.current.remove()
-        })
-    }, [])
-
-    const onResetButtonClick = () => {
-        if (newMapFunctionRef.current) {
-            newMapFunctionRef.current("spongebob");
-        }
+    if (source) {
+      source.cancel();
     }
 
-    const onAddNodeButtonClick = () => {
-        if (addNodeFunctionRef.current) {
-            addNodeFunctionRef.current(selectOptionData);
-        }
-    }
+    source = axios.CancelToken.source();
 
-    const onPlusSearchNodeClick = (selectedNode) => {
-        if (plusSearchNodeRef.current) {
-            plusSearchNodeRef.current(selectedNode);
-        }
-    }
+    client
+      .get(
+        'api/kakaoOpenApi/keywordAndCoord/list?mapId=' +
+          tripData.mapId +
+          '&userKeyword=' +
+          searchValue +
+          '&mapX=' +
+          dayManager.getCurNode().userData.mapX +
+          '&mapY=' +
+          dayManager.getCurNode().userData.mapY,
+        { cancelToken: source.token }
+      )
+      .then((res) => {
+        setSearchResultDataLoading(false);
+        setSearchResultData(res.data);
+        // console.log(res.data)
 
-    const loadSearchOptions = (nodeInfoList) => {
-        if (loadSearchOptionsRef.current) {
-            loadSearchOptionsRef.current(nodeInfoList)
-        }
-    }
-    
-    const onNodeSearchSelect = (nodeData, i) => {
-        setNodeSearchSelected(true)
-        setSelectedData(nodeData)
-        if(onObjManagerNodeSearchSelectRef.current) {
-            onObjManagerNodeSearchSelectRef.current(i)
-        }
-    }
+        loadSearchOptions(res.data);
+      });
+  };
 
-    let source
-    const onNodeSearch = ((e) => {
-
-
-        
-        // setSearchValue(e.target.value)
-        setNodeSearchSelected(false)
-        // console.log(e.target.value)
-
-        const searchValueReplaced = searchValue.replace(/ /g, "%20")
-        // console.log("search: " + searchValueReplaced)
-
-        // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
-
-        setSearchResultDataLoading(true)
-
-        if(!dayManager) return
-
-        if (source) {
-            source.cancel()
-        }
-
-        source = axios.CancelToken.source()
-
-        client.get("api/kakaoOpenApi/keywordAndCoord/list?mapId=" + tripData.mapId
-        + "&userKeyword=" + searchValue
-        + "&mapX="+ dayManager.getCurNode().userData.mapX
-        + "&mapY=" + dayManager.getCurNode().userData.mapY,
-         { cancelToken: source.token })
-            .then((res) => {
-                setSearchResultDataLoading(false)
-                setSearchResultData(res.data)
-                // console.log(res.data)
-                
-                loadSearchOptions(res.data)
-            })
-    })
-
-    return (<>
-        <CanvasContext.Provider value={[canvasState, setCanvasState]}>
-            {/* <Map /> */}
-            <div style={{
-                position: "fixed",
-                top: "0",
-                left: leftBarOpen ? "0" : "-260px",
-                zIndex: "2",
-                transition: "left 0.3s"
-            }}>
-                <Box
-                    display="flex"
-                    alignItems="flex-start"
-                >
-                <Box
-                    mt={4}
-                    p={4}
-                    w="240px"
-                    bgColor="#ffffff"
-                    // borderWidth={1}
-                    borderRadius={4}
-                    // borderColor="gray.300"
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="flex-start"
-                    marginLeft="1.6em"
-                    boxShadow="2xl"
-                >
-                    <IconButton
-                        icon={<IoHome />}
-                        w="100%"
-                        colorScheme="gray"
-                        onClick={() => navigate("/")}
-                    />
-                    {!isReadonly && <Box
-                        maxW="100%"
-                        mt={4}
-                    >
-                        <Box
-                            display="flex"
-                            mb={2}
-                        >
-                            <Input
-                                w="100%"
-                                type="text"
-                                placeholder="노드 이름"
-                                value={searchValue}
-                                onChange={(e) => { setSearchValue(e.target.value) }}
-                                mr={1}
-                            />
-                            <IconButton
-                                icon={<IoSearch />}
-                                colorScheme="teal"
-                                onClick={onNodeSearch}
-                            >
-                                노드 검색
-                            </IconButton>
-                        </Box>
-                        <Box
-                            w="100%"
-                            textAlign="end"
-                            mb={2}
-                        >
-                        </Box>
-                        <Box display="flex" justifyContent="center" mb={4}>
-                            <Box w="100%" maxW="500px" display="flex" flexDirection="column">
-                                {/* <Box fontSize="1.4em" mb={2}>노드 선택</Box> */}
-                                {/* {nodeSearchSelected && <Box>{selectedData.contentid}</Box>} */}
-                                {/* {searchValue.length == 0 && <Box>노드 이름을 입력해주세요!</Box>} */}
-                                <Box
-                                    h={260}
-                                    border="2px"
-                                    borderRadius={4}
-                                    borderColor="gray.400"
-                                    overflowY="scroll"
-                                    className="custom-scrollbar"
-                                >
-                                    {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
-                                    {!searchResultDataLoading && searchResultData.map((result, idx) => (
-                                        <Button
-                                            key={result.contentid}
-                                            border="0px"
-                                            borderBottom="1px"
-                                            borderColor="gray.300"
-                                            borderRadius="0px"
-                                            bgColor={nodeSearchSelected && selectedData.contentid == result.contentid ? "blue.600" : "white"}
-                                            color={nodeSearchSelected && selectedData.contentid == result.contentid ? "white" : "black"}
-                                            _hover={{}}
-                                            h="40px"
-                                            onClick={(e) => onNodeSearchSelect(result, idx)}
-                                        >
-                                            {/* {result.contentid} */}
-                                            <Box fontWeight="semibold" mr={2}>{result.title}</Box>
-                                            <Box fontWeight="medium">{result.addr1}</Box>
-                                            {/* x: {result.mapx}, y: {result.mapy} */}
-                                        </Button>
-                                    ))}
-                                </Box>
-                            </Box>
-                        </Box>
-                        <IconButton
-                            w="100%"
-                            icon={<IoAdd />}
-                            colorScheme="teal"
-                            onClick={() => {
-                                if(nodeSearchSelected) onPlusSearchNodeClick(selectedData)
-                            }}
-                        />
-                    </Box>}
-                </Box>
-                        <IconButton
-                            h="60px"
-                            mt={8}
-                            colorScheme="teal"
-                            onClick={() => setLeftBarOpen(!leftBarOpen)}
-                            icon={leftBarOpen ?  <IoChevronBack /> : <IoChevronForward />}
-                        />
-                </Box>
-            </div>
-
-            <div style={{
-                position: "fixed",
-                top: "0",
-                right: rightBarOpen ? "0px" : "-260px",
-                zIndex: "2",
-                display: "flex",
-                alignItems: "flex-start",
-                marginRight: "1.6em",
-                transition: "right 0.3s"
-            }}>
-                <Box
-                    display="flex"
-                    flexDirection="column"
-                    mt={8}
-                >
-                    <IconButton
-                        h="60px"
-                        mb={6}
-                        colorScheme="teal"
-                        onClick={() => setRightBarOpen(!rightBarOpen)}
-                        icon={rightBarOpen ? <IoChevronForward /> : <IoChevronBack />}
-                    />
-                    <IconButton
-                        mb={2}
-                        colorScheme="pink"
-                        onClick={() => setRightBarPage(0)}
-                        icon={<IoPencil />}
-                    />
-                    <IconButton
-                        colorScheme="blue"
-                        onClick={() => setRightBarPage(1)}
-                        icon={<IoBook />}
-                    />
-                </Box>
-                <Box
-                    mt={4}
-                    p={4}
-                    w="240px"
-                    minH="300px"
-                    maxH="92vh"
-                    overflowY="scroll"
-                    bgColor="#ffffff"
-                    // border={1}
-                    borderRadius={4}
-                    // borderColor="gray"
-                    textAlign="left"
-                    boxShadow="2xl"
-                    className="custom-scrollbar"
-                >
-                    { rightBarPage == 0 &&<>
-                    <Box
-                        display="flex"
-                        mb={4}
-                    >
-                        <Box
-                            w="100%"
-                            mr={2}
-                            display="flex"
-                            alignItems="center"
-                        >
-                            
-                            {/* <Box w="160px" fontWeight="semibold">편집할 Day</Box> */}
-                            <Select value={currentDay} onChange={(e) => {
-                                setCurrentDay(e.target.value)
-                                // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
-                                // dayManager.printStateData()
-                            }}>
-                                {dayModuleList.map((dayModule) => (
-                                    <option key={"option" + dayModule.id} value={dayModule.id} > Day {dayModule.id}</option>
-                                ))}
-                            </Select>
-                        </Box>
-
-                        {!isReadonly && <IconButton
-                            icon={<IoAdd />}
-                            colorScheme="teal"
-                            onClick={(e) => {
-                                let curNode
-                                if(getCurNodeRef.current) {
-                                    curNode = getCurNodeRef.current()
-                                    console.log(curNode)
-                                }
-                                setDayCheckedList(
-                                    [
-                                        ...dayCheckedList,
-                                        true
-                                    ]
-                                )
-                                setDayMenuOpenList(
-                                    [
-                                        ...dayMenuOpenList,
-                                        true
-                                    ]
-                                )
-                                setDayModuleList(
-                                    [
-                                        ...dayModuleList,
-                                        { id: nextDayMenuId, data: [curNode.userData]}
-                                    ]
-                                )
-                                setCurrentDay(nextDayMenuId)        
-                                setOnPlusDay(nextDayMenuId)
-                                // dayManager.plusDay() // 이렇게 하면 plusDay 내에서 이전 currentDay 값 참조하게 됨
-                                setNextDayMenuId(nextDayMenuId + 1)
-                            }}
-                        />}
-                    </Box>
-                    <Box mb={6} pt={2} pb={4}>
-                        <Box
-                            display="flex"
-                            justifyContent="space-between"
-                            mb={2}
-                        >
-                            <Box fontSize="2xl">Day {currentDay}</Box>
-                            <Checkbox defaultChecked isChecked={dayCheckedList[currentDay - 1]} onChange={(e) => {
-                                const nextDayCheckedList = dayCheckedList.map((dayChecked, i) => {
-                                    if (i + 1 == currentDay) {
-                                        return !dayChecked
-                                    } else {
-                                        return dayChecked
-                                    }
-                                })
-                                setDayCheckedList(nextDayCheckedList)
-                                // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
-                                // dayManager.printStateData()
-                            }}></Checkbox>
-                        </Box>
-                        <Box
-                            border="2px"
-                            borderRadius={4}
-                            borderColor="gray.300"
-                            p={2}
-                        >
-                            <Box
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="space-between"
-                            >
-                                <Box fontWeight="semibold">Day 정보</Box>
-                                <IconButton
-                                    variant="ghost"
-                                    colorScheme="blackAlpha"
-                                    size="sm"
-                                    icon={dayMenuOpenList[currentDay - 1] ? <IoRemove /> : <IoChevronDown />}
-                                    onClick={(e) => {
-                                        const nextDayMenuOpenList = dayMenuOpenList.map((menuOpen, i) => {
-                                            if (i + 1 == currentDay) {
-                                                return !menuOpen
-                                            }
-                                            else {
-                                                return menuOpen
-                                            }
-                                        })
-                                        setDayMenuOpenList(nextDayMenuOpenList)
-                                        // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
-                                        // dayManager.printStateData()
-                                    }}
-                                />
-                            </Box>
-                            <Box
-                                textAlign="left"
-                                visibility={dayMenuOpenList[currentDay - 1] ? "visible" : "hidden"}
-                                opacity={dayMenuOpenList[currentDay - 1] ? "1" : "0"}
-                                maxH={dayMenuOpenList[currentDay - 1] ? "100vh" : "0vh"}
-                                mt={dayMenuOpenList[currentDay - 1] ? 1 : 0}
-                                overflowX="auto"
-                                transition="all 0.3s ease-in-out"
-                            >
-                                {dayModuleList[currentDay-1].data.map((node, i) => {
-                                    const _key = "day "+currentDay + ": node " + i
-                                    return(<Box key={_key}>
-                                        <Box
-                                            display="flex" 
-                                            h={10}
-                                            lineHeight={8}
-                                        >
-                                            {!isReadonly && <Box
-                                                display="flex"
-                                                flexDirection="column"
-                                            >
-                                                <Button w="10px" onClick={() => {if(changeDayNodeIndexRef.current) changeDayNodeIndexRef.current(i+1, true)}}>u</Button>
-                                                <Button w="10px" onClick={() => {if(changeDayNodeIndexRef.current) changeDayNodeIndexRef.current(i+1, false)}}>d</Button>
-                                            </Box>}
-                                            <Box
-                                                fontWeight="semibold"
-                                                overflow="hidden"
-                                                onClick={() => {
-                                                    setNodeInfoData({day: currentDay, idx: i, node})
-                                                    onNodeInfoOpen()}
-                                                }
-                                                _hover={{
-                                                    bgColor:"#00ff0033",
-                                                    transition:"all .3s"
-                                                }}
-                                            >
-                                            {i+1}. {node.title}
-                                            </Box>
-                                        </Box>
-                                        
-                                    </Box>)
-                                })}
-                            </Box>
-                        </Box>
-                        <Box mt={4}>
-                            <Box
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="space-between"
-                            >
-                                <Box fontWeight="semibold">리뷰</Box>
-                                <IconButton
-                                    variant="ghost"
-                                    colorScheme="blackAlpha"
-                                    size="sm"
-                                    icon={reviewMenuOpen ? <IoRemove /> : <IoChevronDown />}
-                                    onClick={(e) => {
-                                        setReviewMenuOpen(!reviewMenuOpen)
-                                    }}
-                                />
-                            </Box>
-                            
-                            <Box
-                                textAlign="left"
-                                visibility={reviewMenuOpen ? "visible" : "hidden"}
-                                opacity={reviewMenuOpen ? "1" : "0"}
-                                maxH={reviewMenuOpen ? "100vh" : "0vh"}
-                                mt={reviewMenuOpen ? 1 : 0}
-                                overflowX="auto"
-                                transition="all 0.3s ease-in-out"
-                            >
-                                <Textarea placeholder="리뷰를 작성해주세요!" border="2px" borderColor="gray.400" mt={2} h="200px" value={reviews[currentDay-1]} boxShadow="md" onChange={(e) => {
-                                    const nextReviews = reviews.map((review, i) => {
-                                        if(i == currentDay-1) {
-                                            return e.target.value
-                                        }
-                                        else {
-                                            return review
-                                        }
-                                    })
-                                    setReviews(nextReviews)
-                                    console.log(nextReviews)
-                                }} />
-                            </Box>
-                        </Box>
-                    </Box>
-
-                    { nodeInfoData && nodeInfoData.node && <Modal isOpen={isNodeInfoOpen} onClose={onNodeInfoClose}>
-                        <ModalOverlay />
-                        <ModalContent>
-                            <ModalHeader>
-                                Day {nodeInfoData.day} - {nodeInfoData.idx+1}번째 노드
-                            </ModalHeader>
-                            <ModalCloseButton />
-                            <ModalBody>
-                                <Box fontSize="3xl" fontWeight="semibold">{nodeInfoData.node.title}</Box>
-                                {console.log(nodeInfoData.node)}
-                                <Box mb={6} fontSize="xl">{nodeInfoData.node.addr1}</Box>
-                                <Box mb={6} fontSize="xl">전화번호 : {nodeInfoData.node.tel}</Box>
-                                <Box mb={10} fontSize="xl">방문일 : {nodeInfoData.node.visitDate}</Box>
-                                <Button colorScheme="red" onClick={() => {
-                                    onNodeInfoClose()
-                                    if(removeDayNodeRef.current) removeDayNodeRef.current(nodeInfoData.day, nodeInfoData.idx+1)
-                                }}>
-                                    노드 제거
-                                </Button>
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button onClick={onNodeInfoClose} colorScheme="teal">닫기</Button>
-                            </ModalFooter>
-                        </ModalContent>
-                    </Modal>}
-                    
-                    {!isReadonly && <Button
-                        w="100%"
-                        colorScheme="teal"
-                        mb={2}
-                        onClick={() => {
-                        if(saveReviewsInSaveManager.current) {
-                            saveReviewsInSaveManager.current()
-                        }
-                    }}>
-                        리뷰 저장
-                    </Button>}
-                    </>}
-                    {rightBarPage == 1 &&<>
-                        {!isReadonly && <Box>
-                            <Button
-                                w="100%"
-                                mb={2}
-                                colorScheme="teal"
-                                onClick={() => {
-                                if(generateDiaryRef.current) {
-                                    generateDiaryRef.current().then((res) => {
-                                        console.log(res)
-                                        setTotalReview(res)
-                                    })
-                                }
-                            }}>
-                                일기 생성
-                            </Button>
-                            <Button
-                                w="100%"
-                                mb={4}
-                                colorScheme="teal"
-                                onClick={() => {}}
-                            >
-                                일기 저장
-                            </Button>
-                            </Box>
-                        }
-                        <Box fontSize="xl" fontWeight="semibold" mb={2}>일기</Box>
-                        <Textarea
-                            w="100%"
-                            border="2px"
-                            borderRadius={4}
-                            borderColor="gray.400"
-                            minH="200px"
-                            p={2}
-                            value={totalReview}
-                            onChange={(e) => setTotalReview(e.target.value)}
-                        />
-                    </>}
-                </Box>
-            </div >
-            <div
-                style={{
-                    visibility: nodeMenuOn ? "visible" : "hidden",
-                    position: "fixed",
-                    top: nodeMenuPosition.y,
-                    left: nodeMenuPosition.x,
-                    zIndex: nodeMenuOn ? 4 : -2,
-                    maxH: nodeMenuOn ? "100vh" : "0vh",
-                    opacity: nodeMenuOn ? "1" : "0",
-                    transition: "visibility .3s linear .3s, z-index .3s linear .3s, opacity .3s linear .3s, maxH .3s linear .3s"
-                }}
+  return (
+    <>
+      <CanvasContext.Provider value={[canvasState, setCanvasState]}>
+        {/* <Map /> */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '0',
+            left: leftBarOpen ? '0' : '-260px',
+            zIndex: '2',
+            transition: 'left 0.3s',
+          }}
+        >
+          <Box display="flex" alignItems="flex-start">
+            <Box
+              mt={4}
+              p={4}
+              w="240px"
+              bgColor="#ffffff"
+              // borderWidth={1}
+              borderRadius={4}
+              // borderColor="gray.300"
+              display="flex"
+              flexDirection="column"
+              alignItems="flex-start"
+              marginLeft="1.6em"
+              boxShadow="2xl"
             >
-                <Box
-                    bgColor="white"
-                    borderRadius="2px"
-                    w="200px"
-                    overflowY="hidden"
-                    boxShadow="2xl"
-                    textAlign="left"
-                    p={4}
-                    // transition="all .4s ease-in-out .3s"
-                >
-                    <Box fontWeight="bold">노드 정보</Box>
-                    {selectOptionData.select_option && <Box>
-                        {selectOptionData.select_option.userData.title}<br />
-                        {selectOptionData.select_option.userData.addr1}<br />
-                        {selectOptionData.select_option.userData.tel}<br />
+              <IconButton
+                icon={<IoHome />}
+                w="100%"
+                colorScheme="gray"
+                onClick={() => navigate('/')}
+              />
+              {!isReadonly && (
+                <Box maxW="100%" mt={4}>
+                  <Box display="flex" mb={2}>
+                    <Input
+                      w="100%"
+                      type="text"
+                      placeholder="노드 이름"
+                      value={searchValue}
+                      onChange={(e) => {
+                        setSearchValue(e.target.value);
+                      }}
+                      mr={1}
+                    />
+                    <IconButton icon={<IoSearch />} colorScheme="teal" onClick={onNodeSearch}>
+                      노드 검색
+                    </IconButton>
+                  </Box>
+                  <Box w="100%" textAlign="end" mb={2}></Box>
+                  <Box display="flex" justifyContent="center" mb={4}>
+                    <Box w="100%" maxW="500px" display="flex" flexDirection="column">
+                      {/* <Box fontSize="1.4em" mb={2}>노드 선택</Box> */}
+                      {/* {nodeSearchSelected && <Box>{selectedData.contentid}</Box>} */}
+                      {/* {searchValue.length == 0 && <Box>노드 이름을 입력해주세요!</Box>} */}
+                      <Box
+                        h={260}
+                        border="2px"
+                        borderRadius={4}
+                        borderColor="gray.400"
+                        overflowY="scroll"
+                        className="custom-scrollbar"
+                      >
+                        {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
+                        {!searchResultDataLoading &&
+                          searchResultData.map((result, idx) => (
+                            <Button
+                              key={result.contentid}
+                              border="0px"
+                              borderBottom="1px"
+                              borderColor="gray.300"
+                              borderRadius="0px"
+                              bgColor={
+                                nodeSearchSelected && selectedData.contentid == result.contentid
+                                  ? 'blue.600'
+                                  : 'white'
+                              }
+                              color={
+                                nodeSearchSelected && selectedData.contentid == result.contentid
+                                  ? 'white'
+                                  : 'black'
+                              }
+                              _hover={{}}
+                              h="40px"
+                              onClick={(e) => onNodeSearchSelect(result, idx)}
+                            >
+                              {/* {result.contentid} */}
+                              <Box fontWeight="semibold" mr={2}>
+                                {result.title}
+                              </Box>
+                              <Box fontWeight="medium">{result.addr1}</Box>
+                              {/* x: {result.mapx}, y: {result.mapy} */}
+                            </Button>
+                          ))}
+                      </Box>
                     </Box>
-                    }
-
-                    <Button
-                        onClick={onAddNodeButtonClick}
-                        colorScheme="teal"
-                        mt={2}
-                    >
-                        노드 추가
-                    </Button>
+                  </Box>
+                  <IconButton
+                    w="100%"
+                    icon={<IoAdd />}
+                    colorScheme="teal"
+                    onClick={() => {
+                      if (nodeSearchSelected) onPlusSearchNodeClick(selectedData);
+                    }}
+                  />
                 </Box>
-            </div>
+              )}
+            </Box>
+            <IconButton
+              h="60px"
+              mt={8}
+              colorScheme="teal"
+              onClick={() => setLeftBarOpen(!leftBarOpen)}
+              icon={leftBarOpen ? <IoChevronBack /> : <IoChevronForward />}
+            />
+          </Box>
+        </div>
 
-            <div ref={mapContainer} style={{ height: "100vh" }} />
-            
-        </CanvasContext.Provider>
-    </>)
-}
+        <div
+          style={{
+            position: 'fixed',
+            top: '0',
+            right: rightBarOpen ? '0px' : '-260px',
+            zIndex: '2',
+            display: 'flex',
+            alignItems: 'flex-start',
+            marginRight: '1.6em',
+            transition: 'right 0.3s',
+          }}
+        >
+          <Box display="flex" flexDirection="column" mt={8}>
+            <IconButton
+              h="60px"
+              mb={6}
+              colorScheme="teal"
+              onClick={() => setRightBarOpen(!rightBarOpen)}
+              icon={rightBarOpen ? <IoChevronForward /> : <IoChevronBack />}
+            />
+            <IconButton
+              mb={2}
+              colorScheme="pink"
+              onClick={() => setRightBarPage(0)}
+              icon={<IoPencil />}
+            />
+            <IconButton colorScheme="blue" onClick={() => setRightBarPage(1)} icon={<IoBook />} />
+          </Box>
+          <Box
+            mt={4}
+            p={4}
+            w="240px"
+            minH="300px"
+            maxH="92vh"
+            overflowY="scroll"
+            bgColor="#ffffff"
+            // border={1}
+            borderRadius={4}
+            // borderColor="gray"
+            textAlign="left"
+            boxShadow="2xl"
+            className="custom-scrollbar"
+          >
+            {rightBarPage == 0 && (
+              <>
+                <Box display="flex" mb={4}>
+                  <Box w="100%" mr={2} display="flex" alignItems="center">
+                    {/* <Box w="160px" fontWeight="semibold">편집할 Day</Box> */}
+                    <Select
+                      value={currentDay}
+                      onChange={(e) => {
+                        setCurrentDay(e.target.value);
+                        // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
+                        // dayManager.printStateData()
+                      }}
+                    >
+                      {dayModuleList.map((dayModule) => (
+                        <option key={'option' + dayModule.id} value={dayModule.id}>
+                          {' '}
+                          Day {dayModule.id}
+                        </option>
+                      ))}
+                    </Select>
+                  </Box>
 
-export default ReviewSpace
+                  {!isReadonly && (
+                    <IconButton
+                      icon={<IoAdd />}
+                      colorScheme="teal"
+                      onClick={(e) => {
+                        let curNode;
+                        if (getCurNodeRef.current) {
+                          curNode = getCurNodeRef.current();
+                          console.log(curNode);
+                        }
+                        setDayCheckedList([...dayCheckedList, true]);
+                        setDayMenuOpenList([...dayMenuOpenList, true]);
+                        setDayModuleList([
+                          ...dayModuleList,
+                          { id: nextDayMenuId, data: [curNode.userData] },
+                        ]);
+                        setCurrentDay(nextDayMenuId);
+                        setOnPlusDay(nextDayMenuId);
+                        // dayManager.plusDay() // 이렇게 하면 plusDay 내에서 이전 currentDay 값 참조하게 됨
+                        setNextDayMenuId(nextDayMenuId + 1);
+                      }}
+                    />
+                  )}
+                </Box>
+                <Box mb={6} pt={2} pb={4}>
+                  <Box display="flex" justifyContent="space-between" mb={2}>
+                    <Box fontSize="2xl">Day {currentDay}</Box>
+                    <Checkbox
+                      defaultChecked
+                      isChecked={dayCheckedList[currentDay - 1]}
+                      onChange={(e) => {
+                        const nextDayCheckedList = dayCheckedList.map((dayChecked, i) => {
+                          if (i + 1 == currentDay) {
+                            return !dayChecked;
+                          } else {
+                            return dayChecked;
+                          }
+                        });
+                        setDayCheckedList(nextDayCheckedList);
+                        // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
+                        // dayManager.printStateData()
+                      }}
+                    ></Checkbox>
+                  </Box>
+                  <Box border="2px" borderRadius={4} borderColor="gray.300" p={2}>
+                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                      <Box fontWeight="semibold">Day 정보</Box>
+                      <IconButton
+                        variant="ghost"
+                        colorScheme="blackAlpha"
+                        size="sm"
+                        icon={dayMenuOpenList[currentDay - 1] ? <IoRemove /> : <IoChevronDown />}
+                        onClick={(e) => {
+                          const nextDayMenuOpenList = dayMenuOpenList.map((menuOpen, i) => {
+                            if (i + 1 == currentDay) {
+                              return !menuOpen;
+                            } else {
+                              return menuOpen;
+                            }
+                          });
+                          setDayMenuOpenList(nextDayMenuOpenList);
+                          // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
+                          // dayManager.printStateData()
+                        }}
+                      />
+                    </Box>
+                    <Box
+                      textAlign="left"
+                      visibility={dayMenuOpenList[currentDay - 1] ? 'visible' : 'hidden'}
+                      opacity={dayMenuOpenList[currentDay - 1] ? '1' : '0'}
+                      maxH={dayMenuOpenList[currentDay - 1] ? '100vh' : '0vh'}
+                      mt={dayMenuOpenList[currentDay - 1] ? 1 : 0}
+                      overflowX="auto"
+                      transition="all 0.3s ease-in-out"
+                    >
+                      {dayModuleList[currentDay - 1].data.map((node, i) => {
+                        const _key = 'day ' + currentDay + ': node ' + i;
+                        return (
+                          <Box key={_key}>
+                            <Box display="flex" h={10} lineHeight={8}>
+                              {!isReadonly && (
+                                <Box display="flex" flexDirection="column">
+                                  <Button
+                                    w="10px"
+                                    onClick={() => {
+                                      if (changeDayNodeIndexRef.current)
+                                        changeDayNodeIndexRef.current(i + 1, true);
+                                    }}
+                                  >
+                                    u
+                                  </Button>
+                                  <Button
+                                    w="10px"
+                                    onClick={() => {
+                                      if (changeDayNodeIndexRef.current)
+                                        changeDayNodeIndexRef.current(i + 1, false);
+                                    }}
+                                  >
+                                    d
+                                  </Button>
+                                </Box>
+                              )}
+                              <Box
+                                fontWeight="semibold"
+                                overflow="hidden"
+                                onClick={() => {
+                                  setNodeInfoData({ day: currentDay, idx: i, node });
+                                  onNodeInfoOpen();
+                                }}
+                                _hover={{
+                                  bgColor: '#00ff0033',
+                                  transition: 'all .3s',
+                                }}
+                              >
+                                {i + 1}. {node.title}
+                              </Box>
+                            </Box>
+                          </Box>
+                        );
+                      })}
+                    </Box>
+                  </Box>
+                  <Box mt={4}>
+                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                      <Box fontWeight="semibold">리뷰</Box>
+                      <IconButton
+                        variant="ghost"
+                        colorScheme="blackAlpha"
+                        size="sm"
+                        icon={reviewMenuOpen ? <IoRemove /> : <IoChevronDown />}
+                        onClick={(e) => {
+                          setReviewMenuOpen(!reviewMenuOpen);
+                        }}
+                      />
+                    </Box>
+
+                    <Box
+                      textAlign="left"
+                      visibility={reviewMenuOpen ? 'visible' : 'hidden'}
+                      opacity={reviewMenuOpen ? '1' : '0'}
+                      maxH={reviewMenuOpen ? '100vh' : '0vh'}
+                      mt={reviewMenuOpen ? 1 : 0}
+                      overflowX="auto"
+                      transition="all 0.3s ease-in-out"
+                    >
+                      <Textarea
+                        placeholder="리뷰를 작성해주세요!"
+                        border="2px"
+                        borderColor="gray.400"
+                        mt={2}
+                        h="200px"
+                        value={reviews[currentDay - 1]}
+                        boxShadow="md"
+                        onChange={(e) => {
+                          const nextReviews = reviews.map((review, i) => {
+                            if (i == currentDay - 1) {
+                              return e.target.value;
+                            } else {
+                              return review;
+                            }
+                          });
+                          setReviews(nextReviews);
+                          console.log(nextReviews);
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+
+                {nodeInfoData && nodeInfoData.node && (
+                  <Modal isOpen={isNodeInfoOpen} onClose={onNodeInfoClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                      <ModalHeader>
+                        Day {nodeInfoData.day} - {nodeInfoData.idx + 1}번째 노드
+                      </ModalHeader>
+                      <ModalCloseButton />
+                      <ModalBody>
+                        <Box fontSize="3xl" fontWeight="semibold">
+                          {nodeInfoData.node.title}
+                        </Box>
+                        {console.log(nodeInfoData.node)}
+                        <Box mb={6} fontSize="xl">
+                          {nodeInfoData.node.addr1}
+                        </Box>
+                        <Box mb={6} fontSize="xl">
+                          전화번호 : {nodeInfoData.node.tel}
+                        </Box>
+                        <Box mb={10} fontSize="xl">
+                          방문일 : {nodeInfoData.node.visitDate}
+                        </Box>
+                        <Button
+                          colorScheme="red"
+                          onClick={() => {
+                            onNodeInfoClose();
+                            if (removeDayNodeRef.current)
+                              removeDayNodeRef.current(nodeInfoData.day, nodeInfoData.idx + 1);
+                          }}
+                        >
+                          노드 제거
+                        </Button>
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button onClick={onNodeInfoClose} colorScheme="teal">
+                          닫기
+                        </Button>
+                      </ModalFooter>
+                    </ModalContent>
+                  </Modal>
+                )}
+
+                {!isReadonly && (
+                  <Button
+                    w="100%"
+                    colorScheme="teal"
+                    mb={2}
+                    onClick={() => {
+                      if (saveReviewsInSaveManager.current) {
+                        saveReviewsInSaveManager.current();
+                      }
+                    }}
+                  >
+                    리뷰 저장
+                  </Button>
+                )}
+              </>
+            )}
+            {rightBarPage == 1 && (
+              <>
+                {!isReadonly && (
+                  <Box>
+                    <Button
+                      w="100%"
+                      mb={2}
+                      colorScheme="teal"
+                      onClick={() => {
+                        if (generateDiaryRef.current) {
+                          generateDiaryRef.current().then((res) => {
+                            console.log(res);
+                            setTotalReview(res);
+                          });
+                        }
+                      }}
+                    >
+                      일기 생성
+                    </Button>
+                    <Button w="100%" mb={4} colorScheme="teal" onClick={() => {}}>
+                      일기 저장
+                    </Button>
+                  </Box>
+                )}
+                <Box fontSize="xl" fontWeight="semibold" mb={2}>
+                  일기
+                </Box>
+                <Textarea
+                  w="100%"
+                  border="2px"
+                  borderRadius={4}
+                  borderColor="gray.400"
+                  minH="200px"
+                  p={2}
+                  value={totalReview}
+                  onChange={(e) => setTotalReview(e.target.value)}
+                />
+              </>
+            )}
+          </Box>
+        </div>
+        <div
+          style={{
+            visibility: nodeMenuOn ? 'visible' : 'hidden',
+            position: 'fixed',
+            top: nodeMenuPosition.y,
+            left: nodeMenuPosition.x,
+            zIndex: nodeMenuOn ? 4 : -2,
+            maxH: nodeMenuOn ? '100vh' : '0vh',
+            opacity: nodeMenuOn ? '1' : '0',
+            transition:
+              'visibility .3s linear .3s, z-index .3s linear .3s, opacity .3s linear .3s, maxH .3s linear .3s',
+          }}
+        >
+          <Box
+            bgColor="white"
+            borderRadius="2px"
+            w="200px"
+            overflowY="hidden"
+            boxShadow="2xl"
+            textAlign="left"
+            p={4}
+            // transition="all .4s ease-in-out .3s"
+          >
+            <Box fontWeight="bold">노드 정보</Box>
+            {selectOptionData.select_option && (
+              <Box>
+                {selectOptionData.select_option.userData.title}
+                <br />
+                {selectOptionData.select_option.userData.addr1}
+                <br />
+                {selectOptionData.select_option.userData.tel}
+                <br />
+              </Box>
+            )}
+
+            <Button onClick={onAddNodeButtonClick} colorScheme="teal" mt={2}>
+              노드 추가
+            </Button>
+          </Box>
+        </div>
+
+        <div ref={mapContainer} style={{ height: '100vh' }} />
+      </CanvasContext.Provider>
+    </>
+  );
+};
+
+export default ReviewSpace;
