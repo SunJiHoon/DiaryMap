@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import InputManager, { selectOption } from '../components/manager/inputManager';
-import ObjectManager from '../components/manager/objectManager';
-import SaveManager from '../components/manager/saveManager';
-import DayManager from '../components/manager/dayManager';
+import InputManager, { selectOption } from '../utility/manager/inputManager';
+import ObjectManager from '../utility/manager/objectManager';
+import SaveManager from '../utility/manager/saveManager';
+import DayManager from '../utility/manager/dayManager';
 import { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {

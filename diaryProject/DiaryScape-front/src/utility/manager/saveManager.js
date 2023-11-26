@@ -1,4 +1,4 @@
-import client from '../../utility/client.jsx';
+import client from '../client.jsx';
 import ObjectManager from './objectManager.js';
 import DayManager from './dayManager.js';
 import { Object3D } from 'three';

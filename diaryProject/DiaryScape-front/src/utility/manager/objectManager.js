@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import Player from '../object/player.js';
 import Node from '../object/node.js';
-import client from '../../utility/client.jsx';
+import client from '../client.jsx';
 import DayManager from './dayManager.js';
 import { gsap } from 'gsap';
 
