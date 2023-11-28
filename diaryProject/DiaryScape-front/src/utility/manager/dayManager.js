@@ -185,9 +185,10 @@ class DayManager {
     this.updateDayNodesToFront();
   }
 
-  changeDayNodeIndex(index, isUp) {
-    console.log(nodes);
-    const length = nodes[this.currentDay - 1].length;
+  changeDayNodeIndex = (index, isUp) => {
+    const length = nodes[this.currentDay - 1].length / 2;
+    console.log(nodes[this.currentDay -1]);
+    console.log(length);
 
     if (index < 1 || index > length) {
       //index does not exist
@@ -198,45 +199,54 @@ class DayManager {
       //첫 노드를 위로나 마지막 노드를 밑으로 보내려고 할 때
       console.log('이동 불가');
       return;
-    } else if (index == 2 && isUp) {
-      //첫 노드로 이동할 때
-    } else if (index == length - 1 && !isUp) {
-      //마지막 노드로 이동할 때
-    } else if (isUp) {
-      //중간 노드가 위로 올라갈 때
-      var temp = nodes[2 * index - 1];
-      nodes[2 * index - 1] = nodes[2 * index - 3];
-      nodes[2 * index - 3] = temp;
+    }
+    if(isUp){//노드가 위로 갈 때
+      var temp = nodes[this.currentDay -1][2 * index - 1];
+      nodes[this.currentDay - 1][2 * index - 1] = nodes[this.currentDay - 1][2 * index - 3];
+      nodes[this.currentDay - 1][2 * index - 3] = temp;
 
-      for (let i = 0; i < 3; i++) {
-        objectManager.removeObject(nodes[2 * index - 2 * i]);
-        nodes[2 * index] = objectManager.drawLine(
-          nodes[2 * index + 1 - 2 * i].position,
-          nodes[2 * index - 1 - 2 * i],
-          this.colorList[this.currentDay - (1 % 4)]
-        );
+      if(index == 2){
+        this.changeLine(index, 0, 2);
       }
-    } else if (!isUp) {
-      //중간 노드가 아래로 내려갈 때
-      var temp = nodes[2 * index + 1];
-      nodes[2 * index + 1] = nodes[2 * index - 1];
-      nodes[2 * index - 1] = temp;
+      else if(index == length){
+        this.changeLine(index, 1, 3);
+      }
+      else{
+        this.changeLine(index, 0, 3);
+      }
+    }
+    else{
+      var temp = nodes[this.currentDay - 1][2 * index + 1];
+      nodes[this.currentDay - 1][2 * index + 1] = nodes[this.currentDay - 1][2 * index - 1];
+      nodes[this.currentDay - 1][2 * index - 1] = temp;
 
-      for (let i = 0; i < 3; i++) {
-        objectManager.removeObject(nodes[2 * index * i]);
-        nodes[2 * index + 2] = objectManager.drawLine(
-          nodes[2 * index + 3 - 2 * i].position,
-          nodes[2 * index + 1 - 2 * i],
-          this.colorList[this.currentDay - (1 % 4)]
-        );
+      if(index == 1){
+        this.changeLine(index, -1, 1);
+      }
+      else if(index == length - 1){
+        this.changeLine(index, 0, 2);
+      }
+      else{
+        this.changeLine(index, -1, 2);
       }
     }
 
+    this.updateDayNodesToFront();
     saveManager.saveMyNodes();
   }
 
+  changeLine(index, start, end){
+    for (let i = start; i < end; i++) {
+      objectManager.removeObject(nodes[this.currentDay - 1][2 * index - 2 * i]);
+      nodes[this.currentDay - 1][2 * index - 2 * i] = objectManager.drawLine(
+        nodes[this.currentDay - 1][2 * index + 1 - 2 * i].position,
+        nodes[this.currentDay - 1][2 * index - 1 - 2 * i].position,
+        this.colorList[(this.currentDay - 1) % 4]
+      );
+    }
+  }
+
   removeDayNode = (dayIdx, index) => {
-    //구현하기
     console.log(nodes[dayIdx - 1].length);
     if (nodes[dayIdx - 1].length == 2) {
       return; //노드가 하나만 들어있다면 삭제 못 하게
