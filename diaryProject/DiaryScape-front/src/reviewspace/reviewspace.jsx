@@ -1,4 +1,7 @@
 import * as THREE from 'three';
+import LeftBar from '../components/left_bar'
+import RightBar from '../components/right_bar'
+import NodeMenu from '../components/node_menu'
 import InputManager, { selectOption } from '../utility/manager/inputManager';
 import ObjectManager from '../utility/manager/objectManager';
 import SaveManager from '../utility/manager/saveManager';
@@ -532,30 +535,21 @@ const ReviewSpace = () => {
     <>
       <CanvasContext.Provider value={[canvasState, setCanvasState]}>
         {/* <Map /> */}
-        <div
-          style={{
-            position: 'fixed',
-            top: '0',
-            left: leftBarOpen ? '0' : '-260px',
-            zIndex: '2',
-            transition: 'left 0.3s',
-          }}
-        >
-          <Box display="flex" alignItems="flex-start">
-            <Box
-              mt={4}
-              p={4}
-              w="240px"
-              bgColor="#ffffff"
-              // borderWidth={1}
-              borderRadius={4}
-              // borderColor="gray.300"
-              display="flex"
-              flexDirection="column"
-              alignItems="flex-start"
-              marginLeft="1.6em"
-              boxShadow="2xl"
-            >
+        <LeftBar leftBarOpen={leftBarOpen}>
+        <Box
+            mt={4}
+            p={4}
+            w="240px"
+            bgColor="#ffffff"
+            // borderWidth={1}
+            borderRadius={4}
+            // borderColor="gray.300"
+            display="flex"
+            flexDirection="column"
+            alignItems="flex-start"
+            marginLeft="1.6em"
+            boxShadow="2xl"
+          >
               <IconButton
                 icon={<IoHome />}
                 w="100%"
@@ -645,21 +639,9 @@ const ReviewSpace = () => {
               onClick={() => setLeftBarOpen(!leftBarOpen)}
               icon={leftBarOpen ? <IoChevronBack /> : <IoChevronForward />}
             />
-          </Box>
-        </div>
+        </LeftBar>
 
-        <div
-          style={{
-            position: 'fixed',
-            top: '0',
-            right: rightBarOpen ? '0px' : '-260px',
-            zIndex: '2',
-            display: 'flex',
-            alignItems: 'flex-start',
-            marginRight: '1.6em',
-            transition: 'right 0.3s',
-          }}
-        >
+        <RightBar rightBarOpen={rightBarOpen}>
           <Box display="flex" flexDirection="column" mt={8}>
             <IconButton
               h="60px"
@@ -979,48 +961,15 @@ const ReviewSpace = () => {
                 />
               </>
             )}
-          </Box>
-        </div>
-        <div
-          style={{
-            visibility: nodeMenuOn ? 'visible' : 'hidden',
-            position: 'fixed',
-            top: nodeMenuPosition.y,
-            left: nodeMenuPosition.x,
-            zIndex: nodeMenuOn ? 4 : -2,
-            maxH: nodeMenuOn ? '100vh' : '0vh',
-            opacity: nodeMenuOn ? '1' : '0',
-            transition:
-              'visibility .3s linear .3s, z-index .3s linear .3s, opacity .3s linear .3s, maxH .3s linear .3s',
-          }}
-        >
-          <Box
-            bgColor="white"
-            borderRadius="2px"
-            w="200px"
-            overflowY="hidden"
-            boxShadow="2xl"
-            textAlign="left"
-            p={4}
-            // transition="all .4s ease-in-out .3s"
-          >
-            <Box fontWeight="bold">노드 정보</Box>
-            {selectOptionData.select_option && (
-              <Box>
-                {selectOptionData.select_option.userData.title}
-                <br />
-                {selectOptionData.select_option.userData.addr1}
-                <br />
-                {selectOptionData.select_option.userData.tel}
-                <br />
-              </Box>
-            )}
-
-            <Button onClick={onAddNodeButtonClick} colorScheme="teal" mt={2}>
-              노드 추가
-            </Button>
-          </Box>
-        </div>
+            </Box>
+        </RightBar>
+        
+        <NodeMenu
+          nodeMenuOn={nodeMenuOn}
+          nodeMenuPosition={nodeMenuPosition}
+          selectOptionData={selectOptionData}
+          onAddNodeButtonClick={onAddNodeButtonClick}
+        />
 
         <div ref={mapContainer} style={{ height: '100vh' }} />
       </CanvasContext.Provider>
