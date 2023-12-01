@@ -59,6 +59,7 @@ const RightBarPageDiary = ({
             p={2}
             value={totalReview}
             onChange={(e) => setTotalReview(e.target.value)}
+            readOnly={isReadonly}
         />
         </>
     )

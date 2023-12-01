@@ -229,6 +229,7 @@ const RightBarPageDay = ({
                 h="200px"
                 value={reviews[currentDay - 1]}
                 boxShadow="md"
+                readOnly={isReadonly}
                 onChange={(e) => {
                   const nextReviews = reviews.map((review, i) => {
                     if (i == currentDay - 1) {

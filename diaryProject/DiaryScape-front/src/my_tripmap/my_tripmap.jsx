@@ -94,7 +94,7 @@ const MyTripmap = () => {
     setSelectedData(nodeData);
   };
 
-  const onReviewClicked = (review) => {
+  const onReviewClicked = (review, readOnly=false) => {
     console.log(review);
     dispatch(
       selectTrip({
@@ -103,6 +103,7 @@ const MyTripmap = () => {
         startX: review.mapX,
         startY: review.mapY,
         date: review.visitDate,
+        readOnly,
       })
     );
     dispatch(
@@ -335,6 +336,12 @@ const MyTripmap = () => {
                                         </Box> */}
                   </Box>
                   <Box w="52px" mr={2} display="flex" flexDirection="column">
+                    <IconButton
+                      icon={<IoArrowForwardOutline />}
+                      mb={1}
+                      colorScheme="blue"
+                      onClick={(e) => onReviewClicked(review, true)}
+                    />
                     <IconButton
                       icon={<IoArrowForwardOutline />}
                       mb={1}

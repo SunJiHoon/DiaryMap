@@ -53,8 +53,6 @@ export const CanvasContext = createContext();
 let nextReviewId = 2;
 
 const ReviewSpace = () => {
-  let isReadonly = false;
-  // let isPublic = true
 
   const [canvasState, setCanvasState] = useState(null);
 
@@ -63,6 +61,8 @@ const ReviewSpace = () => {
   const tripData = useSelector((state) => state.trip);
   const startnodeData = useSelector((state) => state.startnode);
 
+  const [isReadonly, setIsReadOnly] = useState(tripData.readOnly)
+  console.log(isReadonly)
   const newMapFunctionRef = useRef(null);
   const addNodeFunctionRef = useRef(null);
   const plusSearchNodeRef = useRef(null);
