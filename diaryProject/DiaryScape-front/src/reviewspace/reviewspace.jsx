@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import LeftBar from '../components/left_bar'
-import NodeSearchInReviewSpace from '../components/node_search_in_review_space'
-import RightBar from '../components/right_bar'
-import RightBarPageDay from '../components/right_bar_page_day'
-import RightBarPageDiary from '../components/right_bar_page_diary'
-import NodeMenu from '../components/node_menu'
+import LeftBar from '../components/left_bar';
+import NodeSearchInReviewSpace from '../components/node_search_in_review_space';
+import RightBar from '../components/right_bar';
+import RightBarPageDay from '../components/right_bar_page_day';
+import RightBarPageDiary from '../components/right_bar_page_diary';
+import NodeMenu from '../components/node_menu';
 import InputManager, { selectOption } from '../utility/manager/inputManager';
 import ObjectManager from '../utility/manager/objectManager';
 import SaveManager from '../utility/manager/saveManager';
@@ -53,7 +53,6 @@ export const CanvasContext = createContext();
 let nextReviewId = 2;
 
 const ReviewSpace = () => {
-
   const [canvasState, setCanvasState] = useState(null);
 
   const navigate = useNavigate();
@@ -61,8 +60,8 @@ const ReviewSpace = () => {
   const tripData = useSelector((state) => state.trip);
   const startnodeData = useSelector((state) => state.startnode);
 
-  const [isReadonly, setIsReadOnly] = useState(tripData.readOnly)
-  console.log(isReadonly)
+  const [isReadonly, setIsReadOnly] = useState(tripData.readOnly);
+  console.log(isReadonly);
   const newMapFunctionRef = useRef(null);
   const addNodeFunctionRef = useRef(null);
   const plusSearchNodeRef = useRef(null);
@@ -105,7 +104,7 @@ const ReviewSpace = () => {
   const [selectedData, setSelectedData] = useState({});
   const [searchResultDataLoading, setSearchResultDataLoading] = useState(false);
   const [totalReview, setTotalReview] = useState('일기를 생성해주세요!');
-  
+
   const [nodeInfoData, setNodeInfoData] = useState({});
 
   mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
@@ -489,7 +488,7 @@ const ReviewSpace = () => {
     // console.log(e.target.value)
 
     const searchValueReplaced = searchValue.replace(/ /g, '%20');
-    // console.log("search: " + searchValueReplaced)
+    console.log('search: ' + searchValueReplaced);
 
     // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
 
@@ -508,7 +507,7 @@ const ReviewSpace = () => {
         'api/kakaoOpenApi/keywordAndCoord/list?mapId=' +
           tripData.mapId +
           '&userKeyword=' +
-          searchValue +
+          searchValueReplaced +
           '&mapX=' +
           dayManager.getCurNode().userData.mapX +
           '&mapY=' +
@@ -529,7 +528,7 @@ const ReviewSpace = () => {
       <CanvasContext.Provider value={[canvasState, setCanvasState]}>
         {/* <Map /> */}
         <LeftBar leftBarOpen={leftBarOpen}>
-        <Box
+          <Box
             mt={4}
             p={4}
             w="240px"
@@ -543,32 +542,32 @@ const ReviewSpace = () => {
             marginLeft="1.6em"
             boxShadow="2xl"
           >
-              <IconButton
-                icon={<IoHome />}
-                w="100%"
-                colorScheme="gray"
-                onClick={() => navigate('/')}
-              />
-              <NodeSearchInReviewSpace
-                isReadonly={isReadonly}
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
-                onNodeSearch={onNodeSearch}
-                searchResultDataLoading={searchResultDataLoading}
-                nodeSearchSelected={nodeSearchSelected}
-                onNodeSearchSelect={onNodeSearchSelect}
-                selectedData={selectedData}
-                onPlusSearchNodeClick={onPlusSearchNodeClick}
-                searchResultData={searchResultData}
-              />
-            </Box>
             <IconButton
-              h="60px"
-              mt={8}
-              colorScheme="teal"
-              onClick={() => setLeftBarOpen(!leftBarOpen)}
-              icon={leftBarOpen ? <IoChevronBack /> : <IoChevronForward />}
+              icon={<IoHome />}
+              w="100%"
+              colorScheme="gray"
+              onClick={() => navigate('/')}
             />
+            <NodeSearchInReviewSpace
+              isReadonly={isReadonly}
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+              onNodeSearch={onNodeSearch}
+              searchResultDataLoading={searchResultDataLoading}
+              nodeSearchSelected={nodeSearchSelected}
+              onNodeSearchSelect={onNodeSearchSelect}
+              selectedData={selectedData}
+              onPlusSearchNodeClick={onPlusSearchNodeClick}
+              searchResultData={searchResultData}
+            />
+          </Box>
+          <IconButton
+            h="60px"
+            mt={8}
+            colorScheme="teal"
+            onClick={() => setLeftBarOpen(!leftBarOpen)}
+            icon={leftBarOpen ? <IoChevronBack /> : <IoChevronForward />}
+          />
         </LeftBar>
 
         <RightBar rightBarOpen={rightBarOpen}>
@@ -637,7 +636,7 @@ const ReviewSpace = () => {
             )}
           </Box>
         </RightBar>
-        
+
         <NodeMenu
           nodeMenuOn={nodeMenuOn}
           nodeMenuPosition={nodeMenuPosition}

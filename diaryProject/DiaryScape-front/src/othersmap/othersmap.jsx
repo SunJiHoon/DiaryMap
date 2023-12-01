@@ -1,6 +1,3 @@
-
 const OthersMap = () => {
-    return (<>
-    
-    </>)
-}
+  return <></>;
+};

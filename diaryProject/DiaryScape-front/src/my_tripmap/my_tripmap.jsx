@@ -94,7 +94,7 @@ const MyTripmap = () => {
     setSelectedData(nodeData);
   };
 
-  const onReviewClicked = (review, readOnly=false) => {
+  const onReviewClicked = (review, readOnly = false) => {
     console.log(review);
     dispatch(
       selectTrip({
