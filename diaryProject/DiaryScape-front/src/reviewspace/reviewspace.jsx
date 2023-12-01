@@ -105,17 +105,7 @@ const ReviewSpace = () => {
   const [selectedData, setSelectedData] = useState({});
   const [searchResultDataLoading, setSearchResultDataLoading] = useState(false);
   const [totalReview, setTotalReview] = useState('일기를 생성해주세요!');
-  const {
-    isOpen: isNodeSearchOpen,
-    onOpen: onNodeSearchOpen,
-    onClose: onNodeSearchClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isNodeInfoOpen,
-    onOpen: onNodeInfoOpen,
-    onClose: onNodeInfoClose,
-  } = useDisclosure();
+  
   const [nodeInfoData, setNodeInfoData] = useState({});
 
   mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
@@ -617,6 +607,7 @@ const ReviewSpace = () => {
               <RightBarPageDay
                 isReadonly={isReadonly}
                 nodeInfoData={nodeInfoData}
+                setNodeInfoData={setNodeInfoData}
                 reviews={reviews}
                 setReviews={setReviews}
                 currentDay={currentDay}

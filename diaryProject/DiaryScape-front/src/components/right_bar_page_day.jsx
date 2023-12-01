@@ -31,7 +31,8 @@ const RightBarPageDay = ({
     isReadonly,
     reviews,
     setReviews,
-    nodeInfoData, 
+    nodeInfoData,
+    setNodeInfoData,
     currentDay, 
     setCurrentDay, 
     dayCheckedList, 
@@ -48,6 +49,12 @@ const RightBarPageDay = ({
     getCurNodeRef, 
     changeDayNodeIndexRef
 }) => {
+  const {
+    isOpen: isNodeInfoOpen,
+    onOpen: onNodeInfoOpen,
+    onClose: onNodeInfoClose,
+  } = useDisclosure();
+
     return (<>
         <Box display="flex" mb={4}>
           <Box w="100%" mr={2} display="flex" alignItems="center">

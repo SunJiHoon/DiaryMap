@@ -1,0 +1,6 @@
+
+const OthersMap = () => {
+    return (<>
+    
+    </>)
+}
