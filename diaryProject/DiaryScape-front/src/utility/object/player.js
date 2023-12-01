@@ -1,17 +1,15 @@
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
 
 let walkAnim;
 
 class player {
   async loadGltf(name) {
-    const gltfLoader = new GLTFLoader().setPath(
-      "./assets/models/"
-    )
+    const gltfLoader = new GLTFLoader().setPath('./assets/models/');
     let _character;
-    await gltfLoader.loadAsync("PuAng.glb").then((characterGltf) => {
+    await gltfLoader.loadAsync('PuAng.glb').then((characterGltf) => {
       _character = characterGltf.scene.children[0];
-      _character.name = "player";
+      _character.name = 'player';
       _character.scale.set(0.1, 0.1, 0.1);
       //this.setAnim(characterGltf);
     });
@@ -27,7 +25,7 @@ class player {
     //walkAnim.clampWhenFinished = true;
   }
 
-  playWalkAnim(){
+  playWalkAnim() {
     walkAnim.play();
   }
 }

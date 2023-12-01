@@ -1,12 +1,12 @@
-import * as THREE from "three"
-import { gsap } from "gsap";
-import { randInt } from "three/src/math/MathUtils";
+import * as THREE from 'three';
+import { gsap } from 'gsap';
+import { randInt } from 'three/src/math/MathUtils';
 
 const Category = {
-  NONE: "none",
-  STATION: "station",
-  TRAVELINGSPOT: "travelingSpot",
-  RESTAURANT: "restaurant",
+  NONE: 'none',
+  STATION: 'station',
+  TRAVELINGSPOT: 'travelingSpot',
+  RESTAURANT: 'restaurant',
 };
 Object.freeze(Category);
 
@@ -17,12 +17,12 @@ class node {
 
   loadObj(infos) {
     const objGeometry = new THREE.SphereGeometry(2);
-    const objMaterial = new THREE.MeshBasicMaterial({ color: "magenta" });
+    const objMaterial = new THREE.MeshBasicMaterial({ color: 'magenta' });
     const obj = new THREE.Mesh(objGeometry, objMaterial);
     obj.scale.set(4, 4, 4);
 
     obj.userData = {
-      tag: "node",
+      tag: 'node',
       contentID: infos.contentid,
       contentType: infos.contentTypeId,
       title: infos.title,
@@ -35,17 +35,17 @@ class node {
       visitDate: infos.visitDate,
       nodeReview: infos.nodeReview,
     };
-    
-    var ranY = randInt(35.0,40.0);
+
+    var ranY = randInt(35.0, 40.0);
     obj.position.set(obj.userData.relativeX, ranY, obj.userData.relativeY);
     return obj;
   }
 
-  playInitAnim(obj){
+  playInitAnim(obj) {
     gsap.to(obj.position, {
       y: 0,
       duration: 1,
-    })
+    });
   }
 }
 

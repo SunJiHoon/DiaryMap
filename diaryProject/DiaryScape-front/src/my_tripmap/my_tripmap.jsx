@@ -178,12 +178,27 @@ const MyTripmap = () => {
   });
 
   return (
-    <Box mt={4} p={6}>
+    <Box mt={2} p={4}>
+      <Box display="flex" justifyContent="center" mb={4}>
+        <Box w="100%" maxW="500px" display="flex" justifyContent="flex-end">
+          <Button
+            size="sm"
+            colorScheme="teal"
+            variant="ghost"
+            onClick={() => {
+              navigate('/othersmap');
+            }}
+          >
+            &gt; 다른 이의 여행 보러가기
+          </Button>
+        </Box>
+      </Box>
+
       <Heading as="h2" size="xl" mb={6}>
         <Box display="inline" color="blue">
           {username}
         </Box>
-        의 여행 리스트
+        의 여행들
       </Heading>
 
       <Button w="100%" maxW="500px" mb={6} onClick={() => dispatch(clearUser())}>
@@ -324,16 +339,13 @@ const MyTripmap = () => {
                   borderRadius={4}
                   borderColor="gray.300"
                 >
-                  <Box w="100%" display="flex" flexDirection="column">
+                  <Box w="100%" display="flex" flexDirection="column" justifyContent="center">
                     <Box fontWeight="semibold" fontSize="1.6em" mb={1}>
                       {review.reviewtitle}
                     </Box>
                     <Box fontSize="1.2em" mb={1}>
                       {review.visitDate}
                     </Box>
-                    {/* <Box>
-                                            mapId: {review.mapId} / 시작 좌표: ({review.mapX}, {review.mapY})
-                                        </Box> */}
                   </Box>
                   <Box w="52px" mr={2} display="flex" flexDirection="column">
                     <IconButton
