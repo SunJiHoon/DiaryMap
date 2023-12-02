@@ -78,7 +78,7 @@ public class Obj3dController {
             Member actualMember = loginMember.get();
             //log.info(String.valueOf(actualMember));
             // actualMember를 사용하여 필요한 작업을 수행
-
+            obj3d1.setMember(actualMember); // obj3d1에 Member 정보 설정
             if (actualMember.getObj3dArrayList() == null) {
                 actualMember.setObj3dArrayList(new ArrayList<>());
                 actualMember.getObj3dArrayList().add(obj3d1);
@@ -131,7 +131,8 @@ public class Obj3dController {
                                 actualMember.getObj3dArrayList().get(i).getStartNode().getRelativeX(),
                                 actualMember.getObj3dArrayList().get(i).getStartNode().getRelativeY(),
                                 actualMember.getObj3dArrayList().get(i).getStartNode().getAddr1(),
-                                actualMember.getObj3dArrayList().get(i).getStartNode().getVisitDate()
+                                actualMember.getObj3dArrayList().get(i).getStartNode().getVisitDate(),
+                                actualMember.getName()
                         )
                 );
             }
@@ -141,6 +142,48 @@ public class Obj3dController {
         } else {
             log.info("쿠키에 들어있는 id로 조회를 해봤으나 db상에 해당 id가 존재하지 않습니다.");
             log.info("we can not find id in our db. i think cookie you have is expired.");
+        }
+
+        String mapDatasJson;
+        try {
+            mapDatasJson = objectMapper.writeValueAsString(titleDataDtos);
+        } catch (JsonProcessingException e) {
+            mapDatasJson = "[]";
+        }
+        return mapDatasJson;
+    }
+
+    @GetMapping(value = "/obj/list/public", produces = "application/json")// obj/create?mapName=척척박사//postMapping도 가능하다.
+    public String getMapPublicLists(
+    ) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<titleData_DTO> titleDataDtos = new ArrayList<>();
+
+        List<Obj3d> obj3ds = obj3dRepository.findAll();
+        //Optional<Member> loginMember = memberMongoRepository.findById(cookie);
+
+        Member ownerMember;
+        String userName = "";
+        for (int i = 0; i < obj3ds.size(); i++) {
+            ownerMember = obj3ds.get(i).getMember();
+            userName = ownerMember.getName();
+            titleDataDtos.add(
+                    new titleData_DTO(
+                            obj3ds.get(i).getObjName(),
+                            obj3ds.get(i).getId(),
+                            obj3ds.get(i).getStartNode().getContentid(),
+                            obj3ds.get(i).getStartNode().getContentTypeId(),
+                            obj3ds.get(i).getStartNode().getTitle(),
+                            obj3ds.get(i).getStartNode().getTel(),
+                            obj3ds.get(i).getStartNode().getMapx(),
+                            obj3ds.get(i).getStartNode().getMapy(),
+                            obj3ds.get(i).getStartNode().getRelativeX(),
+                            obj3ds.get(i).getStartNode().getRelativeY(),
+                            obj3ds.get(i).getStartNode().getAddr1(),
+                            obj3ds.get(i).getStartNode().getVisitDate(),
+                            userName
+                    )
+            );
         }
 
         String mapDatasJson;

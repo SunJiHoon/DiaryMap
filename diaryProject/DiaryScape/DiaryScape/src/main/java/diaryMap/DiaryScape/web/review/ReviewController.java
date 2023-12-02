@@ -122,6 +122,21 @@ public class ReviewController {
         }
     }
 
+    /*
+
+    @GetMapping(value = "/hihihi/hihihihi",produces = "application/json")
+    public resultMessage hihihireturn(){
+
+        hihihi hi = new hihihi();
+        hi.setResult("현현수");
+        resultMessage re = new resultMessage();
+        re.setCode("2000");
+        re.setHihihiresult(hi);
+        re.setIsSuccess(true);
+        return re;
+    }
+ */
+
 }
 
 @Data
@@ -135,3 +150,22 @@ class jsonStr_Value{
 class jsonArr_Value{
     private ArrayList<dayReview> dayReviews;
 }
+
+/*
+
+@Data
+@RequiredArgsConstructor
+class hihihi{
+    private String result;
+}
+
+@Data
+@RequiredArgsConstructor
+class resultMessage{
+    private Boolean isSuccess;
+    private String code;
+    private hihihi hihihiresult;
+}
+
+
+ */
