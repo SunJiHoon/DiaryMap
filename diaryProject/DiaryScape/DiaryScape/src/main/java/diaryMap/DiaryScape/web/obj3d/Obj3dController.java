@@ -69,7 +69,7 @@ public class Obj3dController {
         obj3d1.setCreatedTime(formattedTime);
         obj3d1.setModifiedTime(formattedTime);
 
-        obj3dRepository.save(obj3d1);
+        //obj3dRepository.save(obj3d1);
 
         log.info(obj3d1.getObjName());
         Optional<Member> loginMember = memberMongoRepository.findById(cookie);
@@ -79,6 +79,7 @@ public class Obj3dController {
             //log.info(String.valueOf(actualMember));
             // actualMember를 사용하여 필요한 작업을 수행
             obj3d1.setMember(actualMember); // obj3d1에 Member 정보 설정
+            obj3dRepository.save(obj3d1);
             if (actualMember.getObj3dArrayList() == null) {
                 actualMember.setObj3dArrayList(new ArrayList<>());
                 actualMember.getObj3dArrayList().add(obj3d1);
@@ -549,7 +550,16 @@ public class Obj3dController {
             @RequestParam Map<String, String> paraMap
     ) {
         String id = paraMap.get("mapId");
-        obj3dRepository.deleteById(id);
+        Optional<Obj3d> obj3dRepositoryById = obj3dRepository.findById(id);
+        if (obj3dRepositoryById.isPresent()){
+            Obj3d actualObj3d = obj3dRepositoryById.get();
+            Member member = actualObj3d.getMember();
+            if (member.getObj3dArrayList() != null) {
+                member.getObj3dArrayList().removeIf(obj -> obj.getId().equals(id));
+                memberMongoRepository.save(member); // 변경된 Member를 저장
+            }
+            obj3dRepository.deleteById(id);
+        }
         return "삭제 수행";
     }
 
