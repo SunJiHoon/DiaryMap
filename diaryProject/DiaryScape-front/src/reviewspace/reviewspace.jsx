@@ -4,6 +4,7 @@ import NodeSearchInReviewSpace from '../components/node_search_in_review_space';
 import RightBar from '../components/right_bar';
 import RightBarPageDay from '../components/right_bar_page_day';
 import RightBarPageDiary from '../components/right_bar_page_diary';
+import RecommendedNodeList from '../components/recommended_node_list';
 import NodeMenu from '../components/node_menu';
 import InputManager, { selectOption } from '../utility/manager/inputManager';
 import ObjectManager from '../utility/manager/objectManager';
@@ -39,6 +40,7 @@ import {
   IoBook,
   IoChevronBack,
   IoHome,
+  IoCubeOutline,
 } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import { createContext, useContext } from 'react';
@@ -585,7 +587,13 @@ const ReviewSpace = () => {
               onClick={() => setRightBarPage(0)}
               icon={<IoPencil />}
             />
-            <IconButton colorScheme="blue" onClick={() => setRightBarPage(1)} icon={<IoBook />} />
+            <IconButton
+              mb={2}
+              colorScheme="green"
+              onClick={() => setRightBarPage(1)}
+              icon={<IoCubeOutline />}
+            />
+            <IconButton colorScheme="blue" onClick={() => setRightBarPage(2)} icon={<IoBook />} />
           </Box>
           <Box
             mt={4}
@@ -626,7 +634,8 @@ const ReviewSpace = () => {
                 changeDayNodeIndexRef={changeDayNodeIndexRef}
               />
             )}
-            {rightBarPage == 1 && (
+            {rightBarPage == 1 && <RecommendedNodeList />}
+            {rightBarPage == 2 && (
               <RightBarPageDiary
                 isReadonly={isReadonly}
                 totalReview={totalReview}

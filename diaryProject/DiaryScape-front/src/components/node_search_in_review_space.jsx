@@ -49,6 +49,7 @@ const NodeSearchInReviewSpace = ({
               >
                 {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
                 {!searchResultDataLoading &&
+                  searchResultData &&
                   searchResultData.map((result, idx) => (
                     <Button
                       key={result.contentid}

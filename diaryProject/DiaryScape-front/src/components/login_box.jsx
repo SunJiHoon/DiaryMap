@@ -36,8 +36,13 @@ const LoginBox = () => {
     client
       .post('/api/login', body, { withCredentials: true }) //login
       .then((res) => {
+        console.log(res);
         console.log(res.data);
+        if (res.data.loginId == '-1') return;
         dispatch(loginUser(res.data));
+      })
+      .catch((error) => {
+        console.log(error.response);
       });
   };
 

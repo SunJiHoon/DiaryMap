@@ -48,7 +48,7 @@ const OthersMap = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    client.get('/api/obj/list').then((res) => {
+    client.get('/api/obj/list/public').then((res) => {
       setReviewData(res.data);
     });
   }, []);
@@ -190,8 +190,9 @@ const OthersMap = () => {
                       {review.visitDate}
                     </Box>
 
-                    <Box fontSize="1.3em" mb={1}>
-                      작성자 : {review.username}
+                    <Box display="flex" justifyContent="center" fontSize="1.3em" mb={1}>
+                      <Box>작성자 :</Box>
+                      <Box fontWeight="semibold">{review.userName}</Box>
                     </Box>
                   </Box>
                   <Box

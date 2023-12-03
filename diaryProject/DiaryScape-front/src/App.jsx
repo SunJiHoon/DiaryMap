@@ -17,7 +17,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/map" element={<Map />} />
         <Route path="/reviewspace" element={<ReviewSpace />} />
-        <Route path="/my_tripmap" element={<MyTripmap />} />
+        {/* <Route path="/my_tripmap" element={<MyTripmap />} /> */}
         <Route path="/othersmap" element={<OthersMap />} />
         <Route path="/*" element={<Navigate to="/" />} />
       </Routes>
