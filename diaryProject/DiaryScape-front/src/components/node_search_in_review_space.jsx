@@ -1,47 +1,22 @@
-import {
-    Box,
-    Button,
-    IconButton,
-    Checkbox,
-    Select,
-    Textarea,
-    Input,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    useDisclosure,
-} from '@chakra-ui/react';
-import {
-    IoChevronDown,
-    IoChevronForward,
-    IoSearch,
-    IoAdd,
-    IoRemove,
-    IoPencil,
-    IoBook,
-    IoChevronBack,
-    IoHome,
-} from 'react-icons/io5';
+import { Box, Button, IconButton, Input } from '@chakra-ui/react';
+import { IoSearch, IoAdd } from 'react-icons/io5';
 
 const NodeSearchInReviewSpace = ({
-    children,
-    isReadonly,
-    searchValue,
-    setSearchValue,
-    onNodeSearch,
-    searchResultDataLoading,
-    nodeSearchSelected,
-    onNodeSearchSelect,
-    selectedData,
-    onPlusSearchNodeClick,
-    searchResultData
+  children,
+  isReadonly,
+  searchValue,
+  setSearchValue,
+  onNodeSearch,
+  searchResultDataLoading,
+  nodeSearchSelected,
+  onNodeSearchSelect,
+  selectedData,
+  onPlusSearchNodeClick,
+  searchResultData,
 }) => {
-    return (<>
-        {!isReadonly && (
+  return (
+    <>
+      {!isReadonly && (
         <Box maxW="100%" mt={4}>
           <Box display="flex" mb={2}>
             <Input
@@ -74,6 +49,7 @@ const NodeSearchInReviewSpace = ({
               >
                 {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
                 {!searchResultDataLoading &&
+                  searchResultData &&
                   searchResultData.map((result, idx) => (
                     <Button
                       key={result.contentid}
@@ -116,7 +92,8 @@ const NodeSearchInReviewSpace = ({
           />
         </Box>
       )}
-      </>)
-}
+    </>
+  );
+};
 
-export default NodeSearchInReviewSpace
+export default NodeSearchInReviewSpace;

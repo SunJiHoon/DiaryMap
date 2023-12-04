@@ -1,8 +1,7 @@
-
-const RightBar = ({children, rightBarOpen}) => {
-    return (
+const RightBar = ({ children, rightBarOpen }) => {
+  return (
     <div
-        style={{
+      style={{
         position: 'fixed',
         top: '0',
         right: rightBarOpen ? '0px' : '-260px',
@@ -11,11 +10,11 @@ const RightBar = ({children, rightBarOpen}) => {
         alignItems: 'flex-start',
         marginRight: '1.6em',
         transition: 'right 0.3s',
-        }}
+      }}
     >
-            {children}
+      {children}
     </div>
-    )
-}
+  );
+};
 
-export default RightBar
+export default RightBar;

@@ -25,7 +25,7 @@ import { IoAdd, IoArrowForwardOutline, IoTrashOutline, IoSearch } from 'react-ic
 import '../styles/animation.css';
 import '../styles/custom.css';
 
-const MyTripmap = () => {
+const OthersMap = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -48,51 +48,10 @@ const MyTripmap = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    client.get('/api/obj/list').then((res) => {
+    client.get('/api/obj/list/public').then((res) => {
       setReviewData(res.data);
     });
   }, []);
-
-  const onNewReviewChange = useCallback((e) => {
-    setNewReviewValue(e.target.value);
-  }, []);
-
-  const onNewReviewDateChange = (e) => {
-    setNewReviewDateValue(e.target.value);
-  };
-
-  let source;
-  const onSearch = (e) => {
-    if (source) {
-      source.cancel();
-    }
-
-    source = axios.CancelToken.source();
-
-    // setSearchValue(e.target.value)
-    setStartNodeSelected(false);
-    // console.log(e.target.value)
-
-    const searchValueReplaced = searchValue.replace(/ /g, '%20');
-    console.log('search: ' + searchValueReplaced);
-
-    // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
-
-    setSearchResultDataLoading(true);
-    client
-      .get('api/kakaoOpenApi/onlyKeywordFirst/list?userKeyword=' + searchValue, {
-        cancelToken: source.token,
-      })
-      .then((res) => {
-        setSearchResultDataLoading(false);
-        setSearchResultData(res.data);
-      });
-  };
-
-  const onStartNodeSelect = (nodeData) => {
-    setStartNodeSelected(true);
-    setSelectedData(nodeData);
-  };
 
   const onReviewClicked = (review, readOnly = false) => {
     console.log(review);
@@ -186,142 +145,26 @@ const MyTripmap = () => {
             colorScheme="teal"
             variant="ghost"
             onClick={() => {
-              navigate('/othersmap');
+              navigate('/my_tripmap');
             }}
           >
-            &gt; 다른 이의 여행 보러가기
+            &gt; 나의 여행 맵으로 돌아가기
           </Button>
         </Box>
       </Box>
 
       <Heading as="h2" size="xl" mb={6}>
-        <Box display="inline" color="blue">
-          {username}
-        </Box>
-        의 여행들
+        다른 유저의 여행들
       </Heading>
 
-      <Button w="100%" maxW="500px" mb={6} onClick={() => dispatch(clearUser())}>
+      {/* <Button w="100%" maxW="500px" mb={6} onClick={() => dispatch(clearUser())}>
         로그아웃
-      </Button>
+      </Button> */}
 
       <Box>
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>새 여행 추가</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <form
-                onSubmit={onNewReviewSubmit}
-                onKeyDown={(e) => {
-                  if (e.code == 'Enter') {
-                    e.preventDefault();
-                  }
-                }}
-              >
-                <Box display="flex" justifyContent="center">
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="center"
-                    w="100%"
-                    maxW="500px"
-                    mb={6}
-                  >
-                    <Input
-                      type="text"
-                      placeholder="새 여행 이름"
-                      value={newReviewValue}
-                      onChange={onNewReviewChange}
-                      mb={2}
-                    />
-                    <Input
-                      type="date"
-                      value={newReviewDateValue}
-                      onChange={onNewReviewDateChange}
-                      mb={2}
-                    />
-                    <Box display="flex" mb={2}>
-                      <Input
-                        type="text"
-                        placeholder="시작 장소"
-                        value={searchValue}
-                        onChange={(e) => {
-                          setSearchValue(e.target.value);
-                        }}
-                        mr={2}
-                      />
-                      <IconButton icon={<IoSearch />} onClick={onSearch} colorScheme="teal" />
-                    </Box>
-                    <Button type="submit" colorScheme="teal">
-                      여행 생성
-                    </Button>
-                  </Box>
-                </Box>
-              </form>
-
-              <Box display="flex" justifyContent="center" mb={2}>
-                <Box w="100%" maxW="500px" display="flex" flexDirection="column">
-                  <Box fontSize="1.4em" mb={2}>
-                    시작 장소 선택
-                  </Box>
-                  {/* {startNodeSelected && <Box>{selectedData.contentid}</Box>} */}
-                  {/* {searchValue.length == 0 && <Box>장소 이름을 입력해주세요!</Box>} */}
-                  <Box h={260} overflowY="scroll" className="custom-scrollbar">
-                    {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
-                    {!searchResultDataLoading &&
-                      searchResultData.map((result) => (
-                        <Button
-                          key={result.contentid}
-                          w="100%"
-                          h="52px"
-                          border="0px"
-                          borderBottom="1px"
-                          borderColor="gray.300"
-                          borderRadius="0px"
-                          bgColor={
-                            startNodeSelected && selectedData.contentid == result.contentid
-                              ? 'blue.600'
-                              : 'white'
-                          }
-                          color={
-                            startNodeSelected && selectedData.contentid == result.contentid
-                              ? 'white'
-                              : 'black'
-                          }
-                          _hover={{}}
-                          onClick={(e) => onStartNodeSelect(result)}
-                        >
-                          {/* {result.contentid} */}
-                          <Box display="flex" flexDirection="column">
-                            <Box fontWeight="semibold" mr={2}>
-                              {result.title}
-                            </Box>
-                            <Box fontWeight="medium">{result.addr1}</Box>
-                          </Box>
-                          {/* x: {result.mapx}, y: {result.mapy} */}
-                        </Button>
-                      ))}
-                  </Box>
-                </Box>
-              </Box>
-            </ModalBody>
-            <ModalFooter>
-              <Button onClick={onClose} colorScheme="teal">
-                닫기
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-
         <Box display="flex" justifyContent="center" mb={10}>
           <Box w="100%" maxW="500px" display="flex" flexDirection="column">
             {/* <Box fontSize="1.8em" mb={4}>여행 리스트</Box> */}
-            <Button h={16} colorScheme="teal" fontSize="2xl" onClick={onOpen} mb={6}>
-              <IoAdd />
-              &nbsp;새 여행 작성
-            </Button>
             {console.log(reviewData)}
             {reviewData.map((review, i) => (
               <Box
@@ -343,23 +186,34 @@ const MyTripmap = () => {
                     <Box fontWeight="semibold" fontSize="1.6em" mb={1}>
                       {review.reviewtitle}
                     </Box>
-                    <Box fontSize="1.2em" mb={1}>
+                    <Box fontSize="1.2em" mb={4}>
                       {review.visitDate}
                     </Box>
+
+                    <Box display="flex" justifyContent="center" fontSize="1.3em" mb={1}>
+                      <Box>작성자 :</Box>
+                      <Box fontWeight="semibold">{review.userName}</Box>
+                    </Box>
                   </Box>
-                  <Box w="52px" mr={2} display="flex" flexDirection="column">
+                  <Box
+                    w="52px"
+                    mr={2}
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center"
+                  >
                     <IconButton
                       icon={<IoArrowForwardOutline />}
-                      mb={1}
+                      mb={2}
                       colorScheme="blue"
                       onClick={(e) => onReviewClicked(review, true)}
                     />
-                    <IconButton
+                    {/* <IconButton
                       icon={<IoArrowForwardOutline />}
                       mb={1}
                       colorScheme="teal"
                       onClick={(e) => onReviewClicked(review)}
-                    />
+                    /> */}
                     <IconButton
                       icon={<IoTrashOutline />}
                       onClick={() => {
@@ -383,4 +237,4 @@ const MyTripmap = () => {
   );
 };
 
-export default MyTripmap;
+export default OthersMap;

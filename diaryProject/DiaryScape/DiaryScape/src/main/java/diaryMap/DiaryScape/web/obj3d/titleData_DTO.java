@@ -19,4 +19,5 @@ public class titleData_DTO {
     private String relativeY;
     private String addr1;
     private String visitDate;
+    private String userName;
 }

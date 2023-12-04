@@ -8,6 +8,7 @@ const tripSlice = createSlice({
     startX: 0,
     startY: 0,
     date: 0,
+    readOnly: false,
   },
   reducers: {
     selectTrip: (state, action) => {
@@ -16,6 +17,7 @@ const tripSlice = createSlice({
       state.startX = action.payload.startX;
       state.startY = action.payload.startY;
       state.date = action.payload.date;
+      state.readOnly = action.payload.readOnly;
       return state;
     },
     clearTrip: (state) => {
@@ -24,6 +26,7 @@ const tripSlice = createSlice({
       state.startX = 0;
       state.startY = 0;
       state.date = 0;
+      state.readOnly = false;
       return state;
     },
   },

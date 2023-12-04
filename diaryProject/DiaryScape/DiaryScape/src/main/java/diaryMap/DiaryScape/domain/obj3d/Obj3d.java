@@ -1,8 +1,10 @@
 package diaryMap.DiaryScape.domain.obj3d;
 
+import diaryMap.DiaryScape.domain.member.Member;
 import diaryMap.DiaryScape.web.obj3d.NodeDTO_for_update;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import diaryMap.DiaryScape.web.openApi.NodeDTO;
@@ -26,5 +28,7 @@ public class Obj3d {
     private NodeDTO_for_update startNode;
     private String totalReview;
     private ArrayList<dayReview> dayReviews;
+    @DBRef
+    private Member member; // Member를 DBRef로 참조
 }
 
