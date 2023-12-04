@@ -215,7 +215,7 @@ class DayManager {
         this.changeLine(index, 0, 3);
       }
     }
-    else{
+    else{//노드가 아래로 내려갈 때
       var temp = nodes[this.currentDay - 1][2 * index + 1];
       nodes[this.currentDay - 1][2 * index + 1] = nodes[this.currentDay - 1][2 * index - 1];
       nodes[this.currentDay - 1][2 * index - 1] = temp;
@@ -257,6 +257,7 @@ class DayManager {
       objectManager.removeObject(nodes[dayIdx - 1][2]);
       nodes[dayIdx - 1].splice(1, 2);
     } else if (index == nodes[dayIdx - 1].length / 2) {
+      //마지막 노드라면
       objectManager.removeObject(nodes[dayIdx - 1][index * 2 - 1]);
       objectManager.removeObject(nodes[dayIdx - 1][index * 2 - 2]);
       nodes[dayIdx - 1].splice(index * 2 - 2, 2);
