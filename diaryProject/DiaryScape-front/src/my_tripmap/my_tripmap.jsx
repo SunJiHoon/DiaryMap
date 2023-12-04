@@ -110,7 +110,7 @@ const MyTripmap = () => {
       selectStartnode({
         reviewtitle: review.reviewtitle,
         mapId: review.mapId,
-        contentId: review.contentId,
+        contentid: review.contentId,
         contentTypeId: review.contentTypeId,
         title: review.title,
         tel: review.tel,

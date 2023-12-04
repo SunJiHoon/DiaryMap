@@ -1,11 +1,13 @@
 package diaryMap.DiaryScape.web.obj3d;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 //for update이기도 하지만, 그냥 mynodes, jsonarr를 위한 값이다.
 @Data
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class NodeDTO_for_update {
     //private String tag;
     private String contentid;
