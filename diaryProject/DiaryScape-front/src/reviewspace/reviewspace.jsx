@@ -146,6 +146,9 @@ const ReviewSpace = () => {
   // console.log(tripData);
 
   useEffect(() => {
+    console.log(curNode);
+  }, [curNode]);
+  useEffect(() => {
     dayManager.updateFromFrontData(
       dayModuleList,
       dayCheckedList,

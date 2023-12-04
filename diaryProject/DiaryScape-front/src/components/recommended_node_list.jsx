@@ -12,7 +12,9 @@ const RecommendedNodeList = ({ getCurNodeRef, tripData, curNode }) => {
 
   let source;
   useEffect(() => {
+    if (!curNode) return;
     console.log('update');
+    console.log(curNode);
     setNodeDataSelected(false);
     setNodeListDataLoading(true);
 
@@ -22,23 +24,25 @@ const RecommendedNodeList = ({ getCurNodeRef, tripData, curNode }) => {
 
     source = axios.CancelToken.source();
 
+    console.log(curNode.contentID + ' ' + tripData.mapId);
     client
       .get(
         'api/placeRecommend/recommendPlace?contentid=' +
-          curNode.contentid +
+          curNode.contentID +
           '&mapid=' +
           tripData.mapId,
         { cancelToken: source.token }
       )
       .then((res) => {
+        console.log(res);
         setNodeListDataLoading(false);
         setNodeListData(res.data);
       });
   }, [curNode]);
 
-  const onNodeDataSelect = (nodeData, idx) => {
+  const onNodeDataSelect = (data, idx) => {
     setNodeDataSelected(true);
-    setSelectedData(nodeData);
+    setSelectedData({ data, idx });
   };
 
   return (
@@ -58,29 +62,28 @@ const RecommendedNodeList = ({ getCurNodeRef, tripData, curNode }) => {
           nodeListData &&
           nodeListData.map((result, idx) => (
             <Button
-              key={result.username}
+              key={'recommended_path ' + result.username + ' ' + idx}
               border="0px"
               borderBottom="1px"
               borderColor="gray.300"
               borderRadius="0px"
-              bgColor={
-                nodeDataSelected && selectedData.contentid == result.contentid
-                  ? 'blue.600'
-                  : 'white'
-              }
-              color={
-                nodeDataSelected && selectedData.contentid == result.contentid ? 'white' : 'black'
-              }
+              bgColor={nodeDataSelected && selectedData.idx == idx ? 'blue.600' : 'white'}
+              color={nodeDataSelected && selectedData.idx == idx ? 'white' : 'black'}
               _hover={{}}
-              h="40px"
+              // h="40px"
               onClick={(e) => onNodeDataSelect(result, idx)}
             >
-              <Box fontWeight="semibold" mr={2}>
-                {result.username}
-              </Box>
-              <Box fontWeight="medium">
+              <Box display="flex" fontWeight="medium">
+                <Box fontWeight="semibold">{result.username}</Box>
+                <Box mr={1}>님:&nbsp;</Box>
                 {result.nodeDTO_for_updateArrayList.map((nodeData) => (
-                  <Box key={result.username + ' ' + nodeData.id}>{nodeData.title}&nbsp;</Box>
+                  <Box
+                    key={
+                      'recommended_node ' + result.username + ' ' + idx + ' ' + nodeData.contentid
+                    }
+                  >
+                    {nodeData.title}&nbsp;-&gt;&nbsp;
+                  </Box>
                 ))}
               </Box>
             </Button>
