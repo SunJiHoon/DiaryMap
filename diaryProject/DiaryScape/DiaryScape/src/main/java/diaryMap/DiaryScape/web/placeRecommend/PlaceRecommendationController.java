@@ -30,8 +30,8 @@ public class PlaceRecommendationController {
 
         String userContentid = paraMap.get("contentid");
         String MapidForStartingNode = paraMap.get("mapid");
-        String curuseridForremovingNode = paraMap.get("loginId");
-
+        //String curuseridForremovingNode = paraMap.get("loginId");
+        String curuseridForremovingNode = "";
         Optional<Obj3d> obj3dOptionalforStart = obj3dRepository.findById(MapidForStartingNode);
         String startX = "";
         String startY = "";
@@ -39,6 +39,7 @@ public class PlaceRecommendationController {
             Obj3d obj3dforStart = obj3dOptionalforStart.get();
             startX =obj3dforStart.getStartNode().getMapx();
             startY =obj3dforStart.getStartNode().getMapy();
+            curuseridForremovingNode = obj3dforStart.getMember().getLoginId();
         }
 
         List<Obj3d> obj3dList = obj3dRepository.findAll();
