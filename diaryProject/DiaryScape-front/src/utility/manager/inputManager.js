@@ -135,7 +135,7 @@ class inputManager {
           var load_options = objectManager.getLoadOptions();
           var search_options = objectManager.getSearchOptions();
           var recommended_options = objectManager.getRecommendedOptions();
-          const concat_options = load_options.concat(search_options);
+          var concat_options = load_options.concat(search_options);
           concat_options = concat_options.concat(recommended_options);
           setSelectOptionData({ character, options: concat_options, select_option });
           if (cur_node == select_option) {
