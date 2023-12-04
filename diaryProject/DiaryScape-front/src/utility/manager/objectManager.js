@@ -183,6 +183,10 @@ class objectManager {
     search_options = [];
   }
 
+  getRecommendedOptions(){
+    return recommended_options;
+  }
+
   clearRecommendedOptions(){
     recommended_options = [];
   }
