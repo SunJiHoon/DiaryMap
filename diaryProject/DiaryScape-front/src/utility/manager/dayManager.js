@@ -51,7 +51,8 @@ class DayManager {
     _setDayMenuOpenList,
     _setDayCheckedList,
     _updateFrontReviews,
-    _updateFrontTotalReview
+    _updateFrontTotalReview,
+    _setCurNode
   ) {
     this.setDayModuleList = _setDayModuleList;
     this.setNextDayMenuId = _setNextDayMenuId;
@@ -60,6 +61,7 @@ class DayManager {
     this.setDayCheckedList = _setDayCheckedList;
     this.updateFrontReviews = _updateFrontReviews;
     this.updateFrontTotalReview = _updateFrontTotalReview;
+    this.setCurNodeToFront = _setCurNode;
   }
 
   updateFromFrontData(_dayModuleList, _dayCheckedList, _currentDay, _nextDayMenuId, _tripData) {
@@ -187,7 +189,7 @@ class DayManager {
 
   changeDayNodeIndex = (index, isUp) => {
     const length = nodes[this.currentDay - 1].length / 2;
-    console.log(nodes[this.currentDay -1]);
+    console.log(nodes[this.currentDay - 1]);
     console.log(length);
 
     if (index < 1 || index > length) {
@@ -200,42 +202,40 @@ class DayManager {
       console.log('이동 불가');
       return;
     }
-    if(isUp){//노드가 위로 갈 때
-      var temp = nodes[this.currentDay -1][2 * index - 1];
+    if (isUp) {
+      //노드가 위로 갈 때
+      var temp = nodes[this.currentDay - 1][2 * index - 1];
       nodes[this.currentDay - 1][2 * index - 1] = nodes[this.currentDay - 1][2 * index - 3];
       nodes[this.currentDay - 1][2 * index - 3] = temp;
 
-      if(index == 2){
+      if (index == 2) {
         this.changeLine(index, 0, 2);
-      }
-      else if(index == length){
+      } else if (index == length) {
         this.changeLine(index, 1, 3);
-      }
-      else{
+      } else {
         this.changeLine(index, 0, 3);
       }
-    }
-    else{//노드가 아래로 내려갈 때
+    } else {
+      //노드가 아래로 내려갈 때
       var temp = nodes[this.currentDay - 1][2 * index + 1];
       nodes[this.currentDay - 1][2 * index + 1] = nodes[this.currentDay - 1][2 * index - 1];
       nodes[this.currentDay - 1][2 * index - 1] = temp;
 
-      if(index == 1){
+      if (index == 1) {
         this.changeLine(index, -1, 1);
-      }
-      else if(index == length - 1){
+      } else if (index == length - 1) {
         this.changeLine(index, 0, 2);
-      }
-      else{
+        this.setCurNodeToFront(this.getCurNode().userData);
+      } else {
         this.changeLine(index, -1, 2);
       }
     }
 
     this.updateDayNodesToFront();
     saveManager.saveMyNodes();
-  }
+  };
 
-  changeLine(index, start, end){
+  changeLine(index, start, end) {
     for (let i = start; i < end; i++) {
       objectManager.removeObject(nodes[this.currentDay - 1][2 * index - 2 * i]);
       nodes[this.currentDay - 1][2 * index - 2 * i] = objectManager.drawLine(
@@ -261,6 +261,7 @@ class DayManager {
       objectManager.removeObject(nodes[dayIdx - 1][index * 2 - 1]);
       objectManager.removeObject(nodes[dayIdx - 1][index * 2 - 2]);
       nodes[dayIdx - 1].splice(index * 2 - 2, 2);
+      this.setCurNodeToFront(this.getCurNode().userData);
     } else {
       objectManager.removeObject(nodes[dayIdx - 1][index * 2 - 2]);
       objectManager.removeObject(nodes[dayIdx - 1][index * 2 - 1]);
@@ -327,8 +328,8 @@ class DayManager {
   }
 
   getDayColor(Idx) {
-    if(Idx == 0){
-      return "white";
+    if (Idx == 0) {
+      return 'white';
     }
     return this.colorList[Idx % 4];
   }

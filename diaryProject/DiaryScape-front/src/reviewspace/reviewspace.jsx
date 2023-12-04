@@ -109,6 +109,8 @@ const ReviewSpace = () => {
 
   const [nodeInfoData, setNodeInfoData] = useState({});
 
+  const [curNode, setCurNode] = useState(null);
+
   mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
   const map = useRef(null);
   const mapContainer = useRef(null);
@@ -130,7 +132,8 @@ const ReviewSpace = () => {
     setDayMenuOpenList,
     setDayCheckedList,
     setReviews,
-    setTotalReview
+    setTotalReview,
+    setCurNode
   );
 
   dayManager.updateFromFrontData(
@@ -634,7 +637,13 @@ const ReviewSpace = () => {
                 changeDayNodeIndexRef={changeDayNodeIndexRef}
               />
             )}
-            {rightBarPage == 1 && <RecommendedNodeList />}
+            {rightBarPage == 1 && (
+              <RecommendedNodeList
+                getCurNodeRef={getCurNodeRef}
+                tripData={tripData}
+                curNode={curNode}
+              />
+            )}
             {rightBarPage == 2 && (
               <RightBarPageDiary
                 isReadonly={isReadonly}
