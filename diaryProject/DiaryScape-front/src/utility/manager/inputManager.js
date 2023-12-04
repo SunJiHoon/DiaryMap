@@ -123,9 +123,6 @@ class inputManager {
         mglCameraPositionTransformed,
         direction.sub(mglCameraPositionTransformed).normalize()
       );
-      // var arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 8, 0xff0000);
-      // scene.add(arrow);
-      // console.log(mglCameraPosition)
       const intersectObjects = raycaster.intersectObjects(scene.children);
 
       for (let i = 0; i < intersectObjects.length; i++) {
@@ -136,11 +133,10 @@ class inputManager {
           const cur_node = nodes[index];
           select_option = intersectObjects[i].object;
           var load_options = objectManager.getLoadOptions();
-          console.log('options.length', load_options.length);
           var search_options = objectManager.getSearchOptions();
-          console.log('search_options.length', search_options.length);
+          var recommended_options = objectManager.getRecommendedOptions();
           const concat_options = load_options.concat(search_options);
-          console.log('concat_options.length', concat_options.length);
+          concat_options = concat_options.concat(recommended_options);
           setSelectOptionData({ character, options: concat_options, select_option });
           if (cur_node == select_option) {
             break;

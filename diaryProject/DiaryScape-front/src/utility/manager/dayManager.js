@@ -326,6 +326,9 @@ class DayManager {
   }
 
   getDayColor(Idx) {
+    if(Idx == 0){
+      return "white";
+    }
     return this.colorList[Idx % 4];
   }
 

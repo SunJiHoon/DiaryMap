@@ -7,6 +7,7 @@ import { gsap } from 'gsap';
 
 let load_options = [];
 let search_options = [];
+let recommended_options;
 
 let selectSearchNode;
 
@@ -53,10 +54,6 @@ class objectManager {
     // await this.loadOptions(new THREE.Vector3(tripData.startX, 1, tripData.startY));
   }
 
-  async initLoadNode() {
-    const lastNode = dayManager.getCurNode();
-  }
-
   async loadOptions(selectPos) {
     const res = await client.get(
       '/api/openApi/node?mapId=' + tripData.mapId + '&mapX=' + selectPos.x + '&mapY=' + selectPos.z
@@ -79,6 +76,14 @@ class objectManager {
     }
     console.log('end load search options');
   };
+
+  loadRecommendedOptions = async (nodeInfos) => {
+    this.invisibleOptions(recommended_options, null);
+    this.clearRecommendedOptions();
+    console.log("load Recommended Optoins");
+    recommended_options = this.drawDay(nodeInfos, 0);
+    console.log("end load recommended options");
+  }
 
   invisibleOptions(options, select_option) {
     for (let i = 0; i < options.length; i++) {
@@ -176,6 +181,10 @@ class objectManager {
 
   clearSearchOptions() {
     search_options = [];
+  }
+
+  clearRecommendedOptions(){
+    recommended_options = [];
   }
 }
 
