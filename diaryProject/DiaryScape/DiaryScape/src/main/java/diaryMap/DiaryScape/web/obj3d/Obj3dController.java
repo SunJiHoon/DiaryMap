@@ -55,8 +55,7 @@ public class Obj3dController {
         tempStartNode.setMapy(paraMap.get("mapy"));
         tempStartNode.setVisitDate(paraMap.get("date"));
         tempStartNode.setNodeReview(paraMap.get("nodeReview"));
-
-
+        tempStartNode.setImportCount("0");
 
         obj3d1.setStartNode(tempStartNode);
 
@@ -345,6 +344,7 @@ public class Obj3dController {
                 destinationNodeDTO.setAddr1(sourceNodeDTO.getAddr1());
                 destinationNodeDTO.setVisitDate(sourceNodeDTO.getVisitDate());
                 destinationNodeDTO.setNodeReview(paraMap.get("nodeReview"));
+                destinationNodeDTO.setImportCount(sourceNodeDTO.getImportCount());
                 // 다른 필드 복사
                 NodeDTOs_for_update[i] = destinationNodeDTO;
             }
@@ -414,6 +414,8 @@ public class Obj3dController {
                 destinationNodeDTO.setAddr1(sourceNodeDTO.getAddr1());
                 destinationNodeDTO.setVisitDate(sourceNodeDTO.getVisitDate());
                 destinationNodeDTO.setNodeReview(paraMap.get("nodeReview"));
+                destinationNodeDTO.setImportCount(sourceNodeDTO.getImportCount());
+
                 // 다른 필드 복사
                 NodeDTOs_for_update[i] = destinationNodeDTO;
             }
@@ -499,6 +501,7 @@ public class Obj3dController {
                 destinationNodeDTO.setAddr1(sourceNodeDTO.getAddr1());
                 destinationNodeDTO.setVisitDate(sourceNodeDTO.getVisitDate());
                 destinationNodeDTO.setNodeReview(sourceNodeDTO.getNodeReview());
+                destinationNodeDTO.setImportCount(sourceNodeDTO.getImportCount());
                 // 다른 필드 복사
                 NodeDTOs_for_update[i] = destinationNodeDTO;
             }
@@ -587,7 +590,7 @@ class trashDTO{
     private String addr1;
     private String visitDate;
     private String nodeReview;
-
+    private String importCount;
 }
 @Data
 @RequiredArgsConstructor
