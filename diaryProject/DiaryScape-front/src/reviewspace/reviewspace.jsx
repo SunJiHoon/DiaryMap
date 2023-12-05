@@ -6,36 +6,16 @@ import RightBarPageDay from '../components/right_bar_page_day';
 import RightBarPageDiary from '../components/right_bar_page_diary';
 import RecommendedNodeList from '../components/recommended_node_list';
 import NodeMenu from '../components/node_menu';
+import MapStyleButtons from '../components/map_style_buttons';
 import InputManager, { selectOption } from '../utility/manager/inputManager';
 import ObjectManager from '../utility/manager/objectManager';
 import SaveManager from '../utility/manager/saveManager';
 import DayManager from '../utility/manager/dayManager';
 import { useRef, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  IconButton,
-  Checkbox,
-  Select,
-  Textarea,
-  Input,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, IconButton } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import {
-  IoChevronDown,
   IoChevronForward,
-  IoSearch,
-  IoAdd,
-  IoRemove,
   IoPencil,
   IoBook,
   IoChevronBack,
@@ -43,7 +23,7 @@ import {
   IoCubeOutline,
 } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
-import { createContext, useContext } from 'react';
+import { createContext } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxLanguage from '@mapbox/mapbox-gl-language';
 import client from '../utility/client';
@@ -471,6 +451,12 @@ const ReviewSpace = () => {
     }
   };
 
+  const changeMapStyle = (style) => {
+    if (map.current) {
+      map.current.setStyle('mapbox://styles/mapbox/' + style);
+    }
+  };
+
   const onPlusSearchNodeClick = (selectedNode) => {
     if (plusSearchNodeRef.current) {
       plusSearchNodeRef.current(selectedNode);
@@ -669,22 +655,7 @@ const ReviewSpace = () => {
             zIndex: 2,
           }}
         >
-          <Box diplay="flex" boxShadow="2xl">
-            <Button
-              onClick={() => {
-                if (map.current) map.current.setStyle('mapbox://styles/mapbox/streets-v12');
-              }}
-            >
-              컬러
-            </Button>
-            <Button
-              onClick={() => {
-                if (map.current) map.current.setStyle('mapbox://styles/mapbox/light-v11');
-              }}
-            >
-              흑백
-            </Button>
-          </Box>
+          <MapStyleButtons changeMapStyle={changeMapStyle} />
         </div>
 
         <NodeMenu
