@@ -109,7 +109,9 @@ public class PlaceRecommendationController {
                 //String curTotalCount_string =  String.valueOf(curTotalCount);
                 Random random = new Random();
                 String curTotalCount_string =  String.valueOf(random.nextInt(11));
-                importedPathModule curimportedPathModule = new importedPathModule(curUsername, curTotalCount_string ,curNodeDTOArrayList);
+                String mapName = "";
+                mapName = actualObj3d.getObjName();
+                importedPathModule curimportedPathModule = new importedPathModule(curUsername, mapName, curTotalCount_string ,curNodeDTOArrayList);
                 importedPathModuleArrayList.add(curimportedPathModule);
             }
             else{
@@ -147,6 +149,7 @@ class mapidAndDay{
 @Data
 class importedPathModule{
     String username;
+    String mapname;
     String totalImportedCount;
     ArrayList<NodeDTO_for_update> NodeDTO_for_updateArrayList;
 }
