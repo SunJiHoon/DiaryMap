@@ -26,7 +26,7 @@ class saveManager {
       dayManager.clearNodes();
       dayManager.clearReviews();
       dayManager.plusDay();
-      await objectManager.initNode();
+      await dayManager.createInitNode();
       this.saveMyNodes();
       this.saveReviews();
     } else if (isFirst.data == 'modified') {

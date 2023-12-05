@@ -181,10 +181,17 @@ class DayManager {
     return nodes;
   }
 
+  async createInitNode(){
+    await objectManager.initNode();
+    this.setCurNodeToFront();
+  }
+
   plusDayNode(line, node) {
     nodes[this.currentDay - 1].push(line);
     nodes[this.currentDay - 1].push(node);
+
     this.updateDayNodesToFront();
+    this.setCurNodeToFront();
   }
 
   changeDayNodeIndex = (index, isUp) => {
