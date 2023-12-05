@@ -32,6 +32,15 @@ import '../styles/custom.css';
 
 export const CanvasContext = createContext();
 
+var mapStyle = 'mapbox://styles/mapbox/streets-v12';
+// var mapStyle = 'mapbox://styles/mapbox/outdoors-v11';
+// var mapStyle = 'mapbox://styles/mapbox/light-v11';
+// var mapStyle = 'mapbox://styles/mapbox/dark-v11';
+// var mapStyle = 'mapbox://styles/mapbox/satellite-v11';
+// var mapStyle = 'mapbox://styles/mapbox/navigation-day-v1';
+// var mapStyle = 'mapbox://styles/mapbox/navigation-night-v1';
+
+
 let nextReviewId = 2;
 
 const ReviewSpace = () => {
@@ -187,7 +196,7 @@ const ReviewSpace = () => {
     // dayManager.dataPropagationTest()
     if (map.current) return;
     map.current = new mapboxgl.Map({
-      style: 'mapbox://styles/mapbox/light-v11',
+      style: mapStyle,
       center: [tripData.startX, tripData.startY],
       zoom: 19.5,
       pitch: 45,

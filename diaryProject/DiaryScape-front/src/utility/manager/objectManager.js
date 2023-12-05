@@ -4,6 +4,9 @@ import Node from '../object/node.js';
 import client from '../client.jsx';
 import DayManager from './dayManager.js';
 import { gsap } from 'gsap';
+// import { Line2 } from 'three/addons/lines/Line2.js';
+// import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+// import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 
 let load_options = [];
 let search_options = [];
@@ -27,9 +30,6 @@ class objectManager {
 
   newMap = async () => {
     scene.clear();
-
-    // camera.position.set(originCameraPos.x, originCameraPos.y, originCameraPos.z);
-
     const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
     directionalLight.position.set(-10, 10, 20);
     scene.add(directionalLight);
@@ -81,7 +81,7 @@ class objectManager {
     this.invisibleOptions(recommended_options, null);
     this.clearRecommendedOptions();
     console.log("load Recommended Optoins");
-    recommended_options = this.drawDay(nodeInfos, 0);
+    recommended_options = this.drawDay(nodeInfos, -1);
     console.log("end load recommended options");
   }
 
@@ -151,13 +151,37 @@ class objectManager {
   }
 
   drawLine(startNode, endNode, lineColor) {
+    // const points = [];
+    // const colors = [];
+    // points.push(startNode.x, 0, startNode.z);
+    // points.push(endNode.x, 0, endNode.z);
+    // colors.push(0, 0, 255);
+
+    // const geometry = new LineGeometry();
+    // 		geometry.setPositions( points );
+    // 		geometry.setColors( colors );
+
+    // const matLine = new LineMaterial({
+    //   color: 0xffffff,
+    //   linewidth: 0.005, // in world units with size attenuation, pixels otherwise
+    //   vertexColors: true,
+    //   dashed: true,
+    //   dashSize: 5,
+    //   alphaToCoverage: true,
+    // });
+    // console.log(matLine);
+
+    // const line = new Line2(geometry, matLine);
+    // line.computeLineDistances();
+    // line.scale.set(1, 1, 1);
+    // scene.add(line);
     const points = [];
     const start = new THREE.Vector3(startNode.x, 0, startNode.z);
     const end = new THREE.Vector3(endNode.x, 0, endNode.z);
     points.push(start);
     points.push(end);
     const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-    const lineMaterial = new THREE.LineBasicMaterial({ color: lineColor });
+    const lineMaterial = new THREE.LineBasicMaterial({ color: lineColor, linewidth: 10 });
     const line = new THREE.Line(lineGeometry, lineMaterial);
     scene.add(line);
     return line;
@@ -183,11 +207,11 @@ class objectManager {
     search_options = [];
   }
 
-  getRecommendedOptions(){
+  getRecommendedOptions() {
     return recommended_options;
   }
 
-  clearRecommendedOptions(){
+  clearRecommendedOptions() {
     recommended_options = [];
   }
 }
