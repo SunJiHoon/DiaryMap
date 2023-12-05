@@ -4,7 +4,7 @@ import client from '../utility/client';
 import axios from 'axios';
 import { useEffect } from 'react';
 
-const RecommendedNodeList = ({ getCurNodeRef, tripData, curNode }) => {
+const RecommendedNodeList = ({ getCurNodeRef, tripData, curNode, drawDayRef }) => {
   const [nodeListData, setNodeListData] = useState(null);
   const [nodeListDataLoading, setNodeListDataLoading] = useState(false);
   const [nodeDataSelected, setNodeDataSelected] = useState(false);
@@ -43,6 +43,10 @@ const RecommendedNodeList = ({ getCurNodeRef, tripData, curNode }) => {
   const onNodeDataSelect = (data, idx) => {
     setNodeDataSelected(true);
     setSelectedData({ data, idx });
+    console.log(data);
+    if (drawDayRef.current) {
+      drawDayRef.current(data.nodeDTO_for_updateArrayList, -1);
+    }
   };
 
   return (
@@ -76,10 +80,17 @@ const RecommendedNodeList = ({ getCurNodeRef, tripData, curNode }) => {
               <Box display="flex" fontWeight="medium">
                 <Box fontWeight="semibold">{result.username}</Box>
                 <Box mr={1}>님:&nbsp;</Box>
-                {result.nodeDTO_for_updateArrayList.map((nodeData) => (
+                {result.nodeDTO_for_updateArrayList.map((nodeData, idx_node) => (
                   <Box
                     key={
-                      'recommended_node ' + result.username + ' ' + idx + ' ' + nodeData.contentid
+                      'recommended_node ' +
+                      result.username +
+                      ' ' +
+                      idx +
+                      ' ' +
+                      idx_node +
+                      ' ' +
+                      nodeData.contentid
                     }
                   >
                     {nodeData.title}&nbsp;-&gt;&nbsp;
