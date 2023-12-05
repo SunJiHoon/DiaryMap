@@ -96,7 +96,8 @@ public class PlaceRecommendationController {
                                 relativeY,
                                 finding[j].getAddr1(),
                                 finding[j].getVisitDate(),
-                                finding[j].getNodeReview()
+                                finding[j].getNodeReview(),
+                                finding[j].getImportCount()
                         );
                         curNodeDTOArrayList.add(nodeDTO_for_update);
                     }

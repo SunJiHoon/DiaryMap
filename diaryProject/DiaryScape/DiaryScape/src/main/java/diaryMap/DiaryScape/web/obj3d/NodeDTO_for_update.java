@@ -21,5 +21,6 @@ public class NodeDTO_for_update {
     private String addr1;
     private String visitDate;
     private String nodeReview;
+    private String importCount;
 }
 
