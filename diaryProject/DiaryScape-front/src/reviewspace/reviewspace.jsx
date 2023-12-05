@@ -633,6 +633,7 @@ const ReviewSpace = () => {
                 getCurNodeRef={getCurNodeRef}
                 changeDayNodeIndexRef={changeDayNodeIndexRef}
                 saveReviewsInSaveManager={saveReviewsInSaveManager}
+                removeDayNodeRef={removeDayNodeRef}
               />
             )}
             {rightBarPage == 1 && (
