@@ -4,7 +4,7 @@ import client from '../utility/client';
 import axios from 'axios';
 import { useEffect } from 'react';
 
-const RecommendedNodeList = ({ getCurNodeRef, tripData, curNode, drawDayRef }) => {
+const RecommendedNodeList = ({ getCurNodeRef, tripData, curNode, loadRecommendedOptionsRef }) => {
   const [nodeListData, setNodeListData] = useState(null);
   const [nodeListDataLoading, setNodeListDataLoading] = useState(false);
   const [nodeDataSelected, setNodeDataSelected] = useState(false);
@@ -44,8 +44,8 @@ const RecommendedNodeList = ({ getCurNodeRef, tripData, curNode, drawDayRef }) =
     setNodeDataSelected(true);
     setSelectedData({ data, idx });
     console.log(data);
-    if (drawDayRef.current) {
-      drawDayRef.current(data.nodeDTO_for_updateArrayList, -1);
+    if (loadRecommendedOptionsRef.current) {
+      loadRecommendedOptionsRef.current(data.nodeDTO_for_updateArrayList, -1);
     }
   };
 
