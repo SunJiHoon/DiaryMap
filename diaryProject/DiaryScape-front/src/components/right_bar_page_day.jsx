@@ -151,51 +151,54 @@ const RightBarPageDay = ({
             overflowX="auto"
             transition="all 0.3s ease-in-out"
           >
-            {dayModuleList[currentDay - 1].data.map((node, i) => {
-              const _key = 'day ' + currentDay + ': node ' + i;
-              return (
-                <Box key={_key}>
-                  <Box display="flex" h={10} lineHeight={8}>
-                    {!isReadonly && (
-                      <Box display="flex" flexDirection="column">
-                        <Button
-                          w="10px"
-                          onClick={() => {
-                            if (changeDayNodeIndexRef.current)
-                              changeDayNodeIndexRef.current(i + 1, true);
-                          }}
-                        >
-                          u
-                        </Button>
-                        <Button
-                          w="10px"
-                          onClick={() => {
-                            if (changeDayNodeIndexRef.current)
-                              changeDayNodeIndexRef.current(i + 1, false);
-                          }}
-                        >
-                          d
-                        </Button>
+            {dayModuleList &&
+              dayModuleList[currentDay - 1] &&
+              dayModuleList[currentDay - 1].data &&
+              dayModuleList[currentDay - 1].data.map((node, i) => {
+                const _key = 'day ' + currentDay + ': node ' + i;
+                return (
+                  <Box key={_key}>
+                    <Box display="flex" h={10} lineHeight={8}>
+                      {!isReadonly && (
+                        <Box display="flex" flexDirection="column">
+                          <Button
+                            w="10px"
+                            onClick={() => {
+                              if (changeDayNodeIndexRef.current)
+                                changeDayNodeIndexRef.current(i + 1, true);
+                            }}
+                          >
+                            u
+                          </Button>
+                          <Button
+                            w="10px"
+                            onClick={() => {
+                              if (changeDayNodeIndexRef.current)
+                                changeDayNodeIndexRef.current(i + 1, false);
+                            }}
+                          >
+                            d
+                          </Button>
+                        </Box>
+                      )}
+                      <Box
+                        fontWeight="semibold"
+                        overflow="hidden"
+                        onClick={() => {
+                          setNodeInfoData({ day: currentDay, idx: i, node });
+                          onNodeInfoOpen();
+                        }}
+                        _hover={{
+                          bgColor: '#00ff0033',
+                          transition: 'all .3s',
+                        }}
+                      >
+                        {i + 1}. {node.title}
                       </Box>
-                    )}
-                    <Box
-                      fontWeight="semibold"
-                      overflow="hidden"
-                      onClick={() => {
-                        setNodeInfoData({ day: currentDay, idx: i, node });
-                        onNodeInfoOpen();
-                      }}
-                      _hover={{
-                        bgColor: '#00ff0033',
-                        transition: 'all .3s',
-                      }}
-                    >
-                      {i + 1}. {node.title}
                     </Box>
                   </Box>
-                </Box>
-              );
-            })}
+                );
+              })}
           </Box>
         </Box>
         <Box mt={4}>
