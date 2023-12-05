@@ -111,6 +111,8 @@ const ReviewSpace = () => {
 
   const [curNode, setCurNode] = useState(null);
 
+  const [mapStyle, setMapStyle] = useState('');
+
   mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
   const map = useRef(null);
   const mapContainer = useRef(null);
@@ -658,6 +660,32 @@ const ReviewSpace = () => {
             )}
           </Box>
         </RightBar>
+
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '32px',
+            left: '32px',
+            zIndex: 2,
+          }}
+        >
+          <Box diplay="flex" boxShadow="2xl">
+            <Button
+              onClick={() => {
+                if (map.current) map.current.setStyle('mapbox://styles/mapbox/streets-v12');
+              }}
+            >
+              컬러
+            </Button>
+            <Button
+              onClick={() => {
+                if (map.current) map.current.setStyle('mapbox://styles/mapbox/light-v11');
+              }}
+            >
+              흑백
+            </Button>
+          </Box>
+        </div>
 
         <NodeMenu
           nodeMenuOn={nodeMenuOn}
