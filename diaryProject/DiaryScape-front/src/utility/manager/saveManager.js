@@ -27,7 +27,7 @@ class saveManager {
       dayManager.clearNodes();
       dayManager.clearReviews();
       dayManager.plusDay();
-      await dayManager.createInitNode();
+      await objectManager.initNode();
       this.saveMyNodes();
       this.saveReviews();
     } else if (isFirst.data == 'modified') {
@@ -37,10 +37,8 @@ class saveManager {
       await this.loadReviews();
       this.saveMyNodes();
       this.saveReviews();
-      //await objectManager.initLoadNode();
-      //dayManager.plusDay();
-      //await objectManager.initNode();
     }
+    this.setCurNodeToFront(dayManager.getCurNode().userData);
   }
 
   saveMyNodes() {

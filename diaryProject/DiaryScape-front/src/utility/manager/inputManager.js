@@ -153,6 +153,7 @@ class inputManager {
     objectManager.changeNodeColor(node, dayManager.getDayColor(dayManager.getCurDay() - 1));
     var load_options = objectManager.getLoadOptions();
     var options = load_options.concat(objectManager.getSearchOptions());
+    options.concat(objectManager.getRecommendedOptions());
     selectOption({ character, options, select_option: node });
   }
 

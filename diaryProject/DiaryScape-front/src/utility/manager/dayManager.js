@@ -181,17 +181,12 @@ class DayManager {
     return nodes;
   }
 
-  async createInitNode() {
-    await objectManager.initNode();
-    this.setCurNodeToFront();
-  }
-
   plusDayNode(line, node) {
     nodes[this.currentDay - 1].push(line);
     nodes[this.currentDay - 1].push(node);
 
     this.updateDayNodesToFront();
-    this.setCurNodeToFront();
+    this.setCurNodeToFront(this.getCurNode().userData);
   }
 
   changeDayNodeIndex = (index, isUp) => {
@@ -369,6 +364,7 @@ class DayManager {
     obj.relativeY = Number(nodeInfo.relativeY);
     obj.addr1 = nodeInfo.addr1;
     obj.visitDate = nodeInfo.visitDate;
+    obj.importCount = nodeInfo.importCount;
     return obj;
   }
 }
