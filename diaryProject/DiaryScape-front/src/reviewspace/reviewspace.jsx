@@ -423,8 +423,6 @@ const ReviewSpace = () => {
         },
         labelLayerId
       );
-    });
-    map.current.on('load', () => {
       map.current.addLayer(customLayer);
     });
 
