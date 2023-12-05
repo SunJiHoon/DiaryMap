@@ -34,6 +34,7 @@ class node {
       addr1: infos.addr1,
       visitDate: infos.visitDate,
       nodeReview: infos.nodeReview,
+      importCount: 0,
     };
 
     var ranY = randInt(35.0, 40.0);

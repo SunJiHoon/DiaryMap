@@ -181,7 +181,7 @@ class DayManager {
     return nodes;
   }
 
-  async createInitNode(){
+  async createInitNode() {
     await objectManager.initNode();
     this.setCurNodeToFront();
   }
@@ -196,50 +196,65 @@ class DayManager {
 
   changeDayNodeIndex = (index, isUp) => {
     const length = nodes[this.currentDay - 1].length / 2;
-    console.log(nodes[this.currentDay - 1]);
-    console.log(length);
 
     if (index < 1 || index > length) {
       //index does not exist
-      console.log('없는 노드');
       return;
     }
-    if ((index == 1 && isUp) || (index == length && !isUp)) {
-      //첫 노드를 위로나 마지막 노드를 밑으로 보내려고 할 때
-      console.log('이동 불가');
-      return;
-    }
+
     if (isUp) {
       //노드가 위로 갈 때
+      if (index == 1) {// 첫 노드 이동불가
+        return;
+      }
+
       var temp = nodes[this.currentDay - 1][2 * index - 1];
       nodes[this.currentDay - 1][2 * index - 1] = nodes[this.currentDay - 1][2 * index - 3];
       nodes[this.currentDay - 1][2 * index - 3] = temp;
 
+      this.updateDayNodesToFront();
+      saveManager.saveMyNodes();
+
+
       if (index == 2) {
+        if (length == 2) {
+          this.setCurNodeToFront(this.getCurNode().userData);
+          return;
+        }
         this.changeLine(index, 0, 2);
       } else if (index == length) {
         this.changeLine(index, 1, 3);
+        this.setCurNodeToFront(this.getCurNode().userData);
       } else {
         this.changeLine(index, 0, 3);
       }
-    } else {
+    }
+    else {
       //노드가 아래로 내려갈 때
+      if (index == length) {
+        return;
+      }
+
       var temp = nodes[this.currentDay - 1][2 * index + 1];
       nodes[this.currentDay - 1][2 * index + 1] = nodes[this.currentDay - 1][2 * index - 1];
       nodes[this.currentDay - 1][2 * index - 1] = temp;
 
+      this.updateDayNodesToFront();
+      saveManager.saveMyNodes();
+
       if (index == 1) {
+        if (length == 2) {
+          this.setCurNodeToFront(this.getCurNode().userData);
+          return;
+        }
         this.changeLine(index, -1, 1);
       } else if (index == length - 1) {
-        this.changeLine(index, 0, 2);
         this.setCurNodeToFront(this.getCurNode().userData);
+        this.changeLine(index, 0, 2);
       } else {
         this.changeLine(index, -1, 2);
       }
     }
-
-    this.updateDayNodesToFront();
-    saveManager.saveMyNodes();
   };
 
   changeLine(index, start, end) {
