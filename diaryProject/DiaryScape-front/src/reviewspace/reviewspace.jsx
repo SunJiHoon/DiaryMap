@@ -6,36 +6,16 @@ import RightBarPageDay from '../components/right_bar_page_day';
 import RightBarPageDiary from '../components/right_bar_page_diary';
 import RecommendedNodeList from '../components/recommended_node_list';
 import NodeMenu from '../components/node_menu';
+import MapStyleButtons from '../components/map_style_buttons';
 import InputManager, { selectOption } from '../utility/manager/inputManager';
 import ObjectManager from '../utility/manager/objectManager';
 import SaveManager from '../utility/manager/saveManager';
 import DayManager from '../utility/manager/dayManager';
 import { useRef, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  IconButton,
-  Checkbox,
-  Select,
-  Textarea,
-  Input,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, IconButton } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import {
-  IoChevronDown,
   IoChevronForward,
-  IoSearch,
-  IoAdd,
-  IoRemove,
   IoPencil,
   IoBook,
   IoChevronBack,
@@ -43,7 +23,7 @@ import {
   IoCubeOutline,
 } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
-import { createContext, useContext } from 'react';
+import { createContext } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxLanguage from '@mapbox/mapbox-gl-language';
 import client from '../utility/client';
@@ -675,29 +655,7 @@ const ReviewSpace = () => {
             zIndex: 2,
           }}
         >
-          <Box diplay="flex" boxShadow="2xl">
-            <Button size="sm" onClick={() => changeMapStyle('streets-v12')}>
-              streets-v12
-            </Button>
-            <Button size="sm" onClick={() => changeMapStyle('outdoors-v11')}>
-              outdoors-v11
-            </Button>
-            <Button size="sm" onClick={() => changeMapStyle('light-v11')}>
-              light-v11
-            </Button>
-            <Button size="sm" onClick={() => changeMapStyle('dark-v11')}>
-              dark-v11
-            </Button>
-            <Button size="sm" onClick={() => changeMapStyle('satellite-v11')}>
-              satellite-v11
-            </Button>
-            <Button size="sm" onClick={() => changeMapStyle('navigation-day-v1')}>
-              navigation-day-v1
-            </Button>
-            <Button size="sm" onClick={() => changeMapStyle('navigation-night-v1')}>
-              navigation-night-v1
-            </Button>
-          </Box>
+          <MapStyleButtons changeMapStyle={changeMapStyle} />
         </div>
 
         <NodeMenu

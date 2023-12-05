@@ -329,7 +329,7 @@ const MyTripmap = () => {
                 display="flex"
                 mb={6}
                 _hover={{
-                  transform: 'scale(1.2)',
+                  transform: 'scale(1.15)',
                 }}
                 transition="all .3s"
                 // animation={`1s linear ${1 * (i+1)}s initial-down`}
