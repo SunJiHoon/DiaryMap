@@ -40,7 +40,6 @@ var mapStyle = 'mapbox://styles/mapbox/streets-v12';
 // var mapStyle = 'mapbox://styles/mapbox/navigation-day-v1';
 // var mapStyle = 'mapbox://styles/mapbox/navigation-night-v1';
 
-
 let nextReviewId = 2;
 
 const ReviewSpace = () => {
@@ -196,7 +195,7 @@ const ReviewSpace = () => {
     // dayManager.dataPropagationTest()
     if (map.current) return;
     map.current = new mapboxgl.Map({
-      style: mapStyle,
+      style: 'mapbox://styles/mapbox/streets-v12',
       center: [tripData.startX, tripData.startY],
       zoom: 19.5,
       pitch: 45,
