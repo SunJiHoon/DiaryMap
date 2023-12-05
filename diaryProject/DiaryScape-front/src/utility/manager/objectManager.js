@@ -10,7 +10,7 @@ import { gsap } from 'gsap';
 
 let load_options = [];
 let search_options = [];
-let recommended_options;
+let recommended_options = [];
 
 let selectSearchNode;
 
