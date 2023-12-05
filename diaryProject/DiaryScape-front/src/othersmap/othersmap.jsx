@@ -2,21 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, clearUser } from '../reducer/user_slice';
 import { selectTrip, clearTrip } from '../reducer/trip_slice';
 import { selectStartnode, clearStartnode } from '../reducer/startnode_slice';
-import {
-  Box,
-  Input,
-  Button,
-  Heading,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  IconButton,
-} from '@chakra-ui/react';
+import { Box, Button, Heading, useDisclosure, IconButton } from '@chakra-ui/react';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import client from '../utility/client';
@@ -171,6 +157,10 @@ const OthersMap = () => {
                 key={review.mapId}
                 display="flex"
                 mb={6}
+                _hover={{
+                  transform: 'scale(1.15)',
+                }}
+                transition="all .3s"
                 // animation={`1s linear ${1 * (i+1)}s initial-down`}
               >
                 <Box

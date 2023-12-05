@@ -32,6 +32,14 @@ import '../styles/custom.css';
 
 export const CanvasContext = createContext();
 
+var mapStyle = 'mapbox://styles/mapbox/streets-v12';
+// var mapStyle = 'mapbox://styles/mapbox/outdoors-v11';
+// var mapStyle = 'mapbox://styles/mapbox/light-v11';
+// var mapStyle = 'mapbox://styles/mapbox/dark-v11';
+// var mapStyle = 'mapbox://styles/mapbox/satellite-v11';
+// var mapStyle = 'mapbox://styles/mapbox/navigation-day-v1';
+// var mapStyle = 'mapbox://styles/mapbox/navigation-night-v1';
+
 let nextReviewId = 2;
 
 const ReviewSpace = () => {
@@ -187,7 +195,7 @@ const ReviewSpace = () => {
     // dayManager.dataPropagationTest()
     if (map.current) return;
     map.current = new mapboxgl.Map({
-      style: 'mapbox://styles/mapbox/light-v11',
+      style: 'mapbox://styles/mapbox/streets-v12',
       center: [tripData.startX, tripData.startY],
       zoom: 19.5,
       pitch: 45,
@@ -299,7 +307,7 @@ const ReviewSpace = () => {
             plusSearchNodeRef.current = inputManager.plusSearchNode;
           });
         });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        // this.renderer.setSize(window.innerWidth, window.innerHeight);
 
         // let _cameraPosition = map.getFreeCameraOptions().position;
         // cameraPosition.set(_cameraPosition.x, _cameraPosition.y, _cameraPosition.z)
@@ -423,8 +431,6 @@ const ReviewSpace = () => {
         },
         labelLayerId
       );
-    });
-    map.current.on('load', () => {
       map.current.addLayer(customLayer);
     });
 
@@ -627,6 +633,7 @@ const ReviewSpace = () => {
                 getCurNodeRef={getCurNodeRef}
                 changeDayNodeIndexRef={changeDayNodeIndexRef}
                 saveReviewsInSaveManager={saveReviewsInSaveManager}
+                removeDayNodeRef={removeDayNodeRef}
               />
             )}
             {rightBarPage == 1 && (
