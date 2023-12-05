@@ -7,6 +7,8 @@ import diaryMap.DiaryScape.web.openApi.NodeController;
 
 import diaryMap.DiaryScape.web.openApi.KeywordDTO;
 import diaryMap.DiaryScape.web.openApi.NodeDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +50,8 @@ public class kakaoKeywordController {
                 "&sort=accuracy" +
                 "&query=" + userKeyword;
     }
+
+
 
     @GetMapping(value = "/kakaoOpenApi/onlyKeywordFirst/list",produces = "application/json")
     public String showMeNodeInfo_onlyKeywordFirst(
@@ -271,7 +275,7 @@ public class kakaoKeywordController {
                 "&query=" + userKeyword +
                 "&y=" + y +
                 "&x=" + x +
-                "&radius=2000";//단위는 미터
+                "&radius=20000";//단위는 미터
     }
 
     @GetMapping(value = "/kakaoOpenApi/keywordAndCoord/list",produces = "application/json")
@@ -388,5 +392,99 @@ public class kakaoKeywordController {
         return returnjsonArray.toString();
     }
 
+
+    //카카오 키워드는 특정 좌표 근처에서 검색을 수행함.
+    private String givemePathQuery(String originX, String originY, String destX, String destY){
+        return "https://apis-navi.kakaomobility.com/v1/directions" +
+                "?origin=" +
+                originX +
+                "," +
+                originY +
+                "&destination=" +
+                destX +
+                "," +
+                destY +
+                "&waypoints=" +
+                "&priority=RECOMMEND" +
+                "&car_fuel=GASOLINE" +
+                "&car_hipass=false" +
+                "&alternatives=false" +
+                "&road_details=false";
+    }
+
+    @GetMapping(value = "/kakaoOpenApi/getPath",produces = "application/json")
+    public pathInfoClass giveMePath(
+            @RequestParam Map<String, String> paraMap
+    ) throws IOException {
+        //쿼리 요청 날리기
+        String oriX = "";
+        String oriY = "";
+        String destX = "";
+        String destY = "";
+
+        try {
+            oriX = URLEncoder.encode(paraMap.get("oriX"), "UTF-8");
+            oriY = URLEncoder.encode(paraMap.get("oriY"), "UTF-8");
+            destX = URLEncoder.encode(paraMap.get("destX"), "UTF-8");
+            destY = URLEncoder.encode(paraMap.get("destY"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        URL url = new URL(givemePathQuery(oriX, oriY, destX, destY));
+        String line;
+        StringBuilder sb = new StringBuilder();
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json; charset=UTF-8");
+        // KakaoAK를 포함한 Authorization 헤더 설정
+        String apiKey = env.getProperty("kakao-admin-key");
+        //log.info(apiKey);
+        conn.setRequestProperty("Authorization", "KakaoAK " + apiKey);
+
+        // API 응답메시지를 불러와서 문자열로 저장
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream(), "UTF-8"));
+        }
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+        String text = sb.toString();
+
+        //변환
+        JSONObject jsonObject = new JSONObject(text);
+        // "items" 객체 안에 있는 "item" 배열을 추출
+        JSONArray routesArray  = jsonObject.getJSONArray("routes");
+        int distance = 0;
+        int duration = 0;
+        int taxiFare = 0;
+        if (routesArray.length() > 0) {
+            JSONObject firstRoute = routesArray.getJSONObject(0);
+            JSONObject summaryObj = firstRoute.getJSONObject("summary");
+            //.getJSONObject("fare");
+            distance = summaryObj.getInt("distance");//m
+            duration = summaryObj.getInt("duration");//초
+            taxiFare = summaryObj.getJSONObject("fare").getInt("taxi");
+            return new pathInfoClass(String.valueOf(distance), String.valueOf(duration), String.valueOf(taxiFare));
+        } else {
+            log.info("No routes found");
+            return new pathInfoClass("-1", "-1", "-1");
+        }
+
+
+    }
     //
+}
+
+@Data
+@AllArgsConstructor
+class pathInfoClass{
+    private String distance;
+    private String duration;
+    private String taxiFare;
 }
