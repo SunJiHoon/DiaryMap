@@ -81,6 +81,7 @@ public class PlaceRecommendationController {
                 //ArrayList<NodeDTO> nodeDTOArrayList; 구하기
                 NodeDTO_for_update[] finding = actualObj3d.getJsonArr();
                 ArrayList<NodeDTO_for_update> curNodeDTOArrayList = new ArrayList<>();
+                int curTotalCount = 0;
                 for (int j=0; j < finding.length; j++){
                     if (finding[j].getVisitDate().compareTo(curDay) == 0){
                         String relativeX = calRelativeX(startX, finding[j].getMapx());
@@ -99,16 +100,35 @@ public class PlaceRecommendationController {
                                 finding[j].getNodeReview(),
                                 finding[j].getImportCount()
                         );
+                        if (finding[j].getImportCount() != null){
+                            curTotalCount += Integer.parseInt(finding[j].getImportCount());
+                        }
                         curNodeDTOArrayList.add(nodeDTO_for_update);
                     }
                 }
-                importedPathModule curimportedPathModule = new importedPathModule(curUsername, curNodeDTOArrayList);
+                //String curTotalCount_string =  String.valueOf(curTotalCount);
+                Random random = new Random();
+                String curTotalCount_string =  String.valueOf(random.nextInt(11));
+                importedPathModule curimportedPathModule = new importedPathModule(curUsername, curTotalCount_string ,curNodeDTOArrayList);
                 importedPathModuleArrayList.add(curimportedPathModule);
             }
             else{
 
             }
         }
+
+        // 만약 당신이
+        // 모듈 개수, //수정 예정
+        // 내림차순
+        // 을 원한다면
+        // Comparator 정의
+        Comparator<importedPathModule> totalCountComparator = Comparator.comparingInt(module ->
+                Integer.parseInt(module.getTotalImportedCount()));
+
+        // importedPathModuleArrayList를 totalImportedCount 기준으로 내림차순 정렬
+        importedPathModuleArrayList.sort((module1, module2) ->
+                Integer.compare(Integer.parseInt(module2.getTotalImportedCount()),
+                        Integer.parseInt(module1.getTotalImportedCount())));
 
         //맵의 주인공 이름과, 맵에 담긴 노드들 중, 해당 날짜 노드 들을 추천.
         return importedPathModuleArrayList;
@@ -127,5 +147,6 @@ class mapidAndDay{
 @Data
 class importedPathModule{
     String username;
+    String totalImportedCount;
     ArrayList<NodeDTO_for_update> NodeDTO_for_updateArrayList;
 }
