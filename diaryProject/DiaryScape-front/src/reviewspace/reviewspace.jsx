@@ -471,6 +471,12 @@ const ReviewSpace = () => {
     }
   };
 
+  const changeMapStyle = (style) => {
+    if (map.current) {
+      map.current.setStyle('mapbox://styles/mapbox/' + style);
+    }
+  };
+
   const onPlusSearchNodeClick = (selectedNode) => {
     if (plusSearchNodeRef.current) {
       plusSearchNodeRef.current(selectedNode);
@@ -670,19 +676,26 @@ const ReviewSpace = () => {
           }}
         >
           <Box diplay="flex" boxShadow="2xl">
-            <Button
-              onClick={() => {
-                if (map.current) map.current.setStyle('mapbox://styles/mapbox/streets-v12');
-              }}
-            >
-              컬러
+            <Button size="sm" onClick={() => changeMapStyle('streets-v12')}>
+              streets-v12
             </Button>
-            <Button
-              onClick={() => {
-                if (map.current) map.current.setStyle('mapbox://styles/mapbox/light-v11');
-              }}
-            >
-              흑백
+            <Button size="sm" onClick={() => changeMapStyle('outdoors-v11')}>
+              outdoors-v11
+            </Button>
+            <Button size="sm" onClick={() => changeMapStyle('light-v11')}>
+              light-v11
+            </Button>
+            <Button size="sm" onClick={() => changeMapStyle('dark-v11')}>
+              dark-v11
+            </Button>
+            <Button size="sm" onClick={() => changeMapStyle('satellite-v11')}>
+              satellite-v11
+            </Button>
+            <Button size="sm" onClick={() => changeMapStyle('navigation-day-v1')}>
+              navigation-day-v1
+            </Button>
+            <Button size="sm" onClick={() => changeMapStyle('navigation-night-v1')}>
+              navigation-night-v1
             </Button>
           </Box>
         </div>
