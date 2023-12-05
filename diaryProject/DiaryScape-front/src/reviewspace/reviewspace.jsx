@@ -638,6 +638,7 @@ const ReviewSpace = () => {
                 setNextDayMenuId={setNextDayMenuId}
                 getCurNodeRef={getCurNodeRef}
                 changeDayNodeIndexRef={changeDayNodeIndexRef}
+                saveReviewsInSaveManager={saveReviewsInSaveManager}
               />
             )}
             {rightBarPage == 1 && (

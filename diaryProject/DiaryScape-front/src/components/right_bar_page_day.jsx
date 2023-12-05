@@ -48,6 +48,7 @@ const RightBarPageDay = ({
   setNextDayMenuId,
   getCurNodeRef,
   changeDayNodeIndexRef,
+  saveReviewsInSaveManager,
 }) => {
   const {
     isOpen: isNodeInfoOpen,
