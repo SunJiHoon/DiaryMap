@@ -299,7 +299,7 @@ const ReviewSpace = () => {
             plusSearchNodeRef.current = inputManager.plusSearchNode;
           });
         });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        // this.renderer.setSize(window.innerWidth, window.innerHeight);
 
         // let _cameraPosition = map.getFreeCameraOptions().position;
         // cameraPosition.set(_cameraPosition.x, _cameraPosition.y, _cameraPosition.z)
