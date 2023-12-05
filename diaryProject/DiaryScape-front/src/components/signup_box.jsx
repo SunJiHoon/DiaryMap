@@ -41,10 +41,21 @@ const SignUpBox = () => {
       .then((res) => {
         console.log(res);
         console.log(res.data);
+        console.log(loginId, name);
         if (res.status == 200) {
           // 회원가입 완료 문구 띄운 후 '홈으로' 버튼 누르면 돌아가게
-          dispatch(loginUser({ loginId, name }));
-          navigate('/');
+          client
+            .post('/api/login', body, { withCredentials: true }) //login
+            .then((res) => {
+              console.log(res);
+              console.log(res.data);
+              if (res.data.loginId == '-1') return;
+              dispatch(loginUser(res.data));
+              navigate('/');
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
         }
       });
   };

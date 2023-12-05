@@ -9,8 +9,9 @@ var dayManager;
 var tripData;
 
 class saveManager {
-  constructor(_tripData) {
+  constructor(_tripData, _setCurNode) {
     tripData = _tripData;
+    this.setCurNodeToFront = _setCurNode;
     if (dayManager == null) {
       dayManager = new DayManager();
     }
