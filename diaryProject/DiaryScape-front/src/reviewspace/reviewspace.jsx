@@ -596,97 +596,54 @@ const ReviewSpace = () => {
           />
         </LeftBar>
 
-        <RightBar rightBarOpen={rightBarOpen}>
-          <Box display="flex" flexDirection="column" mt={8}>
-            <IconButton
-              h="60px"
-              mb={6}
-              colorScheme="teal"
-              onClick={() => setRightBarOpen(!rightBarOpen)}
-              icon={rightBarOpen ? <IoChevronForward /> : <IoChevronBack />}
+        <RightBar rightBarOpen={rightBarOpen} setRightBarPage={setRightBarPage}>
+          {rightBarPage == 0 && (
+            <RightBarPageDay
+              isReadonly={isReadonly}
+              nodeInfoData={nodeInfoData}
+              setNodeInfoData={setNodeInfoData}
+              reviews={reviews}
+              setReviews={setReviews}
+              currentDay={currentDay}
+              setCurrentDay={setCurrentDay}
+              dayCheckedList={dayCheckedList}
+              setDayCheckedList={setDayCheckedList}
+              dayModuleList={dayModuleList}
+              setDayModuleList={setDayModuleList}
+              dayMenuOpenList={dayMenuOpenList}
+              setDayMenuOpenList={setDayMenuOpenList}
+              setOnPlusDay={setOnPlusDay}
+              reviewMenuOpen={reviewMenuOpen}
+              setReviewMenuOpen={setReviewMenuOpen}
+              nextDayMenuId={nextDayMenuId}
+              setNextDayMenuId={setNextDayMenuId}
+              getCurNodeRef={getCurNodeRef}
+              changeDayNodeIndexRef={changeDayNodeIndexRef}
+              saveReviewsInSaveManager={saveReviewsInSaveManager}
+              removeDayNodeRef={removeDayNodeRef}
             />
-            <IconButton
-              mb={2}
-              colorScheme="pink"
-              onClick={() => setRightBarPage(0)}
-              icon={<IoPencil />}
+          )}
+          {rightBarPage == 1 && (
+            <RecommendedNodeList
+              dayModuleSelected={dayModuleSelected}
+              dayModuleSelectedData={dayModuleSelectedData}
+              setDayModuleSelected={setDayModuleSelected}
+              setDayModuleSelectedData={setDayModuleSelectedData}
+              getCurNodeRef={getCurNodeRef}
+              tripData={tripData}
+              curNode={curNode}
+              loadRecommendedOptionsRef={loadRecommendedOptionsRef}
             />
-            <IconButton
-              mb={2}
-              colorScheme="green"
-              onClick={() => setRightBarPage(1)}
-              icon={<IoCubeOutline />}
+          )}
+          {rightBarPage == 2 && (
+            <RightBarPageDiary
+              isReadonly={isReadonly}
+              totalReview={totalReview}
+              setTotalReview={setTotalReview}
+              generateDiaryRef={generateDiaryRef}
             />
-            <IconButton colorScheme="blue" onClick={() => setRightBarPage(2)} icon={<IoBook />} />
-            <IconButton
-              colorScheme="blue"
-              onClick={() => setRightBarPage(3)}
-              icon={<IoSettings />}
-            />
-          </Box>
-          <Box
-            mt={4}
-            p={4}
-            w="240px"
-            minH="300px"
-            maxH="92vh"
-            overflowY="scroll"
-            bgColor="#ffffff"
-            // border={1}
-            borderRadius={4}
-            // borderColor="gray"
-            textAlign="left"
-            boxShadow="2xl"
-            className="custom-scrollbar"
-          >
-            {rightBarPage == 0 && (
-              <RightBarPageDay
-                isReadonly={isReadonly}
-                nodeInfoData={nodeInfoData}
-                setNodeInfoData={setNodeInfoData}
-                reviews={reviews}
-                setReviews={setReviews}
-                currentDay={currentDay}
-                setCurrentDay={setCurrentDay}
-                dayCheckedList={dayCheckedList}
-                setDayCheckedList={setDayCheckedList}
-                dayModuleList={dayModuleList}
-                setDayModuleList={setDayModuleList}
-                dayMenuOpenList={dayMenuOpenList}
-                setDayMenuOpenList={setDayMenuOpenList}
-                setOnPlusDay={setOnPlusDay}
-                reviewMenuOpen={reviewMenuOpen}
-                setReviewMenuOpen={setReviewMenuOpen}
-                nextDayMenuId={nextDayMenuId}
-                setNextDayMenuId={setNextDayMenuId}
-                getCurNodeRef={getCurNodeRef}
-                changeDayNodeIndexRef={changeDayNodeIndexRef}
-                saveReviewsInSaveManager={saveReviewsInSaveManager}
-                removeDayNodeRef={removeDayNodeRef}
-              />
-            )}
-            {rightBarPage == 1 && (
-              <RecommendedNodeList
-                dayModuleSelected={dayModuleSelected}
-                dayModuleSelectedData={dayModuleSelectedData}
-                setDayModuleSelected={setDayModuleSelected}
-                setDayModuleSelectedData={setDayModuleSelectedData}
-                getCurNodeRef={getCurNodeRef}
-                tripData={tripData}
-                curNode={curNode}
-                loadRecommendedOptionsRef={loadRecommendedOptionsRef}
-              />
-            )}
-            {rightBarPage == 2 && (
-              <RightBarPageDiary
-                isReadonly={isReadonly}
-                totalReview={totalReview}
-                setTotalReview={setTotalReview}
-                generateDiaryRef={generateDiaryRef}
-              />
-            )}
-            {rightBarPage == 3 && <UserOptions tripData={tripData} />}
-          </Box>
+          )}
+          {rightBarPage == 3 && <UserOptions tripData={tripData} />}
         </RightBar>
 
         <div
