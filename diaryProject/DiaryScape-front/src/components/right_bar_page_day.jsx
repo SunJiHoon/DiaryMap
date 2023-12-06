@@ -201,9 +201,9 @@ const RightBarPageDay = ({
                     {dayModuleList[currentDay - 1].edge &&
                       dayModuleList[currentDay - 1].edge[i] && (
                         <Box>
-                          {dayModuleList[currentDay - 1].edge[i].time}
-                          {dayModuleList[currentDay - 1].edge[i].fee}
-                          {dayModuleList[currentDay - 1].edge[i].distance}
+                          {Number(dayModuleList[currentDay - 1].edge[i].duration) / 60}분
+                          {dayModuleList[currentDay - 1].edge[i].distance}m
+                          {dayModuleList[currentDay - 1].edge[i].taxiFare}원
                         </Box>
                       )}
                   </Box>

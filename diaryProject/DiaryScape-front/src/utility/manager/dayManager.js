@@ -94,8 +94,8 @@ class DayManager {
       var edges = [];
       for (let j = 0; j < _nodes[i].nodes.length; j++) {
         temp2.push(_nodes[i].nodes[j]);
-        if(j != 0){
-          edges.push(nodes[j * 2].userData);
+        if (j != 0) {
+          edges.push(nodes[i][j * 2].userData);
         }
       }
       temp.data = temp2;
@@ -124,7 +124,7 @@ class DayManager {
         let edges = [];
         for (let index = 0; index < nodes[this.currentDay - 1].length / 2; index++) {
           temp.push(nodes[this.currentDay - 1][index * 2 + 1].userData);
-          if(index != 0){
+          if (index != 0) {
             edges.push(nodes[this.currentDay - 1][index * 2].userData);
           }
         }
