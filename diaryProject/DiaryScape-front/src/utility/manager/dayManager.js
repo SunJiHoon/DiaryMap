@@ -86,6 +86,7 @@ class DayManager {
     //var obj = [{id:1, data:[node1, node2, node3]},{},{}];
     const size = _nodes.length;
     var obj = [];
+    console.log(nodes);
 
     for (let i = 0; i < size; i++) {
       var temp = {};
@@ -96,6 +97,7 @@ class DayManager {
         temp2.push(_nodes[i].nodes[j]);
         if (j != 0) {
           edges.push(nodes[i][j * 2].userData);
+          console.log(nodes[i][j * 2].userData);
         }
       }
       temp.data = temp2;
@@ -128,8 +130,6 @@ class DayManager {
             edges.push(nodes[this.currentDay - 1][index * 2].userData);
           }
         }
-        console.log(edges);
-        //dayModule.data = temp;
         return { id: dayModule.id, data: temp, edge: edges };
       } else {
         return dayModule;
@@ -199,7 +199,7 @@ class DayManager {
     console.log(nodes);
   }
 
-  changeDayNodeIndex = (index, isUp) => {
+  changeDayNodeIndex = async (index, isUp) => {
     const length = nodes[this.currentDay - 1].length / 2;
 
     if (index < 1 || index > length) {
@@ -226,12 +226,12 @@ class DayManager {
           this.setCurNodeToFront(this.getCurNode().userData);
           return;
         }
-        this.changeLine(index, 0, 2);
+        await this.changeLine(index, 0, 2);
       } else if (index == length) {
-        this.changeLine(index, 1, 3);
+        await this.changeLine(index, 1, 3);
         this.setCurNodeToFront(this.getCurNode().userData);
       } else {
-        this.changeLine(index, 0, 3);
+        await this.changeLine(index, 0, 3);
       }
     } else {
       //노드가 아래로 내려갈 때
@@ -251,21 +251,21 @@ class DayManager {
           this.setCurNodeToFront(this.getCurNode().userData);
           return;
         }
-        this.changeLine(index, -1, 1);
+        await this.changeLine(index, -1, 1);
       } else if (index == length - 1) {
         this.setCurNodeToFront(this.getCurNode().userData);
-        this.changeLine(index, 0, 2);
+        await this.changeLine(index, 0, 2);
       } else {
-        this.changeLine(index, -1, 2);
+        await this.changeLine(index, -1, 2);
       }
     }
     console.log(nodes);
   };
 
-  changeLine(index, start, end) {
+  async changeLine(index, start, end) {
     for (let i = start; i < end; i++) {
       objectManager.removeObject(nodes[this.currentDay - 1][2 * index - 2 * i]);
-      nodes[this.currentDay - 1][2 * index - 2 * i] = objectManager.drawLine(
+      nodes[this.currentDay - 1][2 * index - 2 * i] = await objectManager.drawLine(
         nodes[this.currentDay - 1][2 * index + 1 - 2 * i].userData,
         nodes[this.currentDay - 1][2 * index - 1 - 2 * i].userData,
         this.colorList[(this.currentDay - 1) % 4]
@@ -273,7 +273,7 @@ class DayManager {
     }
   }
 
-  removeDayNode = (dayIdx, index) => {
+  removeDayNode = async (dayIdx, index) => {
     console.log(nodes[dayIdx - 1].length);
     if (nodes[dayIdx - 1].length == 2) {
       return; //노드가 하나만 들어있다면 삭제 못 하게
@@ -293,7 +293,7 @@ class DayManager {
       objectManager.removeObject(nodes[dayIdx - 1][index * 2 - 2]);
       objectManager.removeObject(nodes[dayIdx - 1][index * 2 - 1]);
       objectManager.removeObject(nodes[dayIdx - 1][index * 2]);
-      nodes[dayIdx - 1][index * 2 - 2] = objectManager.drawLine(
+      nodes[dayIdx - 1][index * 2 - 2] = await objectManager.drawLine(
         nodes[dayIdx - 1][index * 2 - 3].userData,
         nodes[dayIdx - 1][index * 2 + 1].userData,
         this.getDayColor(dayIdx - 1)
