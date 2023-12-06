@@ -1,10 +1,9 @@
-import SaveManager from './saveManager';
-
 let instance = null;
 
 let objectManager, saveManager;
 
 var nodes = [];
+var pathInfos = [];
 var reviews = [];
 var totalReview = '';
 
@@ -187,6 +186,7 @@ class DayManager {
 
     this.updateDayNodesToFront();
     this.setCurNodeToFront(this.getCurNode().userData);
+    console.log(nodes);
   }
 
   changeDayNodeIndex = (index, isUp) => {
@@ -250,14 +250,15 @@ class DayManager {
         this.changeLine(index, -1, 2);
       }
     }
+    console.log(nodes);
   };
 
   changeLine(index, start, end) {
     for (let i = start; i < end; i++) {
       objectManager.removeObject(nodes[this.currentDay - 1][2 * index - 2 * i]);
       nodes[this.currentDay - 1][2 * index - 2 * i] = objectManager.drawLine(
-        nodes[this.currentDay - 1][2 * index + 1 - 2 * i].position,
-        nodes[this.currentDay - 1][2 * index - 1 - 2 * i].position,
+        nodes[this.currentDay - 1][2 * index + 1 - 2 * i].userData,
+        nodes[this.currentDay - 1][2 * index - 1 - 2 * i].userData,
         this.colorList[(this.currentDay - 1) % 4]
       );
     }
@@ -284,8 +285,8 @@ class DayManager {
       objectManager.removeObject(nodes[dayIdx - 1][index * 2 - 1]);
       objectManager.removeObject(nodes[dayIdx - 1][index * 2]);
       nodes[dayIdx - 1][index * 2 - 2] = objectManager.drawLine(
-        nodes[dayIdx - 1][index * 2 - 3].position,
-        nodes[dayIdx - 1][index * 2 + 1].position,
+        nodes[dayIdx - 1][index * 2 - 3].userData,
+        nodes[dayIdx - 1][index * 2 + 1].userData,
         this.getDayColor(dayIdx - 1)
       );
       nodes[dayIdx - 1].splice(index * 2 - 1, 2);
@@ -299,6 +300,12 @@ class DayManager {
     //length 0일 때 예외 처리?
     return nodes[this.currentDay - 1][nodes[this.currentDay - 1].length - 1];
   };
+
+  setPathInfos(_pathInfos){
+    pathInfos = _pathInfos;
+    console.log("pathInfos", pathInfos);
+    console.log("_pathInfos", _pathInfos);
+  }
 
   getReviews() {
     return reviews;
@@ -346,7 +353,7 @@ class DayManager {
 
   getDayColor(Idx) {
     if (Idx == -1) {
-      return 'white';
+      return "brown";
     }
     return this.colorList[Idx % 4];
   }

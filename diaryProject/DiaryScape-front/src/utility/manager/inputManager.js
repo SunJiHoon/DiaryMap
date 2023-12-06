@@ -24,6 +24,7 @@ const dayManager = new DayManager();
 const raycaster = new THREE.Raycaster();
 
 let cur_state;
+var isReadOnly = false;
 
 let cameraOrigin;
 
@@ -46,7 +47,8 @@ class inputManager {
     _setNodeMenuOn,
     _setNodeMenuPosition,
     _selectOptionData,
-    _setSelectOptionData
+    _setSelectOptionData,
+    _isReadOnly
   ) {
     camera = _camera;
     map = _map;
@@ -60,7 +62,7 @@ class inputManager {
     //setNodeMenuOn(true)
     //console.log("menu on")
     character = scene.getObjectByName('player');
-    console.log(character);
+    isReadOnly = _isReadOnly;
 
     this.inputManage();
   }
@@ -102,9 +104,6 @@ class inputManager {
     if (event.key == 't') {
       dayManager.printStateData();
     }
-    if (event.key == 'a') {
-      demotestVar = !demotestVar;
-    }
   }
   async handleMouseDown(event) {
     setNodeMenuOn(false);
@@ -123,6 +122,7 @@ class inputManager {
         mglCameraPositionTransformed,
         direction.sub(mglCameraPositionTransformed).normalize()
       );
+      raycaster.camera = camera;
       const intersectObjects = raycaster.intersectObjects(scene.children);
 
       for (let i = 0; i < intersectObjects.length; i++) {
@@ -178,8 +178,6 @@ class inputManager {
   // }
 }
 
-let demotestVar = false; //demo test 용 변수.
-
 export const selectOption = (selectOptionDataState) => {
   const { character, options, select_option } = selectOptionDataState;
   const cur_day = dayManager.getCurDay();
@@ -187,12 +185,8 @@ export const selectOption = (selectOptionDataState) => {
   const index = nodes.length - 1;
   const cur_node = nodes[index];
 
-  const line = objectManager.drawLine(
-    cur_node.position,
-    select_option.position,
-    dayManager.getDayColor(cur_day - 1)
-  );
-  if (demotestVar) {
+  const line = objectManager.drawLine(cur_node, select_option.position, dayManager.getDayColor(cur_day - 1));
+  if (!isReadOnly) {
     objectManager.loadOptions(
       new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY)
     );

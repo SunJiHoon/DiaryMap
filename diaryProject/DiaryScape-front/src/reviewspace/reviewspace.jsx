@@ -205,6 +205,7 @@ const ReviewSpace = () => {
       container: mapContainer.current,
       antialias: true,
     });
+    console.log(map);
     // map.current.dragRotate.disable()
     // map.current.touchZoomRotate.disableRotation()
     map.current.addControl(

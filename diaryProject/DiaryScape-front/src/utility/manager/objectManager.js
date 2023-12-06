@@ -4,9 +4,10 @@ import Node from '../object/node.js';
 import client from '../client.jsx';
 import DayManager from './dayManager.js';
 import { gsap } from 'gsap';
-// import { Line2 } from 'three/addons/lines/Line2.js';
-// import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
-// import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
+import { Line2 } from 'three/addons/lines/Line2.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
+import SaveManager from './saveManager.js';
 
 let load_options = [];
 let search_options = [];
@@ -19,6 +20,7 @@ var player;
 var tripData;
 var startNodeData;
 const dayManager = new DayManager();
+const saveManager = new SaveManager();
 
 class objectManager {
   constructor(_scene, _camera, _tripData, _startNodeData) {
@@ -81,7 +83,8 @@ class objectManager {
     this.invisibleOptions(recommended_options, null);
     this.clearRecommendedOptions();
     console.log('load Recommended Optoins');
-    recommended_options = this.drawDay(nodeInfos, -1);
+    recommended_options = await this.drawDay(nodeInfos, -1);
+    console.log(recommended_options);
     console.log('end load recommended options');
   };
 
@@ -125,11 +128,7 @@ class objectManager {
     for (var i = 0; i < size - 1; i++) {
       var nextNode = await this.createNode(nodeArr[i + 1]);
       this.changeNodeColor(nextNode, dayManager.getDayColor(dayIdx));
-      const line = this.drawLine(
-        new THREE.Vector3(nodeArr[i].relativeX, 0, nodeArr[i].relativeY),
-        new THREE.Vector3(nodeArr[i + 1].relativeX, 0, nodeArr[i + 1].relativeY),
-        dayColor
-      );
+      const line = this.drawLine(nodeArr[i], nodeArr[i + 1], dayColor);
       objectArr.push(line);
       objectArr.push(nextNode);
     }
@@ -151,39 +150,40 @@ class objectManager {
   }
 
   drawLine(startNode, endNode, lineColor) {
-    // const points = [];
-    // const colors = [];
-    // points.push(startNode.x, 0, startNode.z);
-    // points.push(endNode.x, 0, endNode.z);
-    // colors.push(0, 0, 255);
-
-    // const geometry = new LineGeometry();
-    // 		geometry.setPositions( points );
-    // 		geometry.setColors( colors );
-
-    // const matLine = new LineMaterial({
-    //   color: 0xffffff,
-    //   linewidth: 0.005, // in world units with size attenuation, pixels otherwise
-    //   vertexColors: true,
-    //   dashed: true,
-    //   dashSize: 5,
-    //   alphaToCoverage: true,
-    // });
-    // console.log(matLine);
-
-    // const line = new Line2(geometry, matLine);
-    // line.computeLineDistances();
-    // line.scale.set(1, 1, 1);
-    // scene.add(line);
+    console.log(startNode, endNode);
     const points = [];
-    const start = new THREE.Vector3(startNode.x, 0, startNode.z);
-    const end = new THREE.Vector3(endNode.x, 0, endNode.z);
-    points.push(start);
-    points.push(end);
-    const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-    const lineMaterial = new THREE.LineBasicMaterial({ color: lineColor, linewidth: 10 });
-    const line = new THREE.Line(lineGeometry, lineMaterial);
+    points.push(startNode.relativeX, 0, startNode.relativeY);
+    points.push(endNode.relativeX, 0, endNode.relativeY);
+
+    const geometry = new LineGeometry();
+    		geometry.setPositions( points );
+    		// geometry.setColors( colors );
+
+    const matLine = new LineMaterial({
+      color: lineColor,
+      linewidth: 10, // in world units with size attenuation, pixels otherwise
+      vertexColors: false,
+      dashed: false,
+      dashSize: 5,
+      alphaToCoverage: true,
+      worldUnits: true,
+    });
+
+    const line = new Line2(geometry, matLine);
+    line.computeLineDistances();
+    line.scale.set(1, 1, 1);
     scene.add(line);
+    // const points = [];
+    // const start = new THREE.Vector3(startNode.x, 0, startNode.z);
+    // const end = new THREE.Vector3(endNode.x, 0, endNode.z);
+    // points.push(start);
+    // points.push(end);
+    // const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+    // const lineMaterial = new THREE.LineBasicMaterial({ color: lineColor, linewidth: 10 });
+    // const line = new THREE.Line(lineGeometry, lineMaterial);
+    // scene.add(line);
+    saveManager.makePathInfos(startNode, endNode);
+    console.log("draw Line 끝");
     return line;
   }
 

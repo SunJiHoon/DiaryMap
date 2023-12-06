@@ -88,6 +88,15 @@ class saveManager {
     dayManager.updateDayInfosToFront(res.data);
   }
 
+  async makePathInfos(startNode, endNode){
+    const pathInfo = [];
+    console.log("startNode", startNode, "endNode", endNode);
+    const res = await client.get('/api/kakaoOpenApi/getPath?oriX=' + startNode.mapx + "&oriY=" + startNode.mapy
+    + "&destX=" + endNode.mapx + "&destY=" + endNode.mapy
+    );
+    console.log(res);
+  }
+
   async saveReviews() {
     var dayReviews = [];
     const reviews = dayManager.getReviews();
