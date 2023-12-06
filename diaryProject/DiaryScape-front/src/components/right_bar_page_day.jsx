@@ -151,6 +151,7 @@ const RightBarPageDay = ({
             overflowX="auto"
             transition="all 0.3s ease-in-out"
           >
+            {console.log(dayModuleList)}
             {dayModuleList &&
               dayModuleList[currentDay - 1] &&
               dayModuleList[currentDay - 1].data &&
@@ -182,6 +183,7 @@ const RightBarPageDay = ({
                         </Box>
                       )}
                       <Box
+                        w="100%"
                         fontWeight="semibold"
                         overflow="hidden"
                         onClick={() => {
@@ -196,6 +198,14 @@ const RightBarPageDay = ({
                         {i + 1}. {node.title}
                       </Box>
                     </Box>
+                    {dayModuleList[currentDay - 1].edge &&
+                      dayModuleList[currentDay - 1].edge[i] && (
+                        <Box>
+                          {dayModuleList[currentDay - 1].edge[i].time}
+                          {dayModuleList[currentDay - 1].edge[i].fee}
+                          {dayModuleList[currentDay - 1].edge[i].distance}
+                        </Box>
+                      )}
                   </Box>
                 );
               })}

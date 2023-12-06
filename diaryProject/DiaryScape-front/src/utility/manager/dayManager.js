@@ -300,10 +300,10 @@ class DayManager {
     return nodes[this.currentDay - 1][nodes[this.currentDay - 1].length - 1];
   };
 
-  setPathInfos(_pathInfos){
+  setPathInfos(_pathInfos) {
     pathInfos = _pathInfos;
-    console.log("pathInfos", pathInfos);
-    console.log("_pathInfos", _pathInfos);
+    console.log('pathInfos', pathInfos);
+    console.log('_pathInfos', _pathInfos);
   }
 
   getReviews() {
@@ -352,7 +352,7 @@ class DayManager {
 
   getDayColor(Idx) {
     if (Idx == -1) {
-      return "brown";
+      return 'brown';
     }
     return this.colorList[Idx % 4];
   }
