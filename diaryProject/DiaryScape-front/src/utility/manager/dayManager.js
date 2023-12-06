@@ -199,7 +199,8 @@ class DayManager {
 
     if (isUp) {
       //노드가 위로 갈 때
-      if (index == 1) {// 첫 노드 이동불가
+      if (index == 1) {
+        // 첫 노드 이동불가
         return;
       }
 
@@ -209,7 +210,6 @@ class DayManager {
 
       this.updateDayNodesToFront();
       saveManager.saveMyNodes();
-
 
       if (index == 2) {
         if (length == 2) {
@@ -223,8 +223,7 @@ class DayManager {
       } else {
         this.changeLine(index, 0, 3);
       }
-    }
-    else {
+    } else {
       //노드가 아래로 내려갈 때
       if (index == length) {
         return;
