@@ -9,13 +9,13 @@ import {
 } from 'react-icons/io5';
 import { Box, IconButton } from '@chakra-ui/react';
 
-const RightBar = ({ children, rightBarOpen, setRightBarPage }) => {
+const RightBar = ({ children, rightBarOpen, setRightBarOpen, setRightBarPage }) => {
   return (
     <div
       style={{
         position: 'fixed',
         top: '0',
-        right: rightBarOpen ? '0px' : '-360px',
+        right: rightBarOpen ? '0px' : '-380px',
         zIndex: '2',
         display: 'flex',
         alignItems: 'flex-start',
@@ -43,8 +43,13 @@ const RightBar = ({ children, rightBarOpen, setRightBarPage }) => {
           onClick={() => setRightBarPage(1)}
           icon={<IoCubeOutline />}
         />
-        <IconButton colorScheme="blue" onClick={() => setRightBarPage(2)} icon={<IoBook />} />
-        <IconButton colorScheme="blue" onClick={() => setRightBarPage(3)} icon={<IoSettings />} />
+        <IconButton
+          mb={2}
+          colorScheme="blue"
+          onClick={() => setRightBarPage(2)}
+          icon={<IoBook />}
+        />
+        <IconButton colorScheme="gray" onClick={() => setRightBarPage(3)} icon={<IoSettings />} />
       </Box>
       <Box
         mt={4}

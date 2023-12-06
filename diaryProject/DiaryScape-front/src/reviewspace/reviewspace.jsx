@@ -308,7 +308,8 @@ const ReviewSpace = () => {
               setNodeMenuOn,
               setNodeMenuPosition,
               selectOptionData,
-              setSelectOptionData
+              setSelectOptionData,
+              tripData.readOnly
             );
             addNodeFunctionRef.current = selectOption;
             plusSearchNodeRef.current = inputManager.plusSearchNode;
@@ -596,7 +597,11 @@ const ReviewSpace = () => {
           />
         </LeftBar>
 
-        <RightBar rightBarOpen={rightBarOpen} setRightBarPage={setRightBarPage}>
+        <RightBar
+          rightBarOpen={rightBarOpen}
+          setRightBarOpen={setRightBarOpen}
+          setRightBarPage={setRightBarPage}
+        >
           {rightBarPage == 0 && (
             <RightBarPageDay
               isReadonly={isReadonly}
