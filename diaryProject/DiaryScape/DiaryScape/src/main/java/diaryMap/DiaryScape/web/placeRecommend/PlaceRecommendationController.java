@@ -106,9 +106,11 @@ public class PlaceRecommendationController {
                         curNodeDTOArrayList.add(nodeDTO_for_update);
                     }
                 }
-                //String curTotalCount_string =  String.valueOf(curTotalCount);
+                String curTotalCount_string =  String.valueOf(curTotalCount);
+                /*
                 Random random = new Random();
                 String curTotalCount_string =  String.valueOf(random.nextInt(11));
+                */
                 String mapName = "";
                 mapName = actualObj3d.getObjName();
                 String curimportedMapId = "";
@@ -144,12 +146,14 @@ public class PlaceRecommendationController {
     ){
         String importedMapId = "";
         importedMapId = paraMap.get("importedMapId");
-
         //String importedCountforsetting = "";//자동 1증가
         String importedContentId = "";
         importedContentId = paraMap.get("importedContentId");
         String importedDate = "";
         importedDate = paraMap.get("importedDate");
+        log.info(importedMapId);
+        log.info(importedContentId);
+        log.info(importedDate);
 
         Optional<Obj3d> obj3dOptional = obj3dRepository.findById(importedMapId);
         if (obj3dOptional.isPresent()){
