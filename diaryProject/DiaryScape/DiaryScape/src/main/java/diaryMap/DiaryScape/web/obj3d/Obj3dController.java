@@ -607,10 +607,18 @@ public class Obj3dController {
         if (obj3dRepositoryById.isPresent()){
             Obj3d actualObj3d = obj3dRepositoryById.get();
             String curStatus = actualObj3d.getIsPublic();
-            return curStatus;
-            //obj3dRepository.save(actualObj3d);
-            //return "private 성공";
-
+            if (curStatus == null){
+                return "private";
+            }
+            else if(curStatus.compareTo("true") == 0){
+                return "public";
+            }
+            else if(curStatus.compareTo("false") == 0){
+                return "private";
+            }
+            else{
+                return "이상 발생";
+            }
         }
         return "확인 실패";
     }
