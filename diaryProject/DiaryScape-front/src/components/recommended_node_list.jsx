@@ -61,6 +61,10 @@ const RecommendedNodeList = ({
       <Box fontSize="xl" fontWeight="semibold" mb={2}>
         다른 유저의 동선
       </Box>
+      <Box display="flex" mb={2}>
+        <Box>현재 노드 :&nbsp;</Box>
+        <Box fontWeight="semibold">{curNode.title}</Box>
+      </Box>
       <Box
         h={260}
         border="2px"
@@ -86,7 +90,7 @@ const RecommendedNodeList = ({
             >
               <Box display="flex" fontWeight="medium">
                 <Box fontWeight="semibold">{result.username}</Box>
-                <Box mr={1}>님:&nbsp;</Box>
+                <Box mr={1}>님,&nbsp;</Box>
                 <Box mr={1}>{result.totalImportedCount}회&nbsp;</Box>
                 {result.nodeDTO_for_updateArrayList.map((nodeData, idx_node) => (
                   <Box
@@ -101,7 +105,11 @@ const RecommendedNodeList = ({
                       nodeData.contentid
                     }
                   >
-                    {nodeData.title}&nbsp;-&gt;&nbsp;
+                    {nodeData.title}
+
+                    {idx_node != result.nodeDTO_for_updateArrayList.length - 1 && (
+                      <>&nbsp;-&gt;&nbsp;</>
+                    )}
                   </Box>
                 ))}
               </Box>
