@@ -28,6 +28,7 @@ public class Obj3d {
     private NodeDTO_for_update startNode;
     private String totalReview;
     private ArrayList<dayReview> dayReviews;
+    private String isPublic;
     @DBRef
     private Member member; // Member를 DBRef로 참조
 }

@@ -47,7 +47,7 @@ public class PlaceRecommendationController {
         for(int i = 0; i < obj3dList.size(); i++){//모든 맵 중에서
             Obj3d curObj3d = obj3dList.get(i);
             NodeDTO_for_update[] nodeDTOForUpdatesArr = curObj3d.getJsonArr();
-            if (curObj3d.getMember().getLoginId().compareTo(curuseridForremovingNode) !=0 && nodeDTOForUpdatesArr != null){//jsonArr가 아직 생성 안된 경우는 제외해야 한다.
+            if ((curObj3d.getIsPublic() != null) && (curObj3d.getIsPublic().compareTo("true")== 0) && curObj3d.getMember().getLoginId().compareTo(curuseridForremovingNode) !=0 && nodeDTOForUpdatesArr != null){//jsonArr가 아직 생성 안된 경우는 제외해야 한다.
                 //nodeDTOForUpdates 배열이 contentid와 일치하는 노드를 포함하고 있을까?
                 for(int j = 0; j < nodeDTOForUpdatesArr.length; j++){
                     NodeDTO_for_update curNodeDTO_for_update = nodeDTOForUpdatesArr[j];

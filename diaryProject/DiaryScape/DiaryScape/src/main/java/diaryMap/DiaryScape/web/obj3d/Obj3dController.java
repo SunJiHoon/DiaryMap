@@ -67,6 +67,7 @@ public class Obj3dController {
         log.info("객체 생성 시점: " + formattedTime);
         obj3d1.setCreatedTime(formattedTime);
         obj3d1.setModifiedTime(formattedTime);
+        obj3d1.setIsPublic("false");
 
         //obj3dRepository.save(obj3d1);
 
@@ -161,29 +162,31 @@ public class Obj3dController {
 
         List<Obj3d> obj3ds = obj3dRepository.findAll();
         //Optional<Member> loginMember = memberMongoRepository.findById(cookie);
-
+//(curObj3d.getIsPublic() != null) && (curObj3d.getIsPublic().compareTo("true")== 0)
         Member ownerMember;
         String userName = "";
         for (int i = 0; i < obj3ds.size(); i++) {
             ownerMember = obj3ds.get(i).getMember();
             userName = ownerMember.getName();
-            titleDataDtos.add(
-                    new titleData_DTO(
-                            obj3ds.get(i).getObjName(),
-                            obj3ds.get(i).getId(),
-                            obj3ds.get(i).getStartNode().getContentid(),
-                            obj3ds.get(i).getStartNode().getContentTypeId(),
-                            obj3ds.get(i).getStartNode().getTitle(),
-                            obj3ds.get(i).getStartNode().getTel(),
-                            obj3ds.get(i).getStartNode().getMapx(),
-                            obj3ds.get(i).getStartNode().getMapy(),
-                            obj3ds.get(i).getStartNode().getRelativeX(),
-                            obj3ds.get(i).getStartNode().getRelativeY(),
-                            obj3ds.get(i).getStartNode().getAddr1(),
-                            obj3ds.get(i).getStartNode().getVisitDate(),
-                            userName
-                    )
-            );
+            if (obj3ds.get(i).getIsPublic() != null && obj3ds.get(i).getIsPublic().compareTo("true") == 0){
+                titleDataDtos.add(
+                        new titleData_DTO(
+                                obj3ds.get(i).getObjName(),
+                                obj3ds.get(i).getId(),
+                                obj3ds.get(i).getStartNode().getContentid(),
+                                obj3ds.get(i).getStartNode().getContentTypeId(),
+                                obj3ds.get(i).getStartNode().getTitle(),
+                                obj3ds.get(i).getStartNode().getTel(),
+                                obj3ds.get(i).getStartNode().getMapx(),
+                                obj3ds.get(i).getStartNode().getMapy(),
+                                obj3ds.get(i).getStartNode().getRelativeX(),
+                                obj3ds.get(i).getStartNode().getRelativeY(),
+                                obj3ds.get(i).getStartNode().getAddr1(),
+                                obj3ds.get(i).getStartNode().getVisitDate(),
+                                userName
+                        )
+                );
+            }
         }
 
         String mapDatasJson;
@@ -566,6 +569,34 @@ public class Obj3dController {
         return "삭제 수행";
     }
 
+    @PostMapping("/obj/makePublic")
+    public String makeMapintoPublic(
+            @RequestParam Map<String, String> paraMap
+    ) {
+        String id = paraMap.get("mapId");
+        Optional<Obj3d> obj3dRepositoryById = obj3dRepository.findById(id);
+        if (obj3dRepositoryById.isPresent()){
+            Obj3d actualObj3d = obj3dRepositoryById.get();
+            actualObj3d.setIsPublic("true");
+            obj3dRepository.save(actualObj3d);
+            return "public 성공";
+        }
+        return "설정 실패";
+    }
+    @PostMapping("/obj/makePrivate")
+    public String makeMapintoPrivate(
+            @RequestParam Map<String, String> paraMap
+    ) {
+        String id = paraMap.get("mapId");
+        Optional<Obj3d> obj3dRepositoryById = obj3dRepository.findById(id);
+        if (obj3dRepositoryById.isPresent()){
+            Obj3d actualObj3d = obj3dRepositoryById.get();
+            actualObj3d.setIsPublic("false");
+            obj3dRepository.save(actualObj3d);
+            return "private 성공";
+        }
+        return "설정 실패";
+    }
 
 }
 
