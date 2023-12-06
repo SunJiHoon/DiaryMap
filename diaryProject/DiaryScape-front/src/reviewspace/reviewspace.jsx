@@ -81,7 +81,9 @@ const ReviewSpace = () => {
   const [rightBarPage, setRightBarPage] = useState(0);
   const [debugMenuOpen, setDebugMenuOpen] = useState(false);
 
-  const [dayModuleList, setDayModuleList] = useState([{ id: 1, data: ['day information'] }]);
+  const [dayModuleList, setDayModuleList] = useState([
+    { id: 1, data: ['day information'], edge: ['edge info'] },
+  ]);
   const [reviews, setReviews] = useState(['리뷰를 작성해주세요...']);
 
   const [dayMenuOpenList, setDayMenuOpenList] = useState([false]);
@@ -100,6 +102,7 @@ const ReviewSpace = () => {
 
   const [dayModuleSelected, setDayModuleSelected] = useState(false);
   const [dayModuleSelectedData, setDayModuleSelectedData] = useState(null);
+  const [mapStyleValue, setMapStyleValue] = useState('streets-v12');
 
   const [nodeInfoData, setNodeInfoData] = useState({});
 
@@ -482,6 +485,7 @@ const ReviewSpace = () => {
   };
 
   const changeMapStyle = (style) => {
+    setMapStyleValue(style);
     if (map.current) {
       map.current.setStyle('mapbox://styles/mapbox/' + style);
     }
@@ -649,10 +653,17 @@ const ReviewSpace = () => {
               generateDiaryRef={generateDiaryRef}
             />
           )}
-          {rightBarPage == 3 && <UserOptions tripData={tripData} />}
+          {rightBarPage == 3 && (
+            <UserOptions
+              tripData={tripData}
+              mapStyleValue={mapStyleValue}
+              setMapStyleValue={setMapStyleValue}
+              changeMapStyle={changeMapStyle}
+            />
+          )}
         </RightBar>
 
-        <div
+        {/* <div
           style={{
             position: 'fixed',
             bottom: '32px',
@@ -661,7 +672,7 @@ const ReviewSpace = () => {
           }}
         >
           <MapStyleButtons changeMapStyle={changeMapStyle} />
-        </div>
+        </div> */}
 
         <NodeMenu
           nodeMenuOn={nodeMenuOn}
