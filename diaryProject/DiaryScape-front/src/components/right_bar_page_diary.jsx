@@ -15,6 +15,7 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react';
+import client from '../utility/client';
 
 const RightBarPageDiary = ({
   children,
@@ -22,6 +23,7 @@ const RightBarPageDiary = ({
   totalReview,
   setTotalReview,
   generateDiaryRef,
+  tripData,
 }) => {
   return (
     <>
@@ -42,7 +44,23 @@ const RightBarPageDiary = ({
           >
             일기 생성
           </Button>
-          <Button w="100%" mb={4} colorScheme="teal" onClick={() => {}}>
+          <Button
+            w="100%"
+            mb={4}
+            colorScheme="teal"
+            onClick={() => {
+              console.log(totalReview);
+              client
+                .post(
+                  '/api/totalReview/save?mapId=' + tripData.mapId,
+                  { totalReview },
+                  { withCredentials: true }
+                )
+                .then((res) => {
+                  console.log(res);
+                });
+            }}
+          >
             일기 저장
           </Button>
         </Box>

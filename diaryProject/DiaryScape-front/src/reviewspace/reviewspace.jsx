@@ -651,6 +651,7 @@ const ReviewSpace = () => {
               totalReview={totalReview}
               setTotalReview={setTotalReview}
               generateDiaryRef={generateDiaryRef}
+              tripData={tripData}
             />
           )}
           {rightBarPage == 3 && (
