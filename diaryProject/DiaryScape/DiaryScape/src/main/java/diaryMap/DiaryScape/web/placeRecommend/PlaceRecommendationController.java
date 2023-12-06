@@ -111,7 +111,9 @@ public class PlaceRecommendationController {
                 String curTotalCount_string =  String.valueOf(random.nextInt(11));
                 String mapName = "";
                 mapName = actualObj3d.getObjName();
-                importedPathModule curimportedPathModule = new importedPathModule(curUsername, mapName, curTotalCount_string ,curNodeDTOArrayList);
+                String curimportedMapId = "";
+                curimportedMapId = actualObj3d.getId();
+                importedPathModule curimportedPathModule = new importedPathModule(curUsername, mapName, curTotalCount_string ,curimportedMapId, curNodeDTOArrayList);
                 importedPathModuleArrayList.add(curimportedPathModule);
             }
             else{
@@ -136,6 +138,51 @@ public class PlaceRecommendationController {
         return importedPathModuleArrayList;
     }
 
+    @PostMapping(value = "/placeRecommend/setimportcount",produces = "application/json")
+    String setImportCount(
+            @RequestParam Map<String, String> paraMap
+    ){
+        String importedMapId = "";
+        importedMapId = paraMap.get("importedMapId");
+
+        //String importedCountforsetting = "";//자동 1증가
+        String importedContentId = "";
+        importedContentId = paraMap.get("importedContentId");
+        String importedDate = "";
+        importedDate = paraMap.get("importedDate");
+
+        Optional<Obj3d> obj3dOptional = obj3dRepository.findById(importedMapId);
+        if (obj3dOptional.isPresent()){
+            Obj3d actualObj3d = obj3dOptional.get();
+            NodeDTO_for_update[] nodeDTOForUpdatesArr = actualObj3d.getJsonArr();
+            for (int i=0; i<nodeDTOForUpdatesArr.length;i++){
+                String tempContentId = nodeDTOForUpdatesArr[i].getContentid();
+                String tempDate = nodeDTOForUpdatesArr[i].getVisitDate();
+                if((tempContentId.compareTo(importedContentId) == 0) && (importedDate.compareTo(tempDate) == 0)){
+                    String curimportcount = nodeDTOForUpdatesArr[i].getImportCount();
+                    int updateNum = Integer.parseInt(curimportcount) + 1;
+                    String updateString = Integer.toString(updateNum);
+                    nodeDTOForUpdatesArr[i].setImportCount(updateString);
+                    break;
+                }
+            }
+
+            actualObj3d.setJsonArr(nodeDTOForUpdatesArr);
+            //log.info(NodeDTOs_for_update.toString());
+            //actualObj3d.setModifiedTime(formattedTime);
+            log.info("저장수행");
+            obj3dRepository.save(actualObj3d);
+            //log.info(String.valueOf(actualObj3d));
+            log.info("importedCount 1증가");
+            return "importedCount 1증가";
+
+        }
+        else{
+            return "잘못된 mapid";
+        }
+    }
+
+
 
 }
 
@@ -151,5 +198,7 @@ class importedPathModule{
     String username;
     String mapname;
     String totalImportedCount;
+    String importedMapId;
     ArrayList<NodeDTO_for_update> NodeDTO_for_updateArrayList;
 }
+
