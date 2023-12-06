@@ -1,5 +1,6 @@
 import { Box, Button, IconButton, Input } from '@chakra-ui/react';
 import { IoSearch, IoAdd } from 'react-icons/io5';
+import client from '../utility/client';
 
 const NodeSearchInReviewSpace = ({
   children,
@@ -13,6 +14,8 @@ const NodeSearchInReviewSpace = ({
   selectedData,
   onPlusSearchNodeClick,
   searchResultData,
+  dayModuleSelected,
+  dayModuleSelectedData,
 }) => {
   return (
     <>
@@ -88,6 +91,23 @@ const NodeSearchInReviewSpace = ({
             colorScheme="teal"
             onClick={() => {
               if (nodeSearchSelected) onPlusSearchNodeClick(selectedData);
+              console.log(dayModuleSelected);
+              console.log(dayModuleSelectedData);
+              if (dayModuleSelected) {
+                console.log(dayModuleSelectedData);
+                client
+                  .post(
+                    '/api/placeRecommend/setimportcount?importedMapId=' +
+                      dayModuleSelectedData.data.importedMapId +
+                      '&importedContentId=' +
+                      selectedData.contentid +
+                      '&importedDate=' +
+                      dayModuleSelectedData.data.nodeDTO_for_updateArrayList[0].visitDate
+                  )
+                  .then((res) => {
+                    console.log(res);
+                  });
+              }
             }}
           />
         </Box>

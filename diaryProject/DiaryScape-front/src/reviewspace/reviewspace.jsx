@@ -21,6 +21,7 @@ import {
   IoChevronBack,
   IoHome,
   IoCubeOutline,
+  IoSettings,
 } from 'react-icons/io5';
 import UserOptions from '../components/user_options';
 import { useNavigate } from 'react-router-dom';
@@ -96,6 +97,9 @@ const ReviewSpace = () => {
   const [selectedData, setSelectedData] = useState({});
   const [searchResultDataLoading, setSearchResultDataLoading] = useState(false);
   const [totalReview, setTotalReview] = useState('일기를 생성해주세요!');
+
+  const [dayModuleSelected, setDayModuleSelected] = useState(false);
+  const [dayModuleSelectedData, setDayModuleSelectedData] = useState(null);
 
   const [nodeInfoData, setNodeInfoData] = useState({});
 
@@ -457,6 +461,21 @@ const ReviewSpace = () => {
   const onAddNodeButtonClick = () => {
     if (addNodeFunctionRef.current) {
       addNodeFunctionRef.current(selectOptionData);
+
+      console.log(dayModuleSelectedData);
+      console.log(selectOptionData);
+      client
+        .post(
+          '/api/placeRecommend/setimportcount?importedMapId=' +
+            dayModuleSelectedData.data.importedMapId +
+            '&importedContentId=' +
+            selectOptionData.select_option.userData.contentID +
+            '&importedDate=' +
+            dayModuleSelectedData.data.nodeDTO_for_updateArrayList[0].visitDate
+        )
+        .then((res) => {
+          console.log(res);
+        });
     }
   };
 
@@ -564,6 +583,8 @@ const ReviewSpace = () => {
               selectedData={selectedData}
               onPlusSearchNodeClick={onPlusSearchNodeClick}
               searchResultData={searchResultData}
+              dayModuleSelected={dayModuleSelected}
+              dayModuleSelectedData={dayModuleSelectedData}
             />
           </Box>
           <IconButton
@@ -597,7 +618,11 @@ const ReviewSpace = () => {
               icon={<IoCubeOutline />}
             />
             <IconButton colorScheme="blue" onClick={() => setRightBarPage(2)} icon={<IoBook />} />
-            <IconButton colorScheme="blue" onClick={() => setRightBarPage(3)} icon={<IoBook />} />
+            <IconButton
+              colorScheme="blue"
+              onClick={() => setRightBarPage(3)}
+              icon={<IoSettings />}
+            />
           </Box>
           <Box
             mt={4}
@@ -642,6 +667,10 @@ const ReviewSpace = () => {
             )}
             {rightBarPage == 1 && (
               <RecommendedNodeList
+                dayModuleSelected={dayModuleSelected}
+                dayModuleSelectedData={dayModuleSelectedData}
+                setDayModuleSelected={setDayModuleSelected}
+                setDayModuleSelectedData={setDayModuleSelectedData}
                 getCurNodeRef={getCurNodeRef}
                 tripData={tripData}
                 curNode={curNode}
