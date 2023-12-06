@@ -131,7 +131,7 @@ class objectManager {
     for (var i = 0; i < size - 1; i++) {
       var nextNode = await this.createNode(nodeArr[i + 1]);
       this.changeNodeColor(nextNode, dayManager.getDayColor(dayIdx));
-      const line = this.drawLine(objectArr[2 * i + 1].userData, nextNode.userData, dayColor);
+      const line = await this.drawLine(objectArr[2 * i + 1].userData, nextNode.userData, dayColor);
       objectArr.push(line);
       objectArr.push(nextNode);
     } 
@@ -185,8 +185,7 @@ class objectManager {
     // const line = new THREE.Line(lineGeometry, lineMaterial);
     // scene.add(line);
     const pathInfos = await saveManager.makePathInfo(startNode, endNode);
-    line.userData.pathInfos = pathInfos;
-    console.log(pathInfos);
+    line.userData = pathInfos;
     let textGeometry;
     loader.load( '/assets/helvetiker_regular.typeface.json', function ( font ) {
 

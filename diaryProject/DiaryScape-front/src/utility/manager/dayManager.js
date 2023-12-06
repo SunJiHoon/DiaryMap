@@ -82,31 +82,36 @@ class DayManager {
     // console.log(this.maxDay)
   }
 
-  updateDayInfosToFront(nodes) {
+  updateDayInfosToFront(_nodes) {
     //var obj = [{id:1, data:[node1, node2, node3]},{},{}];
-    const size = nodes.length;
+    const size = _nodes.length;
     var obj = [];
 
     for (let i = 0; i < size; i++) {
       var temp = {};
       temp.id = i + 1;
       var temp2 = [];
-      for (let j = 0; j < nodes[i].nodes.length; j++) {
-        temp2.push(nodes[i].nodes[j]);
+      var edges = [];
+      for (let j = 0; j < _nodes[i].nodes.length; j++) {
+        temp2.push(_nodes[i].nodes[j]);
+        if(j != 0){
+          edges.push(nodes[j * 2].userData);
+        }
       }
       temp.data = temp2;
+      temp.edge = edges;
       obj.push(temp);
     }
     this.setDayModuleList(obj);
-    this.setNextDayMenuId(nodes.length + 1);
-    this.setCurrentDay(nodes.length);
+    this.setNextDayMenuId(_nodes.length + 1);
+    this.setCurrentDay(_nodes.length);
     const dayMenuOpenList = [];
-    for (let i = 0; i < nodes.length; i++) {
+    for (let i = 0; i < _nodes.length; i++) {
       dayMenuOpenList.push(true);
     }
     this.setDayMenuOpenList(dayMenuOpenList);
     const dayCheckedList = [];
-    for (let i = 0; i < nodes.length; i++) {
+    for (let i = 0; i < _nodes.length; i++) {
       dayCheckedList.push(true);
     }
     this.setDayCheckedList(dayCheckedList);
@@ -123,6 +128,7 @@ class DayManager {
             edges.push(nodes[this.currentDay - 1][index * 2].userData);
           }
         }
+        console.log(edges);
         //dayModule.data = temp;
         return { id: dayModule.id, data: temp, edge: edges };
       } else {
