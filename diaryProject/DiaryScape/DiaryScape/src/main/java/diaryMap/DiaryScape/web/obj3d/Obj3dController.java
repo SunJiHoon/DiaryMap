@@ -598,6 +598,32 @@ public class Obj3dController {
         return "설정 실패";
     }
 
+    @GetMapping("/obj/isPublic")
+    public String checkIsPublic(
+            @RequestParam Map<String, String> paraMap
+    ) {
+        String id = paraMap.get("mapId");
+        Optional<Obj3d> obj3dRepositoryById = obj3dRepository.findById(id);
+        if (obj3dRepositoryById.isPresent()){
+            Obj3d actualObj3d = obj3dRepositoryById.get();
+            String curStatus = actualObj3d.getIsPublic();
+            if (curStatus == null){
+                return "private";
+            }
+            else if(curStatus.compareTo("true") == 0){
+                return "public";
+            }
+            else if(curStatus.compareTo("false") == 0){
+                return "private";
+            }
+            else{
+                return "이상 발생";
+            }
+        }
+        return "확인 실패";
+    }
+
+
 }
 
 @Data
