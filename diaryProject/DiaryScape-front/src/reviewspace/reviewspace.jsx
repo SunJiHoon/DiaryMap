@@ -22,6 +22,7 @@ import {
   IoHome,
   IoCubeOutline,
 } from 'react-icons/io5';
+import UserOptions from '../components/user_options';
 import { useNavigate } from 'react-router-dom';
 import { createContext } from 'react';
 import mapboxgl from 'mapbox-gl';
@@ -596,6 +597,7 @@ const ReviewSpace = () => {
               icon={<IoCubeOutline />}
             />
             <IconButton colorScheme="blue" onClick={() => setRightBarPage(2)} icon={<IoBook />} />
+            <IconButton colorScheme="blue" onClick={() => setRightBarPage(3)} icon={<IoBook />} />
           </Box>
           <Box
             mt={4}
@@ -654,6 +656,7 @@ const ReviewSpace = () => {
                 generateDiaryRef={generateDiaryRef}
               />
             )}
+            {rightBarPage == 3 && <UserOptions tripData={tripData} />}
           </Box>
         </RightBar>
 
