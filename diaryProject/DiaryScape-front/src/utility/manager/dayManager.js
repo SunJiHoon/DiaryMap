@@ -116,11 +116,15 @@ class DayManager {
     const nextDayModuleList = this.dayModuleList.map((dayModule, i) => {
       if (dayModule.id == this.currentDay) {
         let temp = [];
+        let edges = [];
         for (let index = 0; index < nodes[this.currentDay - 1].length / 2; index++) {
           temp.push(nodes[this.currentDay - 1][index * 2 + 1].userData);
+          if(index != 0){
+            edges.push(nodes[this.currentDay - 1][index * 2].userData);
+          }
         }
         //dayModule.data = temp;
-        return { id: dayModule.id, data: temp };
+        return { id: dayModule.id, data: temp, edge: edges };
       } else {
         return dayModule;
       }
