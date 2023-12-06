@@ -10,7 +10,7 @@ import { gsap } from 'gsap';
 
 let load_options = [];
 let search_options = [];
-let recommended_options;
+let recommended_options = [];
 
 let selectSearchNode;
 
@@ -80,10 +80,10 @@ class objectManager {
   loadRecommendedOptions = async (nodeInfos) => {
     this.invisibleOptions(recommended_options, null);
     this.clearRecommendedOptions();
-    console.log("load Recommended Optoins");
+    console.log('load Recommended Optoins');
     recommended_options = this.drawDay(nodeInfos, -1);
-    console.log("end load recommended options");
-  }
+    console.log('end load recommended options');
+  };
 
   invisibleOptions(options, select_option) {
     for (let i = 0; i < options.length; i++) {
@@ -109,7 +109,7 @@ class objectManager {
     scene.remove(object);
   }
 
-  async drawDay(nodeArr, dayIdx) {
+  drawDay = async (nodeArr, dayIdx) => {
     const size = nodeArr.length;
     const dayColor = dayManager.getDayColor(dayIdx);
 
@@ -134,7 +134,7 @@ class objectManager {
       objectArr.push(nextNode);
     }
     return objectArr;
-  }
+  };
 
   async createNode(nodeInfo) {
     var node = await new Node(nodeInfo);

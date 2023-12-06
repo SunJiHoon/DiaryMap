@@ -65,6 +65,7 @@ const ReviewSpace = () => {
   const onObjManagerNodeSearchSelectRef = useRef(null);
   const dayReady = useRef(false);
   const changeDayNodeIndexRef = useRef(null);
+  const loadRecommendedOptionsRef = useRef(null);
 
   // const setStateDataRef = useRef(null)
   // const printStateDataRef = useRef(null)
@@ -284,6 +285,7 @@ const ReviewSpace = () => {
           newMapFunctionRef.current = objectManager.newMap;
           loadSearchOptionsRef.current = objectManager.loadSearchOptions;
           onObjManagerNodeSearchSelectRef.current = objectManager.onNodeSearchSelect;
+          loadRecommendedOptionsRef.current = objectManager.loadRecommendedOptions;
 
           saveManager = new SaveManager(tripData, setCurNode);
           saveManager.setObjectManager(objectManager);
@@ -641,6 +643,7 @@ const ReviewSpace = () => {
                 getCurNodeRef={getCurNodeRef}
                 tripData={tripData}
                 curNode={curNode}
+                loadRecommendedOptionsRef={loadRecommendedOptionsRef}
               />
             )}
             {rightBarPage == 2 && (
