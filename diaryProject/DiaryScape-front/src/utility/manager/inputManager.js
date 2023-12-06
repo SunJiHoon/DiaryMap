@@ -156,36 +156,16 @@ class inputManager {
     options.concat(objectManager.getRecommendedOptions());
     selectOption({ character, options, select_option: node });
   }
-
-  // selectOption = () => {
-  //   console.log(select_option);
-  //   const cur_node = character.userData.myNodes[character.userData.myNodes.length - 1];
-
-  //   objectManager.drawLine(cur_node.position, select_option.position);
-  //   objectManager.loadOptions(new THREE.Vector3(userData.mapX, 1, userData.mapY));
-  //   objectManager.invisibleOptions(select_option);
-
-  //   character.userData.myNodes.push(select_option);
-  //   objectManager.saveMyNodes();
-
-  //   const targetPos = new THREE.Vector3(
-  //     select_option.position.x,
-  //     1,
-  //     select_option.position.z
-  //   );
-
-  //   move(targetPos);
-  // }
 }
 
-export const selectOption = (selectOptionDataState) => {
+export const selectOption = async (selectOptionDataState) => {
   const { character, options, select_option } = selectOptionDataState;
   const cur_day = dayManager.getCurDay();
   const nodes = dayManager.getNodes()[cur_day - 1];
   const index = nodes.length - 1;
   const cur_node = nodes[index];
 
-  const line = objectManager.drawLine(cur_node, select_option, dayManager.getDayColor(cur_day - 1));
+  const line = await objectManager.drawLine(cur_node, select_option, dayManager.getDayColor(cur_day - 1));
   if (!isReadOnly) {
     objectManager.loadOptions(
       new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY)
@@ -208,7 +188,6 @@ export const selectOption = (selectOptionDataState) => {
 
 function move(_character, targetPos) {
   cur_state = InputState.MOVE;
-  console.log(_character);
   let angle = new THREE.Vector2(0, 1).angleTo(
     new THREE.Vector2(targetPos.x - _character.position.x, targetPos.z - _character.position.z)
   );
