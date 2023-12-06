@@ -163,9 +163,9 @@ export const selectOption = async (selectOptionDataState) => {
   const cur_day = dayManager.getCurDay();
   const nodes = dayManager.getNodes()[cur_day - 1];
   const index = nodes.length - 1;
-  const cur_node = nodes[index];
+  const cur_node = nodes[index].userData;
 
-  const line = await objectManager.drawLine(cur_node, select_option, dayManager.getDayColor(cur_day - 1));
+  const line = await objectManager.drawLine(cur_node, select_option.userData, dayManager.getDayColor(cur_day - 1));
   if (!isReadOnly) {
     objectManager.loadOptions(
       new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY)
