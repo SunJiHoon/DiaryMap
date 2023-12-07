@@ -166,20 +166,35 @@ const ReviewSpace = () => {
     dayManager.printStateData();
 
     if (
-      map.current &&
-      curNode &&
-      setPlayerPositionRef.current &&
-      getCurNodeRef.current &&
-      getCurNodeRef.current()
+      !(
+        map.current &&
+        curNode &&
+        setPlayerPositionRef.current &&
+        getCurNodeRef.current &&
+        getCurNodeRef.current()
+      )
     ) {
-      setPlayerPositionRef.current(getCurNodeRef.current().position);
-      console.log(dayModuleList);
-      const dayLastNode =
-        dayModuleList[currentDay - 1].data[dayModuleList[currentDay - 1].data.length - 1];
-      map.current.jumpTo({
-        center: [dayLastNode.mapx, dayLastNode.mapy],
-      });
+      return;
     }
+    setPlayerPositionRef.current(getCurNodeRef.current().position);
+    console.log(dayModuleList);
+    if (
+      !(
+        dayModuleList &&
+        dayModuleList[currentDay - 1] &&
+        dayModuleList &&
+        dayModuleList[currentDay - 1].data &&
+        dayModuleList[currentDay - 1].data[dayModuleList[currentDay - 1].data.length - 1]
+      )
+    ) {
+      return;
+    }
+    const dayLastNode =
+      dayModuleList[currentDay - 1].data[dayModuleList[currentDay - 1].data.length - 1];
+
+    map.current.jumpTo({
+      center: [dayLastNode.mapX, dayLastNode.mapY],
+    });
   }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData]);
 
   const plusDayInitial = useRef(false);
