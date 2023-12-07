@@ -8,6 +8,7 @@ const SurroundingNodeList = ({
   setSelectedSurroundingNodeData,
   plusSearchNodeRef,
   curNode,
+  onNodeSearchSelect,
 }) => {
   const [selectedSurroundingNode, setSelectedSurroundingNode] = useState(false);
 
@@ -53,6 +54,7 @@ const SurroundingNodeList = ({
               onClick={() => {
                 setSelectedSurroundingNode(true);
                 setSelectedSurroundingNodeData({ nodeData, idx });
+                onNodeSearchSelect(nodeData, 'surrounding', idx);
               }}
               borderRadius="0px"
               _hover={{}}

@@ -549,11 +549,11 @@ const ReviewSpace = () => {
     }
   };
 
-  const onNodeSearchSelect = (nodeData, i) => {
+  const onNodeSearchSelect = (nodeData, mode, i) => {
     setNodeSearchSelected(true);
     setSelectedData(nodeData);
     if (onObjManagerNodeSearchSelectRef.current) {
-      onObjManagerNodeSearchSelectRef.current(i);
+      onObjManagerNodeSearchSelectRef.current(mode, i);
     }
   };
 
@@ -727,6 +727,7 @@ const ReviewSpace = () => {
               selectedSurroundingNodeData={selectedSurroundingNodeData}
               setSelectedSurroundingNodeData={setSelectedSurroundingNodeData}
               plusSearchNodeRef={plusSearchNodeRef}
+              onNodeSearchSelect={onNodeSearchSelect}
               curNode={curNode}
             />
           )}
