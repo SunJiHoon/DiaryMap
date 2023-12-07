@@ -83,7 +83,7 @@ const RecommendedNodeList = ({
               borderBottom="1px"
               borderColor="gray.300"
               borderRadius="0px"
-              bgColor={dayModuleSelected && dayModuleSelectedData.idx == idx ? 'blue.600' : 'white'}
+              bgColor={dayModuleSelected && dayModuleSelectedData.idx == idx ? 'blue.300' : 'white'}
               color={dayModuleSelected && dayModuleSelectedData.idx == idx ? 'white' : 'black'}
               _hover={{}}
               // h="40px"

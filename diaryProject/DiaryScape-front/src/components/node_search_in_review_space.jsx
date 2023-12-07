@@ -63,7 +63,7 @@ const NodeSearchInReviewSpace = ({
                       borderRadius="0px"
                       bgColor={
                         nodeSearchSelected && selectedData.contentid == result.contentid
-                          ? 'blue.600'
+                          ? 'blue.300'
                           : 'white'
                       }
                       color={

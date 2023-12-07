@@ -54,8 +54,12 @@ const SurroundingNodeList = ({
                 setSelectedSurroundingNode(true);
                 setSelectedSurroundingNodeData({ nodeData, idx });
               }}
+              borderRadius="0px"
+              _hover={{}}
             >
-              <Box fontWeight="semibold">{nodeData.title}</Box>
+              <Box fontWeight="semibold" mr={2}>
+                {nodeData.title}
+              </Box>
               <Box fontWeight="medium">{nodeData.addr1}</Box>
             </Button>
           );
