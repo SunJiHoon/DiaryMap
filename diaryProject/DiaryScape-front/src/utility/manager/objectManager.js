@@ -71,7 +71,7 @@ class objectManager {
       var tempNode = await this.createNode(res.data[i]);
       load_options.push(tempNode);
     }
-    console.log(load_options.map((element) => element.userData)); 
+    console.log(load_options.map((element) => element.userData));
     setSurroundingNodeList(load_options.map((element) => element.userData));
   }
 
@@ -133,7 +133,7 @@ class objectManager {
       const line = await this.drawLine(objectArr[2 * i + 1].userData, nextNode.userData, dayColor);
       objectArr.push(line);
       objectArr.push(nextNode);
-    } 
+    }
     return objectArr;
   };
 
@@ -183,18 +183,17 @@ class objectManager {
     const lineMaterial = new THREE.LineBasicMaterial({ color: lineColor, linewidth: 10 });
     const line = new THREE.Line(lineGeometry, lineMaterial);
     scene.add(line);
-    console.log(endNode);
-    console.log(endNode.relativeX);
-    console.log(endNode.relativex);
-    console.log(endNode.relativeY);
-    console.log(endNode.relativey);
+    // console.log(endNode);
+    // console.log(endNode.relativeX);
+    // console.log(endNode.relativex);
+    // console.log(endNode.relativeY);
+    // console.log(endNode.relativey);
 
     const pathInfos = await saveManager.makePathInfo(startNode, endNode);
     line.userData = pathInfos;
     let textGeometry;
-    loader.load( '/assets/helvetiker_regular.typeface.json', function ( font ) {
-
-      textGeometry = new TextGeometry( 'Hello three.js!', {
+    loader.load('/assets/helvetiker_regular.typeface.json', function (font) {
+      textGeometry = new TextGeometry('Hello three.js!', {
         font: font,
         size: 80,
         height: 5,
@@ -203,15 +202,18 @@ class objectManager {
         bevelThickness: 10,
         bevelSize: 8,
         bevelOffset: 0,
-        bevelSegments: 5
-      }
-      );
+        bevelSegments: 5,
+      });
     });
-    const textMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true } );
+    const textMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true });
     const text = new THREE.Mesh(textGeometry, textMaterial);
-    text.position.set((startNode.relativeX + endNode.relativeX)/2, 3, (startNode.relativeY + endNode.relativeY)/2)
+    text.position.set(
+      (startNode.relativeX + endNode.relativeX) / 2,
+      3,
+      (startNode.relativeY + endNode.relativeY) / 2
+    );
     scene.add(text);
-    console.log(text);
+    // console.log(text);
     return line;
   }
 

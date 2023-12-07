@@ -157,10 +157,16 @@ class DayManager {
   }
 
   visibleDay(dayIdx) {
-    if (dayIdx >= this.maxDay - 2) {
+    console.log(this.maxDay);
+    console.log(dayIdx);
+    console.log(nodes);
+    if (dayIdx >= this.maxDay - 1 || !nodes[dayIdx]) {
       //이것땜에 마지막 날 거 visible 안 됨
       return;
     }
+    console.log(this.maxDay);
+    console.log(dayIdx);
+    console.log(nodes);
     const size = nodes[dayIdx].length;
     for (let i = 0; i < size; i++) {
       if (nodes[dayIdx][i] != null) {

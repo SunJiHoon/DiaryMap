@@ -179,12 +179,10 @@ const ReviewSpace = () => {
   }, [onPlusDay]);
 
   useEffect(() => {
-    // if(dayReady.current) {
     dayCheckedList.map((dayChecked, i) => {
       if (dayChecked) dayManager.visibleDay(i);
       else dayManager.invisibleDay(i);
     });
-    // }
   }, [dayCheckedList]);
 
   const updateReviews = () => {
