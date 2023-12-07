@@ -39,10 +39,9 @@ class saveManager {
       this.saveMyNodes();
       this.saveReviews();
     }
+    
     const lastNode = dayManager.getCurNode();
     await objectManager.loadOptions(new THREE.Vector3(lastNode.userData.mapX, 0, lastNode.userData.mapY));
-    objectManager.setPlayerPos(lastNode.position);
-    this.map.jumpTo({ center: [ lastNode.userData.mapX, lastNode.userData.mapY ] });
     this.setCurNodeToFront(dayManager.getCurNode().userData);
     this.setIsLoading(false);
   }
@@ -77,6 +76,10 @@ class saveManager {
       { requestData },
       { withCredentials: true }
     );
+
+    const lastNode = dayManager.getCurNode();
+    objectManager.setPlayerPos(lastNode.position);
+    this.map.jumpTo({ center: [ lastNode.userData.mapX, lastNode.userData.mapY ] });
   }
 
   async loadMyNodes() {
