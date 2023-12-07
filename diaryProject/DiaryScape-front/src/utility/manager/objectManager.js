@@ -16,6 +16,7 @@ let search_options = [];
 let recommended_options = [];
 
 let selectSearchNode;
+let selectSurroundingNode;
 
 var scene;
 var player;
@@ -99,13 +100,18 @@ class objectManager {
     options = [];
   }
 
-  onNodeSearchSelect = (index) => {
+  onNodeSearchSelect = (area, index) => {
     if (selectSearchNode != null) {
       this.changeNodeColor(selectSearchNode, 'magenta');
+      this.changeNodeColor(selectSurroundingNode, 'magenta');
     }
-    if (search_options.length > 0) {
+    if (search_options.length > 0 && area == "search") {
       selectSearchNode = search_options[index];
       this.changeNodeColor(selectSearchNode, 'cyan');
+    }
+    else if(load_options.length > 0 && area == 'surrounding'){
+      selectSurroundingNode = load_options[index];
+      this.changeNodeColor(selectSurroundingNode, 'cyan');
     }
   };
 
