@@ -80,7 +80,7 @@ class objectManager {
       search_options.push(tempNode);
     }
     console.log(search_options.map((element) => element.userData));
-    this.setSurroundingNodeList()
+    this.setSurroundingNodeList(search_options.map((element) => element.userData))
   };
 
   loadRecommendedOptions = async (nodeInfos) => {
