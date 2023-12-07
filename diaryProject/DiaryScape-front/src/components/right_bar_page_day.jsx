@@ -88,7 +88,7 @@ const RightBarPageDay = ({
               let curNode;
               if (getCurNodeRef.current) {
                 curNode = getCurNodeRef.current();
-                console.log(curNode);
+                // console.log(curNode);
               }
               setDayCheckedList([...dayCheckedList, true]);
               setDayMenuOpenList([...dayMenuOpenList, true]);
@@ -152,7 +152,7 @@ const RightBarPageDay = ({
             overflowX="auto"
             transition="all 0.3s ease-in-out"
           >
-            {console.log(dayModuleList)}
+            {/* {console.log(dayModuleList)} */}
             {dayModuleList &&
               dayModuleList[currentDay - 1] &&
               dayModuleList[currentDay - 1].data &&
@@ -333,7 +333,7 @@ const RightBarPageDay = ({
                   }
                 });
                 setReviews(nextReviews);
-                console.log(nextReviews);
+                // console.log(nextReviews);
               }}
             />
           </Box>
@@ -352,7 +352,7 @@ const RightBarPageDay = ({
               <Box fontSize="3xl" fontWeight="semibold">
                 {nodeInfoData.node.title}
               </Box>
-              {console.log(nodeInfoData.node)}
+              {/* {console.log(nodeInfoData.node)} */}
               <Box mb={6} fontSize="xl">
                 {nodeInfoData.node.addr1}
               </Box>
