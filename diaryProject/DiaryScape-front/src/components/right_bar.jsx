@@ -9,7 +9,14 @@ import {
 } from 'react-icons/io5';
 import { Box, IconButton } from '@chakra-ui/react';
 import { useState } from 'react';
-const RightBar = ({ children, rightBarOpen, setRightBarOpen, rightBarPage, setRightBarPage }) => {
+const RightBar = ({
+  children,
+  rightBarOpen,
+  setRightBarOpen,
+  rightBarPage,
+  setRightBarPage,
+  isReadonly,
+}) => {
   const [title, setTitle] = useState('Day 정보');
   const translateXValue = '24px';
   return (
@@ -41,37 +48,41 @@ const RightBar = ({ children, rightBarOpen, setRightBarOpen, rightBarPage, setRi
           }}
           transition="all .3s"
         />
-        <IconButton
-          mb={2}
-          colorScheme="green"
-          onClick={() => {
-            setRightBarOpen(true);
-            setRightBarPage(1);
-            setTitle('다른 유저의 동선');
-          }}
-          icon={<IoThumbsUpOutline />}
-          transform={rightBarPage == 1 ? 'translateX(0px)' : `translateX(${translateXValue})`}
-          _hover={{
-            transform: 'scale(1.15)',
-          }}
-          transition="all .3s"
-        />
-        <IconButton
-          mb={2}
-          colorScheme="green"
-          bgColor="green.400"
-          onClick={() => {
-            setRightBarOpen(true);
-            setRightBarPage(2);
-            setTitle('주변 노드');
-          }}
-          icon={<IoCubeOutline />}
-          transform={rightBarPage == 2 ? 'translateX(0px)' : `translateX(${translateXValue})`}
-          _hover={{
-            transform: 'scale(1.15)',
-          }}
-          transition="all .3s"
-        />
+        {!isReadonly && (
+          <IconButton
+            mb={2}
+            colorScheme="green"
+            onClick={() => {
+              setRightBarOpen(true);
+              setRightBarPage(1);
+              setTitle('다른 유저의 동선');
+            }}
+            icon={<IoThumbsUpOutline />}
+            transform={rightBarPage == 1 ? 'translateX(0px)' : `translateX(${translateXValue})`}
+            _hover={{
+              transform: 'scale(1.15)',
+            }}
+            transition="all .3s"
+          />
+        )}
+        {!isReadonly && (
+          <IconButton
+            mb={2}
+            colorScheme="green"
+            bgColor="green.400"
+            onClick={() => {
+              setRightBarOpen(true);
+              setRightBarPage(2);
+              setTitle('주변 노드');
+            }}
+            icon={<IoCubeOutline />}
+            transform={rightBarPage == 2 ? 'translateX(0px)' : `translateX(${translateXValue})`}
+            _hover={{
+              transform: 'scale(1.15)',
+            }}
+            transition="all .3s"
+          />
+        )}
         <IconButton
           mb={2}
           colorScheme="blue"

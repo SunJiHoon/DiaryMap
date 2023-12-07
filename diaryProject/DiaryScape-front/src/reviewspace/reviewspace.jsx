@@ -601,6 +601,7 @@ const ReviewSpace = () => {
             mt={4}
             p={4}
             w="240px"
+            minH="80px"
             bgColor="#ffffff"
             // borderWidth={1}
             borderRadius={4}
@@ -646,6 +647,7 @@ const ReviewSpace = () => {
           setRightBarOpen={setRightBarOpen}
           rightBarPage={rightBarPage}
           setRightBarPage={setRightBarPage}
+          isReadonly={isReadonly}
         >
           {rightBarPage == 0 && (
             <RightBarPageDay
@@ -709,6 +711,7 @@ const ReviewSpace = () => {
               mapStyleValue={mapStyleValue}
               setMapStyleValue={setMapStyleValue}
               changeMapStyle={changeMapStyle}
+              isReadonly={isReadonly}
             />
           )}
         </RightBar>
