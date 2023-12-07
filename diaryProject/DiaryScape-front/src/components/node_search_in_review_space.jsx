@@ -89,7 +89,7 @@ const NodeSearchInReviewSpace = ({
                       }
                       _hover={{}}
                       h="40px"
-                      onClick={(e) => onNodeSearchSelect(result, "search" idx)}
+                      onClick={(e) => onNodeSearchSelect(result, 'search', idx)}
                     >
                       {/* {result.contentid} */}
                       <Box fontWeight="semibold" mr={2}>
