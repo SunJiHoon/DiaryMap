@@ -29,6 +29,7 @@ import { useNavigate } from 'react-router-dom';
 import { createContext } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxLanguage from '@mapbox/mapbox-gl-language';
+import { BallTriangle } from 'react-loader-spinner';
 import client from '../utility/client';
 import axios from 'axios';
 import '../styles/custom.css';
@@ -583,7 +584,16 @@ const ReviewSpace = () => {
               alignItems: 'center',
             }}
           >
-            로딩중...
+            <BallTriangle
+              height={100}
+              width={100}
+              radius={5}
+              color="white"
+              ariaLabel="ball-triangle-loading"
+              wrapperClass={{}}
+              wrapperStyle=""
+              visible={true}
+            />
           </div>
         )}
         <LeftBar leftBarOpen={leftBarOpen}>
