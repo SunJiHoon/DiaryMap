@@ -86,7 +86,6 @@ class DayManager {
     //var obj = [{id:1, data:[node1, node2, node3]},{},{}];
     const size = _nodes.length;
     var obj = [];
-    console.log(nodes);
 
     for (let i = 0; i < size; i++) {
       var temp = {};
@@ -97,7 +96,6 @@ class DayManager {
         temp2.push(_nodes[i].nodes[j]);
         if (j != 0) {
           edges.push(nodes[i][j * 2].userData);
-          console.log(nodes[i][j * 2].userData);
         }
       }
       temp.data = temp2;
@@ -154,7 +152,6 @@ class DayManager {
     tempReview.push(this.getDate(this.currentDay - 1));
     tempReview.push('리뷰를 작성해주세요...');
     reviews.push(tempReview);
-    console.log(reviews);
     const resNode = await saveManager.saveMyNodes();
     // const resReview = await saveManager.saveReviews();
   }
@@ -196,7 +193,6 @@ class DayManager {
 
     this.updateDayNodesToFront();
     this.setCurNodeToFront(this.getCurNode().userData);
-    console.log(nodes);
   }
 
   changeDayNodeIndex = async (index, isUp) => {
@@ -259,7 +255,6 @@ class DayManager {
         await this.changeLine(index, -1, 2);
       }
     }
-    console.log(nodes);
   };
 
   async changeLine(index, start, end) {
@@ -274,7 +269,6 @@ class DayManager {
   }
 
   removeDayNode = async (dayIdx, index) => {
-    console.log(nodes[dayIdx - 1].length);
     if (nodes[dayIdx - 1].length == 2) {
       return; //노드가 하나만 들어있다면 삭제 못 하게
     }
@@ -312,8 +306,6 @@ class DayManager {
 
   setPathInfos(_pathInfos) {
     pathInfos = _pathInfos;
-    console.log('pathInfos', pathInfos);
-    console.log('_pathInfos', _pathInfos);
   }
 
   getReviews() {
