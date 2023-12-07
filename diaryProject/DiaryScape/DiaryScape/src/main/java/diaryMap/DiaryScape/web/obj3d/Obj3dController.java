@@ -68,7 +68,7 @@ public class Obj3dController {
         obj3d1.setCreatedTime(formattedTime);
         obj3d1.setModifiedTime(formattedTime);
         obj3d1.setIsPublic("false");
-
+        obj3d1.setTotalReview("total review를 저장해주세요.");
         //obj3dRepository.save(obj3d1);
 
         log.info(obj3d1.getObjName());
