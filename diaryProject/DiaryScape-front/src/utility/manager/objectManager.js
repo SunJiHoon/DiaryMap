@@ -4,10 +4,10 @@ import Node from '../object/node.js';
 import client from '../client.jsx';
 import DayManager from './dayManager.js';
 import { gsap } from 'gsap';
-import { Line2 } from 'three/addons/lines/Line2.js';
-import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
-import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+// import { Line2 } from 'three/addons/lines/Line2.js';
+// import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+// import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
+// import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import SaveManager from './saveManager.js';
 
@@ -23,7 +23,7 @@ var tripData;
 var startNodeData;
 const dayManager = new DayManager();
 const saveManager = new SaveManager();
-const loader = new FontLoader();
+// const loader = new FontLoader();
 
 let setSurroundingNodeList;
 
@@ -71,7 +71,6 @@ class objectManager {
       var tempNode = await this.createNode(res.data[i]);
       load_options.push(tempNode);
     }
-    console.log(load_options.map((element) => element.userData));
     setSurroundingNodeList(load_options.map((element) => element.userData));
   }
 
@@ -153,22 +152,25 @@ class objectManager {
 
   async drawLine(startNode, endNode, lineColor) {
     // const points = [];
-    // points.push(startNode.relativeX, 0, startNode.relativeY);
-    // points.push(endNode.relativeX, 0, endNode.relativeY);
+    // points.push(startNode.relativeX, 3, startNode.relativeY);
+    // points.push(endNode.relativeX, 3, endNode.relativeY);
 
     // const geometry = new LineGeometry();
     // 		geometry.setPositions( points );
     // 		// geometry.setColors( colors );
 
     // const matLine = new LineMaterial({
+    //   lineType: 0,
     //   color: lineColor,
-    //   linewidth: 10, // in world units with size attenuation, pixels otherwise
+    //   linewidth: 15, // in world units with size attenuation, pixels otherwise
     //   vertexColors: false,
     //   dashed: false,
     //   dashSize: 5,
-    //   alphaToCoverage: true,
+    //   alphaToCoverage: false,
     //   worldUnits: true,
+    //   side: THREE.DoubleSide,
     // });
+    // matLine.resolution.set(window.innerWidth, window.innerHeight);
 
     // const line = new Line2(geometry, matLine);
     // line.computeLineDistances();
@@ -183,36 +185,29 @@ class objectManager {
     const lineMaterial = new THREE.LineBasicMaterial({ color: lineColor, linewidth: 10 });
     const line = new THREE.Line(lineGeometry, lineMaterial);
     scene.add(line);
-    // console.log(endNode);
-    // console.log(endNode.relativeX);
-    // console.log(endNode.relativex);
-    // console.log(endNode.relativeY);
-    // console.log(endNode.relativey);
 
     const pathInfos = await saveManager.makePathInfo(startNode, endNode);
     line.userData = pathInfos;
-    let textGeometry;
-    loader.load('/assets/helvetiker_regular.typeface.json', function (font) {
-      textGeometry = new TextGeometry('Hello three.js!', {
-        font: font,
-        size: 80,
-        height: 5,
-        curveSegments: 12,
-        bevelEnabled: true,
-        bevelThickness: 10,
-        bevelSize: 8,
-        bevelOffset: 0,
-        bevelSegments: 5,
-      });
-    });
-    const textMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true });
-    const text = new THREE.Mesh(textGeometry, textMaterial);
-    text.position.set(
-      (startNode.relativeX + endNode.relativeX) / 2,
-      3,
-      (startNode.relativeY + endNode.relativeY) / 2
-    );
-    scene.add(text);
+    // let textGeometry;
+    // loader.load( '/assets/helvetiker_regular.typeface.json', function ( font ) {
+
+    //   textGeometry = new TextGeometry( 'Hello three.js!', {
+    //     font: font,
+    //     size: 80,
+    //     height: 5,
+    //     curveSegments: 12,
+    //     bevelEnabled: true,
+    //     bevelThickness: 10,
+    //     bevelSize: 8,
+    //     bevelOffset: 0,
+    //     bevelSegments: 5
+    //   }
+    //   );
+    // });
+    // const textMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true } );
+    // const text = new THREE.Mesh(textGeometry, textMaterial);
+    // text.position.set((startNode.relativeX + endNode.relativeX)/2, 3, (startNode.relativeY + endNode.relativeY)/2)
+    // scene.add(text);
     // console.log(text);
     return line;
   }
