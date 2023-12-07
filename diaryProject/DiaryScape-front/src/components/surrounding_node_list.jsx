@@ -23,7 +23,7 @@ const SurroundingNodeList = ({
       </Box> */}
       <Box display="flex">
         <Box mb={2}>현재 노드 :&nbsp;</Box>
-        <Box fontWeight="semibold">{curNode.title}</Box>
+        <Box fontWeight="semibold">{curNode && curNode.title}</Box>
       </Box>
       <Box
         className="custom-scrollbar"

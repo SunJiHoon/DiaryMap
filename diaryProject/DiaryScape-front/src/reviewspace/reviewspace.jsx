@@ -73,6 +73,7 @@ const ReviewSpace = () => {
 
   // const setStateDataRef = useRef(null)
   // const printStateDataRef = useRef(null)
+  const [isLoading, setIsLoading] = useState(true);
   const [nodeMenuOn, setNodeMenuOn] = useState(false);
   const [nodeMenuPosition, setNodeMenuPosition] = useState({ x: 0, y: 0 });
 
@@ -305,7 +306,7 @@ const ReviewSpace = () => {
           onObjManagerNodeSearchSelectRef.current = objectManager.onNodeSearchSelect;
           loadRecommendedOptionsRef.current = objectManager.loadRecommendedOptions;
 
-          saveManager = new SaveManager(tripData, setCurNode, map);
+          saveManager = new SaveManager(tripData, setCurNode, map, setIsLoading);
           saveManager.setObjectManager(objectManager);
           dayManager.setSaveManager(saveManager);
           saveReviewsInSaveManager.current = saveManager.saveReviews;
@@ -567,6 +568,24 @@ const ReviewSpace = () => {
     <>
       <CanvasContext.Provider value={[canvasState, setCanvasState]}>
         {/* <Map /> */}
+        {isLoading && (
+          <div
+            style={{
+              backgroundColor: '#00000070',
+              position: 'fixed',
+              top: '0px',
+              left: '0px',
+              width: '100vw',
+              height: '100vh',
+              zIndex: 10,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            로딩중...
+          </div>
+        )}
         <LeftBar leftBarOpen={leftBarOpen}>
           <Box
             mt={4}
