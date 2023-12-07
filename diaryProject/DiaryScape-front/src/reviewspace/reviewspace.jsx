@@ -192,12 +192,15 @@ const ReviewSpace = () => {
     const dayLastNode =
       dayModuleList[currentDay - 1].data[dayModuleList[currentDay - 1].data.length - 1];
     console.log(dayLastNode);
-    if (!(dayLastNode.mapx && dayLastNode.mapy)) {
-      return;
+    if (dayLastNode.mapx && dayLastNode.mapy) {
+      map.current.jumpTo({
+        center: [dayLastNode.mapx, dayLastNode.mapy],
+      });
+    } else if (dayLastNode.mapX && dayLastNode.mapY) {
+      map.current.jumpTo({
+        center: [dayLastNode.mapX, dayLastNode.mapY],
+      });
     }
-    map.current.jumpTo({
-      center: [dayLastNode.mapx, dayLastNode.mapy],
-    });
   }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData]);
 
   const plusDayInitial = useRef(false);
