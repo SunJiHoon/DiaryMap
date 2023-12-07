@@ -64,7 +64,7 @@ const RecommendedNodeList = ({
       </Box>
       <Box display="flex" mb={2}>
         <Box>현재 노드 :&nbsp;</Box>
-        <Box fontWeight="semibold">{curNode.title}</Box>
+        <Box fontWeight="semibold">{curNode && curNode.title}</Box>
       </Box>
       <Box
         h={260}

@@ -662,6 +662,7 @@ const ReviewSpace = () => {
               selectedSurroundingNodeData={selectedSurroundingNodeData}
               setSelectedSurroundingNodeData={setSelectedSurroundingNodeData}
               plusSearchNodeRef={plusSearchNodeRef}
+              curNode={curNode}
             />
           )}
           {rightBarPage == 3 && (
