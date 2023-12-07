@@ -193,12 +193,14 @@ const ReviewSpace = () => {
       dayModuleList[currentDay - 1].data[dayModuleList[currentDay - 1].data.length - 1];
     console.log(dayLastNode);
     if (dayLastNode.mapx && dayLastNode.mapy) {
-      map.current.jumpTo({
+      map.current.flyTo({
         center: [dayLastNode.mapx, dayLastNode.mapy],
+        essential: true,
       });
     } else if (dayLastNode.mapX && dayLastNode.mapY) {
-      map.current.jumpTo({
+      map.current.flyTo({
         center: [dayLastNode.mapX, dayLastNode.mapY],
+        essential: true,
       });
     }
   }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData]);
