@@ -34,7 +34,9 @@ const MyTripmap = () => {
 
   let newDate = new Date();
   let date = newDate.getDate();
+  date = date < 10 ? `0${date}` : date;
   let month = newDate.getMonth() + 1;
+  month = month < 10 ? `0${month}` : month;
   let year = newDate.getFullYear();
 
   const [reviewData, setReviewData] = useState([]);
