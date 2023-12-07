@@ -481,18 +481,20 @@ const ReviewSpace = () => {
 
       // console.log(dayModuleSelectedData);
       // console.log(selectOptionData);
-      client
-        .post(
-          '/api/placeRecommend/setimportcount?importedMapId=' +
-            dayModuleSelectedData.data.importedMapId +
-            '&importedContentId=' +
-            selectOptionData.select_option.userData.contentID +
-            '&importedDate=' +
-            dayModuleSelectedData.data.nodeDTO_for_updateArrayList[0].visitDate
-        )
-        .then((res) => {
-          // console.log(res);
-        });
+      if (dayModuleSelected) {
+        client
+          .post(
+            '/api/placeRecommend/setimportcount?importedMapId=' +
+              dayModuleSelectedData.data.importedMapId +
+              '&importedContentId=' +
+              selectOptionData.select_option.userData.contentID +
+              '&importedDate=' +
+              dayModuleSelectedData.data.nodeDTO_for_updateArrayList[0].visitDate
+          )
+          .then((res) => {
+            // console.log(res);
+          });
+      }
     }
   };
 

@@ -108,8 +108,6 @@ const NodeSearchInReviewSpace = ({
             colorScheme="teal"
             onClick={() => {
               if (nodeSearchSelected) onPlusSearchNodeClick(selectedData);
-              console.log(dayModuleSelected);
-              console.log(dayModuleSelectedData);
               if (dayModuleSelected) {
                 console.log(dayModuleSelectedData);
                 client
