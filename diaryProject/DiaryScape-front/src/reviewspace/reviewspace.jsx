@@ -173,7 +173,12 @@ const ReviewSpace = () => {
       getCurNodeRef.current()
     ) {
       setPlayerPositionRef.current(getCurNodeRef.current().position);
-      map.current.jumpTo({ center: [curNode.mapX, curNode.mapY] });
+      console.log(dayModuleList);
+      const dayLastNode =
+        dayModuleList[currentDay - 1].data[dayModuleList[currentDay - 1].data.length - 1];
+      map.current.jumpTo({
+        center: [dayLastNode.mapx, dayLastNode.mapy],
+      });
     }
   }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData]);
 
