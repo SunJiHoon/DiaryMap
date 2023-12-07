@@ -75,7 +75,6 @@ class inputManager {
   cleanup() {
     window.removeEventListener('keydown', this.handleKeyDown);
     window.removeEventListener('mousedown', this.handleMouseDown);
-    console.log('cleanup inputManager');
   }
 
   setMglCameraPosition(_mglCameraPosition) {
@@ -92,7 +91,6 @@ class inputManager {
       } else if (event.key == 'p') {
         //character.playWalkAnim();
       } else if (event.key == 'q') {
-        console.log(scene);
       }
     }
     if (event.key == 't') {
