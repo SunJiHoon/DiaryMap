@@ -184,6 +184,11 @@ class objectManager {
     const line = new THREE.Line(lineGeometry, lineMaterial);
     scene.add(line);
     console.log(endNode);
+    console.log(endNode.relativeX);
+    console.log(endNode.relativex);
+    console.log(endNode.relativeY);
+    console.log(endNode.relativey);
+
     const pathInfos = await saveManager.makePathInfo(startNode, endNode);
     line.userData = pathInfos;
     let textGeometry;
