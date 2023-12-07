@@ -4,10 +4,10 @@ import Node from '../object/node.js';
 import client from '../client.jsx';
 import DayManager from './dayManager.js';
 import { gsap } from 'gsap';
-import { Line2 } from 'three/addons/lines/Line2.js';
-import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
-import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+// import { Line2 } from 'three/addons/lines/Line2.js';
+// import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+// import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
+// import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import SaveManager from './saveManager.js';
 
@@ -23,7 +23,7 @@ var tripData;
 var startNodeData;
 const dayManager = new DayManager();
 const saveManager = new SaveManager();
-const loader = new FontLoader();
+// const loader = new FontLoader();
 
 let setSurroundingNodeList;
 
