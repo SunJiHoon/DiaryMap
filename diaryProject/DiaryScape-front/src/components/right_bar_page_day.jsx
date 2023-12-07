@@ -16,6 +16,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import {
+  IoChevronUp,
   IoChevronDown,
   IoChevronForward,
   IoSearch,
@@ -159,30 +160,38 @@ const RightBarPageDay = ({
                 const _key = 'day ' + currentDay + ': node ' + i;
                 return (
                   <Box key={_key}>
-                    <Box display="flex" h={10} lineHeight={8}>
+                    <Box display="flex" h={12} alignItems="center" mt={1} mb={1}>
                       {!isReadonly && (
-                        <Box display="flex" flexDirection="column">
-                          <Button
+                        <Box display="flex" flexDirection="column" mr={2}>
+                          <IconButton
+                            h={6}
                             w="10px"
                             onClick={() => {
                               if (changeDayNodeIndexRef.current)
                                 changeDayNodeIndexRef.current(i + 1, true);
                             }}
-                          >
-                            u
-                          </Button>
-                          <Button
+                            colorScheme="teal"
+                            variant="outline"
+                            icon={<IoChevronUp />}
+                          />
+                          <IconButton
+                            h={6}
                             w="10px"
                             onClick={() => {
                               if (changeDayNodeIndexRef.current)
                                 changeDayNodeIndexRef.current(i + 1, false);
                             }}
-                          >
-                            d
-                          </Button>
+                            colorScheme="teal"
+                            variant="outline"
+                            icon={<IoChevronDown />}
+                          />
                         </Box>
                       )}
                       <Box
+                        display="flex"
+                        alignItems="center"
+                        h="100%"
+                        pl={2}
                         w="100%"
                         fontWeight="semibold"
                         overflow="hidden"
@@ -200,10 +209,82 @@ const RightBarPageDay = ({
                     </Box>
                     {dayModuleList[currentDay - 1].edge &&
                       dayModuleList[currentDay - 1].edge[i] && (
-                        <Box>
-                          {Number(dayModuleList[currentDay - 1].edge[i].duration) / 60}분
-                          {dayModuleList[currentDay - 1].edge[i].distance}m
-                          {dayModuleList[currentDay - 1].edge[i].taxiFare}원
+                        <Box
+                          display="flex"
+                          flexDirection="column"
+                          p={2}
+                          border="2px"
+                          borderRadius="4px"
+                          borderColor="gray.400"
+                        >
+                          <Box display="flex" mb={1}>
+                            <Box
+                              textAlign="center"
+                              w="16"
+                              border="1px"
+                              borderRadius="4px"
+                              borderColor="teal"
+                              fontSize="0.8em"
+                              fontWeight="semibold"
+                              color="white"
+                              bgColor="teal"
+                              pl={1}
+                              pr={1}
+                              mr={2}
+                            >
+                              소요시간
+                            </Box>
+                            <Box fontWeight="semibold">
+                              {(
+                                Number(dayModuleList[currentDay - 1].edge[i].duration) / 60
+                              ).toFixed(1)}
+                            </Box>
+                            분
+                          </Box>
+                          <Box display="flex" mb={1}>
+                            <Box
+                              w="16"
+                              textAlign="center"
+                              border="1px"
+                              borderRadius="4px"
+                              borderColor="teal"
+                              fontSize="0.8em"
+                              fontWeight="semibold"
+                              color="white"
+                              bgColor="teal"
+                              pl={1}
+                              pr={1}
+                              mr={2}
+                            >
+                              거리
+                            </Box>
+                            <Box fontWeight="semibold">
+                              {dayModuleList[currentDay - 1].edge[i].distance}
+                            </Box>
+                            m
+                          </Box>
+                          <Box display="flex">
+                            <Box
+                              w="16"
+                              textAlign="center"
+                              border="1px"
+                              borderRadius="4px"
+                              borderColor="teal"
+                              fontSize="0.8em"
+                              fontWeight="semibold"
+                              color="white"
+                              bgColor="teal"
+                              pl={1}
+                              pr={1}
+                              mr={2}
+                            >
+                              택시요금
+                            </Box>
+                            <Box fontWeight="semibold">
+                              {dayModuleList[currentDay - 1].edge[i].taxiFare}
+                            </Box>
+                            원
+                          </Box>
                         </Box>
                       )}
                   </Box>

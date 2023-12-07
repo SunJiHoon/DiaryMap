@@ -53,7 +53,7 @@ const RightBarPageDiary = ({
               client
                 .post(
                   '/api/totalReview/save?mapId=' + tripData.mapId,
-                  { totalReview },
+                  { review: totalReview },
                   { withCredentials: true }
                 )
                 .then((res) => {

@@ -51,6 +51,7 @@ const ReviewSpace = () => {
   const canvasRef = useRef(null);
   const tripData = useSelector((state) => state.trip);
   const startnodeData = useSelector((state) => state.startnode);
+  const username = useSelector((state) => state.user.name);
 
   const [isReadonly, setIsReadOnly] = useState(tripData.readOnly);
   console.log(isReadonly);
@@ -572,12 +573,12 @@ const ReviewSpace = () => {
             marginLeft="1.6em"
             boxShadow="2xl"
           >
-            <IconButton
-              icon={<IoHome />}
-              w="100%"
-              colorScheme="gray"
-              onClick={() => navigate('/')}
-            />
+            <Box ml={2} fontSize="xl" display="flex">
+              <Box fontWeight="semibold">{username}</Box>
+              <Box mr={2}>님의</Box>
+              <Box fontWeight="semibold">{tripData.title}</Box>
+              {console.log(tripData)}
+            </Box>
             <NodeSearchInReviewSpace
               isReadonly={isReadonly}
               searchValue={searchValue}

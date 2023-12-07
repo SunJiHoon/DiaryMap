@@ -3,6 +3,7 @@ import { useState } from 'react';
 import client from '../utility/client';
 import axios from 'axios';
 import { useEffect } from 'react';
+import { IoThumbsUpOutline } from 'react-icons/io5';
 
 const RecommendedNodeList = ({
   dayModuleSelected,
@@ -91,7 +92,10 @@ const RecommendedNodeList = ({
               <Box display="flex" fontWeight="medium">
                 <Box fontWeight="semibold">{result.username}</Box>
                 <Box mr={1}>님,&nbsp;</Box>
-                <Box mr={1}>{result.totalImportedCount}회&nbsp;</Box>
+                <Box display="flex" mr={1}>
+                  <IoThumbsUpOutline />
+                  {result.totalImportedCount}
+                </Box>
                 {result.nodeDTO_for_updateArrayList.map((nodeData, idx_node) => (
                   <Box
                     key={

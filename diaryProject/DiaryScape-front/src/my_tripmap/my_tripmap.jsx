@@ -34,7 +34,9 @@ const MyTripmap = () => {
 
   let newDate = new Date();
   let date = newDate.getDate();
+  date = date < 10 ? `0${date}` : date;
   let month = newDate.getMonth() + 1;
+  month = month < 10 ? `0${month}` : month;
   let year = newDate.getFullYear();
 
   const [reviewData, setReviewData] = useState([]);
@@ -98,7 +100,7 @@ const MyTripmap = () => {
     console.log(review);
     dispatch(
       selectTrip({
-        title: review.title,
+        title: review.reviewtitle,
         mapId: review.mapId,
         startX: review.mapX,
         startY: review.mapY,
@@ -352,12 +354,12 @@ const MyTripmap = () => {
                     </Box>
                   </Box>
                   <Box w="52px" mr={2} display="flex" flexDirection="column">
-                    <IconButton
+                    {/* <IconButton
                       icon={<IoArrowForwardOutline />}
                       mb={1}
                       colorScheme="blue"
                       onClick={(e) => onReviewClicked(review, true)}
-                    />
+                    /> */}
                     <IconButton
                       icon={<IoArrowForwardOutline />}
                       mb={1}
