@@ -71,6 +71,7 @@ const ReviewSpace = () => {
   const dayReady = useRef(false);
   const changeDayNodeIndexRef = useRef(null);
   const loadRecommendedOptionsRef = useRef(null);
+  const setPlayerPositionRef = useRef(null);
 
   // const setStateDataRef = useRef(null)
   // const printStateDataRef = useRef(null)
@@ -163,7 +164,11 @@ const ReviewSpace = () => {
       tripData
     );
     dayManager.printStateData();
-    // console.log(dayModuleList);
+
+    if (map.current && curNode && setPlayerPositionRef.current && getCurNodeRef.current) {
+      setPlayerPositionRef.current(getCurNodeRef.current().position);
+      map.current.jumpTo({ center: [curNode.mapX, curNode.mapY] });
+    }
   }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData]);
 
   const plusDayInitial = useRef(false);
@@ -306,6 +311,7 @@ const ReviewSpace = () => {
           loadSearchOptionsRef.current = objectManager.loadSearchOptions;
           onObjManagerNodeSearchSelectRef.current = objectManager.onNodeSearchSelect;
           loadRecommendedOptionsRef.current = objectManager.loadRecommendedOptions;
+          setPlayerPositionRef.current = objectManager.setPlayerPos;
 
           saveManager = new SaveManager(tripData, setCurNode, map, setIsLoading);
           saveManager.setObjectManager(objectManager);
