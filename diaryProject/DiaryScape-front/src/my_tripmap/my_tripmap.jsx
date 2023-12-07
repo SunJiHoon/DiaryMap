@@ -352,12 +352,12 @@ const MyTripmap = () => {
                     </Box>
                   </Box>
                   <Box w="52px" mr={2} display="flex" flexDirection="column">
-                    <IconButton
+                    {/* <IconButton
                       icon={<IoArrowForwardOutline />}
                       mb={1}
                       colorScheme="blue"
                       onClick={(e) => onReviewClicked(review, true)}
-                    />
+                    /> */}
                     <IconButton
                       icon={<IoArrowForwardOutline />}
                       mb={1}

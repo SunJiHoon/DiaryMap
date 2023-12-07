@@ -55,6 +55,7 @@ const NodeSearchInReviewSpace = ({
                   searchResultData &&
                   searchResultData.map((result, idx) => (
                     <Button
+                      minW="100%"
                       key={result.contentid}
                       border="0px"
                       borderBottom="1px"

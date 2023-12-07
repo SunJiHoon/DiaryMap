@@ -36,20 +36,40 @@ const RightBar = ({ children, rightBarOpen, setRightBarOpen, setRightBarPage }) 
           colorScheme="pink"
           onClick={() => setRightBarPage(0)}
           icon={<IoPencil />}
+          _hover={{
+            transform: 'scale(1.15)',
+          }}
+          transition="all .3s"
         />
         <IconButton
           mb={2}
           colorScheme="green"
           onClick={() => setRightBarPage(1)}
           icon={<IoCubeOutline />}
+          _hover={{
+            transform: 'scale(1.15)',
+          }}
+          transition="all .3s"
         />
         <IconButton
           mb={2}
           colorScheme="blue"
           onClick={() => setRightBarPage(2)}
           icon={<IoBook />}
+          _hover={{
+            transform: 'scale(1.15)',
+          }}
+          transition="all .3s"
         />
-        <IconButton colorScheme="gray" onClick={() => setRightBarPage(3)} icon={<IoSettings />} />
+        <IconButton
+          colorScheme="gray"
+          onClick={() => setRightBarPage(3)}
+          icon={<IoSettings />}
+          _hover={{
+            transform: 'scale(1.15)',
+          }}
+          transition="all .3s"
+        />
       </Box>
       <Box
         mt={4}

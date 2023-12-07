@@ -16,6 +16,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import {
+  IoChevronUp,
   IoChevronDown,
   IoChevronForward,
   IoSearch,
@@ -159,30 +160,38 @@ const RightBarPageDay = ({
                 const _key = 'day ' + currentDay + ': node ' + i;
                 return (
                   <Box key={_key}>
-                    <Box display="flex" h={10} lineHeight={8}>
+                    <Box display="flex" h={12} alignItems="center" mt={1} mb={1}>
                       {!isReadonly && (
-                        <Box display="flex" flexDirection="column">
-                          <Button
+                        <Box display="flex" flexDirection="column" mr={2}>
+                          <IconButton
+                            h={6}
                             w="10px"
                             onClick={() => {
                               if (changeDayNodeIndexRef.current)
                                 changeDayNodeIndexRef.current(i + 1, true);
                             }}
-                          >
-                            u
-                          </Button>
-                          <Button
+                            colorScheme="teal"
+                            variant="outline"
+                            icon={<IoChevronUp />}
+                          />
+                          <IconButton
+                            h={6}
                             w="10px"
                             onClick={() => {
                               if (changeDayNodeIndexRef.current)
                                 changeDayNodeIndexRef.current(i + 1, false);
                             }}
-                          >
-                            d
-                          </Button>
+                            colorScheme="teal"
+                            variant="outline"
+                            icon={<IoChevronDown />}
+                          />
                         </Box>
                       )}
                       <Box
+                        display="flex"
+                        alignItems="center"
+                        h="100%"
+                        pl={2}
                         w="100%"
                         fontWeight="semibold"
                         overflow="hidden"
@@ -200,10 +209,21 @@ const RightBarPageDay = ({
                     </Box>
                     {dayModuleList[currentDay - 1].edge &&
                       dayModuleList[currentDay - 1].edge[i] && (
-                        <Box>
-                          {Number(dayModuleList[currentDay - 1].edge[i].duration) / 60}분
-                          {dayModuleList[currentDay - 1].edge[i].distance}m
-                          {dayModuleList[currentDay - 1].edge[i].taxiFare}원
+                        <Box display="flex">
+                          <Box ml={10} fontWeight="semibold">
+                            {(Number(dayModuleList[currentDay - 1].edge[i].duration) / 60).toFixed(
+                              1
+                            )}
+                          </Box>
+                          분
+                          <Box ml={2} fontWeight="semibold">
+                            {dayModuleList[currentDay - 1].edge[i].distance}
+                          </Box>
+                          m
+                          <Box ml={2} fontWeight="semibold">
+                            {dayModuleList[currentDay - 1].edge[i].taxiFare}
+                          </Box>
+                          원
                         </Box>
                       )}
                   </Box>

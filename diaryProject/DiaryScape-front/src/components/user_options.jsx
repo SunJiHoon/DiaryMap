@@ -1,8 +1,11 @@
-import { Box, Button, Select } from '@chakra-ui/react';
+import { Box, Button, Select, IconButton } from '@chakra-ui/react';
+import { IoHome } from 'react-icons/io5';
 import client from '../utility/client';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const UserOptions = ({ tripData, mapStyleValue, setMapStyleValue, changeMapStyle }) => {
+  const navigate = useNavigate();
   const mapStyles = [
     'streets-v12',
     'outdoors-v11',
@@ -34,6 +37,13 @@ const UserOptions = ({ tripData, mapStyleValue, setMapStyleValue, changeMapStyle
       <Box fontSize="2xl" mb={2}>
         옵션
       </Box>
+      <IconButton
+        icon={<IoHome />}
+        w="100%"
+        colorScheme="gray"
+        onClick={() => navigate('/')}
+        mb={4}
+      />
       <Box>공개 범위</Box>
       <Select
         value={accessibility}
