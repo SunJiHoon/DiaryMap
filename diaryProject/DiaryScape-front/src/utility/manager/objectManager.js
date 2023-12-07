@@ -25,12 +25,14 @@ const dayManager = new DayManager();
 const saveManager = new SaveManager();
 const loader = new FontLoader();
 
+let setSurroundingNodeList;
+
 class objectManager {
-  constructor(_scene, _camera, _tripData, _startNodeData, setSurroundingNodeList) {
+  constructor(_scene, _camera, _tripData, _startNodeData, _setSurroundingNodeList) {
     scene = _scene;
     tripData = _tripData;
     startNodeData = _startNodeData;
-    this.setSurroundingNodeList = setSurroundingNodeList;
+    setSurroundingNodeList = _setSurroundingNodeList;
 
     dayManager.setObjectManager(this);
   }
@@ -70,7 +72,7 @@ class objectManager {
       load_options.push(tempNode);
     }
     console.log(load_options.map((element) => element.userData)); 
-    this.setSurroundingNodeList(load_options.map((element) => element.userData))
+    setSurroundingNodeList(load_options.map((element) => element.userData));
   }
 
   loadSearchOptions = async (nodeInfos) => {
@@ -181,6 +183,7 @@ class objectManager {
     const lineMaterial = new THREE.LineBasicMaterial({ color: lineColor, linewidth: 10 });
     const line = new THREE.Line(lineGeometry, lineMaterial);
     scene.add(line);
+    console.log(endNode);
     const pathInfos = await saveManager.makePathInfo(startNode, endNode);
     line.userData = pathInfos;
     let textGeometry;
