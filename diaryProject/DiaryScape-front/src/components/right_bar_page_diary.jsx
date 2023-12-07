@@ -1,20 +1,4 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  Checkbox,
-  Select,
-  Textarea,
-  Input,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Button, Textarea } from '@chakra-ui/react';
 import client from '../utility/client';
 
 const RightBarPageDiary = ({
@@ -25,6 +9,7 @@ const RightBarPageDiary = ({
   generateDiaryRef,
   tripData,
 }) => {
+  console.log(totalReview);
   return (
     <>
       {/* <Box fontSize="2xl" fontWeight="semibold" mb={2}>

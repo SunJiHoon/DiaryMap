@@ -3,9 +3,9 @@ import {
   IoPencil,
   IoBook,
   IoChevronBack,
-  IoHome,
   IoCubeOutline,
   IoSettings,
+  IoThumbsUpOutline,
 } from 'react-icons/io5';
 import { Box, IconButton } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -49,7 +49,7 @@ const RightBar = ({ children, rightBarOpen, setRightBarOpen, rightBarPage, setRi
             setRightBarPage(1);
             setTitle('다른 유저의 동선');
           }}
-          icon={<IoCubeOutline />}
+          icon={<IoThumbsUpOutline />}
           transform={rightBarPage == 1 ? 'translateX(0px)' : `translateX(${translateXValue})`}
           _hover={{
             transform: 'scale(1.15)',
@@ -59,6 +59,7 @@ const RightBar = ({ children, rightBarOpen, setRightBarOpen, rightBarPage, setRi
         <IconButton
           mb={2}
           colorScheme="green"
+          bgColor="green.400"
           onClick={() => {
             setRightBarOpen(true);
             setRightBarPage(2);
