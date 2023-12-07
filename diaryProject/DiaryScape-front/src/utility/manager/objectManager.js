@@ -69,6 +69,8 @@ class objectManager {
       var tempNode = await this.createNode(res.data[i]);
       load_options.push(tempNode);
     }
+    console.log(load_options.map((element) => element.userData)); 
+    this.setSurroundingNodeList(load_options.map((element) => element.userData))
   }
 
   loadSearchOptions = async (nodeInfos) => {
@@ -79,8 +81,6 @@ class objectManager {
       var tempNode = await this.createNode(nodeInfos[i]);
       search_options.push(tempNode);
     }
-    console.log(search_options.map((element) => element.userData));
-    this.setSurroundingNodeList(search_options.map((element) => element.userData))
   };
 
   loadRecommendedOptions = async (nodeInfos) => {
