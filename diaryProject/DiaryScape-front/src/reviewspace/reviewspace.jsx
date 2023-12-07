@@ -165,7 +165,13 @@ const ReviewSpace = () => {
     );
     dayManager.printStateData();
 
-    if (map.current && curNode && setPlayerPositionRef.current && getCurNodeRef.current) {
+    if (
+      map.current &&
+      curNode &&
+      setPlayerPositionRef.current &&
+      getCurNodeRef.current &&
+      getCurNodeRef.current()
+    ) {
       setPlayerPositionRef.current(getCurNodeRef.current().position);
       map.current.jumpTo({ center: [curNode.mapX, curNode.mapY] });
     }
