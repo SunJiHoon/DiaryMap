@@ -54,7 +54,7 @@ const ReviewSpace = () => {
   const username = useSelector((state) => state.user.name);
 
   const [isReadonly, setIsReadOnly] = useState(tripData.readOnly);
-  console.log(isReadonly);
+  // console.log(isReadonly);
   const newMapFunctionRef = useRef(null);
   const addNodeFunctionRef = useRef(null);
   const plusSearchNodeRef = useRef(null);
@@ -100,6 +100,7 @@ const ReviewSpace = () => {
   const [selectedData, setSelectedData] = useState({});
   const [searchResultDataLoading, setSearchResultDataLoading] = useState(false);
   const [totalReview, setTotalReview] = useState('일기를 생성해주세요!');
+  const [surroundingNodeList, setSurroundingNodeList] = useState([]);
 
   const [dayModuleSelected, setDayModuleSelected] = useState(false);
   const [dayModuleSelectedData, setDayModuleSelectedData] = useState(null);
@@ -146,7 +147,7 @@ const ReviewSpace = () => {
   // console.log(tripData);
 
   useEffect(() => {
-    console.log(curNode);
+    // console.log(curNode);
   }, [curNode]);
   useEffect(() => {
     dayManager.updateFromFrontData(
@@ -157,14 +158,14 @@ const ReviewSpace = () => {
       tripData
     );
     dayManager.printStateData();
-    console.log(dayModuleList);
+    // console.log(dayModuleList);
   }, [dayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData]);
 
   const plusDayInitial = useRef(false);
   useEffect(() => {
     if (!plusDayInitial.current) {
       plusDayInitial.current = true;
-      console.log('initial');
+      // console.log('initial');
       return;
     }
     // dayReady.current = false
@@ -193,7 +194,7 @@ const ReviewSpace = () => {
 
   useEffect(() => {
     if (!updateReviewsInitial.current) {
-      console.log('initial');
+      // console.log('initial');
       updateReviewsInitial.current = true;
       return;
     }
@@ -213,7 +214,7 @@ const ReviewSpace = () => {
       container: mapContainer.current,
       antialias: true,
     });
-    console.log(map);
+    // console.log(map);
     // map.current.dragRotate.disable()
     // map.current.touchZoomRotate.disableRotation()
     map.current.addControl(
@@ -290,7 +291,13 @@ const ReviewSpace = () => {
         // camera.position.set(-35, 45, 45);
         // camera.lookAt(0, 0, 0);
 
-        objectManager = new ObjectManager(this.scene, this.camera, tripData, startnodeData);
+        objectManager = new ObjectManager(
+          this.scene,
+          this.camera,
+          tripData,
+          startnodeData,
+          setSurroundingNodeList
+        );
         objectManager.newMap().then(() => {
           newMapFunctionRef.current = objectManager.newMap;
           loadSearchOptionsRef.current = objectManager.loadSearchOptions;
@@ -468,8 +475,8 @@ const ReviewSpace = () => {
     if (addNodeFunctionRef.current) {
       addNodeFunctionRef.current(selectOptionData);
 
-      console.log(dayModuleSelectedData);
-      console.log(selectOptionData);
+      // console.log(dayModuleSelectedData);
+      // console.log(selectOptionData);
       client
         .post(
           '/api/placeRecommend/setimportcount?importedMapId=' +
@@ -480,7 +487,7 @@ const ReviewSpace = () => {
             dayModuleSelectedData.data.nodeDTO_for_updateArrayList[0].visitDate
         )
         .then((res) => {
-          console.log(res);
+          // console.log(res);
         });
     }
   };
@@ -519,7 +526,7 @@ const ReviewSpace = () => {
     // console.log(e.target.value)
 
     const searchValueReplaced = searchValue.replace(/ /g, '%20');
-    console.log('search: ' + searchValueReplaced);
+    // console.log('search: ' + searchValueReplaced);
 
     // console.log("axios get 요청 : " + "http://localhost:8080/api/openApi/start/list?userKeyword=" + searchValueReplaced)
 
@@ -577,7 +584,7 @@ const ReviewSpace = () => {
               <Box fontWeight="semibold">{username}</Box>
               <Box mr={2}>님의</Box>
               <Box fontWeight="semibold">{tripData.title}</Box>
-              {console.log(tripData)}
+              {/* {console.log(tripData)} */}
             </Box>
             <NodeSearchInReviewSpace
               isReadonly={isReadonly}
@@ -646,7 +653,8 @@ const ReviewSpace = () => {
               loadRecommendedOptionsRef={loadRecommendedOptionsRef}
             />
           )}
-          {rightBarPage == 2 && (
+          {rightBarPage == 2 && <SurroundingNodeList surroundingNodeList={surroundingNodeList} />}
+          {rightBarPage == 3 && (
             <RightBarPageDiary
               isReadonly={isReadonly}
               totalReview={totalReview}
@@ -655,7 +663,7 @@ const ReviewSpace = () => {
               tripData={tripData}
             />
           )}
-          {rightBarPage == 3 && (
+          {rightBarPage == 4 && (
             <UserOptions
               tripData={tripData}
               mapStyleValue={mapStyleValue}
