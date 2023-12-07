@@ -7,6 +7,7 @@ const SurroundingNodeList = ({
   selectedSurroundingNodeData,
   setSelectedSurroundingNodeData,
   plusSearchNodeRef,
+  curNode,
 }) => {
   const [selectedSurroundingNode, setSelectedSurroundingNode] = useState(false);
 
@@ -19,6 +20,10 @@ const SurroundingNodeList = ({
     <Box>
       <Box fontSize="2xl" fontWeight="semibold" mb={2}>
         주변 노드
+      </Box>
+      <Box display="flex">
+        <Box mb={2}>현재 노드 :&nbsp;</Box>
+        <Box fontWeight="semibold">{curNode.title}</Box>
       </Box>
       <Box
         className="custom-scrollbar"
@@ -41,15 +46,17 @@ const SurroundingNodeList = ({
                   : 'black'
               }
               bgColor={
-                selectedSurroundingNode && selectedSurroundingNodeData.idx == idx ? 'blue' : 'white'
+                selectedSurroundingNode && selectedSurroundingNodeData.idx == idx
+                  ? 'blue.300'
+                  : 'white'
               }
               onClick={() => {
                 setSelectedSurroundingNode(true);
                 setSelectedSurroundingNodeData({ nodeData, idx });
               }}
             >
-              <Box>{nodeData.title}</Box>
-              <Box>{nodeData.addr1}</Box>
+              <Box fontWeight="semibold">{nodeData.title}</Box>
+              <Box fontWeight="medium">{nodeData.addr1}</Box>
             </Button>
           );
         })}

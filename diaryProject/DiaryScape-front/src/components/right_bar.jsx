@@ -34,7 +34,10 @@ const RightBar = ({ children, rightBarOpen, setRightBarOpen, setRightBarPage }) 
         <IconButton
           mb={2}
           colorScheme="pink"
-          onClick={() => setRightBarPage(0)}
+          onClick={() => {
+            setRightBarOpen(true);
+            setRightBarPage(0);
+          }}
           icon={<IoPencil />}
           _hover={{
             transform: 'scale(1.15)',
@@ -44,7 +47,10 @@ const RightBar = ({ children, rightBarOpen, setRightBarOpen, setRightBarPage }) 
         <IconButton
           mb={2}
           colorScheme="green"
-          onClick={() => setRightBarPage(1)}
+          onClick={() => {
+            setRightBarOpen(true);
+            setRightBarPage(1);
+          }}
           icon={<IoCubeOutline />}
           _hover={{
             transform: 'scale(1.15)',
@@ -54,7 +60,10 @@ const RightBar = ({ children, rightBarOpen, setRightBarOpen, setRightBarPage }) 
         <IconButton
           mb={2}
           colorScheme="green"
-          onClick={() => setRightBarPage(2)}
+          onClick={() => {
+            setRightBarOpen(true);
+            setRightBarPage(2);
+          }}
           icon={<IoCubeOutline />}
           _hover={{
             transform: 'scale(1.15)',
@@ -64,7 +73,10 @@ const RightBar = ({ children, rightBarOpen, setRightBarOpen, setRightBarPage }) 
         <IconButton
           mb={2}
           colorScheme="blue"
-          onClick={() => setRightBarPage(3)}
+          onClick={() => {
+            setRightBarOpen(true);
+            setRightBarPage(3);
+          }}
           icon={<IoBook />}
           _hover={{
             transform: 'scale(1.15)',
@@ -73,7 +85,10 @@ const RightBar = ({ children, rightBarOpen, setRightBarOpen, setRightBarPage }) 
         />
         <IconButton
           colorScheme="gray"
-          onClick={() => setRightBarPage(4)}
+          onClick={() => {
+            setRightBarOpen(true);
+            setRightBarPage(4);
+          }}
           icon={<IoSettings />}
           _hover={{
             transform: 'scale(1.15)',
