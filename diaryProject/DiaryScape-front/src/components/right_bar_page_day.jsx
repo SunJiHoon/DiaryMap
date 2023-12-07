@@ -60,9 +60,6 @@ const RightBarPageDay = ({
 
   return (
     <>
-      <Box fontSize="2xl" fontWeight="semibold" mb={2}>
-        Day 정보
-      </Box>
       <Box display="flex" mb={4}>
         <Box w="100%" mr={2} display="flex" alignItems="center">
           {/* <Box w="160px" fontWeight="semibold">편집할 Day</Box> */}

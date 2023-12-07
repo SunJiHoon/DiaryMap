@@ -34,9 +34,9 @@ const UserOptions = ({ tripData, mapStyleValue, setMapStyleValue, changeMapStyle
 
   return (
     <Box>
-      <Box fontSize="2xl" fontWeight="semibold" mb={2}>
+      {/* <Box fontSize="2xl" fontWeight="semibold" mb={2}>
         옵션
-      </Box>
+      </Box> */}
       <IconButton
         icon={<IoHome />}
         w="100%"

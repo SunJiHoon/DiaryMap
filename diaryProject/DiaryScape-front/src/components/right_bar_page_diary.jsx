@@ -27,9 +27,9 @@ const RightBarPageDiary = ({
 }) => {
   return (
     <>
-      <Box fontSize="2xl" fontWeight="semibold" mb={2}>
+      {/* <Box fontSize="2xl" fontWeight="semibold" mb={2}>
         일기
-      </Box>
+      </Box> */}
       {!isReadonly && (
         <Box>
           <Button

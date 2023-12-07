@@ -307,7 +307,7 @@ const ReviewSpace = () => {
           onObjManagerNodeSearchSelectRef.current = objectManager.onNodeSearchSelect;
           loadRecommendedOptionsRef.current = objectManager.loadRecommendedOptions;
 
-          saveManager = new SaveManager(tripData, setCurNode);
+          saveManager = new SaveManager(tripData, setCurNode, map);
           saveManager.setObjectManager(objectManager);
           dayManager.setSaveManager(saveManager);
           saveReviewsInSaveManager.current = saveManager.saveReviews;
@@ -400,6 +400,7 @@ const ReviewSpace = () => {
               newMglCameraPosition.z
             )
           );
+
         this.map.triggerRepaint();
         // window.addEventListener("resize", handleResize);
 
@@ -616,6 +617,7 @@ const ReviewSpace = () => {
         <RightBar
           rightBarOpen={rightBarOpen}
           setRightBarOpen={setRightBarOpen}
+          rightBarPage={rightBarPage}
           setRightBarPage={setRightBarPage}
         >
           {rightBarPage == 0 && (

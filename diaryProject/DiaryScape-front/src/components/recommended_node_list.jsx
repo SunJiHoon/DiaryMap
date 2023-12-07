@@ -59,9 +59,9 @@ const RecommendedNodeList = ({
 
   return (
     <>
-      <Box fontSize="2xl" fontWeight="semibold" mb={2}>
+      {/* <Box fontSize="2xl" fontWeight="semibold" mb={2}>
         다른 유저의 동선
-      </Box>
+      </Box> */}
       <Box display="flex" mb={2}>
         <Box>현재 노드 :&nbsp;</Box>
         <Box fontWeight="semibold">{curNode && curNode.title}</Box>

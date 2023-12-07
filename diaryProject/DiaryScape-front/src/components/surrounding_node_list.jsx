@@ -18,9 +18,9 @@ const SurroundingNodeList = ({
   console.log(surroundingNodeList);
   return (
     <Box>
-      <Box fontSize="2xl" fontWeight="semibold" mb={2}>
+      {/* <Box fontSize="2xl" fontWeight="semibold" mb={2}>
         주변 노드
-      </Box>
+      </Box> */}
       <Box display="flex">
         <Box mb={2}>현재 노드 :&nbsp;</Box>
         <Box fontWeight="semibold">{curNode.title}</Box>
