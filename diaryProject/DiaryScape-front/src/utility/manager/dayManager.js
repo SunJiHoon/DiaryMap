@@ -299,7 +299,7 @@ class DayManager {
   };
 
   getCurNode = () => {
-    //length 0일 때 예외 처리?
+    if(nodes[this.currentDay - 1] == null){ return null; }
     return nodes[this.currentDay - 1][nodes[this.currentDay - 1].length - 1];
   };
 
