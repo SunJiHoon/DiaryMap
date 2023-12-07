@@ -41,8 +41,8 @@ class saveManager {
     }
     const lastNode = dayManager.getCurNode();
     await objectManager.loadOptions(new THREE.Vector3(lastNode.userData.mapX, 0, lastNode.userData.mapY));
-    // objectManager.setPlayerPos(lastNode.position);
-    // this.map.jumpTo({ center: [ lastNode.userData.mapX, lastNode.userData.mapY ] });
+    objectManager.setPlayerPos(lastNode.position);
+    this.map.jumpTo({ center: [ lastNode.userData.mapX, lastNode.userData.mapY ] });
     this.setCurNodeToFront(dayManager.getCurNode().userData);
     this.setIsLoading(false);
   }
