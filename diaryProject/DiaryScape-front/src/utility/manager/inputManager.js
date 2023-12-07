@@ -59,8 +59,6 @@ class inputManager {
     setNodeMenuPosition = _setNodeMenuPosition;
     selectOptionData = _selectOptionData;
     setSelectOptionData = _setSelectOptionData;
-    //setNodeMenuOn(true)
-    //console.log("menu on")
     character = scene.getObjectByName('player');
     isReadOnly = _isReadOnly;
 
@@ -82,13 +80,9 @@ class inputManager {
 
   setMglCameraPosition(_mglCameraPosition) {
     mglCameraPosition = _mglCameraPosition;
-    // console.log("set:")
-    // console.log(cameraPosition)
   }
   setMglCameraPositionTransformed(_mglCameraPositionTransformed) {
     mglCameraPositionTransformed = _mglCameraPositionTransformed;
-    // console.log("set:")
-    // console.log(cameraPosition)
   }
 
   handleKeyDown(event) {
@@ -115,7 +109,6 @@ class inputManager {
       pointer.y = -((event.clientY / window.innerHeight) * 2 - 1);
       pointer.z = 1;
       pointer.w = 1;
-      // console.log(pointer)
       let direction = pointer.clone().applyMatrix4(camera.projectionMatrix.clone().invert());
       direction.divideScalar(direction.w);
       raycaster.set(

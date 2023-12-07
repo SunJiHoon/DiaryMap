@@ -42,7 +42,6 @@ class saveManager {
   }
 
   saveMyNodes() {
-    console.log('saveMyNodes');
     let jsonArr = [];
     const max_day = dayManager.getMaxDay() - 1;
     for (let j = 0; j < max_day; j++) {
@@ -112,7 +111,6 @@ class saveManager {
       temp.dayReview = reviews[i][1];
       dayReviews.push(temp);
     }
-    console.log(dayReviews);
     client.post(
       '/api/dayReviews/save?mapId=' + tripData.mapId,
       { dayReviews },
@@ -123,16 +121,12 @@ class saveManager {
   async loadReviews() {
     const reviews = await client.get('api/dayReviews/look?mapId=' + tripData.mapId);
     const totalReview = await client.get('/api/totalReview/look?mapId=' + tripData.mapId);
-    console.log(totalReview);
-    console.log(totalReview.data.review);
     dayManager.setReviews(reviews.data, totalReview.data.review);
   }
 
   generateDiary = async () => {
-    console.log('sendGPT');
     const res = await client.get('api/chatgptApi/sumedDiary?mapId=' + tripData.mapId);
     var review = res.data.answer;
-    console.log('sendGPT끝');
     await client.post(
       '/api/totalReview/save?mapId=' + tripData.mapId,
       { review },

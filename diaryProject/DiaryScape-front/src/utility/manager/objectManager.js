@@ -26,10 +26,12 @@ const saveManager = new SaveManager();
 const loader = new FontLoader();
 
 class objectManager {
-  constructor(_scene, _camera, _tripData, _startNodeData) {
+  constructor(_scene, _camera, _tripData, _startNodeData, setSurroundingNodeList) {
     scene = _scene;
     tripData = _tripData;
     startNodeData = _startNodeData;
+    this.setSurroundingNodeList = setSurroundingNodeList;
+
     dayManager.setObjectManager(this);
   }
 
@@ -77,6 +79,8 @@ class objectManager {
       var tempNode = await this.createNode(nodeInfos[i]);
       search_options.push(tempNode);
     }
+    console.log(search_options.map((element) => element.userData));
+    this.setSurroundingNodeList()
   };
 
   loadRecommendedOptions = async (nodeInfos) => {
