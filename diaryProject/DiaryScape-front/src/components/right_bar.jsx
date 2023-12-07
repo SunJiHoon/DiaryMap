@@ -15,7 +15,7 @@ const RightBar = ({ children, rightBarOpen, setRightBarOpen, setRightBarPage }) 
       style={{
         position: 'fixed',
         top: '0',
-        right: rightBarOpen ? '0px' : '-380px',
+        right: rightBarOpen ? '0px' : '-400px',
         zIndex: '2',
         display: 'flex',
         alignItems: 'flex-start',
@@ -74,7 +74,7 @@ const RightBar = ({ children, rightBarOpen, setRightBarOpen, setRightBarPage }) 
       <Box
         mt={4}
         p={4}
-        w="360px"
+        w="380px"
         minH="300px"
         maxH="92vh"
         overflowY="scroll"

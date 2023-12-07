@@ -209,18 +209,62 @@ const RightBarPageDay = ({
                     </Box>
                     {dayModuleList[currentDay - 1].edge &&
                       dayModuleList[currentDay - 1].edge[i] && (
-                        <Box display="flex">
-                          <Box ml={10} fontWeight="semibold">
+                        <Box display="flex" alignItems="center">
+                          <Box
+                            border="1px"
+                            borderRadius="4px"
+                            borderColor="teal"
+                            fontSize="0.8em"
+                            fontWeight="semibold"
+                            color="white"
+                            bgColor="teal"
+                            pl={1}
+                            pr={1}
+                            mr={1}
+                          >
+                            소요시간
+                          </Box>
+                          <Box fontWeight="semibold">
                             {(Number(dayModuleList[currentDay - 1].edge[i].duration) / 60).toFixed(
                               1
                             )}
                           </Box>
                           분
-                          <Box ml={2} fontWeight="semibold">
+                          <Box
+                            border="1px"
+                            borderRadius="4px"
+                            borderColor="teal"
+                            fontSize="0.8em"
+                            fontWeight="semibold"
+                            color="white"
+                            bgColor="teal"
+                            ml={2}
+                            pl={1}
+                            pr={1}
+                            mr={1}
+                          >
+                            거리
+                          </Box>
+                          <Box fontWeight="semibold">
                             {dayModuleList[currentDay - 1].edge[i].distance}
                           </Box>
                           m
-                          <Box ml={2} fontWeight="semibold">
+                          <Box
+                            border="1px"
+                            borderRadius="4px"
+                            borderColor="teal"
+                            fontSize="0.8em"
+                            fontWeight="semibold"
+                            color="white"
+                            bgColor="teal"
+                            ml={2}
+                            pl={1}
+                            pr={1}
+                            mr={1}
+                          >
+                            택시요금
+                          </Box>
+                          <Box fontWeight="semibold">
                             {dayModuleList[currentDay - 1].edge[i].taxiFare}
                           </Box>
                           원
