@@ -85,16 +85,9 @@ class inputManager {
   }
 
   handleKeyDown(event) {
-    if (cur_state == InputState.IDLE) {
-      if (event.key == 'l') {
-        saveManager.loadReviews();
-      } else if (event.key == 'p') {
-        //character.playWalkAnim();
-      } else if (event.key == 'q') {
-      }
-    }
-    if (event.key == 't') {
-      dayManager.printStateData();
+    if (event.keyCode == 32 || event.key == ' ' || event.code == 'Space') {
+      const lastNode = dayManager.getCurNode();
+      map.flyTo({center:[lastNode.userData.mapX, lastNode.userData.mapY]});
     }
   }
   async handleMouseDown(event) {
