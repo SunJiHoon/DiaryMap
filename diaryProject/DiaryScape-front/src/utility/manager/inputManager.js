@@ -143,6 +143,8 @@ class inputManager {
 
   async plusSearchNode(nodeInfo) {
     var node = await objectManager.createNode(nodeInfo);
+    if(!node.userData.mapX) { node.userData.mapX = nodeInfo.mapX; }
+    if(!node.userData.mapY) { node.userData.mapY = nodeInfo.mapY; }
     objectManager.changeNodeColor(node, dayManager.getDayColor(dayManager.getCurDay() - 1));
     var load_options = objectManager.getLoadOptions();
     var options = load_options.concat(objectManager.getSearchOptions());
