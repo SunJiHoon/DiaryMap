@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import client from '../utility/client';
 import axios from 'axios';
 import { IoAdd, IoArrowForwardOutline, IoTrashOutline, IoSearch } from 'react-icons/io5';
+import { Oval } from 'react-loader-spinner';
 import '../styles/animation.css';
 import '../styles/custom.css';
 
@@ -271,7 +272,22 @@ const MyTripmap = () => {
                   {/* {startNodeSelected && <Box>{selectedData.contentid}</Box>} */}
                   {/* {searchValue.length == 0 && <Box>장소 이름을 입력해주세요!</Box>} */}
                   <Box h={260} overflowY="scroll" className="custom-scrollbar">
-                    {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
+                    {searchResultDataLoading && (
+                      <Box ml={44} mt={24}>
+                        <Oval
+                          height={40}
+                          width={40}
+                          color="black"
+                          wrapperStyle={{}}
+                          wrapperClass=""
+                          visible={true}
+                          ariaLabel="oval-loading"
+                          secondaryColor="gray"
+                          strokeWidth={2}
+                          strokeWidthSecondary={2}
+                        />
+                      </Box>
+                    )}
                     {!searchResultDataLoading &&
                       searchResultData.map((result) => (
                         <Button

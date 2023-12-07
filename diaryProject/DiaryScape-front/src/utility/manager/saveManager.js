@@ -1,7 +1,6 @@
 import client from '../client.jsx';
-import ObjectManager from './objectManager.js';
 import DayManager from './dayManager.js';
-import { Object3D } from 'three';
+import * as THREE from 'three';
 
 var objectManager;
 var dayManager;
@@ -9,12 +8,14 @@ var dayManager;
 var tripData;
 
 class saveManager {
-  constructor(_tripData, _setCurNode) {
+  constructor(_tripData, _setCurNode, _map, setIsLoading) {
     tripData = _tripData;
     this.setCurNodeToFront = _setCurNode;
     if (dayManager == null) {
       dayManager = new DayManager();
     }
+    this.map = _map;
+    this.setIsLoading = setIsLoading;
   }
 
   setObjectManager(_objectManager) {
@@ -38,11 +39,14 @@ class saveManager {
       this.saveMyNodes();
       this.saveReviews();
     }
+    
+    const lastNode = dayManager.getCurNode();
+    await objectManager.loadOptions(new THREE.Vector3(lastNode.userData.mapX, 0, lastNode.userData.mapY));
     this.setCurNodeToFront(dayManager.getCurNode().userData);
+    this.setIsLoading(false);
   }
 
   saveMyNodes() {
-    console.log('saveMyNodes');
     let jsonArr = [];
     const max_day = dayManager.getMaxDay() - 1;
     for (let j = 0; j < max_day; j++) {
@@ -72,6 +76,10 @@ class saveManager {
       { requestData },
       { withCredentials: true }
     );
+
+    const lastNode = dayManager.getCurNode();
+    objectManager.setPlayerPos(lastNode.position);
+    this.map.jumpTo({ center: [ lastNode.userData.mapX, lastNode.userData.mapY ] });
   }
 
   async loadMyNodes() {
@@ -112,7 +120,6 @@ class saveManager {
       temp.dayReview = reviews[i][1];
       dayReviews.push(temp);
     }
-    console.log(dayReviews);
     client.post(
       '/api/dayReviews/save?mapId=' + tripData.mapId,
       { dayReviews },
@@ -123,16 +130,12 @@ class saveManager {
   async loadReviews() {
     const reviews = await client.get('api/dayReviews/look?mapId=' + tripData.mapId);
     const totalReview = await client.get('/api/totalReview/look?mapId=' + tripData.mapId);
-    console.log(totalReview);
-    console.log(totalReview.data.review);
     dayManager.setReviews(reviews.data, totalReview.data.review);
   }
 
   generateDiary = async () => {
-    console.log('sendGPT');
     const res = await client.get('api/chatgptApi/sumedDiary?mapId=' + tripData.mapId);
     var review = res.data.answer;
-    console.log('sendGPT끝');
     await client.post(
       '/api/totalReview/save?mapId=' + tripData.mapId,
       { review },

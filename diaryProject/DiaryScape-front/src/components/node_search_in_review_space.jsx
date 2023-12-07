@@ -1,6 +1,7 @@
 import { Box, Button, IconButton, Input } from '@chakra-ui/react';
 import { IoSearch, IoAdd } from 'react-icons/io5';
 import client from '../utility/client';
+import { Oval } from 'react-loader-spinner';
 
 const NodeSearchInReviewSpace = ({
   children,
@@ -50,7 +51,22 @@ const NodeSearchInReviewSpace = ({
                 overflowY="scroll"
                 className="custom-scrollbar"
               >
-                {searchResultDataLoading && <Box>데이터 불러오는 중...</Box>}
+                {searchResultDataLoading && (
+                  <Box ml={20} mt={24}>
+                    <Oval
+                      height={40}
+                      width={40}
+                      color="black"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                      visible={true}
+                      ariaLabel="oval-loading"
+                      secondaryColor="gray"
+                      strokeWidth={2}
+                      strokeWidthSecondary={2}
+                    />
+                  </Box>
+                )}
                 {!searchResultDataLoading &&
                   searchResultData &&
                   searchResultData.map((result, idx) => (
@@ -63,7 +79,7 @@ const NodeSearchInReviewSpace = ({
                       borderRadius="0px"
                       bgColor={
                         nodeSearchSelected && selectedData.contentid == result.contentid
-                          ? 'blue.600'
+                          ? 'blue.300'
                           : 'white'
                       }
                       color={
@@ -92,8 +108,6 @@ const NodeSearchInReviewSpace = ({
             colorScheme="teal"
             onClick={() => {
               if (nodeSearchSelected) onPlusSearchNodeClick(selectedData);
-              console.log(dayModuleSelected);
-              console.log(dayModuleSelectedData);
               if (dayModuleSelected) {
                 console.log(dayModuleSelectedData);
                 client

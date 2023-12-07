@@ -18,7 +18,6 @@ class player {
   }
 
   setAnim(gltf) {
-    console.log(gltf.scene);
     const mixer = new THREE.AnimationMixer(gltf.scene);
     //walkAnim = mixer.clipAction(gltf.animations[0]);
     //walkAnim.repetitions = 5;

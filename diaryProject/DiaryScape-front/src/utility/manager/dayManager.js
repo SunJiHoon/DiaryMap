@@ -157,8 +157,7 @@ class DayManager {
   }
 
   visibleDay(dayIdx) {
-    if (dayIdx >= this.maxDay - 2) {
-      //이것땜에 마지막 날 거 visible 안 됨
+    if (dayIdx >= this.maxDay - 1 || !nodes[dayIdx]) {
       return;
     }
     const size = nodes[dayIdx].length;

@@ -4,7 +4,7 @@ import client from '../utility/client';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const UserOptions = ({ tripData, mapStyleValue, setMapStyleValue, changeMapStyle }) => {
+const UserOptions = ({ tripData, mapStyleValue, setMapStyleValue, changeMapStyle, isReadonly }) => {
   const navigate = useNavigate();
   const mapStyles = [
     'streets-v12',
@@ -34,9 +34,9 @@ const UserOptions = ({ tripData, mapStyleValue, setMapStyleValue, changeMapStyle
 
   return (
     <Box>
-      <Box fontSize="2xl" mb={2}>
+      {/* <Box fontSize="2xl" fontWeight="semibold" mb={2}>
         옵션
-      </Box>
+      </Box> */}
       <IconButton
         icon={<IoHome />}
         w="100%"
@@ -44,19 +44,23 @@ const UserOptions = ({ tripData, mapStyleValue, setMapStyleValue, changeMapStyle
         onClick={() => navigate('/')}
         mb={4}
       />
-      <Box>공개 범위</Box>
-      <Select
-        value={accessibility}
-        onChange={(e) => {
-          updateAccessibility(e.target.value);
-          // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
-          // dayManager.printStateData()
-        }}
-        mb={4}
-      >
-        <option value={'Public'}>Public</option>
-        <option value={'Private'}>Private</option>
-      </Select>
+      {!isReadonly && (
+        <>
+          <Box>공개 범위</Box>
+          <Select
+            value={accessibility}
+            onChange={(e) => {
+              updateAccessibility(e.target.value);
+              // dayManager.updateFromFrontData(dayModuleList, setDayModuleList, dayCheckedList, currentDay, nextDayMenuId, tripData)
+              // dayManager.printStateData()
+            }}
+            mb={4}
+          >
+            <option value={'Public'}>Public</option>
+            <option value={'Private'}>Private</option>
+          </Select>
+        </>
+      )}
 
       <Box>맵 스타일</Box>
       <Select

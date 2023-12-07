@@ -59,12 +59,12 @@ const RecommendedNodeList = ({
 
   return (
     <>
-      <Box fontSize="xl" fontWeight="semibold" mb={2}>
+      {/* <Box fontSize="2xl" fontWeight="semibold" mb={2}>
         다른 유저의 동선
-      </Box>
+      </Box> */}
       <Box display="flex" mb={2}>
         <Box>현재 노드 :&nbsp;</Box>
-        <Box fontWeight="semibold">{curNode.title}</Box>
+        <Box fontWeight="semibold">{curNode && curNode.title}</Box>
       </Box>
       <Box
         h={260}
@@ -83,7 +83,7 @@ const RecommendedNodeList = ({
               borderBottom="1px"
               borderColor="gray.300"
               borderRadius="0px"
-              bgColor={dayModuleSelected && dayModuleSelectedData.idx == idx ? 'blue.600' : 'white'}
+              bgColor={dayModuleSelected && dayModuleSelectedData.idx == idx ? 'blue.300' : 'white'}
               color={dayModuleSelected && dayModuleSelectedData.idx == idx ? 'white' : 'black'}
               _hover={{}}
               // h="40px"

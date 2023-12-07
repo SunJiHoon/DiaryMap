@@ -59,8 +59,6 @@ class inputManager {
     setNodeMenuPosition = _setNodeMenuPosition;
     selectOptionData = _selectOptionData;
     setSelectOptionData = _setSelectOptionData;
-    //setNodeMenuOn(true)
-    //console.log("menu on")
     character = scene.getObjectByName('player');
     isReadOnly = _isReadOnly;
 
@@ -82,13 +80,9 @@ class inputManager {
 
   setMglCameraPosition(_mglCameraPosition) {
     mglCameraPosition = _mglCameraPosition;
-    // console.log("set:")
-    // console.log(cameraPosition)
   }
   setMglCameraPositionTransformed(_mglCameraPositionTransformed) {
     mglCameraPositionTransformed = _mglCameraPositionTransformed;
-    // console.log("set:")
-    // console.log(cameraPosition)
   }
 
   handleKeyDown(event) {
@@ -115,7 +109,6 @@ class inputManager {
       pointer.y = -((event.clientY / window.innerHeight) * 2 - 1);
       pointer.z = 1;
       pointer.w = 1;
-      // console.log(pointer)
       let direction = pointer.clone().applyMatrix4(camera.projectionMatrix.clone().invert());
       direction.divideScalar(direction.w);
       raycaster.set(
@@ -150,10 +143,12 @@ class inputManager {
 
   async plusSearchNode(nodeInfo) {
     var node = await objectManager.createNode(nodeInfo);
+    if(!node.userData.mapX) { node.userData.mapX = nodeInfo.mapX; }
+    if(!node.userData.mapY) { node.userData.mapY = nodeInfo.mapY; }
     objectManager.changeNodeColor(node, dayManager.getDayColor(dayManager.getCurDay() - 1));
     var load_options = objectManager.getLoadOptions();
     var options = load_options.concat(objectManager.getSearchOptions());
-    options.concat(objectManager.getRecommendedOptions());
+    options = options.concat(objectManager.getRecommendedOptions());
     selectOption({ character, options, select_option: node });
   }
 }
@@ -165,7 +160,11 @@ export const selectOption = async (selectOptionDataState) => {
   const index = nodes.length - 1;
   const cur_node = nodes[index].userData;
 
-  const line = await objectManager.drawLine(cur_node, select_option.userData, dayManager.getDayColor(cur_day - 1));
+  const line = await objectManager.drawLine(
+    cur_node,
+    select_option.userData,
+    dayManager.getDayColor(cur_day - 1)
+  );
   if (!isReadOnly) {
     objectManager.loadOptions(
       new THREE.Vector3(select_option.userData.mapX, 1, select_option.userData.mapY)
