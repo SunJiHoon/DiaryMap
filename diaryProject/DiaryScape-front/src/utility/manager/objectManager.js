@@ -103,7 +103,11 @@ class objectManager {
   onNodeSearchSelect = (area, index) => {
     if (selectSearchNode != null) {
       this.changeNodeColor(selectSearchNode, 'magenta');
+      selectSearchNode = null;
+    }
+    if(selectSurroundingNode != null){
       this.changeNodeColor(selectSurroundingNode, 'magenta');
+      selectSurroundingNode = null;
     }
     if (search_options.length > 0 && area == "search") {
       selectSearchNode = search_options[index];
@@ -112,6 +116,7 @@ class objectManager {
     else if(load_options.length > 0 && area == 'surrounding'){
       selectSurroundingNode = load_options[index];
       this.changeNodeColor(selectSurroundingNode, 'cyan');
+      console.log(selectSurroundingNode);
     }
   };
 
