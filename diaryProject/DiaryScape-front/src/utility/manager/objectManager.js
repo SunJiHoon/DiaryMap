@@ -67,28 +67,22 @@ class objectManager {
       var tempNode = await this.createNode(res.data[i]);
       load_options.push(tempNode);
     }
-    console.log('end load options');
   }
 
   loadSearchOptions = async (nodeInfos) => {
     this.invisibleOptions(search_options, null);
     this.clearSearchOptions();
-    console.log(search_options.length);
     const size = nodeInfos.length;
     for (let i = 0; i < size; i++) {
       var tempNode = await this.createNode(nodeInfos[i]);
       search_options.push(tempNode);
     }
-    console.log('end load search options');
   };
 
   loadRecommendedOptions = async (nodeInfos) => {
     this.invisibleOptions(recommended_options, null);
     this.clearRecommendedOptions();
-    console.log('load Recommended Optoins');
     recommended_options = await this.drawDay(nodeInfos, -1);
-    console.log(recommended_options);
-    console.log('end load recommended options');
   };
 
   invisibleOptions(options, select_option) {
@@ -111,7 +105,6 @@ class objectManager {
   };
 
   removeObject(object) {
-    console.log(object);
     scene.remove(object);
   }
 
@@ -153,37 +146,37 @@ class objectManager {
   }
 
   async drawLine(startNode, endNode, lineColor) {
-    const points = [];
-    points.push(startNode.relativeX, 0, startNode.relativeY);
-    points.push(endNode.relativeX, 0, endNode.relativeY);
-
-    const geometry = new LineGeometry();
-    		geometry.setPositions( points );
-    		// geometry.setColors( colors );
-
-    const matLine = new LineMaterial({
-      color: lineColor,
-      linewidth: 10, // in world units with size attenuation, pixels otherwise
-      vertexColors: false,
-      dashed: false,
-      dashSize: 5,
-      alphaToCoverage: true,
-      worldUnits: true,
-    });
-
-    const line = new Line2(geometry, matLine);
-    line.computeLineDistances();
-    line.scale.set(1, 1, 1);
-    scene.add(line);
     // const points = [];
-    // const start = new THREE.Vector3(startNode.x, 0, startNode.z);
-    // const end = new THREE.Vector3(endNode.x, 0, endNode.z);
-    // points.push(start);
-    // points.push(end);
-    // const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-    // const lineMaterial = new THREE.LineBasicMaterial({ color: lineColor, linewidth: 10 });
-    // const line = new THREE.Line(lineGeometry, lineMaterial);
+    // points.push(startNode.relativeX, 0, startNode.relativeY);
+    // points.push(endNode.relativeX, 0, endNode.relativeY);
+
+    // const geometry = new LineGeometry();
+    // 		geometry.setPositions( points );
+    // 		// geometry.setColors( colors );
+
+    // const matLine = new LineMaterial({
+    //   color: lineColor,
+    //   linewidth: 10, // in world units with size attenuation, pixels otherwise
+    //   vertexColors: false,
+    //   dashed: false,
+    //   dashSize: 5,
+    //   alphaToCoverage: true,
+    //   worldUnits: true,
+    // });
+
+    // const line = new Line2(geometry, matLine);
+    // line.computeLineDistances();
+    // line.scale.set(1, 1, 1);
     // scene.add(line);
+    const points = [];
+    const start = new THREE.Vector3(startNode.relativeX, 0, startNode.relativeY);
+    const end = new THREE.Vector3(endNode.relativeX, 0, endNode.relativeY);
+    points.push(start);
+    points.push(end);
+    const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+    const lineMaterial = new THREE.LineBasicMaterial({ color: lineColor, linewidth: 10 });
+    const line = new THREE.Line(lineGeometry, lineMaterial);
+    scene.add(line);
     const pathInfos = await saveManager.makePathInfo(startNode, endNode);
     line.userData = pathInfos;
     let textGeometry;
@@ -206,6 +199,7 @@ class objectManager {
     const text = new THREE.Mesh(textGeometry, textMaterial);
     text.position.set((startNode.relativeX + endNode.relativeX)/2, 3, (startNode.relativeY + endNode.relativeY)/2)
     scene.add(text);
+    console.log(text);
     return line;
   }
 
