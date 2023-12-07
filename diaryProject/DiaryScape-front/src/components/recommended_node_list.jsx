@@ -59,7 +59,7 @@ const RecommendedNodeList = ({
 
   return (
     <>
-      <Box fontSize="xl" fontWeight="semibold" mb={2}>
+      <Box fontSize="2xl" fontWeight="semibold" mb={2}>
         다른 유저의 동선
       </Box>
       <Box display="flex" mb={2}>

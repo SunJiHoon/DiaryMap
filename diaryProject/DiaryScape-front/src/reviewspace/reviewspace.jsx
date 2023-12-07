@@ -5,6 +5,7 @@ import RightBar from '../components/right_bar';
 import RightBarPageDay from '../components/right_bar_page_day';
 import RightBarPageDiary from '../components/right_bar_page_diary';
 import RecommendedNodeList from '../components/recommended_node_list';
+import SurroundingNodeList from '../components/surrounding_node_list';
 import NodeMenu from '../components/node_menu';
 import MapStyleButtons from '../components/map_style_buttons';
 import InputManager, { selectOption } from '../utility/manager/inputManager';
@@ -100,7 +101,9 @@ const ReviewSpace = () => {
   const [selectedData, setSelectedData] = useState({});
   const [searchResultDataLoading, setSearchResultDataLoading] = useState(false);
   const [totalReview, setTotalReview] = useState('일기를 생성해주세요!');
+
   const [surroundingNodeList, setSurroundingNodeList] = useState([]);
+  const [selectedSurroundingNodeData, setSelectedSurroundingNodeData] = useState({});
 
   const [dayModuleSelected, setDayModuleSelected] = useState(false);
   const [dayModuleSelectedData, setDayModuleSelectedData] = useState(null);
@@ -653,7 +656,14 @@ const ReviewSpace = () => {
               loadRecommendedOptionsRef={loadRecommendedOptionsRef}
             />
           )}
-          {rightBarPage == 2 && <SurroundingNodeList surroundingNodeList={surroundingNodeList} />}
+          {rightBarPage == 2 && (
+            <SurroundingNodeList
+              surroundingNodeList={surroundingNodeList}
+              selectedSurroundingNodeData={selectedSurroundingNodeData}
+              setSelectedSurroundingNodeData={setSelectedSurroundingNodeData}
+              plusSearchNodeRef={plusSearchNodeRef}
+            />
+          )}
           {rightBarPage == 3 && (
             <RightBarPageDiary
               isReadonly={isReadonly}

@@ -27,6 +27,9 @@ const RightBarPageDiary = ({
 }) => {
   return (
     <>
+      <Box fontSize="2xl" fontWeight="semibold" mb={2}>
+        일기
+      </Box>
       {!isReadonly && (
         <Box>
           <Button
@@ -65,9 +68,6 @@ const RightBarPageDiary = ({
           </Button>
         </Box>
       )}
-      <Box fontSize="xl" fontWeight="semibold" mb={2}>
-        일기
-      </Box>
       <Textarea
         w="100%"
         border="2px"
