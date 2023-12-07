@@ -1,7 +1,6 @@
 import client from '../client.jsx';
-import ObjectManager from './objectManager.js';
 import DayManager from './dayManager.js';
-import { Object3D } from 'three';
+import * as THREE from 'three';
 
 var objectManager;
 var dayManager;
@@ -9,12 +8,14 @@ var dayManager;
 var tripData;
 
 class saveManager {
-  constructor(_tripData, _setCurNode) {
+  constructor(_tripData, _setCurNode, _map, setIsLoading) {
     tripData = _tripData;
     this.setCurNodeToFront = _setCurNode;
     if (dayManager == null) {
       dayManager = new DayManager();
     }
+    this.map = _map;
+    this.setIsLoading = setIsLoading;
   }
 
   setObjectManager(_objectManager) {
@@ -38,7 +39,12 @@ class saveManager {
       this.saveMyNodes();
       this.saveReviews();
     }
+    const lastNode = dayManager.getCurNode();
+    await objectManager.loadOptions(new THREE.Vector3(lastNode.userData.mapX, 0, lastNode.userData.mapY));
+    objectManager.setPlayerPos(lastNode.position);
+    this.map.center = [lastNode.userData.mapX, lastNode.userData.mapY];
     this.setCurNodeToFront(dayManager.getCurNode().userData);
+    this.setIsLoading(false);
   }
 
   saveMyNodes() {
