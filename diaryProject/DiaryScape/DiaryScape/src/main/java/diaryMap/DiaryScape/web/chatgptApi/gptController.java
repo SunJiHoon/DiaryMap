@@ -152,6 +152,7 @@ public class gptController {
                 in.close();
 
                 String responseBody = response.toString();
+                responseBody = responseBody.replace("\\n", "\n");
                 System.out.println("Response: " + responseBody);
                 MyAnswer myAnswer = new MyAnswer();
                 myAnswer.setAnswer(responseBody);

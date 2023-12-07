@@ -465,15 +465,20 @@ public class kakaoKeywordController {
         int taxiFare = 0;
         if (routesArray.length() > 0) {
             JSONObject firstRoute = routesArray.getJSONObject(0);
-            JSONObject summaryObj = firstRoute.getJSONObject("summary");
-            //.getJSONObject("fare");
-            distance = summaryObj.getInt("distance");//m
-            duration = summaryObj.getInt("duration");//초
-            taxiFare = summaryObj.getJSONObject("fare").getInt("taxi");
-            return new pathInfoClass(String.valueOf(distance), String.valueOf(duration), String.valueOf(taxiFare));
+            if (firstRoute.has("summary")) {
+                JSONObject summaryObj = firstRoute.getJSONObject("summary");
+                distance = summaryObj.getInt("distance");//m
+                duration = summaryObj.getInt("duration");//초
+                taxiFare = summaryObj.getJSONObject("fare").getInt("taxi");
+                return new pathInfoClass(String.valueOf(distance), String.valueOf(duration), String.valueOf(taxiFare));
+            } else {
+                // "summary" 키가 존재하지 않을 때의 처리
+                log.info("No routes found");
+                return new pathInfoClass("0", "0", "0");
+            }
         } else {
             log.info("No routes found");
-            return new pathInfoClass("-1", "-1", "-1");
+            return new pathInfoClass("0", "0", "0");
         }
 
 
