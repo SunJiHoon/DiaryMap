@@ -17,6 +17,7 @@ import { Box, IconButton } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import {
   IoChevronForward,
+  IoLocation,
   IoPencil,
   IoBook,
   IoChevronBack,
@@ -72,6 +73,7 @@ const ReviewSpace = () => {
   const changeDayNodeIndexRef = useRef(null);
   const loadRecommendedOptionsRef = useRef(null);
   const setPlayerPositionRef = useRef(null);
+  const moveCameraToCharacterRef = useRef(null);
 
   // const setStateDataRef = useRef(null)
   // const printStateDataRef = useRef(null)
@@ -368,6 +370,7 @@ const ReviewSpace = () => {
             );
             addNodeFunctionRef.current = selectOption;
             plusSearchNodeRef.current = inputManager.plusSearchNode;
+            moveCameraToCharacterRef.current = inputManager.moveCameraToCharacter;
           });
         });
         // this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -775,9 +778,30 @@ const ReviewSpace = () => {
           nodeMenuPosition={nodeMenuPosition}
           selectOptionData={selectOptionData}
           onAddNodeButtonClick={onAddNodeButtonClick}
+          isReadonly={isReadonly}
         />
 
         <div ref={mapContainer} style={{ height: '100vh' }} />
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '40px',
+            left: '24px',
+            zIndex: 2,
+          }}
+        >
+          <Box boxShadow="2xl">
+            <IconButton
+              icon={<IoLocation />}
+              colorScheme="teal"
+              onClick={() => {
+                if (moveCameraToCharacterRef.current) {
+                  moveCameraToCharacterRef.current();
+                }
+              }}
+            />
+          </Box>
+        </div>
       </CanvasContext.Provider>
     </>
   );

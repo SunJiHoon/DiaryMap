@@ -6,6 +6,7 @@ const NodeMenu = ({
   nodeMenuPosition,
   selectOptionData,
   onAddNodeButtonClick,
+  isReadonly,
 }) => {
   return (
     <div
@@ -43,9 +44,11 @@ const NodeMenu = ({
           </Box>
         )}
 
-        <Button onClick={onAddNodeButtonClick} colorScheme="teal" mt={2}>
-          노드 추가
-        </Button>
+        {!isReadonly && (
+          <Button onClick={onAddNodeButtonClick} colorScheme="teal" mt={2}>
+            노드 추가
+          </Button>
+        )}
       </Box>
     </div>
   );

@@ -26,6 +26,7 @@ import {
   IoBook,
   IoChevronBack,
   IoHome,
+  IoTrash,
 } from 'react-icons/io5';
 
 const RightBarPageDay = ({
@@ -188,23 +189,43 @@ const RightBarPageDay = ({
                         </Box>
                       )}
                       <Box
-                        display="flex"
-                        alignItems="center"
                         h="100%"
-                        pl={2}
                         w="100%"
-                        fontWeight="semibold"
-                        overflow="hidden"
-                        onClick={() => {
-                          setNodeInfoData({ day: currentDay, idx: i, node });
-                          onNodeInfoOpen();
-                        }}
-                        _hover={{
-                          bgColor: '#00ff0033',
-                          transition: 'all .3s',
-                        }}
+                        pr={4}
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
                       >
-                        {i + 1}. {node.title}
+                        <Box
+                          display="flex"
+                          alignItems="center"
+                          h="100%"
+                          w="100%"
+                          pl={2}
+                          mr={2}
+                          overflowX="scroll"
+                          fontWeight="semibold"
+                          overflow="hidden"
+                          onClick={() => {
+                            setNodeInfoData({ day: currentDay, idx: i, node });
+                            onNodeInfoOpen();
+                          }}
+                          _hover={{
+                            bgColor: '#00ff0033',
+                            transition: 'all .3s',
+                          }}
+                        >
+                          {i + 1}. {node.title}
+                        </Box>
+                        <IconButton
+                          icon={<IoTrash />}
+                          size="sm"
+                          colorScheme="red"
+                          onClick={() => {
+                            if (removeDayNodeRef.current)
+                              removeDayNodeRef.current(currentDay, i + 1);
+                          }}
+                        />
                       </Box>
                     </Box>
                     {dayModuleList[currentDay - 1].edge &&
@@ -362,16 +383,18 @@ const RightBarPageDay = ({
               <Box mb={10} fontSize="xl">
                 방문일 : {nodeInfoData.node.visitDate}
               </Box>
-              <Button
-                colorScheme="red"
-                onClick={() => {
-                  onNodeInfoClose();
-                  if (removeDayNodeRef.current)
-                    removeDayNodeRef.current(nodeInfoData.day, nodeInfoData.idx + 1);
-                }}
-              >
-                노드 제거
-              </Button>
+              {!isReadonly && (
+                <Button
+                  colorScheme="red"
+                  onClick={() => {
+                    onNodeInfoClose();
+                    if (removeDayNodeRef.current)
+                      removeDayNodeRef.current(nodeInfoData.day, nodeInfoData.idx + 1);
+                  }}
+                >
+                  노드 제거
+                </Button>
+              )}
             </ModalBody>
             <ModalFooter>
               <Button onClick={onNodeInfoClose} colorScheme="teal">

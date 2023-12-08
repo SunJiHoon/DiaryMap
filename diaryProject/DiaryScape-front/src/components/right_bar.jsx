@@ -117,6 +117,7 @@ const RightBar = ({
         mt={4}
         p={4}
         w="380px"
+        maxW="80vw"
         minH="300px"
         maxH="92vh"
         overflowY="scroll"

@@ -204,7 +204,7 @@ const OthersMap = () => {
                       colorScheme="teal"
                       onClick={(e) => onReviewClicked(review)}
                     /> */}
-                    <IconButton
+                    {/* <IconButton
                       icon={<IoTrashOutline />}
                       onClick={() => {
                         client.post('api/obj/delete?mapId=' + review.mapId).then((res) => {
@@ -214,7 +214,7 @@ const OthersMap = () => {
                           });
                         });
                       }}
-                    />
+                    /> */}
                   </Box>
                 </Box>
               </Box>
