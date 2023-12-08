@@ -43,7 +43,7 @@ const OthersMap = () => {
     console.log(review);
     dispatch(
       selectTrip({
-        title: review.title,
+        title: review.reviewtitle,
         mapId: review.mapId,
         startX: review.mapX,
         startY: review.mapY,

@@ -661,7 +661,7 @@ const ReviewSpace = () => {
               <Box fontWeight="semibold">{username}</Box>
               <Box mr={2}>님의</Box>
               <Box fontWeight="semibold">{tripData.title}</Box>
-              {/* {console.log(tripData)} */}
+              {console.log(tripData)}
             </Box>
             <NodeSearchInReviewSpace
               isReadonly={isReadonly}
