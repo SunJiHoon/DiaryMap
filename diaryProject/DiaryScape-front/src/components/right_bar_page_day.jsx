@@ -217,15 +217,17 @@ const RightBarPageDay = ({
                         >
                           {i + 1}. {node.title}
                         </Box>
-                        <IconButton
-                          icon={<IoTrash />}
-                          size="sm"
-                          colorScheme="red"
-                          onClick={() => {
-                            if (removeDayNodeRef.current)
-                              removeDayNodeRef.current(currentDay, i + 1);
-                          }}
-                        />
+                        {!isReadonly && (
+                          <IconButton
+                            icon={<IoTrash />}
+                            size="sm"
+                            colorScheme="red"
+                            onClick={() => {
+                              if (removeDayNodeRef.current)
+                                removeDayNodeRef.current(currentDay, i + 1);
+                            }}
+                          />
+                        )}
                       </Box>
                     </Box>
                     {dayModuleList[currentDay - 1].edge &&
