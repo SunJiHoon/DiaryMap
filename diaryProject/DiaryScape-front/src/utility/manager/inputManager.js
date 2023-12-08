@@ -90,7 +90,12 @@ class inputManager {
   //     map.flyTo({center:[lastNode.userData.mapX, lastNode.userData.mapY]});
   //   }
   // }
-  
+
+  moveCameraToCharacter(){
+    const lastNode = dayManager.getCurNode();
+    map.flyTo({center:[lastNode.userData.mapX, lastNode.userData.mapY]});
+  }
+
   async handleMouseDown(event) {
     setNodeMenuOn(false);
     select_option = null;
