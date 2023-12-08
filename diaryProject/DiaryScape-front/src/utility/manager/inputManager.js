@@ -84,12 +84,13 @@ class inputManager {
     mglCameraPositionTransformed = _mglCameraPositionTransformed;
   }
 
-  handleKeyDown(event) {
-    if (event.keyCode == 32 || event.key == ' ' || event.code == 'Space') {
-      const lastNode = dayManager.getCurNode();
-      map.flyTo({center:[lastNode.userData.mapX, lastNode.userData.mapY]});
-    }
-  }
+  // handleKeyDown(event) {
+  //   if (event.keyCode == 32 || event.key == ' ' || event.code == 'Space') {
+  //     const lastNode = dayManager.getCurNode();
+  //     map.flyTo({center:[lastNode.userData.mapX, lastNode.userData.mapY]});
+  //   }
+  // }
+  
   async handleMouseDown(event) {
     setNodeMenuOn(false);
     select_option = null;
